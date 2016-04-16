@@ -1,0 +1,36 @@
+MISUR UNIT
+
+	These are the misure unit that I use on the program:
+
+	lenght:		Km	(1000 m)
+	mass:		Kg
+	time:		s
+
+
+INT TYPE: IN OBJ STRUCT
+
+	-- Visible --
+	1  = Spaceship
+	2  = Sun
+	3  = Planet (generic)
+	4  = Planet (Rock)
+	5  = Planet (Giant Gas)
+	6  = Natural satellite
+	7  = Asteroid
+	8  = Comet
+	9  = Black Hole
+	10 = Space station
+	-- Background --
+	0  = Null. there isn't any object in this obj position
+	11 = Not allocated but present (unknowed)
+	>11 | <0 = Unexpected type (considered 0)
+
+EXIT STATUS
+
+	When a function exit alwais give an int value to the calling function. This is a legend of which exit status are now present:
+	
+	0 = All is went well. Excelent!
+	1 = Variable type not valid
+	2 = Unknow exit status
+	3 = var's size wrong
+	4 = Overflow
