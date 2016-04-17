@@ -32,11 +32,6 @@
 	// The number of character printed when printing a LONG DOUBLE (possible 3 to 12)
 	#define LDLUN 8
 	
-	// The number of variable used in communicating between functions (Set less high possible for less RAM required and general optimizing. if required set up highly value)
-	#define NUMIVAR	16
-	#define NUMCVAR 2
-	#define NUMLVAR 1
-	
 	// The max lenght of a variable cvar (see NUMCVAR)
 	#define LENGHTCVAR 16
 

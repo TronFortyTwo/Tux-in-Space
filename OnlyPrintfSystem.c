@@ -29,6 +29,7 @@
 	//prototype for the OPS's functions
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar);
 	void PrintInt (tinf *inf, int n, short *columndone, short *linedone);
+	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone);
 	
  
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
@@ -41,6 +42,7 @@
 	short chardone = 0;
 	// the position in the arrays
 	short ipos=0;
+	short lpos=0;
 	
 	// make some space
 	printf("\n\n\n\n\n\n\n\n");
@@ -82,12 +84,18 @@
 			
 			// if the character is a % start var printing
 			else if (phrase[chardone] == '%') {
+				chardone++;
 				// if is an int call PrintInt
-				if (phrase[chardone+1] == 'i') {
+				if (phrase[chardone] == 'i') {
 					PrintInt(inf, ivar[ipos], &columndone, &linedone);
 					ipos++;
-					chardone=chardone+2;
+					chardone++;
 				}
+				else if (phrase[chardone] == 'l') {
+					PrintLongDouble(inf, &lvar[lpos], &columndone, &linedone);
+					lpos++;
+					chardone++;
+					}
 				
 				continue;
 			}
@@ -155,6 +163,16 @@
 		
 		//if the number is too big for the line
 		if(*columndone+2*FRAMELUN+size >= inf->column){
+			//if there isn't another clear line
+			if(*linedone+3 == inf->line){
+				//complete the line
+				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				printf("%s\n", FRAMER);
+				//update teh counters
+				*columndone=inf->column;
+				//exit the function
+				return;
+			}
 			//complete the line and update counter
 			PrintLine(inf, " ", 2*FRAMELUN+*columndone);
 			printf("%s\n%s", FRAMER, FRAME);
@@ -176,3 +194,37 @@
 		return;
 	}
 
+/***
+ * The function PrintLongDouble printf a long double whit the OPS's nice style
+ * 
+ * 
+ */
+	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone) {
+		
+		// if a long double occupies more than a line (whit the frame), it will not be printfed
+		char *buffer = (char *) malloc ((inf->column-2*FRAMELUN)*sizeof(char));
+		// the size of the number
+		short size;
+		// caluculate size
+		size = snprintf(buffer, inf->column-2*FRAMELUN, "%Lf", *n);
+		// if the number don't overflow the line
+		if(*columndone+2*FRAMELUN+size <= inf->column) {
+			//printf it
+			printf("%s", buffer);
+			//update the counters
+			*columndone=*columndone+size;
+			}
+		// else, if the number is more big than the space remaining in the line
+		else{
+			//complete the line whit spaces
+			PrintLine(inf, " ", 2*FRAMELUN);
+			//do the frame and new line
+			printf("%s\n%s", FRAME, FRAMER);
+			//printf the number
+			printf("%s", buffer);
+			//update the counters
+			*columndone=FRAMELUN+size;
+			*linedone=*linedone+1;
+		}
+		return;
+	}
