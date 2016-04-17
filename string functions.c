@@ -39,36 +39,38 @@
 		return;
 		}
 		
-/*** GetLine is a function that write a line of characters
+/*** GetLine is a function that return a line of characters
  * 		can be setted a number num of character that don't be returned
- * 		similar(in the behavior but not in the structure) to PrintLine but this write a char and doesn't print
+ * 		similar(in the behavior but not in the structure) to PrintLine but this return the string and doesn't print it
+ * 	NOTE:
+ * 	this function don't end the string whit '\0'
  * 
  *	*/
-	void GetLine (tinf *inf, char character[1], short num, int cpos);
+	char *GetLine (tinf *inf, char character[1], short num);
 	
-	void GetLine (tinf *inf, char character[1], short num, int cpos) {
+	char *GetLine (tinf *inf, char character[1], short num) {
 		
 		short p;	// p for polpetta
 		
+		char *string = (char *) malloc(sizeof(char)*inf->column);
+		
 		for (p=0; p!=inf->column-num+1; p++) {
-			if (p == LENGHTCVAR) {
-				return;
-			}
-			inf->cvar[p][cpos] = character[0];
+			string[p] = character[0];
 		}
 		
-		return;
+		return string;
 		}
 
 
 /*** Write on an Array of Chars	(Was)
  * 		this function write a string given in another string starting from a position
  * 
- * 		return the number of characters copyed, else -1
+ * 		return the number of characters copyed, else -1 if the string string go in overflow
+ * 			
  *	*/
-	short Was (char *string, char toadd[], int pos);
+	short Was (char *string, char *toadd, int pos);
 
-	short Was (char *string, char toadd[], int pos) {
+	short Was (char *string, char *toadd, int pos) {
 		// loop's counter
 		int i;
 		// main loop

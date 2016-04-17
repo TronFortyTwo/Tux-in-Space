@@ -27,11 +27,11 @@
  */
  
 	//prototype for the OPS's functions
-	int OnlyPrintfSystem(tinf *inf, char *phrase);
+	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar);
 	void PrintInt (tinf *inf, int n, short *columndone, short *linedone);
 	
  
-	int OnlyPrintfSystem(tinf *inf, char *phrase) {
+	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
 	
 	// the number of lines alredy printfed
 	short linedone = 0;
@@ -39,6 +39,8 @@
 	short columndone = 0;
 	// the number of character of phrase printed
 	short chardone = 0;
+	// the position in the arrays
+	short ipos=0;
 	
 	// make some space
 	printf("\n\n\n\n\n\n\n\n");
@@ -82,6 +84,8 @@
 			else if (phrase[chardone] == '%') {
 				// if is an int call PrintInt
 				if (phrase[chardone+1] == 'i') {
+					PrintInt(inf, ivar[ipos], &columndone, &linedone);
+					ipos++;
 					chardone=chardone+2;
 				}
 				

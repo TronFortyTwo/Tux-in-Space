@@ -56,7 +56,7 @@
 */
 
 
-	int Rmotor (tsys *sys, tinf *inf, int mode, char *phrase, int *ivar, long double *lvar, char *cvar[]) {
+	int Rmotor (tsys *sys, tinf *inf, int mode, char *phrase, int *ivar, long double *lvar, char *cvar) {
 
 		// The state received
 		int staterec;
@@ -66,7 +66,7 @@
 		
 		// Call the correct function
 		if (mode==0)
-			staterec = OnlyPrintfSystem(inf, phrase);
+			staterec = OnlyPrintfSystem(inf, phrase, ivar, lvar, cvar);
 		if (mode==1)
 			staterec = OPSo(sys, inf);
 		
@@ -74,11 +74,11 @@
 		if 		(staterec == 0 );
 		else {
 			if (mode==0)
-				strcpy(string[0] , "OnlyPrintfSystem");
+				strcpy(string , "OnlyPrintfSystem");
 			if (mode==1)
-				strcpy(string[0] , "OPSOutput");
-			Rmotor (sys, inf, 0, "Rmotor's call to %c. It exit whit error: %i\n\nPress a button to continue...",&staterec ,);
-			Gets();
+				strcpy(string , "OPSOutput");
+			Rmotor (sys, inf, 0, "Rmotor's call to %c. It exit whit error: %i\n\nPress a button to continue...", &staterec, 0, string);
+			scanf("%d", &staterec);
 		}
 		return 0;
 	}

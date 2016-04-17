@@ -46,7 +46,7 @@
 	int Shell (tsys *sys, tinf *inf) {
 
 		// Retruning value from the function. 0 if all is good
-		short staterec;
+		int staterec;
 	
 		// variable for communicate whit other functions
 		int comm[2];
@@ -62,8 +62,8 @@
 			
 			// Ask the name of the new system
 			comm[0]=NAMELUN;
-			Rmotor(sys, inf, 0, "What is the name of this new system? [max %i characters]", comm, 0, 0);
-			Gets(sys->name);
+			Rmotor(sys, inf, 0, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0, 0);
+			scanf("%s", sys->name);
 			fflush(stdin);
 
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
@@ -72,7 +72,7 @@
 			scanf("%d", &sys->active[NUMOGG]);
 			fflush(stdin);
 			for (; (sys->active[NUMOGG] > NUMOGG) | (sys->active[NUMOGG] < 0); ) {
-				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number. [max %i]");
+				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number. [max %i]", comm, 0, 0);
 				scanf("%d", &sys->active[NUMOGG]);
 				fflush(stdin);
 			}
@@ -91,10 +91,10 @@
 			
 			// Ask the user informations about the objects
 			comm[1] = NAMELUN;
-			for (l=0, inf->ivar[1]=NAMELUN-1; l!=sys->active[NUMOGG]; l++) {
+			for (l=0; l!=sys->active[NUMOGG]; l++) {
 				comm[0] = l+1;
-				Rmotor(sys, inf, 0, "What's the name of the object number %i? [max %i letter]", comm, 0, 0);
-				Gets(sys->o[l].name);
+				Rmotor(sys, inf, 0, "What's the name of the object number %i? [no spaces] [max %i letter]", comm, 0, 0);
+				scanf("%s", sys->o[l].name);
 				fflush(stdin);
 				Rmotor(sys, inf, 0, "Which's the type of the object number %i?\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station", comm, 0, 0);
 				scanf("%d",&sys->o[l].type);
@@ -117,16 +117,16 @@
 		for ( ; ; ) {
 		
 			// call Pmotor
-			staterec = Pmotor (sys, inf);
+			staterec = Pmotor (sys);
 			if (staterec != 0)
 				return staterec;
 				
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
 				staterec = Rmotor (sys, inf, 1, " ", 0, 0, 0);
-				if (staterec != 0)
-				return staterec;
-				}
+				if (staterec != 0)	
+					Rmotor(sys, inf, 0, "OnlyPrintfSystemOutput exited whit %i", &staterec, 0, 0);
+			}
 			
 			// call the instruction parser
 			staterec = Parser(sys, inf, 's' );

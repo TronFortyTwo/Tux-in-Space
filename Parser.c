@@ -107,25 +107,25 @@
 	 */
 	int Reask(tinf *inf, char command[]){
 		// the answer of the user
-		char answer;
-		strcpy(inf->cvar[0], command);
-		Rmotor(0, inf, 0, "Sorry. But the word %c that you wrote is wrong. Do you want to write another command? [y/n]");
+		char answer[32];
+		strcpy(answer, command);
+		Rmotor(0, inf, 0, "Sorry. But the word %c that you wrote is wrong. Do you want to write another command? [y/n]", 0, 0, answer);
 		
 		for(;;){
 			// a loop that exit 0 or 1
-			scanf("%c", &answer);
+			scanf("%s", answer);
 			fflush(stdin);
 			// if postitive return 0
-			if (answer == 'y') {
-				Rmotor(0, inf, 0, "What is your command?");
+			if (answer[0] == 'y') {
+				Rmotor(0, inf, 0, "What is your command?", 0, 0, 0);
 				return 0;
 			}
 			// if negative return 1
-			else if (answer == 'n')
+			else if (answer[0] == 'n')
 				return 1;
 			// if wrong reask
 			else
-				Rmotor(0, inf, 0, "Please answer 'y' or 'n'");
+				Rmotor(0, inf, 0, "Please answer 'y' or 'n'", 0, 0, 0);
 		}
 	}
 	

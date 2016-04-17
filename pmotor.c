@@ -12,9 +12,9 @@
  */
 
 
-int Pmotor (tsys *sys, tinf *inf);
+int Pmotor (tsys *sys);
 
-int Pmotor (tsys *sys, tinf *inf) {
+int Pmotor (tsys *sys) {
 	
 		// Counters for loops
 		short i, l;
@@ -50,13 +50,13 @@ int Pmotor (tsys *sys, tinf *inf) {
 		}
 		// move the objects
 		for (i=0; i!=sys->active[NUMOGG]; i++) {
-			sys->o[sys->active[i]].x = (sys->o[sys->active[i]].x + sys->o[sys->active[i]].velx) * inf->precision ;
-			sys->o[sys->active[i]].y = (sys->o[sys->active[i]].y + sys->o[sys->active[i]].vely) * inf->precision ;
-			sys->o[sys->active[i]].z = (sys->o[sys->active[i]].z + sys->o[sys->active[i]].velz) * inf->precision ;
+			sys->o[sys->active[i]].x = (sys->o[sys->active[i]].x + sys->o[sys->active[i]].velx) * sys->precision ;
+			sys->o[sys->active[i]].y = (sys->o[sys->active[i]].y + sys->o[sys->active[i]].vely) * sys->precision ;
+			sys->o[sys->active[i]].z = (sys->o[sys->active[i]].z + sys->o[sys->active[i]].velz) * sys->precision ;
 			}
 	
 		// update the time
-		sys->millisec = 1000 * inf->precision;
+		sys->millisec = 1000 * sys->precision;
 		if (sys->millisec >= 1000 ) {
 			for (; sys->millisec >1000; sys->sec++, sys->millisec = sys->millisec - 1000);
 			if (sys->sec >= 60) {
