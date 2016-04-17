@@ -32,6 +32,10 @@
 
 	int Menu (tinf *inf) {
 		
+		char buffer[16]={'c','i','a','o','\0','c','c','\0','r','0','\0'};
+		
+		Rmotor(0, inf, 0, "ciao = %c\ncc = %c\nr0 = %c", 0, 0, buffer);
+		
 		// A variable that save the scanf of an input. And do other too...
 		int inputandothers;
 		

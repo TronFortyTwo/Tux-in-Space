@@ -30,6 +30,7 @@
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar);
 	void PrintInt (tinf *inf, int n, short *columndone, short *linedone);
 	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone);
+	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone);
 	
  
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
@@ -43,6 +44,7 @@
 	// the position in the arrays
 	short ipos=0;
 	short lpos=0;
+	short cpos=0;
 	
 	// make some space
 	printf("\n\n\n\n\n\n\n\n");
@@ -89,14 +91,16 @@
 				if (phrase[chardone] == 'i') {
 					PrintInt(inf, ivar[ipos], &columndone, &linedone);
 					ipos++;
-					chardone++;
 				}
 				else if (phrase[chardone] == 'l') {
 					PrintLongDouble(inf, &lvar[lpos], &columndone, &linedone);
 					lpos++;
-					chardone++;
-					}
-				
+				}
+				else if (phrase[chardone] == 'c') {
+					PrintString(inf, cvar, cpos, &columndone, &linedone);
+					cpos++;
+				}
+				chardone++;
 				continue;
 			}
 			
@@ -197,7 +201,6 @@
 /***
  * The function PrintLongDouble printf a long double whit the OPS's nice style
  * 
- * 
  */
 	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone) {
 		
@@ -216,8 +219,18 @@
 			}
 		// else, if the number is more big than the space remaining in the line
 		else{
+			//if there isn't any new line to print
+			if(*linedone+3 == inf->line){
+				//complete the line
+				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				printf("%s\n", FRAMER);
+				//update teh counters
+				*columndone=inf->column;
+				//exit the function
+				return;
+			}
 			//complete the line whit spaces
-			PrintLine(inf, " ", 2*FRAMELUN);
+			PrintLine(inf, " ", *columndone+2*FRAMELUN);
 			//do the frame and new line
 			printf("%s\n%s", FRAME, FRAMER);
 			//printf the number
@@ -228,3 +241,54 @@
 		}
 		return;
 	}
+
+/***
+ * The function PrintString printf a string from a buffer of char. 
+ * For easily transport of the buffer in the functions, in a buffer there is many strings, shared whit '\0'.
+ * This is the reason of why must be given a number that represent what string must be printed
+ */
+	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone) {
+		
+		//contein the position of the first character of the string to printf
+		short position;
+		
+		//counter
+		short i;
+		
+		//look for the first character of the string to print
+		for (position=0, i=0; i != numstring; position++) {
+			if(buffer[position]=='\0')
+				i++;
+		}
+	
+		//take the size of the string
+		for(i=position; buffer[i] != '\0'; i++)
+		i = i-position;
+	
+		//now printf the string if not overflow the line
+		if(*columndone+2*FRAMELUN+i <= inf->column) {
+			printf("%s", &buffer[position]);
+			*columndone = *columndone+i;
+		}
+		//else, if there is another line, printf the string in a new line
+		else {
+			if(*linedone+3 == inf->line){
+				//complete the line
+				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				printf("%s\n", FRAMER);
+				//update teh counters
+				*columndone=inf->column;
+				//exit the function
+				return;
+			}
+			PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+			printf("%s\n%s%s", FRAMER, FRAME, &buffer[position]);
+			*columndone = FRAMELUN+i;
+			*linedone=*linedone+1;
+		}
+		
+		return;
+	}
+
+
+
