@@ -20,6 +20,8 @@
 
 /***
  * This is CSpace's header file
+ * 
+ * Contein even the definition of constant
  */
 
 // External standard library
