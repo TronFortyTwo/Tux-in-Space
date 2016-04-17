@@ -61,14 +61,14 @@
 		if (staterec == 0) {
 			
 			// Ask the name of the new system
-			comm[0]=NAMELUN;
+			comm[0]=NAMELUN-1;
 			Rmotor(sys, inf, 0, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0, 0);
 			scanf("%s", sys->name);
 			fflush(stdin);
 
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
 			comm[0]=NUMOGG;
-			Rmotor(sys, inf, 0, "How many objects there are in the system? [max %i]", comm, 0, 0);
+			Rmotor(sys, inf, 0, "do you want to configure some object now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify the system later, in runtime)", 0, 0, 0);
 			scanf("%d", &sys->active[NUMOGG]);
 			fflush(stdin);
 			for (; (sys->active[NUMOGG] > NUMOGG) | (sys->active[NUMOGG] < 0); ) {
@@ -76,6 +76,7 @@
 				scanf("%d", &sys->active[NUMOGG]);
 				fflush(stdin);
 			}
+			
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
 				if (l < sys->active[NUMOGG]) {
@@ -91,7 +92,7 @@
 			
 			// Ask the user informations about the objects
 			comm[1] = NAMELUN;
-			for (l=0; l!=sys->active[NUMOGG]; l++) {
+			for (l=0; l != sys->active[NUMOGG]; l++) {
 				comm[0] = l+1;
 				Rmotor(sys, inf, 0, "What's the name of the object number %i? [no spaces] [max %i letter]", comm, 0, 0);
 				scanf("%s", sys->o[l].name);
@@ -113,6 +114,7 @@
 				fflush(stdin);
 			}
 		}
+		
 		// The simulation loop (infinite)
 		for ( ; ; ) {
 		

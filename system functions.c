@@ -34,7 +34,24 @@
 	}
 
 /***
- * 	This function initialize a new system and ask information
- * */
+ * 	This function initialize a new object and ask information
+ * 
+ * 	n is the number of the object to initialize
+ */
 
-	short InitSystem ();
+	void InitObject (tinf *inf, tobj *obj, short n);
+	void InitObject (tinf *inf, tobj *obj, short n) {
+		
+		// What is going to be printed
+		char buffer[128];
+		// char variable array
+		char cvar[NAMELUN+1];
+		int ivar[1];
+		long double lvar[1];
+		// character writed in buffer
+		int position;
+	
+		
+		
+		return;
+	}
