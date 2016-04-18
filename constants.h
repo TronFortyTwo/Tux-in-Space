@@ -24,13 +24,19 @@
 
 
 	// Max number of object that the program can work on
-	#define NUMOGG 2048
+	#define NUMOGG 64
 	
 	// The lenght of a name of an object or a system
 	#define NAMELUN 64
 	
 	// The number of character printed when printing a LONG DOUBLE (possible 3 to 12)
 	#define LDLUN 8
+	
+	//the size of a buffer of character used in InitObject
+	#define BUFFERSIZE 512
+	
+	// the max lenght of a command word
+	#define COMMANDLENGHT 8
 	
 	// The max lenght of a variable cvar (see NUMCVAR)
 	#define LENGHTCVAR 16

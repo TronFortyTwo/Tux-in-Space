@@ -61,8 +61,7 @@
 	int Change(tsys *sys);
 	
 
-	// the max lenght of a command word
-	#define COMMANDLENGHT 8
+	
 
 	/**
 	 * The main function

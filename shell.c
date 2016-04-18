@@ -72,17 +72,18 @@
 			scanf("%d", &sys->active[NUMOGG]);
 			fflush(stdin);
 			for (; ;) {
-				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0, 0);
-				scanf("%d", &sys->active[NUMOGG]);
-				fflush(stdin);
 				if(sys->active[NUMOGG] < NUMOGG)
 					if(sys->active[NUMOGG] >= 0)
 						break;
+				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0, 0);
+				scanf("%d", &sys->active[NUMOGG]);
+				fflush(stdin);
 			}
+			
 			
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
-				if (l < sys->active[NUMOGG]) {
+				if (l <= sys->active[NUMOGG]) {
 					sys->o[l].type = 11;
 				}
 				else {
@@ -90,12 +91,8 @@
 				}
 			}
 			
-			// update the active array
-			UpdateActive(sys);
-			
-			// Ask the user informations about the objects
+			// Initialize some object
 			for (l=0; l != sys->active[NUMOGG]; l++) {
-				printf("calling Init Object");
 				InitObject(inf, &sys->o[l], l+1);
 			}
 		}

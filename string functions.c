@@ -37,7 +37,7 @@
 			}
 
 		return;
-		}
+	}
 		
 /*** GetLine is a function that return a line of characters
  * 		can be setted a number num of character that don't be returned
@@ -59,7 +59,7 @@
 		}
 		
 		return string;
-		}
+	}
 
 
 /*** Write on an Array of Chars	(Was)
@@ -84,3 +84,23 @@
 		}
 		return i;
 	}
+
+/*** The function ClearString
+ *		take a pointer to a string and blank it deleting all the character in a range given and writing a character given on it
+ */
+
+void ClearString(char *dest, short range, char sub);
+
+void ClearString(char *dest, short range, char sub) {
+	
+	//loop counter
+	short i;
+	
+	// a loop
+	for(i=0 ; i!=range; i++){
+		dest[i] = sub;
+	}
+	return;
+}
+
+

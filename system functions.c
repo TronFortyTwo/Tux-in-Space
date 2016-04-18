@@ -47,13 +47,10 @@
 	
 	void InitObject (tinf *inf, tobj *obj, short n) {
 		
-		printf("starting InitObject...");
-		
-		// What is going to be printed
-		char buffer[128];
+		// What is going to be printed. If the function go in segmentation fault, increase it
+		char buffer[BUFFERSIZE];
 		// char variable array
-		char *cvar = (char *) malloc (NAMELUN*sizeof(char));
-		short cpos=0;
+		char cvar[NAMELUN];
 		int ivar[1];
 		short ipos=0;
 		long double lvar[7];
@@ -61,8 +58,12 @@
 		// character writed in buffer and a character counter variable whit similar objective
 		int position;
 	
+		//Clear the string from some unexpected '\0'
+		ClearString(buffer, BUFFERSIZE, ' '); 
+	
 		// Title
 		position = Was(buffer, "NEW OBJECT INITIALIZATION:\n\n", 0);
+		printf("%d", position);
 		// A number
 		if(n >= 0){
 			position = position + Was(buffer, "object number %i", position);
@@ -71,13 +72,13 @@
 		}
 		// some space and ask about the name
 		position = position + Was(buffer, "\n\n\nname:", position);
-		Was (buffer, "[max %i character][only one word]\0", position);
+		Was (buffer, "[max %i character][only one word]\0\0", position);
 		ivar[ipos] = NAMELUN-1;
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
 		scanf("%s", obj->name);
 		// ask about the type
-		cpos = cpos + Was(cvar, obj->name, cpos);
-		cvar[cpos+1]='\0';
+		strcpy(cvar, obj->name);
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%s\ntype of the object:", position);
 		Was(buffer, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -85,6 +86,7 @@
 		// ask about the mass
 		ivar[ipos]=obj->type;
 		ipos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%i\nmass:", position);
 		Was(buffer, " (Kg)\0",position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -92,6 +94,7 @@
 		// ask about the x
 		lvar[lpos]=obj->mass;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nposition of the object in the x axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -99,6 +102,7 @@
 		// ask about the y
 		lvar[lpos]=obj->x;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nposition of the object in the y axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -106,6 +110,7 @@
 		// ask about the z
 		lvar[lpos]=obj->y;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nposition of the object in the z axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -113,6 +118,7 @@
 		// ask about the x's fast
 		lvar[lpos]=obj->z;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nfast of the object on the x axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -120,6 +126,7 @@
 		// ask about the y's fast
 		lvar[lpos]=obj->velx;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nfast of the object on the y axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -127,6 +134,7 @@
 		// ask about the z's fast
 		lvar[lpos]=obj->vely;
 		lpos++;
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
 		position = position + Was(buffer, "%l\nfast of the object on the z axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -134,7 +142,8 @@
 		// finish the asking
 		lvar[lpos]=obj->velz;
 		lpos++;
-		position = position + Was(buffer, "%l\n\nInitializing complete. Press 42 to intialize the object again or anythig else to continue\0", position);
+		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		position = position + Was(buffer, "%l\n\nInitializing complete. Digit 42 to intialize the object again or anythig else to continue\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
 		scanf("%d", ivar);
 		if(ivar[0]==42)
