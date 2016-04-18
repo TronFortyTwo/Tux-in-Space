@@ -46,9 +46,9 @@
  * 	this function don't end the string whit '\0'
  * 
  *	*/
-	char *GetLine (tinf *inf, char character[1], short num);
+	char * GetLine (tinf *inf, char character[1], short num);
 	
-	char *GetLine (tinf *inf, char character[1], short num) {
+	char * GetLine (tinf *inf, char character[1], short num) {
 		
 		short p;	// p for polpetta
 		
@@ -66,7 +66,8 @@
  * 		this function write a string given in another string starting from a position
  * 
  * 		return the number of characters copyed, else -1 if the string string go in overflow
- * 			
+ * 	NOTE:
+ * 	the character '\0' isn't writed
  *	*/
 	short Was (char *string, char *toadd, int pos);
 

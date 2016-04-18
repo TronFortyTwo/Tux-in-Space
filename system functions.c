@@ -34,24 +34,111 @@
 	}
 
 /***
- * 	This function initialize a new object and ask information
+ * 	This function InitObject initialize a new object and ask information about it
  * 
- * 	n is the number of the object to initialize
+ * 	n is the number of the object to initialize, if in a list
+ * 	
+ * 	NOTE:
+ * 	-this function is a bit :| Poker Face
+ * 	-this is a recursive function
  */
 
 	void InitObject (tinf *inf, tobj *obj, short n);
+	
 	void InitObject (tinf *inf, tobj *obj, short n) {
+		
+		printf("starting InitObject...");
 		
 		// What is going to be printed
 		char buffer[128];
 		// char variable array
-		char cvar[NAMELUN+1];
+		char *cvar = (char *) malloc (NAMELUN*sizeof(char));
+		short cpos=0;
 		int ivar[1];
-		long double lvar[1];
-		// character writed in buffer
+		short ipos=0;
+		long double lvar[7];
+		short lpos=0;
+		// character writed in buffer and a character counter variable whit similar objective
 		int position;
 	
-		
+		// Title
+		position = Was(buffer, "NEW OBJECT INITIALIZATION:\n\n", 0);
+		// A number
+		if(n >= 0){
+			position = position + Was(buffer, "object number %i", position);
+			ivar[ipos]=n;
+			ipos++;
+		}
+		// some space and ask about the name
+		position = position + Was(buffer, "\n\n\nname:", position);
+		Was (buffer, "[max %i character][only one word]\0", position);
+		ivar[ipos] = NAMELUN-1;
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%s", obj->name);
+		// ask about the type
+		cpos = cpos + Was(cvar, obj->name, cpos);
+		cvar[cpos+1]='\0';
+		position = position + Was(buffer, "%s\ntype of the object:", position);
+		Was(buffer, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%d", &obj->type);
+		// ask about the mass
+		ivar[ipos]=obj->type;
+		ipos++;
+		position = position + Was(buffer, "%i\nmass:", position);
+		Was(buffer, " (Kg)\0",position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->mass);
+		// ask about the x
+		lvar[lpos]=obj->mass;
+		lpos++;
+		position = position + Was(buffer, "%l\nposition of the object in the x axis:", position);
+		Was(buffer, " (Km)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->x);
+		// ask about the y
+		lvar[lpos]=obj->x;
+		lpos++;
+		position = position + Was(buffer, "%l\nposition of the object in the y axis:", position);
+		Was(buffer, " (Km)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->y);
+		// ask about the z
+		lvar[lpos]=obj->y;
+		lpos++;
+		position = position + Was(buffer, "%l\nposition of the object in the z axis:", position);
+		Was(buffer, " (Km)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->z);
+		// ask about the x's fast
+		lvar[lpos]=obj->z;
+		lpos++;
+		position = position + Was(buffer, "%l\nfast of the object on the x axis:", position);
+		Was(buffer, " (Km/s)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->velx);
+		// ask about the y's fast
+		lvar[lpos]=obj->velx;
+		lpos++;
+		position = position + Was(buffer, "%l\nfast of the object on the y axis:", position);
+		Was(buffer, " (Km/s)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->vely);
+		// ask about the z's fast
+		lvar[lpos]=obj->vely;
+		lpos++;
+		position = position + Was(buffer, "%l\nfast of the object on the z axis:", position);
+		Was(buffer, " (Km/s)\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%Lf", &obj->velz);
+		// finish the asking
+		lvar[lpos]=obj->velz;
+		lpos++;
+		position = position + Was(buffer, "%l\n\nInitializing complete. Press 42 to intialize the object again or anythig else to continue\0", position);
+		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		scanf("%d", ivar);
+		if(ivar[0]==42)
+			InitObject(inf, obj, n);
 		
 		return;
 	}
