@@ -71,12 +71,11 @@
 			staterec = OPSo(sys, inf);
 		
 		// Control that the function did the work correctly. If not signal it
-		if 		(staterec == 0 );
-		else {
+		if(staterec != 0){
 			if (mode==0)
-				strcpy(string , "OnlyPrintfSystem");
+				strcpy(string, "OnlyPrintfSystem");
 			if (mode==1)
-				strcpy(string , "OPSOutput");
+				strcpy(string, "OPSOutput");
 			Rmotor (sys, inf, 0, "Rmotor's call to %c. It exit whit error: %i\n\nPress a button to continue...", &staterec, 0, string);
 			scanf("%d", &staterec);
 		}

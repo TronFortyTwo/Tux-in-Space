@@ -1,28 +1,28 @@
 /*
-#############################################################################################
-#    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
-#																							#
-#    This program is free software; you can redistribute it and/or modify					#
-#    it under the terms of the GNU General Public License as published by					#
-#    the Free Software Foundation, version 3 or compatibles.								#
-#																							#
-#    This program is distributed in the hope that it will be useful,						#
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of							#
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the							#
-#    GNU General Public License for more details.											#
-#																							#
-#    You should have received a copy of the GNU General Public License						#
-#    along with this program; if not, write to the Free Software							#
-#    Foundation, Inc.																		#
-#############################################################################################
+#############################################################################
+#    CSpace - space simulator												#
+#    Copyright (C) 2016  emanuele.sorce@hotmail.com							#
+#																			#
+#    This program is free software; you can redistribute it and/or modify	#
+#    it under the terms of the GNU General Public License as published by	#
+#    the Free Software Foundation, version 3 or compatibles.				#
+#																			#
+#    This program is distributed in the hope that it will be useful,		#
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of			#
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			#
+#    GNU General Public License for more details.							#
+#																			#
+#    You should have received a copy of the GNU General Public License		#
+#    along with this program; if not, write to the Free Software			#
+#    Foundation, Inc.														#
+#############################################################################
 
  * The function OnlyPrintfSystem: print word in a simple behavior and adapts on the value of column and line
  * 
  * The advantages on use OnlyPrintfSystem is:
  * 		- A simply but nice automatic impagination that all function could use whit a simple call 
  * 		- make the program nice and smart
- * 		- A very more simple algoritm (faster and lighter) respect more graphically mode of Rmotor not writted yet, but equally can adapts the column and line numbers
+ * 		- A very more simple algoritm (faster and lighter) respect more complex mode of Rmotor not writted yet, but equally can adapts the column and line numbers
  *
  */
  
@@ -32,7 +32,7 @@
 	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone);
 	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone);
 	
- 
+ /**OPS*/
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
 	
 	// the number of lines alredy printfed

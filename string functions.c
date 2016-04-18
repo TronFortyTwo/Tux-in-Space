@@ -37,7 +37,7 @@
 			}
 
 		return;
-		}
+	}
 		
 /*** GetLine is a function that return a line of characters
  * 		can be setted a number num of character that don't be returned
@@ -46,9 +46,9 @@
  * 	this function don't end the string whit '\0'
  * 
  *	*/
-	char *GetLine (tinf *inf, char character[1], short num);
+	char * GetLine (tinf *inf, char character[1], short num);
 	
-	char *GetLine (tinf *inf, char character[1], short num) {
+	char * GetLine (tinf *inf, char character[1], short num) {
 		
 		short p;	// p for polpetta
 		
@@ -59,14 +59,15 @@
 		}
 		
 		return string;
-		}
+	}
 
 
 /*** Write on an Array of Chars	(Was)
  * 		this function write a string given in another string starting from a position
  * 
  * 		return the number of characters copyed, else -1 if the string string go in overflow
- * 			
+ * 	NOTE:
+ * 	the character '\0' isn't writed
  *	*/
 	short Was (char *string, char *toadd, int pos);
 
@@ -83,3 +84,23 @@
 		}
 		return i;
 	}
+
+/*** The function ClearString
+ *		take a pointer to a string and blank it deleting all the character in a range given and writing a character given on it
+ */
+
+void ClearString(char *dest, short range, char sub);
+
+void ClearString(char *dest, short range, char sub) {
+	
+	//loop counter
+	short i;
+	
+	// a loop
+	for(i=0 ; i!=range; i++){
+		dest[i] = sub;
+	}
+	return;
+}
+
+

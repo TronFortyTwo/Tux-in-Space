@@ -61,24 +61,29 @@
 		if (staterec == 0) {
 			
 			// Ask the name of the new system
-			comm[0]=NAMELUN;
+			comm[0]=NAMELUN-1;
 			Rmotor(sys, inf, 0, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0, 0);
 			scanf("%s", sys->name);
 			fflush(stdin);
 
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
 			comm[0]=NUMOGG;
-			Rmotor(sys, inf, 0, "How many objects there are in the system? [max %i]", comm, 0, 0);
+			Rmotor(sys, inf, 0, "do you want to configure some object now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0, 0);
 			scanf("%d", &sys->active[NUMOGG]);
 			fflush(stdin);
-			for (; (sys->active[NUMOGG] > NUMOGG) | (sys->active[NUMOGG] < 0); ) {
-				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number. [max %i]", comm, 0, 0);
+			for (; ;) {
+				if(sys->active[NUMOGG] < NUMOGG)
+					if(sys->active[NUMOGG] >= 0)
+						break;
+				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0, 0);
 				scanf("%d", &sys->active[NUMOGG]);
 				fflush(stdin);
 			}
+			
+			
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
-				if (l < sys->active[NUMOGG]) {
+				if (l <= sys->active[NUMOGG]) {
 					sys->o[l].type = 11;
 				}
 				else {
@@ -86,33 +91,12 @@
 				}
 			}
 			
-			// update the active array
-			UpdateActive(sys);
-			
-			// Ask the user informations about the objects
-			comm[1] = NAMELUN;
-			for (l=0; l!=sys->active[NUMOGG]; l++) {
-				comm[0] = l+1;
-				Rmotor(sys, inf, 0, "What's the name of the object number %i? [no spaces] [max %i letter]", comm, 0, 0);
-				scanf("%s", sys->o[l].name);
-				fflush(stdin);
-				Rmotor(sys, inf, 0, "Which's the type of the object number %i?\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station", comm, 0, 0);
-				scanf("%d",&sys->o[l].type);
-				Rmotor(sys, inf, 0, "What is the position of the object number %i? [x y z] [Km]",comm,0,0);
-				scanf("%Lf",&sys->o[l].x);
-				scanf("%Lf",&sys->o[l].y);
-				scanf("%Lf",&sys->o[l].z);
-				fflush(stdin);
-				Rmotor(sys, inf, 0,"What is the fast of the object number %i? [x y z] [Km/s]", comm, 0, 0);
-				scanf("%Lf",&sys->o[l].velx);
-				scanf("%Lf",&sys->o[l].vely);
-				scanf("%Lf",&sys->o[l].velz);
-				fflush(stdin);
-				Rmotor(sys, inf, 0, "What is the mass of the object number %i? [1000 Kg (t)]", comm, 0, 0);
-				scanf("%Lf", &sys->o[l].mass);
-				fflush(stdin);
+			// Initialize some object
+			for (l=0; l != sys->active[NUMOGG]; l++) {
+				InitObject(inf, &sys->o[l], l+1);
 			}
 		}
+		
 		// The simulation loop (infinite)
 		for ( ; ; ) {
 		
