@@ -89,16 +89,16 @@
  *		take a pointer to a string and blank it deleting all the character in a range given and writing a character given on it
  */
 
-void ClearString(char *dest, short range, char sub);
+void ClearString(char *dest, short range, char *sub);
 
-void ClearString(char *dest, short range, char sub) {
+void ClearString(char *dest, short range, char *sub) {
 	
 	//loop counter
 	short i;
 	
 	// a loop
 	for(i=0 ; i!=range; i++){
-		dest[i] = sub;
+		dest[i] = sub[0];
 	}
 	return;
 }

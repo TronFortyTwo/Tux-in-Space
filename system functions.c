@@ -59,7 +59,7 @@
 		int position;
 	
 		//Clear the string from some unexpected '\0'
-		ClearString(buffer, BUFFERSIZE, ' '); 
+		ClearString(buffer, BUFFERSIZE, " "); 
 	
 		// Title
 		position = Was(buffer, "NEW OBJECT INITIALIZATION:\n\n", 0);
@@ -78,7 +78,7 @@
 		scanf("%s", obj->name);
 		// ask about the type
 		strcpy(cvar, obj->name);
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%s\ntype of the object:", position);
 		Was(buffer, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -86,7 +86,7 @@
 		// ask about the mass
 		ivar[ipos]=obj->type;
 		ipos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%i\nmass:", position);
 		Was(buffer, " (Kg)\0",position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -94,7 +94,7 @@
 		// ask about the x
 		lvar[lpos]=obj->mass;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nposition of the object in the x axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -102,7 +102,7 @@
 		// ask about the y
 		lvar[lpos]=obj->x;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nposition of the object in the y axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -110,7 +110,7 @@
 		// ask about the z
 		lvar[lpos]=obj->y;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nposition of the object in the z axis:", position);
 		Was(buffer, " (Km)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -118,7 +118,7 @@
 		// ask about the x's fast
 		lvar[lpos]=obj->z;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nfast of the object on the x axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -126,7 +126,7 @@
 		// ask about the y's fast
 		lvar[lpos]=obj->velx;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nfast of the object on the y axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -134,7 +134,7 @@
 		// ask about the z's fast
 		lvar[lpos]=obj->vely;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\nfast of the object on the z axis:", position);
 		Was(buffer, " (Km/s)\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
@@ -142,7 +142,7 @@
 		// finish the asking
 		lvar[lpos]=obj->velz;
 		lpos++;
-		ClearString(buffer+position, BUFFERSIZE-position, ' '); 
+		ClearString(buffer+position, BUFFERSIZE-position, " "); 
 		position = position + Was(buffer, "%l\n\nInitializing complete. Digit 42 to intialize the object again or anythig else to continue\0", position);
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
 		scanf("%d", ivar);
