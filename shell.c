@@ -96,7 +96,6 @@
 				InitObject(inf, &sys->o[l], l+1);
 			}
 		}
-		
 		// The simulation loop (infinite)
 		for ( ; ; ) {
 		

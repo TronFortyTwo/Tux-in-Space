@@ -90,7 +90,7 @@
 		// The return value from shell function
 		int staterec;
 		
-		// default things for struct inf are setted:
+		// default things for struct inf are setted.
 		// line and column are respectively the number of line and column that Rmotor can use for printing
 		inf.line = 40;
 		inf.column = 100;
@@ -104,7 +104,7 @@
 		// the precision is setted 1 calcolation every 2 second
 		sys.precision = 2;
 		
-		// set num precision to 7
+		// set num precision
 		inf.numprecision = 4;
 
 		// call the shell and she returns a state

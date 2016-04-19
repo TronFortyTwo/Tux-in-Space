@@ -14,7 +14,7 @@
 #																							#
 #    You should have received a copy of the GNU General Public License						#
 #    along with this program; if not, write to the Free Software							#
-#    Foundation, Inc.																	#
+#    Foundation, Inc.																		#
 #############################################################################################
 
  *
@@ -38,29 +38,4 @@
 
 		return;
 	}
-		
-/*** GetLine is a function that return a line of characters
- * 		can be setted a number num of character that don't be returned
- * 		similar(in the behavior but not in the structure) to PrintLine but this return the string and doesn't print it
- * 	NOTE:
- * 	this function don't end the string whit '\0'
- * 
- *	*/
-	char * GetLine (tinf *inf, char character[1], short num);
-	
-	char * GetLine (tinf *inf, char character[1], short num) {
-		
-		short p;	// p for polpetta
-		
-		char *string = (char *) malloc (sizeof(char)*inf->column);
-		
-		for (p=0; p!=inf->column-num+1; p++) {
-			string[p] = character[0];
-		}
-		
-		free(string);
-		
-		return string;
-	}
-
 

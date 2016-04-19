@@ -66,6 +66,7 @@
 		
 		//a loop that fill the line
 		for (columndone=FRAMELUN; columndone < inf->column-FRAMELUN; ) {
+			
 			// If the character is a new line
 			if(phrase[chardone]=='\n') {
 				// printf spaces to complete the line
@@ -83,21 +84,29 @@
 				continue;
 			}
 			
-			// if the character is a % start var printing
+			// if the character is a % start dinamic printing
 			else if (phrase[chardone] == '%') {
 				chardone++;
-				// if is an int call PrintInt
+				// if is an i call PrintInt
 				if (phrase[chardone] == 'i') {
 					PrintInt(inf, ivar[ipos], &columndone, &linedone);
 					ipos++;
 				}
+				// if is an l call PrintLongDouble
 				else if (phrase[chardone] == 'l') {
 					PrintLongDouble(inf, &lvar[lpos], &columndone, &linedone);
 					lpos++;
 				}
+				// if is a c call PrintString
 				else if (phrase[chardone] == 'c') {
 					PrintString(inf, cvar, cpos, &columndone, &linedone);
 					cpos++;
+				}
+				// if is a L finish the line whit phrase[chardone+1]
+				else if (phrase[chardone] == 'f') {
+					PrintLine(inf, &phrase[chardone+1], 2*FRAMELUN+columndone);
+					chardone++;
+					columndone = inf->column-FRAMELUN;
 				}
 				chardone++;
 				continue;

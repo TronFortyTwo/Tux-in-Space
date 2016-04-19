@@ -26,20 +26,6 @@
  * NOTE:
  * For smart allocation, this is a recursive function, so the last two paramater when normally calling the function must be setted to 0
  * 
- * TIME LINE
- * ------------------------------
- * ------------------------------
- * 
- * Name    x     velx
- * Type    y     vely
- * mass    z     velz
- * 
- * ------------------------------
- * 
- * ...
- * 
- * 
- * 
  * 
  */
 	int OPSo (tsys *sys, tinf *inf);
@@ -48,17 +34,19 @@
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
+		//the type of the object
+		char type[30];
 		// the array to give to Rmotor whit size
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
 		short lpos=0;
-		//counter
+		// counter
 		short i;
-		// secondary little buffer
-		char littlebuffer[30];
+		// pointer to a object
+		tobj *obj;
 		
 		// Printf the line whit the time.
-		strcpy (buffer, "Year %i | Day %i | %i:%i:%i,%i\n");
+		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n");
 		ivar[0] = sys->year;
 		ivar[1] = sys->day;
 		ivar[2] = sys->hour;
@@ -66,45 +54,40 @@
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
 		// Write two lines of '-'
-		strcat (buffer, GetLine(inf, "-", 2*FRAMELUN));
-	    strcat (buffer, GetLine(inf, "-", 2*FRAMELUN));
-		strcat (buffer, "\n\n");
-		// a loop for every object of the system
-		for (i=0; i!=sys->nactive; i++) {
-			// Write the name of the object
-			strcat (buffer, sys->o[sys->active[i]].name);
-			// Make some space and printf the x position, other space and the fast in x, then new line. alloc the long double array
-			strcat (buffer, "    x axis: %l whit a fast of %l\n");
-			lvar[lpos] = sys->o[sys->active[i]].x;
-			lpos++;
-			lvar[lpos] = sys->o[sys->active[i]].velx;
-			lpos++;
-			// Write the type of the object
-			ExtractType(sys->o[sys->active[i]].type, littlebuffer);
-			strcat (buffer, littlebuffer);
-			// Write the y and his fast
-			strcat (buffer, "    y axis: %l whit a fast of %l\n");
-			lvar[lpos] = sys->o[sys->active[i]].y;
-			lpos++;
-			lvar[lpos] = sys->o[sys->active[i]].vely;
-			lpos++;
-			// Write in a new line: mass, z and z fast
-			strcat (buffer, "mass: %l    z axis:%l whit an fast of %l\n");
-			lvar[lpos] = sys->o[sys->active[i]].mass;
-			lpos++;
-			lvar[lpos] = sys->o[sys->active[i]].z;
-			lpos++;
-			lvar[lpos] = sys->o[sys->active[i]].velz;
-			lpos++;
-			// Write the final line of '-'
-			strcat (buffer, GetLine(inf, "-", 2*FRAMELUN));
-			
+		for(i=0; i!=inf->column-2*FRAMELUN; i++) {
+			strcat (buffer, "--");
+		}
+		
+		// A loop that tell to every object something
+		for (i=0; i!=sys->nactive; i++){
+			//set the pointer to the object we are using
+			obj = &sys->o[sys->active[i]];
+			//Tell the name, type and mass
+			strcat(buffer, obj->name);
+			strcat(buffer, " | ");
+			ExtractType(obj->type, type);
+			strcat(buffer, type);
+			strcat(buffer, " | ");
+			strcat(buffer, "%l");
+			lvar[lpos++] = obj->mass;
+			//Tell the x '\n', the y a '\n' and the z
+			strcat(buffer, "\n%l whit fast of %l\n%l whit fast of %l\n%l whit fast of %l");
+			lvar[lpos++]= obj->x;
+			lvar[lpos++]= obj->y;
+			lvar[lpos++]= obj->z;
+			lvar[lpos++]= obj->velx;
+			lvar[lpos++]= obj->vely;
+			lvar[lpos++]= obj->velz;
+			// A line of '-'
+			for(i=0; i!=inf->column-2*FRAMELUN; i++) {
+			strcat (buffer, "-");
+		}
 		}
 		
 		//tell to Rmotor what is done
 		Rmotor(sys, inf, 0, buffer, ivar, lvar, 0);
 		
-		// dealloc the array
+		// dealloc the arrays
 		free(lvar);
 		
 		return 0;
