@@ -39,7 +39,7 @@
 		for(;;) {
 		
 			//Principal menù, first screen	
-			Rmotor(0, inf, 0, "CSPACE: The space's simulator\n\n-New system: 1\n-Settings: 2\n-Information: 3\n", 0, 0, 0);
+			Rmotor(0, inf, 0, ".   CSPACE: The space's simulator\n\n-New system: 1\n-Settings: 2\n-Information: 3\n", 0, 0, 0);
 			scanf("%d", &inputandothers);
 			fflush(stdin);
 			
@@ -59,6 +59,10 @@
 				Rmotor(0, inf, 0, "New number of lines (now %i):", &inputandothers, 0, 0);
 				Setmaxoutput(inf);
 				scanf("%d", &inf->line);
+				fflush(stdin);
+				inputandothers=inf->numprecision;
+				Rmotor(0, inf, 0, "New number of number's decimal printed (now %i):", &inputandothers, 0, 0);
+				scanf("%d", &inf->numprecision);
 				fflush(stdin);
 			}
 			// if information printf the license

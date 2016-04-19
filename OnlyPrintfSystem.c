@@ -32,7 +32,7 @@
 	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone);
 	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone);
 	
- /**OPS*/
+ /**Only Printf System */
 	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
 	
 	// the number of lines alredy printfed
@@ -62,11 +62,10 @@
 	for( linedone=2; linedone!=inf->line-3; linedone++) {
 		
 		//printf the frame
-		printf(FRAME);
+		printf("%s", FRAME);
 		
 		//a loop that fill the line
 		for (columndone=FRAMELUN; columndone < inf->column-FRAMELUN; ) {
-			
 			// If the character is a new line
 			if(phrase[chardone]=='\n') {
 				// printf spaces to complete the line
@@ -127,7 +126,7 @@
 	}
 	
 	// printf the last two line of the frame
-	printf(FRAME);
+	printf("%s", FRAME);
 	PrintLine(inf, FRAMEEND, 4);
 	printf("%s\n", FRAMER);
 	PrintLine(inf, FRAMESTART, 0);
@@ -209,7 +208,7 @@
 		// the size of the number
 		short size;
 		// caluculate size
-		size = snprintf(buffer, inf->column-2*FRAMELUN, "%Lf", *n);
+		size = snprintf(buffer, inf->column-2*FRAMELUN, "%+'.*Lf",inf->numprecision, *n);
 		// if the number don't overflow the line
 		if(*columndone+2*FRAMELUN+size <= inf->column) {
 			//printf it
@@ -262,8 +261,7 @@
 		}
 	
 		//take the size of the string
-		for(i=position; buffer[i] != '\0'; i++)
-		i = i-position;
+		i = strlen(&buffer[position]);
 	
 		//now printf the string if not overflow the line
 		if(*columndone+2*FRAMELUN+i <= inf->column) {
@@ -274,7 +272,7 @@
 		else {
 			if(*linedone+3 == inf->line){
 				//complete the line
-				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				PrintLine(inf, " ", FRAMELUN+*columndone);
 				printf("%s\n", FRAMER);
 				//update teh counters
 				*columndone=inf->column;

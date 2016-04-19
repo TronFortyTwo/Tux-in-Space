@@ -52,55 +52,15 @@
 		
 		short p;	// p for polpetta
 		
-		char *string = (char *) malloc(sizeof(char)*inf->column);
+		char *string = (char *) malloc (sizeof(char)*inf->column);
 		
 		for (p=0; p!=inf->column-num+1; p++) {
 			string[p] = character[0];
 		}
 		
+		free(string);
+		
 		return string;
 	}
-
-
-/*** Write on an Array of Chars	(Was)
- * 		this function write a string given in another string starting from a position
- * 
- * 		return the number of characters copyed, else -1 if the string string go in overflow
- * 	NOTE:
- * 	the character '\0' isn't writed
- *	*/
-	short Was (char *string, char *toadd, int pos);
-
-	short Was (char *string, char *toadd, int pos) {
-		// loop's counter
-		int i;
-		// main loop
-		for (i=0; toadd[i]!='\0'; i++) {
-			// control that the string has space for another character
-			if(string[i+pos] == '\0')
-				return -1;
-			// copy the character
-			string[i+pos] = toadd[i];
-		}
-		return i;
-	}
-
-/*** The function ClearString
- *		take a pointer to a string and blank it deleting all the character in a range given and writing a character given on it
- */
-
-void ClearString(char *dest, short range, char *sub);
-
-void ClearString(char *dest, short range, char *sub) {
-	
-	//loop counter
-	short i;
-	
-	// a loop
-	for(i=0 ; i!=range; i++){
-		dest[i] = sub[0];
-	}
-	return;
-}
 
 

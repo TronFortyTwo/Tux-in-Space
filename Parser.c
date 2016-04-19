@@ -63,10 +63,10 @@
 
 	
 
-	/**
-	 * The main function
-	 * of the parser
-	 */
+/**
+ * The main function
+ * of the parser
+ */
 	int Parser(tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned

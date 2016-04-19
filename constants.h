@@ -40,6 +40,9 @@
 	
 	// The max lenght of a variable cvar (see NUMCVAR)
 	#define LENGHTCVAR 16
+	
+	// the lenght of a tab
+	#define TABLEN 14
 
 	// The frame that Rmotor uses and his size
 	#define FRAME "# "
