@@ -105,7 +105,7 @@
 		sys.precision = 2;
 		
 		// set num precision to 7
-		inf.numprecision = 7;
+		inf.numprecision = 4;
 
 		// call the shell and she returns a state
 		staterec = Shell (&sys, &inf);

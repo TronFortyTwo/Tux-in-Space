@@ -73,8 +73,8 @@
 		char reffub [BUFFERSIZE];
 		// char variable array
 		char cvar[NAMELUN];
-		int ivar[1];
-		short ipos=0;
+		int ivar[2];
+		short ipos = 0;
 		long double lvar[7];
 		short lpos=0;
 	
@@ -83,7 +83,7 @@
 		// A number
 		if(n >= 0){
 			strcat(buffer, "object number %i");
-			ivar[ipos]=n;
+			ivar[ipos] = n;
 			ipos++;
 		}
 		// some space and ask about the name
@@ -170,10 +170,8 @@
 		lpos++;
 		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
-		scanf("%d", ivar);
-		fflush(stdin);
-		if(ivar[0]==4)
+		scanf("%d", &ivar[0]);
+		if(ivar[0] == 4)
 			InitObject(inf, obj, n);
-		
 		return;
 	}

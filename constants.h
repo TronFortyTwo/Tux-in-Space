@@ -24,7 +24,7 @@
 
 
 	// Max number of object that the program can work on
-	#define NUMOGG 64
+	#define NUMOGG 4096
 	
 	// The lenght of a name of an object or a system
 	#define NAMELUN 64
@@ -33,7 +33,7 @@
 	#define LDLUN 8
 	
 	//the size of a buffer of character used in InitObject
-	#define BUFFERSIZE 512
+	#define BUFFERSIZE 1024
 	
 	// the max lenght of a command word
 	#define COMMANDLENGHT 8
