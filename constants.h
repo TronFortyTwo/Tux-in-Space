@@ -24,7 +24,7 @@
 
 
 	// Max number of object that the program can work on
-	#define NUMOGG 8
+	#define NUMOGG 128
 	
 	// The lenght of a name of an object or a system
 	#define NAMELUN 64
@@ -32,8 +32,10 @@
 	// The number of character printed when printing a LONG DOUBLE (possible 3 to 12)
 	#define LDLUN 8
 	
-	//the size of a buffer of character used in InitObject
+	//the size of a buffer of character
 	#define BUFFERSIZE 1024
+	//max lenght of the buffer used by SafeScan function
+	#define BUFFERINPUTSIZE 25
 	
 	// the max lenght of a command word
 	#define COMMANDLENGHT 8

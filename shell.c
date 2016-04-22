@@ -69,15 +69,13 @@
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
 			comm[0]=NUMOGG;
 			Rmotor(sys, inf, 0, "do you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0, 0);
-			scanf("%d", &sys->nactive);
-			fflush(stdin);
+			SafeIScan(inf, &sys->nactive);
 			for (; ;) {
 				if(sys->nactive < NUMOGG)
 					if(sys->nactive >= 0)
 						break;
 				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0, 0);
-				scanf("%d", &sys->nactive);
-				fflush(stdin);
+				SafeIScan(inf, &sys->nactive);
 			}
 			
 			

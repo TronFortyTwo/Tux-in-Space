@@ -99,8 +99,7 @@
 		strcpy(reffub, buffer);
 		strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
 		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
-		scanf("%d", &obj->type);
-		fflush(stdin);
+		SafeIScan(inf, &obj->type);
 		// ask about the mass
 		ExtractType(obj->type, reffub);
 		strcat(buffer, reffub);
@@ -169,7 +168,7 @@
 		lpos++;
 		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
-		scanf("%d", ivar);
+		SafeIScan(inf, ivar);
 		if(ivar[0] == 4)
 			InitObject(inf, obj, n);
 		return;
