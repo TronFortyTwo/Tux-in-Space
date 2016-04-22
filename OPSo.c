@@ -59,7 +59,7 @@
 		}
 		
 		// A loop that tell to every object something
-		for (i=0; i!=sys->nactive; i++){
+		for (i=1; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[sys->active[i]];
 			//Tell the name, type and mass
@@ -80,8 +80,8 @@
 			lvar[lpos++]= obj->velz;
 			// A height of '-'
 			for(i=0; i!=inf->width-2*FRAMELUN; i++) {
-			strcat (buffer, "-");
-		}
+				strcat (buffer, "-");
+			}
 		}
 		
 		//tell to Rmotor what is done

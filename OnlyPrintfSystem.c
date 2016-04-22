@@ -259,8 +259,7 @@
 		
 		//contein the position of the first character of the string to printf
 		short position;
-		
-		//counter
+		//counter and temporany variable
 		short i;
 		
 		//look for the first character of the string to print

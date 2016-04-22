@@ -94,7 +94,6 @@
 			// Initialize some object
 			for (l=0; l!=sys->nactive; l++) {
 				InitObject(inf, &sys->o[l], l+1);
-				printf("done");
 			}
 		}
 		// The simulation loop (infinite)

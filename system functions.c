@@ -170,7 +170,6 @@
 		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
 		scanf("%d", ivar);
-		printf("scanned");
 		if(ivar[0] == 4)
 			InitObject(inf, obj, n);
 		return;

@@ -25,9 +25,9 @@ int Pmotor (tsys *sys) {
 		
 		// Gravity force
 		// a loop that operate var active for var active
-		for(i=0; i!=sys->active[NUMOGG]; i++) {
+		for(i=0; i!=sys->nactive; i++) {
 			// a loop that consider every planet (i+1 because whit l<i is alredy made, and whit i=l the two objects are the same)
-			for (l=i+1; l!= sys->active[NUMOGG]; i++) {
+			for (l=i+1; l!= sys->nactive; i++) {
 				// First: must be individuated the baricenter of the sistem of obj i and obj (see Information.txt at the voice Pmotor)
 				distx = sys->o[sys->active[i]].x - sys->o[sys->active[l]].x;
 				disty = sys->o[sys->active[i]].y - sys->o[sys->active[l]].y;
@@ -49,7 +49,7 @@ int Pmotor (tsys *sys) {
 			}
 		}
 		// move the objects
-		for (i=0; i!=sys->active[NUMOGG]; i++) {
+		for (i=0; i!=sys->nactive; i++) {
 			sys->o[sys->active[i]].x = (sys->o[sys->active[i]].x + sys->o[sys->active[i]].velx) * sys->precision ;
 			sys->o[sys->active[i]].y = (sys->o[sys->active[i]].y + sys->o[sys->active[i]].vely) * sys->precision ;
 			sys->o[sys->active[i]].z = (sys->o[sys->active[i]].z + sys->o[sys->active[i]].velz) * sys->precision ;
