@@ -1,7 +1,6 @@
 /*
  * HERE we have functions that help whit the system of the program 
  * 
- * 
  */
 
 
@@ -11,7 +10,7 @@
  *	*/
 	void Setmaxoutput(tinf *inf);
 	void Setmaxoutput(tinf *inf) {
-		inf->maxoutput = (inf->column - 2 * FRAMELUN) * (inf->line - 2 * FRAMELUN -1);
+		inf->maxoutput = (inf->width - 2 * FRAMELUN) * (inf->height - 2 * FRAMELUN -1);
 		return;
 	}
 
@@ -170,7 +169,8 @@
 		lpos++;
 		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
 		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
-		scanf("%d", &ivar[0]);
+		scanf("%d", ivar);
+		printf("scanned");
 		if(ivar[0] == 4)
 			InitObject(inf, obj, n);
 		return;

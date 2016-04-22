@@ -35,8 +35,8 @@
 		// Maxoutput is the maximum number of char that can be printed (not consider the frames)
 		int maxoutput;
 		// The number of columns and lines that Rmotor's function must use.
-		int column;
-		int line;
+		int width;
+		int height;
 		// number of character used for printing the deciamal of a long double
 		int numprecision;
 	};
@@ -91,11 +91,11 @@
 		int staterec;
 		
 		// default things for struct inf are setted.
-		// line and column are respectively the number of line and column that Rmotor can use for printing
-		inf.line = 40;
-		inf.column = 100;
+		// height and width are respectively the number of height and width that Rmotor can use for printing
+		inf.height = 40;
+		inf.width = 100;
 	
-		// maxoutput is the max number of character that Rmotor can effectevely use (there are four column and five lines occupied by the frame)
+		// maxoutput is the max number of character that Rmotor can effectevely use (there are four width and five lines occupied by the frame)
 		Setmaxoutput(&inf);
 		
 		// the vmode is setted 0 (onlyOPS)

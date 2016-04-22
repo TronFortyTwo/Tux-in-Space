@@ -23,7 +23,7 @@
  */
 
 
-/*** PrintLine is a function that printf a line of characters
+/*** PrintLine is a function that printf a height of characters
  * 		can be setted a number num of character that don't be printed
  *	*/
 	void PrintLine (tinf *inf, char character[], int num);
@@ -32,7 +32,7 @@
 		
 		short p;	//(p)rinted
 
-		for ( p=0; p!=inf->column-num; p++) {
+		for ( p=0; p!=inf->width-num; p++) {
 			printf("%s", character);
 			}
 

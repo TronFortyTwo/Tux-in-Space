@@ -45,7 +45,7 @@
 		// pointer to a object
 		tobj *obj;
 		
-		// Printf the line whit the time.
+		// Printf the height whit the time.
 		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n");
 		ivar[0] = sys->year;
 		ivar[1] = sys->day;
@@ -54,7 +54,7 @@
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
 		// Write two lines of '-'
-		for(i=0; i!=inf->column-2*FRAMELUN; i++) {
+		for(i=0; i!=inf->width-2*FRAMELUN; i++) {
 			strcat (buffer, "--");
 		}
 		
@@ -78,8 +78,8 @@
 			lvar[lpos++]= obj->velx;
 			lvar[lpos++]= obj->vely;
 			lvar[lpos++]= obj->velz;
-			// A line of '-'
-			for(i=0; i!=inf->column-2*FRAMELUN; i++) {
+			// A height of '-'
+			for(i=0; i!=inf->width-2*FRAMELUN; i++) {
 			strcat (buffer, "-");
 		}
 		}

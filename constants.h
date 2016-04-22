@@ -24,7 +24,7 @@
 
 
 	// Max number of object that the program can work on
-	#define NUMOGG 4096
+	#define NUMOGG 8
 	
 	// The lenght of a name of an object or a system
 	#define NAMELUN 64
