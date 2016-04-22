@@ -52,12 +52,6 @@
 	#define FRAMELUN 2
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
-
-	// this are numbers needed from the variable database that use it for make a variable proprety of a function.
-	// No one function use the number directly, but use the name, so what number chose is indifferent
-	// all the number must be different
-	#define NUMFUNCTIONS 2
-	#define VOnlyPrintfSystem 1
-	#define VOPSo 2
-	//...
-	//if a function use the Database manager just add it here whit a new number(and a V first) and add one at the NUMFUNCTION
+	
+	
+	
