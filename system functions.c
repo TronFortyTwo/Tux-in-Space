@@ -3,7 +3,33 @@
  * 
  */
 
-
+/***
+ * UpdateActive update the active list and the nactive var
+ * 
+ */
+	void UpdateActive(tsys *sys);
+	void UpdateActive(tsys *sys) {
+		
+		//counters
+		short i;
+		
+		//reset the number of object active
+		sys->nactive=0;
+		
+		//loop
+		for (i=0; i!=NUMOGG; i++) {
+			//if the object is active(!=0 so even error statuses) add it at the list and update the counters
+			if(sys->o[i].type != 0) {
+				sys->active[sys->nactive] = i;
+				sys->nactive++;
+			}
+		}
+	
+	
+		return;
+	}
+ 
+ 
 
 /*** Update Maxoutput is a function that update maxoutput
  * 

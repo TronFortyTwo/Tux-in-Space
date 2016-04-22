@@ -40,7 +40,7 @@
 		
 			//Principal menù, first screen	
 			Rmotor(0, inf, 0, ".   CSPACE: The space's simulator\n\n-New system: 1\n-Settings: 2\n-Information: 3\n", 0, 0, 0);
-			scanf("%d", &inputandothers);
+			SafeIScan(inf, &inputandothers);
 			fflush(stdin);
 			
 			// If "new simulation" tell the Shell 0; (uninitialized obj)

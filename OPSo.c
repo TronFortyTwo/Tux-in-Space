@@ -40,8 +40,9 @@
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
 		short lpos=0;
-		// counter
+		// counters
 		short i;
+		short count;
 		// pointer to a object
 		tobj *obj;
 		
@@ -59,7 +60,7 @@
 		}
 		
 		// A loop that tell to every object something
-		for (i=1; i!=sys->nactive; i++) {
+		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[sys->active[i]];
 			//Tell the name, type and mass
@@ -68,18 +69,18 @@
 			ExtractType(obj->type, type);
 			strcat(buffer, type);
 			strcat(buffer, " | ");
-			strcat(buffer, "%l");
+			strcat(buffer, " mass of %l");
 			lvar[lpos++] = obj->mass;
 			//Tell the x '\n', the y a '\n' and the z
-			strcat(buffer, "\n%l whit fast of %l\n%l whit fast of %l\n%l whit fast of %l");
+			strcat(buffer, "\nX axis: %l whit fast of %l\nY axis:%l whit fast of %l\nZ axis: %l whit fast of %l\n");
 			lvar[lpos++]= obj->x;
-			lvar[lpos++]= obj->y;
-			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velx;
+			lvar[lpos++]= obj->y;
 			lvar[lpos++]= obj->vely;
+			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
 			// A height of '-'
-			for(i=0; i!=inf->width-2*FRAMELUN; i++) {
+			for(count=0; count!=inf->width-2*FRAMELUN; count++) {
 				strcat (buffer, "-");
 			}
 		}

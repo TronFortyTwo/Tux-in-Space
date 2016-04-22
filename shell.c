@@ -89,6 +89,10 @@
 				}
 			}
 			
+			// Update the active list
+			UpdateActive(sys); 
+			
+			
 			// Initialize some object
 			for (l=0; l!=sys->nactive; l++) {
 				InitObject(inf, &sys->o[l], l+1);
