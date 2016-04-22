@@ -8,5 +8,5 @@ The power of the program sits in its language: the C, and in its graphic motor: 
 
 for test/use the program:
 -------------------------
-There is a Main executable file, compiled in a Debian 64 bit. Maybe can run in other computer.
-Elsewhere, you can compile the main whit "gcc -lm -Wall -o -g main.c destination_file". You are encouraged of start use or test this program.
+There is a Main executable file, compiled in a Debian 64 bit. Maybe can run in other computers.
+Elsewhere, you can compile the program easyly whit "gcc -lm -Wall -o -g main.c destination_file" in the master directory. You are encouraged of start use and test this program.
