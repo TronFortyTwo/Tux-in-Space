@@ -45,7 +45,7 @@
 	// definition of the type of the object's structures
 	// structure of one object
 	struct object {
-		char name [NAMELUN];// the name of the object (es.: Earth, My Planet, Moon)
+		char name [NAMELUN];// the name of the object (es.: Earth, My_Planet, Moon)
 		int type;	 		// the type of object. see information.txt
 		long double mass;	// the mass
 		long double x;   	// the coordinate x
@@ -86,9 +86,6 @@
 		// definition of the structures
 		tinf inf;
 		tsys sys;
-
-		// The return value from shell function
-		int staterec;
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
@@ -107,13 +104,7 @@
 		// set num precision
 		inf.numprecision = 4;
 
-		// call the shell and she returns a state
-		staterec = Shell (&sys, &inf);
-		
-		//The program finish
-		if(staterec != 0) {
-			Rmotor (0, &inf, 0, "main: The shell function exited whit %i (This is an error or, in the best case, an unexpected event)", &staterec, 0, 0);
-		}
-		
+		// call the shell
+		Shell (&sys, &inf);
 		return 0;
 	}

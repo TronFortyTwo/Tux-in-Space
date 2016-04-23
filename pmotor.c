@@ -12,9 +12,9 @@
  */
 
 
-int Pmotor (tsys *sys);
+void Pmotor (tsys *sys);
 
-int Pmotor (tsys *sys) {
+void Pmotor (tsys *sys) {
 	
 		// Counters for loops
 		short i, l;
@@ -73,5 +73,5 @@ int Pmotor (tsys *sys) {
 			}
 		}
 	
-		return 0;
+		return;
 		}

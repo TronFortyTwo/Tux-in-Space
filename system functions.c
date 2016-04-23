@@ -96,8 +96,7 @@
 		// What is going to be printed. If the function go in segmentation fault, increase it
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
-		// char variable array
-		char cvar[NAMELUN];
+		// array to give to Rmotor whit counters
 		int ivar[2];
 		short ipos = 0;
 		long double lvar[7];
@@ -116,15 +115,15 @@
 		strcpy (reffub, buffer);
 		strcat (reffub, "\nThe name of the object must be of a maximum of %i characters and spaces are not allowed");
 		ivar[ipos] = NAMELUN-1;
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", obj->name);
 		fflush(stdin);
 		// ask about the type
-		strcpy(cvar, obj->name); 
-		strcat(buffer, " %c\n\ntype of the object:  ");
+		strcpy(buffer, obj->name); 
+		strcat(buffer, " \n\ntype of the object:  ");
 		strcpy(reffub, buffer);
 		strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		SafeIScan(inf, &obj->type);
 		// ask about the mass
 		ExtractType(obj->type, reffub);
@@ -132,7 +131,7 @@
 		strcat(buffer, "\n\nmass:  ");
 		strcpy(reffub, buffer);
 		strcat(reffub, " (Kg)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->mass);
 		fflush(stdin);
 		// ask about the x
@@ -141,7 +140,7 @@
 		strcat(buffer, "%l\n\nposition of the object in the x axis:  ");
 		strcpy(reffub, buffer);
 		strcat(reffub, " (Km)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->x);
 		fflush(stdin);
 		// ask about the y
@@ -150,7 +149,7 @@
 		strcat (buffer, "%l\n\nposition of the object in the y axis:  ");
 		strcpy (reffub, buffer);
 		strcat (reffub, " (Km)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->y);
 		fflush(stdin);
 		// ask about the z
@@ -159,7 +158,7 @@
 		strcat (buffer, "%l\n\nposition of the object in the z axis:  ");
 		strcpy (reffub, buffer);
 		strcat (reffub, " (Km)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->z);
 		fflush(stdin);
 		// ask about the x's fast
@@ -168,7 +167,7 @@
 		strcat (buffer, "%l\n\nfast of the object throught the x axis:  ");
 		strcpy (reffub, buffer);
 		strcat (reffub, " (Km/s)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->velx);
 		fflush(stdin);
 		// ask about the y's fast
@@ -177,7 +176,7 @@
 		strcat (buffer, "%l\n\nfast of the object throught the y axis:  ");
 		strcpy (reffub, buffer);
 		strcat (reffub, " (Km/s)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->vely);
 		fflush(stdin);
 		// ask about the z's fast
@@ -186,14 +185,14 @@
 		strcat (buffer, "%l\n\nfast of the object throught the z axis:  ");
 		strcpy (reffub, buffer);
 		strcat (reffub, " (Km/s)");
-		Rmotor(0, inf, 0, reffub, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		scanf("%Lf", &obj->velz);
 		fflush(stdin);
 		// finish the asking
 		lvar[lpos]=obj->velz;
 		lpos++;
 		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
-		Rmotor(0, inf, 0, buffer, ivar, lvar, cvar);
+		OPS(inf, reffub, ivar, lvar);
 		SafeIScan(inf, ivar);
 		if(ivar[0] == 4)
 			InitObject(inf, obj, n);

@@ -29,10 +29,9 @@
 	#include <stdlib.h>
 	#include <math.h>
 	#include <string.h>
-
-
-//The Rmotor principal function prototype
-	int Rmotor (tsys *sys, tinf *inf, int mode, char *phrase, int *ivar, long double *lvar, char *cvar);
+	
+// Prototype of some function function
+	int OPS(tinf *inf, char *, int *, long double *);
 	
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "string functions.c"
@@ -41,7 +40,6 @@
 	#include "OnlyPrintfSystem.c"
 	#include "OPSo.c"
 	#include "menù.c"
-	#include "rmotor.c"
 	#include "pmotor.c"
 	#include "Parser.c"
 	#include "shell.c"

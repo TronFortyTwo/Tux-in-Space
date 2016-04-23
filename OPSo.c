@@ -86,7 +86,7 @@
 		}
 		
 		//tell to Rmotor what is done
-		Rmotor(sys, inf, 0, buffer, ivar, lvar, 0);
+		OPS(inf, buffer, ivar, lvar);
 		
 		// dealloc the arrays
 		free(lvar);

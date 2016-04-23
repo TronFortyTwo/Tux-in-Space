@@ -48,18 +48,19 @@ void SafeIScan(tinf *inf, int *dest);
 void SafeIScan(tinf *inf, int *dest) {
 	
 	//this buffer remember all the input
-	char buffer[BUFFERINPUTSIZE];
+	char input[BUFFERINPUTSIZE];
+	char buffer[BUFFERSIZE];
 	//this is the int value saved in buffer
-	long long int input;
+	long long int number;
 	//int values that are given to Rmotor
 	int ivar[2];
 	
 	//scanf the string
-	scanf("%s", buffer);
+	scanf("%s", input);
 	fflush(stdin);
 		
 	//call the function
-	input = strtoll(buffer, NULL, 0);
+	number = strtoll(input, NULL, 0);
 	
 	//set the max value of an int
 	ivar[0]= (int) pow(2, 8*sizeof(int) -1);
@@ -67,17 +68,20 @@ void SafeIScan(tinf *inf, int *dest) {
 		
 	// reask the number until the number can fit the int number
 	for( ; ; ) {
-		if(input <= ivar[0])
-			if(input >= ivar[1])
+		if(number <= ivar[0])
+			if(number >= ivar[1])
 				break;
-		Rmotor(0, inf, 0, "ATTENCTION:\nThe number %s that you gave us is too big or too small!\n\nPlease, type another number between %i and %i", ivar, 0, buffer);
-		scanf("%s", buffer);
+		strcpy(buffer, "ATTENCTION:\nThe number ");
+		strcat(buffer, input);
+		strcat(buffer, "that you gave is too big or too small!\n\nPlease, type another number between %i and %i");
+		OPS(inf, buffer, ivar, 0);
+		scanf("%s", input);
 		fflush(stdin);
-		input = strtoll(buffer, NULL, 0);
+		number = strtoll(input, NULL, 0);
 	}
 
 	//assign the value
-	*dest = input;
+	*dest = number;
 
 	return;
 }

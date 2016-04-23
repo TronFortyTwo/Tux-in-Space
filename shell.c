@@ -40,10 +40,10 @@
  * 
  */
 	
-	int Shell (tsys *sys, tinf *inf);
+	void Shell (tsys *sys, tinf *inf);
 	
 	
-	int Shell (tsys *sys, tinf *inf) {
+	void Shell (tsys *sys, tinf *inf) {
 
 		// Retruning value from the function. 0 if all is good
 		int staterec;
@@ -62,19 +62,19 @@
 			
 			// Ask the name of the new system
 			comm[0]=NAMELUN-1;
-			Rmotor(sys, inf, 0, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0, 0);
+			OPS (inf, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0);
 			scanf("%s", sys->name);
 			fflush(stdin);
 
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
 			comm[0]=NUMOGG;
-			Rmotor(sys, inf, 0, "do you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0, 0);
+			OPS(inf, "do you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
 			SafeIScan(inf, &sys->nactive);
 			for (; ;) {
 				if(sys->nactive < NUMOGG)
 					if(sys->nactive >= 0)
 						break;
-				Rmotor (sys, inf, 0, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0, 0);
+				OPS (inf, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0);
 				SafeIScan(inf, &sys->nactive);
 			}
 			
@@ -102,21 +102,16 @@
 		
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
-				staterec = Rmotor (sys, inf, 1, " ", 0, 0, 0);
-				if (staterec != 0)	
-					Rmotor(sys, inf, 0, "OnlyPrintfSystemOutput exited whit %i", &staterec, 0, 0);
+				OPSo (sys, inf);
 			}
 			
 			// call the instruction parser
-			staterec = Parser(sys, inf, 's' );
-			
+			Parser(sys, inf, 's' );
 			
 			// call the phisic motor
-			staterec = Pmotor (sys);
-			if (staterec != 0)
-				return staterec;
+			Pmotor(sys);
 				
 		}
 
-		return 0;
+		return;
 	}

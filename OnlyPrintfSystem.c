@@ -24,16 +24,19 @@
  * 		- make the program nice and smart
  * 		- A very more simple algoritm (faster and lighter) respect more complex mode of Rmotor not writted yet, but equally can adapts the width and height numbers
  *
+ * 	NOTE:
+ * 	OnlyPrintfSystem is often called OPS
+ * 
  */
  
 	//prototype for the OPS's functions
-	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar);
-	void PrintInt (tinf *inf, int n, short *columndone, short *linedone);
-	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone);
-	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone);
+	
+	void PrintInt (tinf *, int, short *, short *);
+	void PrintLongDouble (tinf *, long double *, short *, short *);
+	void PrintString(tinf *, char *, short, short *, short *);
 	
  /**Only Printf System */
-	int OnlyPrintfSystem(tinf *inf, char *phrase, int *ivar, long double *lvar, char *cvar) {
+	int OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
 	
 	// the number of lines alredy printfed
 	short linedone = 0;
@@ -44,7 +47,6 @@
 	// the position in the arrays
 	short ipos=0;
 	short lpos=0;
-	short cpos=0;
 	
 	// make some space
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -97,11 +99,6 @@
 					PrintLongDouble(inf, &lvar[lpos], &columndone, &linedone);
 					lpos++;
 				}
-				// if is a c call PrintString
-				else if (phrase[chardone] == 'c') {
-					PrintString(inf, cvar, cpos, &columndone, &linedone);
-					cpos++;
-				}
 				// if is a L finish the height whit phrase[chardone+1]
 				else if (phrase[chardone] == 'f') {
 					PrintLine(inf, &phrase[chardone+1], 2*FRAMELUN+columndone);
@@ -147,9 +144,9 @@
 	}
 	// if not recall OPS to finish the printing
 	else {
-		printf("PRESS ENTER TO CONTINUE PRINTING");
-		scanf("\0");
-		Rmotor(0, inf, 0, &phrase[chardone+1], ivar, lvar, cvar);
+		printf("PRESS 0 TO CONTINUE PRINTING");
+		scanf("0");
+		OPS(inf, &phrase[chardone+1], &ivar[ipos], &lvar[lpos]);
 	}
 	
 	// return 0
@@ -257,52 +254,4 @@
 		}
 		return;
 	}
-
-/***
- * The function PrintString printf a string from a buffer of char. 
- * For easily transport of the buffer in the functions, in a buffer there is many strings, shared whit '\0'.
- * This is the reason of why must be given a number that represent what string must be printed
- */
-	void PrintString(tinf *inf, char *buffer, short numstring, short *columndone, short *linedone) {
-		
-		//contein the position of the first character of the string to printf
-		short position;
-		//counter and temporany variable
-		short i;
-		
-		//look for the first character of the string to print
-		for (position=0, i=0; i != numstring; position++) {
-			if(buffer[position]=='\0')
-				i++;
-		}
-	
-		//take the size of the string
-		i = strlen(&buffer[position]);
-	
-		//now printf the string if not overflow the height
-		if(*columndone+2*FRAMELUN+i <= inf->width) {
-			printf("%s", &buffer[position]);
-			*columndone = *columndone+i;
-		}
-		//else, if there is another height, printf the string in a new height
-		else {
-			if(*linedone+3 == inf->height){
-				//complete the height
-				PrintLine(inf, " ", FRAMELUN+*columndone);
-				printf("%s\n", FRAMER);
-				//update teh counters
-				*columndone=inf->width;
-				//exit the function
-				return;
-			}
-			PrintLine(inf, " ", 2*FRAMELUN+*columndone);
-			printf("%s\n%s%s", FRAMER, FRAME, &buffer[position]);
-			*columndone = FRAMELUN+i;
-			*linedone=*linedone+1;
-		}
-		
-		return;
-	}
-
-
 

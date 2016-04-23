@@ -53,7 +53,7 @@
  
 	/** Prototipes: */
 	// The main function
-	int Parser(tsys *sys, tinf *inf, char tag);
+	void Parser(tsys *sys, tinf *inf, char tag);
 	// functions called only from Parser:
 	// Reask reask for the instruction if the instruction is wrong
 	int Reask(tinf *inf, char command[]);
@@ -67,7 +67,7 @@
  * The main function
  * of the parser
  */
-	int Parser(tsys *sys, tinf *inf, char tag) {
+	void Parser(tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned
 		char input[COMMANDLENGHT];
@@ -95,7 +95,7 @@
 			}
 		}
 
-	return 0;
+	return;
 	}
 	
 	/**
@@ -104,27 +104,29 @@
 	 * NOTE:
 	 * We don't have the pointer to sys, then we tell to Rmotor that is 0 because the OPS don't use the *sys
 	 */
-	int Reask(tinf *inf, char command[]){
+	int Reask(tinf *inf, char *command){
 		// the answer of the user
-		char answer[32];
-		strcpy(answer, command);
-		Rmotor(0, inf, 0, "Sorry. But the word %c that you wrote is wrong. Do you want to write another command? [y/n]", 0, 0, answer);
+		char buffer[BUFFERSIZE];
+		strcpy(buffer, "Sorry. But the command ");
+		strcat(buffer, command);
+		strcat(buffer, "is wrong. Do you want to write another command? [y/n]");
+		OPS(inf, buffer, 0, 0);
 		
 		for(;;){
 			// a loop that exit 0 or 1
-			scanf("%s", answer);
+			scanf("%s", command);
 			fflush(stdin);
 			// if postitive return 0
-			if (answer[0] == 'y') {
-				Rmotor(0, inf, 0, "What is your command?", 0, 0, 0);
+			if (command[0] == 'y') {
+				OPS(inf, "What is your command?", 0, 0);
 				return 0;
 			}
 			// if negative return 1
-			else if (answer[0] == 'n')
+			else if (command[0] == 'n')
 				return 1;
 			// if wrong reask
 			else
-				Rmotor(0, inf, 0, "Please answer 'y' or 'n'", 0, 0, 0);
+				OPS (inf, "Please answer 'y' or 'n'", 0, 0);
 		}
 	}
 	
