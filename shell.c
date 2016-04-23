@@ -78,10 +78,9 @@
 				SafeIScan(inf, &sys->nactive);
 			}
 			
-			
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
-				if (l <= sys->nactive) {
+				if (l < sys->nactive) {
 					sys->o[l].type = 11;
 				}
 				else {
@@ -101,11 +100,6 @@
 		// The simulation loop (infinite)
 		for ( ; ; ) {
 		
-			// call Pmotor
-			staterec = Pmotor (sys);
-			if (staterec != 0)
-				return staterec;
-				
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
 				staterec = Rmotor (sys, inf, 1, " ", 0, 0, 0);
@@ -115,6 +109,13 @@
 			
 			// call the instruction parser
 			staterec = Parser(sys, inf, 's' );
+			
+			
+			// call the phisic motor
+			staterec = Pmotor (sys);
+			if (staterec != 0)
+				return staterec;
+				
 		}
 
 		return 0;

@@ -37,7 +37,7 @@
 	
 	// the number of lines alredy printfed
 	short linedone = 0;
-	// the number of character in a height alredy printfed
+	// the number of character in a line alredy printfed
 	short columndone = 0;
 	// the number of character of phrase printed
 	short chardone = 0;
@@ -47,18 +47,18 @@
 	short cpos=0;
 	
 	// make some space
-	printf("\n\n\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	
-	// printf the first character of the frame like first height
+	// printf the first character of the frame like first linr
 	PrintLine(inf, FRAMESTART, 0);
 	printf("\n");
 	
-	// printf the second height continuing whit the frame
+	// printf the second linr continuing whit the frame
 	printf(FRAME);
 	PrintLine(inf, FRAMEEND, 4);
 	printf("%s\n", FRAMER);
 	
-	//a loop that printf every height
+	//a loop that printf every linr
 	for( linedone=2; linedone!=inf->height-3; linedone++) {
 		
 		//printf the frame
@@ -134,15 +134,23 @@
 		
 	}
 	
-	// printf the last two height of the frame
+	// printf the last two line of the frame
 	printf("%s", FRAME);
 	PrintLine(inf, FRAMEEND, 4);
 	printf("%s\n", FRAMER);
 	PrintLine(inf, FRAMESTART, 0);
 	printf("\n");
 	
-	// ask user for input
-	printf("%s:", FRAME);
+	// if the char to print are finished ask user for input
+	if (phrase[chardone == '\0']) {
+		printf("%s:", FRAME);
+	}
+	// if not recall OPS to finish the printing
+	else {
+		printf("PRESS ENTER TO CONTINUE PRINTING");
+		scanf("\0");
+		Rmotor(0, inf, 0, &phrase[chardone+1], ivar, lvar, cvar);
+	}
 	
 	// return 0
 	return 0;

@@ -46,7 +46,7 @@
 		// pointer to a object
 		tobj *obj;
 		
-		// Printf the height whit the time.
+		// Printf the line whit the time.
 		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n");
 		ivar[0] = sys->year;
 		ivar[1] = sys->day;
@@ -69,17 +69,17 @@
 			ExtractType(obj->type, type);
 			strcat(buffer, type);
 			strcat(buffer, " | ");
-			strcat(buffer, " mass of %l");
+			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;
 			//Tell the x '\n', the y a '\n' and the z
-			strcat(buffer, "\nX axis: %l whit fast of %l\nY axis:%l whit fast of %l\nZ axis: %l whit fast of %l\n");
+			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis:%l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
 			lvar[lpos++]= obj->x;
 			lvar[lpos++]= obj->velx;
 			lvar[lpos++]= obj->y;
 			lvar[lpos++]= obj->vely;
 			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
-			// A height of '-'
+			// A line of '-'
 			for(count=0; count!=inf->width-2*FRAMELUN; count++) {
 				strcat (buffer, "-");
 			}
