@@ -96,6 +96,10 @@
 		// What is going to be printed. If the function go in segmentation fault, increase it
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
+		// name of the object to load
+		char name[NAMELUN+18];
+		// object to load
+		FILE *objfile;
 		// array to give to Rmotor whit counters
 		int ivar[2];
 		short ipos = 0;
@@ -110,30 +114,62 @@
 			ivar[ipos] = n;
 			ipos++;
 		}
-		// some space and ask about the name
-		strcat (buffer, "\n\n\nname:    ");
+		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\nThe name of the object must be of a maximum of %i characters and spaces are not allowed");
-		ivar[ipos] = NAMELUN-1;
+		strcat (reffub, "\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
-		scanf("%s", obj->name);
-		fflush(stdin);
-		// ask about the type
-		strcat(buffer, obj->name); 
-		strcat(buffer, " \n\ntype of the object:  ");
-		strcpy(reffub, buffer);
-		strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
-		OPS(inf, reffub, ivar, lvar);
-		SafeIScan(inf, &obj->type);
-		// ask about the mass
-		ExtractType(obj->type, reffub);
-		strcat(buffer, reffub);
-		strcat(buffer, "\n\nmass:  ");
-		strcpy(reffub, buffer);
-		strcat(reffub, " (Kg)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->mass);
-		fflush(stdin);
+		scanf("%s", reffub);
+		// if yes
+		if(name[0] != 'n') {
+			//add the extension (.object) and the path objects/
+			strcat(reffub, ".object");
+			strcpy(name, "Objects/");
+			strcat(name, reffub);
+			objfile = fopen(name, "r");
+			if(objfile==NULL) {
+				OPS(inf, "ERROR!\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
+				SafeIScan(inf, &ivar[0]);
+				InitObject(inf, obj, n);
+				return;
+			}
+			// Read name, type and mass
+			fscanf(objfile, "%s\n%d\n%Lf", obj->name, &obj->type, &obj->mass);
+			fclose(objfile);
+			//tell name, type and mass whitout ask
+			strcat(buffer, "\n\n\nname:    ");
+			strcat(buffer, obj->name);
+			strcat(buffer, "\n\ntype of the object:  ");
+			ExtractType(obj->type, reffub);
+			strcat(buffer, reffub);
+			strcat(buffer, "\n\nmass:  ");
+		}
+		//if not
+		else {
+			// some space and ask about the name
+			strcat (buffer, "\n\n\nname:    ");
+			strcpy (reffub, buffer);
+			strcat (reffub, "\nThe name of the object must be of a maximum of %i characters and spaces are not allowed");
+			ivar[ipos] = NAMELUN-1;
+			OPS(inf, reffub, ivar, lvar);
+			scanf("%s", obj->name);
+			fflush(stdin);
+			// ask about the type
+			strcat(buffer, obj->name); 
+			strcat(buffer, "\n\ntype of the object:  ");
+			strcpy(reffub, buffer);
+			strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
+			OPS(inf, reffub, ivar, lvar);
+			SafeIScan(inf, &obj->type);
+			// ask about the mass
+			ExtractType(obj->type, reffub);
+			strcat(buffer, reffub);
+			strcat(buffer, "\n\nmass:  ");
+			strcpy(reffub, buffer);
+			strcat(reffub, " (Kg)");
+			OPS(inf, reffub, ivar, lvar);
+			scanf("%Lf", &obj->mass);
+			fflush(stdin);
+		}
 		// ask about the x
 		lvar[lpos]=obj->mass;
 		lpos++;

@@ -27,7 +27,7 @@
  * The parser command now are:
  * 	
  * 		- Continue
- * 		//exit from Parser whitout action. Is a command whitout function
+ * 		exit from Parser whitout action. Is a command whitout function
  * 
  * 		- Change
  * 				NameObj
@@ -45,7 +45,7 @@
  * 						name
  * 						G
  * 						time
- * 						
+ * 		change datas about objects
  * 
  * 
  * 
@@ -109,7 +109,7 @@
 		char buffer[BUFFERSIZE];
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
-		strcat(buffer, "is wrong. Do you want to write another command? [y/n]");
+		strcat(buffer, "that you wrote is unknow. Do you want to write another command? [y/n]");
 		OPS(inf, buffer, 0, 0);
 		
 		for(;;){
