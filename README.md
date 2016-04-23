@@ -14,5 +14,5 @@ Elsewhere, you can compile the program easily whit "gcc -lm -Wall -o -g main.c d
 Status
 ------
 The program is in pre-alpha status: this mean that the code is far from being complete
-Future version:
+Future version:  
 ALPHA 1: this version will be released when the program has a scheleton of all its principal component
