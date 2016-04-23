@@ -50,6 +50,7 @@
 	#define FRAME "# "
 	#define FRAMER " #"		//FRAME R(ight)
 	#define FRAMELUN 2
+	#define TWOFRAMELUN 4
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 	

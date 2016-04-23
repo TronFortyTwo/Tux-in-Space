@@ -55,7 +55,7 @@
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
 		// Write two lines of '-'
-		for(i=0; i!=inf->width-2*FRAMELUN; i++) {
+		for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
 			strcat (buffer, "--");
 		}
 		
@@ -80,7 +80,7 @@
 			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
 			// A line of '-'
-			for(count=0; count!=inf->width-2*FRAMELUN; count++) {
+			for(count=0; count!=inf->width-TWOFRAMELUN; count++) {
 				strcat (buffer, "-");
 			}
 		}

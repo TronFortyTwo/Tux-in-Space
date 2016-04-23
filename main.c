@@ -89,7 +89,7 @@
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 40;
+		inf.height = 30;
 		inf.width = 100;
 	
 		// maxoutput is the max number of character that Rmotor can effectevely use (there are four width and five lines occupied by the frame)

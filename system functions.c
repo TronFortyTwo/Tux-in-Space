@@ -261,6 +261,7 @@
 			fclose(dest);
 			OPS(inf, "ERROR WHILE SAVING\n\nThe object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
 			scanf("%c", &input);
+			fflush(stdin);
 			if(input == 'n')
 				return;
 		}
@@ -272,6 +273,8 @@
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
 		scanf("%c", &input);
+		fflush(stdin);
+		
 	
 		return;	
 	}
