@@ -10,3 +10,9 @@ for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Debian 64 bit. Maybe can run in other computers.
 Elsewhere, you can compile the program easily whit "gcc -lm -Wall -o -g main.c destination_file" in the master directory. You are encouraged of start use and test this program.
+
+Status
+------
+The program is in pre-alpha status: this mean that the code is far from being complete
+Future version:
+ALPHA 1: this version will be released when the program has a scheleton of all its principal component
