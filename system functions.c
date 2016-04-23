@@ -111,7 +111,7 @@
 			ipos++;
 		}
 		// some space and ask about the name
-		strcat (buffer, "\n\n\nname:");
+		strcat (buffer, "\n\n\nname:    ");
 		strcpy (reffub, buffer);
 		strcat (reffub, "\nThe name of the object must be of a maximum of %i characters and spaces are not allowed");
 		ivar[ipos] = NAMELUN-1;
@@ -119,7 +119,7 @@
 		scanf("%s", obj->name);
 		fflush(stdin);
 		// ask about the type
-		strcpy(buffer, obj->name); 
+		strcat(buffer, obj->name); 
 		strcat(buffer, " \n\ntype of the object:  ");
 		strcpy(reffub, buffer);
 		strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
