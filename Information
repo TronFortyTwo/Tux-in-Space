@@ -3,7 +3,7 @@ MISUR UNIT
 	These are the misure unit that I use on the program:
 
 	lenght:		Km	(1000 m)
-	mass:		Kg
+	mass:		t	(1000 Kg)
 	time:		s
 
 

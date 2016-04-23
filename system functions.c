@@ -3,6 +3,9 @@
  * 
  */
 
+//Prototypes
+	void SaveObject(tinf *, tobj *);
+
 /***
  * UpdateActive update the active list and the nactive var
  * 
@@ -119,8 +122,7 @@
 		strcat (reffub, "\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
-		// if yes
-		if(name[0] != 'n') {
+		if(0 != strcmp(reffub, "n")) {
 			//add the extension (.object) and the path objects/
 			strcat(reffub, ".object");
 			strcpy(name, "Objects/");
@@ -165,7 +167,7 @@
 			strcat(buffer, reffub);
 			strcat(buffer, "\n\nmass:  ");
 			strcpy(reffub, buffer);
-			strcat(reffub, " (Kg)");
+			strcat(reffub, " (t) 1 ton = 1000 Kg");
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%Lf", &obj->mass);
 			fflush(stdin);
@@ -227,10 +229,49 @@
 		// finish the asking
 		lvar[lpos]=obj->velz;
 		lpos++;
-		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 4 if you are not happy of this configuration and you want to reinitialize the object\nPress a number that is not 4 to continue\0");
-		OPS(inf, reffub, ivar, lvar);
+		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 0 if you are not happy of this configuration and you want to reinitialize the object\nPress 1 if you want to save this object in a file\nPress a number that is >1 to continue");
+		OPS(inf, buffer, ivar, lvar);
 		SafeIScan(inf, ivar);
-		if(ivar[0] == 4)
+		if(ivar[0] == 1) {
+			SaveObject(inf, obj);
+		}
+		if(ivar[0] == 0)
 			InitObject(inf, obj, n);
 		return;
+	}
+
+/***
+ * The SaveObject function save a object in a file
+ */
+	void SaveObject(tinf *inf, tobj *obj) {
+	
+		//the path where the object must be saved, an input variable and the destination file pointer
+		char path[NAMELUN+16];
+		char input;
+		FILE *dest;
+		
+		//Write the path
+		strcpy(path, "Objects/");
+		strcat(path, obj->name);
+		strcat(path, ".object");
+		
+		//control that the file isn't alredy existent
+		dest = fopen(path, "r");
+		if(dest != NULL) {
+			fclose(dest);
+			OPS(inf, "ERROR WHILE SAVING\n\nThe object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
+			scanf("%c", &input);
+			if(input == 'n')
+				return;
+		}
+	
+		// Write the object
+		dest = fopen(path, "w");
+		fprintf(dest, "%s\n%d\n%Lf", obj->name, obj->type, obj->mass);
+		fclose(dest);
+	
+		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
+		scanf("%c", &input);
+	
+		return;	
 	}
