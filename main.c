@@ -87,6 +87,7 @@
 		int nactive;			//the number of them
 		tobj o[NUMOGG];
 		long double G;
+		tStype *Stype;			// The pointer at the structure that coontein all the type
 	};
 	typedef struct system tsys;
 
@@ -98,12 +99,12 @@
 
 	int main (int argc, char *argv[]) {
 		
-		printf("Loading...\n");
+		printf("\t\tCSpace\n\nLoading...\n");
 		
 		// definition of the structures
 		tinf inf;
 		tsys sys;
-		ttype *type;
+		tStype *type;
 		
 		// The types file
 		FILE *Ftype;
@@ -111,7 +112,8 @@
 		// Read the a file and load the types
 		Ftype = fopen("types.typ", "r");
 		if(Ftype != NULL) {
-			InitType(Ftype);
+			type = InitType(Ftype);
+			sys.Stype = type;
 			fclose(Ftype);
 		}
 		else

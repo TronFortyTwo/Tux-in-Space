@@ -22,6 +22,24 @@
  * 
  */
 
+/***
+ * 	The function ChangeChar take a string and in it remove all a char and change it whit an other
+ * */
+	void ChangeChar(char *, char, char);
+	void ChangeChar(char *string, char first, char later) {
+		// counter for loops
+		short i;
+		
+		// a loop
+		for(i=0; string[i]!='\0'; i++) {
+			if(string[i] == first)
+				string[i] = later;
+		}
+		return;
+	}
+
+
+
 
 /*** PrintLine is a function that printf a height of characters
  * 		can be setted a number num of character that don't be printed
