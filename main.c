@@ -28,7 +28,23 @@
 	// include definition of constants
 	#include "constants.h"
 
-	// the structure infostruct is a structure that contein information about the options and other tecnical things 
+	// The structure that represent a type of a object
+	struct objtype {
+		char name[NAMELUN];
+		char description[BUFFERSIZE];
+		char identifier;
+		struct objtype *from;
+	};
+	typedef struct objtype ttype;
+	
+	// The structure whit all the types
+	struct TypesStruct {
+		unsigned short number;
+		ttype type[];
+	};
+	typedef struct TypesStruct tStype;
+
+	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	struct info {
 		// Visual mode (0 = Only OPS)
 		int vmode;
@@ -45,15 +61,15 @@
 	// definition of the type of the object's structures
 	// structure of one object
 	struct object {
-		char name [NAMELUN];// the name of the object (es.: Earth, My_Planet, Moon)
-		int type;	 		// the type of object. see information.txt
-		long double mass;	// the mass
-		long double x;   	// the coordinate x
-		long double y;		// the coordinate y
-		long double z;		// the coordinate z
-		long double velx;	// the fast of the movement in x
-		long double vely;	// the fast of the movement in y
-		long double velz;	// the fast of the movement in z
+		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
+		char type [NAMELUN];	// the type of object.
+		long double mass;		// the mass
+		long double x;   		// the coordinate x
+		long double y;			// the coordinate y
+		long double z;			// the coordinate z
+		long double velx;		// the fast of the movement in x
+		long double vely;		// the fast of the movement in y
+		long double velz;		// the fast of the movement in z
 	};
 	typedef struct object tobj;
 	
@@ -83,9 +99,22 @@
 
 	int main (int argc, char *argv[]) {
 		
+		printf("Loading...\n");
+		
 		// definition of the structures
 		tinf inf;
 		tsys sys;
+		ttype *type;
+		
+		// The types file
+		FILE *Ftype;
+		
+		// Read the a file and load the types
+		Ftype = fopen("types.typ", "r");
+		if(Ftype != NULL)
+			InitType(Ftype);
+		else
+			printf("WARNING: Could not open file whit types!\n");
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing

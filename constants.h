@@ -26,11 +26,8 @@
 	// Max number of object that the program can work on
 	#define NUMOGG 128
 	
-	// The lenght of a name of an object or a system
+	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
-	
-	// The number of character printed when printing a LONG DOUBLE (possible 3 to 12)
-	#define LDLUN 8
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024
@@ -54,5 +51,5 @@
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 	
-	
-	
+	// 
+
