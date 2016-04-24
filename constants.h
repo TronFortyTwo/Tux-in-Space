@@ -27,7 +27,7 @@
 	#define NUMOGG 128
 	
 	// The lenght of a name of an object, a system or a type
-	#define NAMELUN 64
+	#define NAMELUN 32
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024

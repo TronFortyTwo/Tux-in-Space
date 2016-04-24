@@ -30,17 +30,16 @@
 
 	// The structure that represent a type of a object
 	struct objtype {
-		char name[NAMELUN];
-		char description[BUFFERSIZE];
-		char identifier;
-		struct objtype *from;
+		char name [NAMELUN];
+		char description [BUFFERSIZE];
+		char parent [NAMELUN];
 	};
 	typedef struct objtype ttype;
 	
 	// The structure whit all the types
 	struct TypesStruct {
-		unsigned short number;
-		ttype type[];
+		int number;
+		ttype *type;			// This is a pointer to an array
 	};
 	typedef struct TypesStruct tStype;
 
@@ -111,8 +110,10 @@
 		
 		// Read the a file and load the types
 		Ftype = fopen("types.typ", "r");
-		if(Ftype != NULL)
+		if(Ftype != NULL) {
 			InitType(Ftype);
+			fclose(Ftype);
+		}
 		else
 			printf("WARNING: Could not open file whit types!\n");
 		
