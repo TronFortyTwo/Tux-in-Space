@@ -23,7 +23,6 @@
  *
  * Prototipes:
  */
-	void ExtractType (int , char *);
 	tStype *InitType (FILE *);
  
 /***
@@ -37,7 +36,7 @@
 		short i;
 	
 		// read how many types there are in the file
-		fscanf(stream, "%i\n", &types_struct.number);
+		fscanf(stream, "%i\n\n", &types_struct.number);
 		
 		//alloc enought spaces for all the one type structure
 		types_struct.type = (ttype *) malloc (types_struct.number * sizeof(ttype));

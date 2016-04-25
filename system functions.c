@@ -91,7 +91,7 @@
 			strcat(name, reffub);
 			objfile = fopen(name, "r");
 			if(objfile==NULL) {
-				OPS(inf, "ERROR!\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
+				OPS(inf, "ERROR!\n\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
 				SafeIScan(inf, &ivar[0]);
 				InitObject(inf, obj, n);
 				return;
