@@ -81,10 +81,10 @@
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
 				if (l < sys->nactive) {
-					sys->o[l].type = 11;
+					strcpy(sys->o[l].type, "Unknow");
 				}
 				else {
-					sys->o[l].type = 0;
+					strcpy(sys->o[l].type, "Void");
 				}
 			}
 			
@@ -94,7 +94,7 @@
 			
 			// Initialize some object
 			for (l=0; l!=sys->nactive; l++) {
-				InitObject(inf, &sys->o[l], l+1);
+				InitObject(inf, &sys->o[l], sys->Stype, l+1);
 			}
 		}
 		// The simulation loop (infinite)

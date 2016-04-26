@@ -54,15 +54,15 @@
  * 	-this is a recursive function
  */
 
-	void InitObject (tinf *inf, tobj *obj, short n);
+	void InitObject (tinf *inf, tobj *obj, tStype *typ, short n);
 	
-	void InitObject (tinf *inf, tobj *obj, short n) {
+	void InitObject (tinf *inf, tobj *obj, tStype *typ, short n) {
 		
 		// What is going to be printed. If the function go in segmentation fault, increase it
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
-		// name of the object to load
-		char name[NAMELUN+18];
+		// name of the object to load and the name of a type
+		char name[NAMELUN+17];
 		// object to load
 		FILE *objfile;
 		// array to give to Rmotor whit counters
@@ -70,6 +70,8 @@
 		short ipos = 0;
 		long double lvar[7];
 		short lpos=0;
+		//counter
+		short i;
 	
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
@@ -93,17 +95,17 @@
 			if(objfile==NULL) {
 				OPS(inf, "ERROR!\n\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
 				SafeIScan(inf, &ivar[0]);
-				InitObject(inf, obj, n);
+				InitObject(inf, obj, typ, n);
 				return;
 			}
 			// Read name, type and mass
-			fscanf(objfile, "%s\n%d\n%Lf", obj->name, &obj->type, &obj->mass);
+			fscanf(objfile, "%s\n%s\n%Lf", obj->name, obj->type, &obj->mass);
 			fclose(objfile);
 			//tell name, type and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
-			ExtractType(obj->type, reffub);
+			strcat(buffer, obj->type);
 			strcat(buffer, reffub);
 			strcat(buffer, "\n\nmass:  ");
 		}
@@ -117,16 +119,32 @@
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
 			fflush(stdin);
-			// ask about the type
-			strcat(buffer, obj->name); 
-			strcat(buffer, "\n\ntype of the object:  ");
-			strcpy(reffub, buffer);
-			strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
-			OPS(inf, reffub, ivar, lvar);
-			SafeIScan(inf, &obj->type);
+			// ask about the type (categoria throught subcategoria)
+			strcat(buffer, obj->name);
+			strcat(buffer, "\n\ntype of the object:  \n");
+			for(strcpy(name, "NULL"); ;) {
+				// reset the temp buffer to the origianal buffer
+				strcpy(reffub, buffer);
+				// set the buffer
+				for(i=0; i!=typ->number; i++) {
+					// if the type is of this subcategory
+					if (0 != strcmp(typ->type->parent, name)) {
+						//write it in the temp buffer
+						strcat(reffub, typ->type->name);
+						strcat(reffub, "\n");
+					}
+				}
+				// if not any type has been found, select it as type
+				if(0 != strcmp(reffub, buffer)) {
+					strcpy(obj->name, name);
+					break;
+				}
+				// speak and take the answer
+				OPS(inf, reffub, ivar, lvar);
+				scanf("%s", name);
+			}
 			// ask about the mass
-			ExtractType(obj->type, reffub);
-			strcat(buffer, reffub);
+			strcat(buffer, obj->type);
 			strcat(buffer, "\n\nmass:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (t) 1 ton = 1000 Kg");
@@ -198,7 +216,7 @@
 			SaveObject(inf, obj);
 		}
 		if(ivar[0] == 0)
-			InitObject(inf, obj, n);
+			InitObject(inf, obj, typ, n);
 		return;
 	}
 
@@ -230,7 +248,7 @@
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%d\n%Lf", obj->name, obj->type, obj->mass);
+		fprintf(dest, "%s\n%s\n%Lf", obj->name, obj->type, obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);

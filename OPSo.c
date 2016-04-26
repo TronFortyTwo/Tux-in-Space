@@ -34,8 +34,6 @@
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		//the type of the object
-		char type[30];
 		// the array to give to Rmotor whit size
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
@@ -66,8 +64,7 @@
 			//Tell the name, type and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			ExtractType(obj->type, type);
-			strcat(buffer, type);
+			strcat(buffer, obj->type);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;
