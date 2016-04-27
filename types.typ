@@ -1,4 +1,4 @@
-67
+7
 
 Natural
 A_natural_object_is_a_object_not_created_by_humans.
@@ -20,7 +20,7 @@ Rogue_Planet
 objects_of_planetary_mass_ejected_into_interstellar_space.
 Planet
 
-Unknow
+Not_initialized
 When_a_object_is_allocated_but_not_initialized_yet
 Debug
 

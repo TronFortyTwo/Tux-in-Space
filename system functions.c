@@ -98,7 +98,7 @@
 				InitObject(inf, obj, typ, n);
 				return;
 			}
-			// Read name, type and mass
+			// Read name, type and mass and close the file
 			fscanf(objfile, "%s\n%s\n%Lf", obj->name, obj->type, &obj->mass);
 			fclose(objfile);
 			//tell name, type and mass whitout ask
@@ -121,22 +121,22 @@
 			fflush(stdin);
 			// ask about the type (categoria throught subcategoria)
 			strcat(buffer, obj->name);
-			strcat(buffer, "\n\ntype of the object:  \n");
+			strcat(buffer, "\n\ntype of the object:  ");
 			for(strcpy(name, "NULL"); ;) {
-				// reset the temp buffer to the origianal buffer
+				// reset the temp buffer at the origianal buffer
 				strcpy(reffub, buffer);
-				// set the buffer
+				// set the buffer reffub
 				for(i=0; i!=typ->number; i++) {
 					// if the type is of this subcategory
 					if (0 != strcmp(typ->type->parent, name)) {
 						//write it in the temp buffer
-						strcat(reffub, typ->type->name);
 						strcat(reffub, "\n");
+						strcat(reffub, typ->type->name);
 					}
 				}
 				// if not any type has been found, select it as type
-				if(0 != strcmp(reffub, buffer)) {
-					strcpy(obj->name, name);
+				if(strcmp(reffub, buffer)) {
+					strcpy(obj->type, name);
 					break;
 				}
 				// speak and take the answer

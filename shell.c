@@ -81,7 +81,7 @@
 			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
 				if (l < sys->nactive) {
-					strcpy(sys->o[l].type, "Unknow");
+					strcpy(sys->o[l].type, "Not_initialized");
 				}
 				else {
 					strcpy(sys->o[l].type, "Void");

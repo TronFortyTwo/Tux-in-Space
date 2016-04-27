@@ -31,7 +31,7 @@
 	// The structure that represent a type of a object
 	struct objtype {
 		char name [NAMELUN];
-		char description [BUFFERSIZE];
+		char description [DESCRIPTIONSIZE];
 		char parent [NAMELUN];
 	};
 	typedef struct objtype ttype;
@@ -121,7 +121,7 @@
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 30;
+		inf.height = 50;
 		inf.width = 100;
 	
 		// maxoutput is the max number of character that Rmotor can effectevely use (there are four width and five lines occupied by the frame)

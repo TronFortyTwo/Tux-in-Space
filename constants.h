@@ -29,8 +29,12 @@
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 32
 	
+	// The size of a type's description
+	#define DESCRIPTIONSIZE 512
+	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024
+	
 	//max lenght of the buffer used by SafeScan function
 	#define BUFFERINPUTSIZE 25
 	
