@@ -30,7 +30,7 @@
 	#define NAMELUN 32
 	
 	// The size of a type's description
-	#define DESCRIPTIONSIZE 512
+	#define DESCRIPTIONSIZE 256
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024

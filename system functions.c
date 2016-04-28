@@ -72,6 +72,7 @@
 		short lpos=0;
 		//counter
 		short i;
+		short w;
 	
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
@@ -119,30 +120,33 @@
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
 			fflush(stdin);
-			// ask about the type (categoria throught subcategoria)
 			strcat(buffer, obj->name);
+			// ask about the type (categoria throught subcategoria)
 			strcat(buffer, "\n\ntype of the object:  ");
-			for(strcpy(name, "NULL"); ;) {
-				// reset the temp buffer at the origianal buffer
+			strcpy(name, "NULL");
+			// the loop that ask for the type browsing throught the gerarchic type structure
+			do {
+				// reset the temp buffer
 				strcpy(reffub, buffer);
-				// set the buffer reffub
-				for(i=0; i!=typ->number; i++) {
-					// if the type is of this subcategory
-					if (0 != strcmp(typ->type->parent, name)) {
-						//write it in the temp buffer
-						strcat(reffub, "\n");
-						strcat(reffub, typ->type->name);
+				// the loop that choose right types
+				for (i=0, w=0; i!=typ->number; i++) {
+					// if name variable is = typ->type[i]->parent add it at the reffub 
+					if(strcmp(name, typ->type[i].parent) == 0) {
+						strcat (reffub, "\n");
+						strcat (reffub, typ->type[i].name);
+						w++;
 					}
 				}
-				// if not any type has been found, select it as type
-				if(strcmp(reffub, buffer)) {
+				// print the scanf the user answer
+				OPS(inf, reffub, ivar, lvar);
+				scanf("%s", name);
+				//if the type hasn't any subtype exit the loop remembing name as type
+				if (w == 0){
 					strcpy(obj->type, name);
 					break;
 				}
-				// speak and take the answer
-				OPS(inf, reffub, ivar, lvar);
-				scanf("%s", name);
-			}
+			} while(0);
+			
 			// ask about the mass
 			strcat(buffer, obj->type);
 			strcat(buffer, "\n\nmass:  ");
