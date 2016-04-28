@@ -137,15 +137,15 @@
 						w++;
 					}
 				}
-				// print the scanf the user answer
-				OPS(inf, reffub, ivar, lvar);
-				scanf("%s", name);
 				//if the type hasn't any subtype exit the loop remembing name as type
 				if (w == 0){
 					strcpy(obj->type, name);
 					break;
 				}
-			} while(0);
+				// print the scanf the user answer
+				OPS(inf, reffub, ivar, lvar);
+				scanf("%s", name);
+			} while(1);
 			
 			// ask about the mass
 			strcat(buffer, obj->type);
