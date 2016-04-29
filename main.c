@@ -109,6 +109,9 @@
 		// The kinds file
 		FILE *Fkind;
 		
+		//an input variable
+		char input;
+				
 		// Read the a file and load the kinds
 		Fkind = fopen("kinds.knd", "r");
 		if(Fkind != NULL) {
@@ -116,8 +119,10 @@
 			sys.Skind = kind;
 			fclose(Fkind);
 		}
-		else
-			printf("WARNING: Could not open file whit kinds!\n");
+		else {
+			OPSE(&inf, "Can't open kind.knd file whit definition of object's type. Program can works whit problems and issues", 0, 0);
+			scanf("%c", &input);
+		}
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
@@ -138,5 +143,9 @@
 
 		// call the shell
 		Shell (&sys, &inf);
+		
+		//free the memory
+		free(kind);
+		
 		return 0;
 	}

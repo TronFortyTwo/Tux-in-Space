@@ -74,7 +74,7 @@
 				if(sys->nactive < NUMOGG)
 					if(sys->nactive >= 0)
 						break;
-				OPS (inf, "Attenction! Wrong value! Put another number between 0 and %i", comm, 0);
+				OPSE (inf, "Wrong value! Must be put another number between 0 and %i:", comm, 0);
 				SafeIScan(inf, &sys->nactive);
 			}
 			

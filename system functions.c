@@ -88,6 +88,7 @@
 		strcat (reffub, "\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
+		// if the user don't want to load an object
 		if(0 != strcmp(reffub, "n")) {
 			//add the extension (.object) and the path objects/
 			strcat(reffub, ".object");
@@ -95,7 +96,7 @@
 			strcat(name, reffub);
 			objfile = fopen(name, "r");
 			if(objfile==NULL) {
-				OPS(inf, "ERROR!\n\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
+				OPSE(inf, "The file you would to load doesn't exist!\nRestart initialization sequence", 0, 0);
 				SafeIScan(inf, &ivar[0]);
 				InitObject(inf, obj, knd, n);
 				return;
@@ -272,7 +273,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "ERROR WHILE SAVING\n\nThe object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
+			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
 			scanf("%c", &input);
 			fflush(stdin);
 			if(input == 'n')

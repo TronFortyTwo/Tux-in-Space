@@ -89,10 +89,10 @@ void SafeIScan(tinf *inf, int *dest) {
 		if(number <= ivar[0])
 			if(number >= ivar[1])
 				break;
-		strcpy(buffer, "ATTENCTION:\nThe number ");
+		strcpy(buffer, "The number ");
 		strcat(buffer, input);
 		strcat(buffer, "that you gave is too big or too small!\n\nPlease, kind another number between %i and %i");
-		OPS(inf, buffer, ivar, 0);
+		OPSE(inf, buffer, ivar, 0);
 		scanf("%s", input);
 		fflush(stdin);
 		number = strtoll(input, NULL, 0);

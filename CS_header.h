@@ -30,8 +30,9 @@
 	#include <math.h>
 	#include <string.h>
 	
-// Prototype of some function function
+// Prototype of some function called from everywhere
 	int OPS(tinf *inf, char *, int *, long double *);
+	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
 	
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "string functions.c"

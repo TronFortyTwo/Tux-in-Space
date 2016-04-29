@@ -254,4 +254,32 @@
 		}
 		return;
 	}
+	
+/***
+ * OPSE (OnlyPrintfSystemError) printf an error message whit the OPS
+ */
+	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar){
+		//size of message
+		short size;
+		size = strlen(message);
+		//the message to print
+		char *buffer = (char *) malloc ((32+size)*sizeof(char));
+		//a nice bip
+		printf("\a");
+		//set the buffer
+		strcpy(buffer, "ERROR!\n\n");
+		strcat(buffer, message);
+		strcat(buffer, "\n\nwaiting...");
+		//printf the buffer
+		OPS(inf, buffer, ivar, lvar);
+		//exit the function
+		free(buffer);
+		return;
+	}
+
+
+
+
+
+
 
