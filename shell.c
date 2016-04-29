@@ -62,13 +62,13 @@
 			
 			// Ask the name of the new system
 			comm[0]=NAMELUN-1;
-			OPS (inf, "What is the name of this new system? [no spaces] [max %i characters]", comm, 0);
+			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", comm, 0);
 			scanf("%s", sys->name);
 			fflush(stdin);
 
 			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
 			comm[0]=NUMOGG;
-			OPS(inf, "do you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
+			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
 			SafeIScan(inf, &sys->nactive);
 			for (; ;) {
 				if(sys->nactive < NUMOGG)
@@ -78,13 +78,13 @@
 				SafeIScan(inf, &sys->nactive);
 			}
 			
-			// Set all the object's type to 0 whit exeption of a number input of object that must setted to 11
+			// Set all the object's kind to 0 whit exeption of a number input of object that must setted to 11
 			for (l=0; l != NUMOGG; l++) {
 				if (l < sys->nactive) {
-					sys->o[l].type = 11;
+					strcpy(sys->o[l].kind, "Not_initialized");
 				}
 				else {
-					sys->o[l].type = 0;
+					strcpy(sys->o[l].kind, "Void");
 				}
 			}
 			
@@ -94,7 +94,7 @@
 			
 			// Initialize some object
 			for (l=0; l!=sys->nactive; l++) {
-				InitObject(inf, &sys->o[l], l+1);
+				InitObject(inf, &sys->o[l], sys->Skind, l+1);
 			}
 		}
 		// The simulation loop (infinite)

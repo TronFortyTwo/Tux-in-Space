@@ -16,32 +16,36 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-*/
-
-/***
- * This is CSpace's header file
+ *
+ * In this file there are functions that manage type
  * 
- * Contein even the definition of constant
+ *
+ *
+ * Prototipes:
  */
-
-// External standard library
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <math.h>
-	#include <string.h>
+	tStype *InitType (FILE *);
+ 
+/***
+ * The function InitObject set the type structure reading it from a file and return his address
+ */
+	tStype *InitType (FILE *stream) {
+		
+		// The type mean structure (static because must be passed to others functions)
+		static tStype types_struct;
+		//counter
+		short i;
 	
-// Prototype of some function function
-	int OPS(tinf *inf, char *, int *, long double *);
+		// read how many types there are in the file
+		fscanf(stream, "%i\n\n", &types_struct.number);
+		
+		//alloc enought spaces for all the one type structure
+		types_struct.type = (ttype *) malloc (types_struct.number * sizeof(ttype));
+		
+		for (i=0; i!=types_struct.number; i++) {
+			fscanf(stream, "%s\n", types_struct.type[i].name);
+			fscanf(stream, "%s\n", types_struct.type[i].description);
+			fscanf(stream, "%s\n\n", types_struct.type[i].parent);
+		}
 	
-// CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
-	#include "string functions.c"
-	#include "kind.c"
-	#include "system functions.c"
-	#include "mathematical functions.c"
-	#include "OnlyPrintfSystem.c"
-	#include "OPSo.c"
-	#include "menù.c"
-	#include "pmotor.c"
-	#include "Parser.c"
-	#include "shell.c"
-
+		return &types_struct;
+	}

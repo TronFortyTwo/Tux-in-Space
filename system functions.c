@@ -22,7 +22,7 @@
 		//loop
 		for (i=0; i!=NUMOGG; i++) {
 			//if the object is active(!=0 so even error statuses) add it at the list and update the counters
-			if(sys->o[i].type != 0) {
+			if(sys->o[i].kind != 0) {
 				sys->active[sys->nactive] = i;
 				sys->nactive++;
 			}
@@ -43,44 +43,6 @@
 		return;
 	}
 
-/***
- * This function gave a number write in a variable the name
- * 
- */
-	void ExtractType (int type, char *dest);
-	void ExtractType (int type, char *dest) {
-	
-		if (type <= 0)
-			strcpy(dest, "Error Type");
-		else if (type == 0)
-			strcpy(dest, "Void");
-		else if (type == 1)
-			strcpy(dest, "Spaceship");
-		else if (type == 2)
-			strcpy(dest, "Sun");
-		else if (type == 3)
-			strcpy(dest, "Generic Planet");
-		else if (type == 4)
-			strcpy(dest, "Rock Planet");
-		else if (type == 5)
-			strcpy(dest, "Giant Gas Planet");
-		else if (type == 6)
-			strcpy(dest, "Natural Satellite");
-		else if (type == 7)
-			strcpy(dest, "Asteroid");
-		else if (type == 8)
-			strcpy(dest, "Comet");
-		else if (type == 9)
-			strcpy(dest, "Black Hole");
-		else if (type == 10)
-			strcpy(dest, "Space Station");
-		else if (type == 11)
-			strcpy(dest, "Unknow type");
-		else if (type >= 11)
-			strcpy(dest, "Error Type");
-	
-		return;
-	}
 
 /***
  * 	This function InitObject initialize a new object and ask information about it
@@ -92,15 +54,16 @@
  * 	-this is a recursive function
  */
 
-	void InitObject (tinf *inf, tobj *obj, short n);
+	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n);
 	
-	void InitObject (tinf *inf, tobj *obj, short n) {
+	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n) {
 		
 		// What is going to be printed. If the function go in segmentation fault, increase it
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
-		// name of the object to load
-		char name[NAMELUN+18];
+		// name of the object to load and the name of a kind of object
+		char name[NAMELUN+17];
+		char input[DESCRIPTIONSIZE];
 		// object to load
 		FILE *objfile;
 		// array to give to Rmotor whit counters
@@ -108,6 +71,9 @@
 		short ipos = 0;
 		long double lvar[7];
 		short lpos=0;
+		//counter
+		short i;
+		short w;
 	
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
@@ -129,19 +95,19 @@
 			strcat(name, reffub);
 			objfile = fopen(name, "r");
 			if(objfile==NULL) {
-				OPS(inf, "ERROR!\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
+				OPS(inf, "ERROR!\n\nThe file you would to load doesn't exist! Restarting initialization sequence\nPress a number to continue", 0, 0);
 				SafeIScan(inf, &ivar[0]);
-				InitObject(inf, obj, n);
+				InitObject(inf, obj, knd, n);
 				return;
 			}
-			// Read name, type and mass
-			fscanf(objfile, "%s\n%d\n%Lf", obj->name, &obj->type, &obj->mass);
+			// Read name, kind and mass and close the file
+			fscanf(objfile, "%s\n%s\n%Lf", obj->name, obj->kind, &obj->mass);
 			fclose(objfile);
-			//tell name, type and mass whitout ask
+			//tell name, kind and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
-			ExtractType(obj->type, reffub);
+			strcat(buffer, obj->kind);
 			strcat(buffer, reffub);
 			strcat(buffer, "\n\nmass:  ");
 		}
@@ -155,16 +121,63 @@
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
 			fflush(stdin);
-			// ask about the type
-			strcat(buffer, obj->name); 
+			strcat(buffer, obj->name);
+			// ask about the kind (categoria throught subcategoria)
 			strcat(buffer, "\n\ntype of the object:  ");
-			strcpy(reffub, buffer);
-			strcat(reffub, "\n1  = Spaceship\n2  = Sun\n3  = Planet (generic)\n4  = Planet (Rock)\n5  = Planet (Giant Gas)\n6  = Natural satellite\n7  = Asteroid\n8  = Comet\n9  = Black Hole\n10 = Space station\n");
-			OPS(inf, reffub, ivar, lvar);
-			SafeIScan(inf, &obj->type);
+			strcpy(name, "NULL");
+			// the loop that ask for the kind browsing throught the gerarchic kind structure
+			do {
+				// reset the temp buffer
+				strcpy(reffub, buffer);
+				//make a line of space
+				strcat(reffub, "\n");
+				// the loop that choose right kinds
+				for (i=0, w=0; i!=knd->number; i++) {
+					// if name variable is = knd->kind[i]->parent add it at the reffub 
+					if(strcmp(name, knd->kind[i].parent) == 0) {
+						strcat (reffub, "\n-");
+						strcat (reffub, knd->kind[i].name);
+						w++;
+					}
+				}
+				//if the kind hasn't any subtype exit the loop remembing name as kind
+				if (w == 0){
+					strcpy(obj->kind, name);
+					break;
+				}
+				//else add the back and the description button
+				else {
+					strcat(reffub, "\n---back\n---for a short description type descr");
+				}
+				// print the reffub and scanf the user answer
+				OPS(inf, reffub, ivar, lvar);
+				scanf("%s", input);
+				//if the user choose back make name NULL
+				if(strcmp(input, "back") == 0) {
+					strcpy(name, "NULL");
+				}
+				//if the user ask a description show a description of the object
+				else if(strcmp(input, "descr") == 0) {
+					OPS(inf, "OBJECT DESCRIPTION\n\nOf which kind of object do you want an explaination?", ivar, lvar);
+					scanf("%s", input);
+					strcpy(reffub, "OBJECT DESCRIPTION: ");
+					strcat(reffub, input);
+					strcat(reffub, "\n\n");
+					KindDescriptionFromName (knd, input);
+					strcat(reffub, input);
+					strcat(reffub, "\n\nThis kind of object is under the category: ");
+					strcat(reffub, KindParentFromName(knd, input) );
+					strcat(reffub, "\n\nPress a button to continue");
+					OPS(inf, reffub, ivar, lvar);
+					scanf("%s", input);
+				}
+				//else assign to the name the input
+				else
+					strcpy(name, input);
+			} while(1);
+			
 			// ask about the mass
-			ExtractType(obj->type, reffub);
-			strcat(buffer, reffub);
+			strcat(buffer, obj->kind);
 			strcat(buffer, "\n\nmass:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (t) 1 ton = 1000 Kg");
@@ -236,7 +249,7 @@
 			SaveObject(inf, obj);
 		}
 		if(ivar[0] == 0)
-			InitObject(inf, obj, n);
+			InitObject(inf, obj, knd, n);
 		return;
 	}
 
@@ -261,17 +274,20 @@
 			fclose(dest);
 			OPS(inf, "ERROR WHILE SAVING\n\nThe object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
 			scanf("%c", &input);
+			fflush(stdin);
 			if(input == 'n')
 				return;
 		}
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%d\n%Lf", obj->name, obj->type, obj->mass);
+		fprintf(dest, "%s\n%s\n%Lf", obj->name, obj->kind, obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
 		scanf("%c", &input);
+		fflush(stdin);
+		
 	
 		return;	
 	}

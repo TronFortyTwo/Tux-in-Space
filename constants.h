@@ -26,14 +26,15 @@
 	// Max number of object that the program can work on
 	#define NUMOGG 128
 	
-	// The lenght of a name of an object or a system
+	// The lenght of a name of an object, a system or a kind
 	#define NAMELUN 64
 	
-	// The number of character printed when printing a LONG DOUBLE (possible 3 to 12)
-	#define LDLUN 8
+	// The size of a kind's description. It must is bigger than NAMELUN
+	#define DESCRIPTIONSIZE 256
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024
+	
 	//max lenght of the buffer used by SafeScan function
 	#define BUFFERINPUTSIZE 25
 	
@@ -50,8 +51,9 @@
 	#define FRAME "# "
 	#define FRAMER " #"		//FRAME R(ight)
 	#define FRAMELUN 2
+	#define TWOFRAMELUN 4
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 	
-	
-	
+	// 
+

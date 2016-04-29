@@ -28,7 +28,22 @@
 	// include definition of constants
 	#include "constants.h"
 
-	// the structure infostruct is a structure that contein information about the options and other tecnical things 
+	// The structure that represent a kind of a object
+	struct objtype {
+		char name [NAMELUN];
+		char description [DESCRIPTIONSIZE];
+		char parent [NAMELUN];
+	};
+	typedef struct objtype tkind;
+	
+	// The structure whit all the kinds
+	struct TypesStruct {
+		int number;
+		tkind *kind;			// This is a pointer to an array
+	};
+	typedef struct TypesStruct tSkind;
+
+	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	struct info {
 		// Visual mode (0 = Only OPS)
 		int vmode;
@@ -42,18 +57,18 @@
 	};
 	typedef struct info tinf;
 
-	// definition of the type of the object's structures
+	// definition of the kind of the object's structures
 	// structure of one object
 	struct object {
-		char name [NAMELUN];// the name of the object (es.: Earth, My_Planet, Moon)
-		int type;	 		// the type of object. see information.txt
-		long double mass;	// the mass
-		long double x;   	// the coordinate x
-		long double y;		// the coordinate y
-		long double z;		// the coordinate z
-		long double velx;	// the fast of the movement in x
-		long double vely;	// the fast of the movement in y
-		long double velz;	// the fast of the movement in z
+		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
+		char kind [NAMELUN];	// the kind of object.
+		long double mass;		// the mass
+		long double x;   		// the coordinate x
+		long double y;			// the coordinate y
+		long double z;			// the coordinate z
+		long double velx;		// the fast of the movement in x
+		long double vely;		// the fast of the movement in y
+		long double velz;		// the fast of the movement in z
 	};
 	typedef struct object tobj;
 	
@@ -68,10 +83,11 @@
 		int min;
 		int sec;
 		int millisec;
-		int active[NUMOGG];		//This variable contein the position of the active (type!=0) object
+		int active[NUMOGG];		//This variable contein the position of the active (kind!=0) object
 		int nactive;			//the number of them
 		tobj o[NUMOGG];
 		long double G;
+		tSkind *Skind;			// The pointer at the structure that coontein all the kind
 	};
 	typedef struct system tsys;
 
@@ -83,13 +99,29 @@
 
 	int main (int argc, char *argv[]) {
 		
+		printf("\t\tCSpace\n\nLoading...\n");
+		
 		// definition of the structures
 		tinf inf;
 		tsys sys;
+		tSkind *kind;
+		
+		// The kinds file
+		FILE *Fkind;
+		
+		// Read the a file and load the kinds
+		Fkind = fopen("kinds.knd", "r");
+		if(Fkind != NULL) {
+			kind = InitKind(Fkind);
+			sys.Skind = kind;
+			fclose(Fkind);
+		}
+		else
+			printf("WARNING: Could not open file whit kinds!\n");
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 40;
+		inf.height = 50;
 		inf.width = 100;
 	
 		// maxoutput is the max number of character that Rmotor can effectevely use (there are four width and five lines occupied by the frame)

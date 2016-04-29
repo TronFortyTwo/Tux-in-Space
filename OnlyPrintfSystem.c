@@ -101,7 +101,7 @@
 				}
 				// if is a L finish the height whit phrase[chardone+1]
 				else if (phrase[chardone] == 'f') {
-					PrintLine(inf, &phrase[chardone+1], 2*FRAMELUN+columndone);
+					PrintLine(inf, &phrase[chardone+1], TWOFRAMELUN+columndone);
 					chardone++;
 					columndone = inf->width-FRAMELUN;
 				}
@@ -179,11 +179,11 @@
 		size = GetSize(n, 0);
 		
 		//if the number is too big for the height
-		if(*columndone+2*FRAMELUN+size >= inf->width){
+		if(*columndone+TWOFRAMELUN+size >= inf->width){
 			//if there isn't another clear height
 			if(*linedone+3 == inf->height){
 				//complete the height
-				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				PrintLine(inf, " ", TWOFRAMELUN+*columndone);
 				printf("%s\n", FRAMER);
 				//update teh counters
 				*columndone=inf->width;
@@ -191,7 +191,7 @@
 				return;
 			}
 			//complete the height and update counter
-			PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+			PrintLine(inf, " ", TWOFRAMELUN+*columndone);
 			printf("%s\n%s", FRAMER, FRAME);
 			*columndone = FRAMELUN;
 			*linedone = *linedone+1;
@@ -218,13 +218,13 @@
 	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone) {
 		
 		// if a long double occupies more than a height (whit the frame), it will not be printfed
-		char *buffer = (char *) malloc ((inf->width-2*FRAMELUN)*sizeof(char));
+		char *buffer = (char *) malloc ((inf->width-TWOFRAMELUN)*sizeof(char));
 		// the size of the number
 		short size;
 		// caluculate size
-		size = snprintf(buffer, inf->width-2*FRAMELUN, "%+'.*Lf",inf->numprecision, *n);
+		size = snprintf(buffer, inf->width-TWOFRAMELUN, "%+'.*Lf",inf->numprecision, *n);
 		// if the number don't overflow the height
-		if(*columndone+2*FRAMELUN+size <= inf->width) {
+		if(*columndone+TWOFRAMELUN+size <= inf->width) {
 			//printf it
 			printf("%s", buffer);
 			//update the counters
@@ -235,7 +235,7 @@
 			//if there isn't any new height to print
 			if(*linedone+3 == inf->height){
 				//complete the height
-				PrintLine(inf, " ", 2*FRAMELUN+*columndone);
+				PrintLine(inf, " ", TWOFRAMELUN+*columndone);
 				printf("%s\n", FRAMER);
 				//update teh counters
 				*columndone=inf->width;
@@ -243,7 +243,7 @@
 				return;
 			}
 			//complete the height whit spaces
-			PrintLine(inf, " ", *columndone+2*FRAMELUN);
+			PrintLine(inf, " ", *columndone+TWOFRAMELUN);
 			//do the frame and new height
 			printf("%s\n%s", FRAME, FRAMER);
 			//printf the number

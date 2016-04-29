@@ -34,8 +34,6 @@
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		//the type of the object
-		char type[30];
 		// the array to give to Rmotor whit size
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
@@ -55,7 +53,7 @@
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
 		// Write two lines of '-'
-		for(i=0; i!=inf->width-2*FRAMELUN; i++) {
+		for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
 			strcat (buffer, "--");
 		}
 		
@@ -63,11 +61,10 @@
 		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[sys->active[i]];
-			//Tell the name, type and mass
+			//Tell the name, kind and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			ExtractType(obj->type, type);
-			strcat(buffer, type);
+			strcat(buffer, obj->kind);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;
@@ -80,7 +77,7 @@
 			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
 			// A line of '-'
-			for(count=0; count!=inf->width-2*FRAMELUN; count++) {
+			for(count=0; count!=inf->width-TWOFRAMELUN; count++) {
 				strcat (buffer, "-");
 			}
 		}

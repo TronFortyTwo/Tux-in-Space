@@ -32,7 +32,7 @@
  * 		- Change
  * 				NameObj
  * 						name
- * 						type
+ * 						kind
  * 						mass
  * 						x
  * 						y
@@ -101,8 +101,7 @@
 	/**
 	 * The Reask function. Reask the input
 	 * Retrun 0 if the user want to rewrite a command, 1 if not
-	 * NOTE:
-	 * We don't have the pointer to sys, then we tell to Rmotor that is 0 because the OPS don't use the *sys
+	 * 
 	 */
 	int Reask(tinf *inf, char *command){
 		// the answer of the user
