@@ -26,10 +26,10 @@
 	// Max number of object that the program can work on
 	#define NUMOGG 128
 	
-	// The lenght of a name of an object, a system or a type
-	#define NAMELUN 32
+	// The lenght of a name of an object, a system or a kind
+	#define NAMELUN 64
 	
-	// The size of a type's description
+	// The size of a kind's description. It must is bigger than NAMELUN
 	#define DESCRIPTIONSIZE 256
 	
 	//the size of a buffer of character

@@ -35,7 +35,7 @@
 	
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "string functions.c"
-	#include "type.c"
+	#include "kind.c"
 	#include "system functions.c"
 	#include "mathematical functions.c"
 	#include "OnlyPrintfSystem.c"

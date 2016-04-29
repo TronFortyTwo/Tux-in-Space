@@ -28,20 +28,20 @@
 	// include definition of constants
 	#include "constants.h"
 
-	// The structure that represent a type of a object
+	// The structure that represent a kind of a object
 	struct objtype {
 		char name [NAMELUN];
 		char description [DESCRIPTIONSIZE];
 		char parent [NAMELUN];
 	};
-	typedef struct objtype ttype;
+	typedef struct objtype tkind;
 	
-	// The structure whit all the types
+	// The structure whit all the kinds
 	struct TypesStruct {
 		int number;
-		ttype *type;			// This is a pointer to an array
+		tkind *kind;			// This is a pointer to an array
 	};
-	typedef struct TypesStruct tStype;
+	typedef struct TypesStruct tSkind;
 
 	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	struct info {
@@ -57,11 +57,11 @@
 	};
 	typedef struct info tinf;
 
-	// definition of the type of the object's structures
+	// definition of the kind of the object's structures
 	// structure of one object
 	struct object {
 		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
-		char type [NAMELUN];	// the type of object.
+		char kind [NAMELUN];	// the kind of object.
 		long double mass;		// the mass
 		long double x;   		// the coordinate x
 		long double y;			// the coordinate y
@@ -83,11 +83,11 @@
 		int min;
 		int sec;
 		int millisec;
-		int active[NUMOGG];		//This variable contein the position of the active (type!=0) object
+		int active[NUMOGG];		//This variable contein the position of the active (kind!=0) object
 		int nactive;			//the number of them
 		tobj o[NUMOGG];
 		long double G;
-		tStype *Stype;			// The pointer at the structure that coontein all the type
+		tSkind *Skind;			// The pointer at the structure that coontein all the kind
 	};
 	typedef struct system tsys;
 
@@ -104,20 +104,20 @@
 		// definition of the structures
 		tinf inf;
 		tsys sys;
-		tStype *type;
+		tSkind *kind;
 		
-		// The types file
-		FILE *Ftype;
+		// The kinds file
+		FILE *Fkind;
 		
-		// Read the a file and load the types
-		Ftype = fopen("types.typ", "r");
-		if(Ftype != NULL) {
-			type = InitType(Ftype);
-			sys.Stype = type;
-			fclose(Ftype);
+		// Read the a file and load the kinds
+		Fkind = fopen("kinds.knd", "r");
+		if(Fkind != NULL) {
+			kind = InitKind(Fkind);
+			sys.Skind = kind;
+			fclose(Fkind);
 		}
 		else
-			printf("WARNING: Could not open file whit types!\n");
+			printf("WARNING: Could not open file whit kinds!\n");
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing

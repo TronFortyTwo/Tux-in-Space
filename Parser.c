@@ -32,7 +32,7 @@
  * 		- Change
  * 				NameObj
  * 						name
- * 						type
+ * 						kind
  * 						mass
  * 						x
  * 						y

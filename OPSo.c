@@ -61,10 +61,10 @@
 		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[sys->active[i]];
-			//Tell the name, type and mass
+			//Tell the name, kind and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			strcat(buffer, obj->type);
+			strcat(buffer, obj->kind);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;

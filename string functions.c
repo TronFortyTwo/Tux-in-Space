@@ -91,7 +91,7 @@ void SafeIScan(tinf *inf, int *dest) {
 				break;
 		strcpy(buffer, "ATTENCTION:\nThe number ");
 		strcat(buffer, input);
-		strcat(buffer, "that you gave is too big or too small!\n\nPlease, type another number between %i and %i");
+		strcat(buffer, "that you gave is too big or too small!\n\nPlease, kind another number between %i and %i");
 		OPS(inf, buffer, ivar, 0);
 		scanf("%s", input);
 		fflush(stdin);
