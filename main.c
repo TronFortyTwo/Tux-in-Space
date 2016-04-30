@@ -75,17 +75,16 @@
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	struct system {
 		char name [NAMELUN];
-		// Precision of the simulation (in second). [Pmotor needs it]
-		float precision;
+		
+		float precision;		// Precision of the simulation (in second). [Pmotor needs it]
 		int year;
-		int day;
-		int hour;
-		int min;
-		int sec;
-		int millisec;
-		int active[NUMOGG];		//This variable contein the position of the active (kind!=0) object
-		int nactive;			//the number of them
-		tobj o[NUMOGG];
+		short day;
+		short hour;
+		short min;
+		short sec;
+		short millisec;
+		int nactive;			//the number of objects
+		tobj *o;
 		long double G;
 		tSkind *Skind;			// The pointer at the structure that coontein all the kind
 	};

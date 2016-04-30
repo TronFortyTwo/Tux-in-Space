@@ -82,7 +82,7 @@
 			if (strcmp("continue", input) == 0)
 				break;
 			// change
-			else if (strcmp("change", input)) {
+			else if (strcmp("change", input) == 0) {
 				Change(sys);
 				break;
 			}
@@ -108,7 +108,7 @@
 		char buffer[BUFFERSIZE];
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
-		strcat(buffer, "that you wrote is unknow. Do you want to write another command? [y/n]");
+		strcat(buffer, " that you wrote is unknow. Do you want to write another command? [y/n]");
 		OPS(inf, buffer, 0, 0);
 		
 		for(;;){
@@ -135,17 +135,6 @@
 	 * 
 	 */
 	 int Change (tsys *sys) {
-		
-		char command[NAMELUN];
-		short *objflag = (short *) malloc (sizeof(short) * (sys->active[NUMOGG]+1) );	// An array of value (0 or 1) that indicate if the object at the position sys->active[] can be the true name. additionaly the last member indicate if is the system to modify
-		
-		// Scanf the name of what you want to modify
-		scanf("%s", command);
-		fflush(stdin);
-		
-		// search in the names of objects and system for the char command
-		
-		free(objflag);
 		
 		return 0;
 		}

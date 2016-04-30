@@ -48,55 +48,13 @@
 		// Retruning value from the function. 0 if all is good
 		int staterec;
 	
-		// variable for communicate whit other functions
-		int comm[2];
-	
-		// counter
-		int l = 0;
-
 		// Call the mean menù, it tell to shell what to do.
 		staterec = Menu(inf);
 
-		// If the menù tell 0 the program initialize obj
-		if (staterec == 0) {
-			
-			// Ask the name of the new system
-			comm[0]=NAMELUN-1;
-			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", comm, 0);
-			scanf("%s", sys->name);
-			fflush(stdin);
-
-			// Ask the user how many object there are in the system. the loop control that the value put don't put in overflow the stack
-			comm[0]=NUMOGG;
-			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
-			SafeIScan(inf, &sys->nactive);
-			for (; ;) {
-				if(sys->nactive < NUMOGG)
-					if(sys->nactive >= 0)
-						break;
-				OPSE (inf, "Wrong value! Must be put another number between 0 and %i:", comm, 0);
-				SafeIScan(inf, &sys->nactive);
-			}
-			
-			// Set all the object's kind to 0 whit exeption of a number input of object that must setted to 11
-			for (l=0; l != NUMOGG; l++) {
-				if (l < sys->nactive) {
-					strcpy(sys->o[l].kind, "Not_initialized");
-				}
-				else {
-					strcpy(sys->o[l].kind, "Void");
-				}
-			}
-			
-			// Update the active list
-			UpdateActive(sys); 
-			
-			
-			// Initialize some object
-			for (l=0; l!=sys->nactive; l++) {
-				InitObject(inf, &sys->o[l], sys->Skind, l+1);
-			}
-		}
+		// If the menù answered 0 the program initialize the system as new
+		if (staterec == 0)
+			InitSystem(sys, inf);
+	
 		// The simulation loop (infinite)
 		for ( ; ; ) {
 		

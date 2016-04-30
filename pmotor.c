@@ -29,30 +29,30 @@ void Pmotor (tsys *sys) {
 			// a loop that consider every planet (i+1 because whit l<i is alredy made, and whit i=l the two objects are the same)
 			for (l=i+1; l!= sys->nactive; l++) {
 				// First: must be individuated the baricenter of the sistem of obj i and obj (see Information.txt at the voice Pmotor)
-				distx = sys->o[sys->active[i]].x - sys->o[sys->active[l]].x;
-				disty = sys->o[sys->active[i]].y - sys->o[sys->active[l]].y;
-				distz = sys->o[sys->active[i]].z - sys->o[sys->active[l]].z;
+				distx = sys->o[i].x - sys->o[l].x;
+				disty = sys->o[i].y - sys->o[l].y;
+				distz = sys->o[i].z - sys->o[l].z;
 				dist  = pow ( (distx*distx + disty*disty + distz*distz) , 1/3);
 				// individuate the intensity of acceleration
-				temp1 = (sys->o[sys->active[i]].mass * sys->o[sys->active[l]].mass * sys->G) / (dist*dist);
+				temp1 = (sys->o[i].mass * sys->o[l].mass * sys->G) / (dist*dist);
 				// for the calculate of the module F of i, I use this:		x : intensity of attraction = mass l : (mass i + mass l)  ||| then, x = (mass l * intensity of attraction) /intensity of attraction
-				temp2 = sys->o[sys->active[l]].mass * temp1 / ( sys->o[sys->active[l]].mass + sys->o[sys->active[i]].mass );
+				temp2 = sys->o[l].mass * temp1 / ( sys->o[l].mass + sys->o[i].mass );
 				// then the same thing, turning the number (for l)
-				temp3 = sys->o[sys->active[i]].mass * temp1 / ( sys->o[sys->active[l]].mass + sys->o[sys->active[i]].mass);
+				temp3 = sys->o[i].mass * temp1 / ( sys->o[l].mass + sys->o[i].mass);
 				// now sum the vel [i] whit:		number to sum [i] : distx = vector(temp2) : dist		then repeate for others coordinates
-				sys->o[sys->active[i]].velx = sys->o[sys->active[i]].velx + temp2 * distx / dist;
-				sys->o[sys->active[i]].vely = sys->o[sys->active[i]].vely + temp2 * disty / dist;
-				sys->o[sys->active[i]].velz = sys->o[sys->active[i]].velz + temp2 * distz / dist;
-				sys->o[sys->active[l]].velx = sys->o[sys->active[l]].velx + temp3 * distx / dist;
-				sys->o[sys->active[l]].vely = sys->o[sys->active[l]].vely + temp3 * disty / dist;
-				sys->o[sys->active[l]].velz = sys->o[sys->active[l]].velz + temp3 * distz / dist;
+				sys->o[i].velx = sys->o[i].velx + temp2 * distx / dist;
+				sys->o[i].vely = sys->o[i].vely + temp2 * disty / dist;
+				sys->o[i].velz = sys->o[i].velz + temp2 * distz / dist;
+				sys->o[l].velx = sys->o[l].velx + temp3 * distx / dist;
+				sys->o[l].vely = sys->o[l].vely + temp3 * disty / dist;
+				sys->o[l].velz = sys->o[l].velz + temp3 * distz / dist;
 			}
 		}
 		// move the objects
 		for (i=0; i!=sys->nactive; i++) {
-			sys->o[sys->active[i]].x = (sys->o[sys->active[i]].x + sys->o[sys->active[i]].velx) * sys->precision ;
-			sys->o[sys->active[i]].y = (sys->o[sys->active[i]].y + sys->o[sys->active[i]].vely) * sys->precision ;
-			sys->o[sys->active[i]].z = (sys->o[sys->active[i]].z + sys->o[sys->active[i]].velz) * sys->precision ;
+			sys->o[i].x = (sys->o[i].x + sys->o[i].velx) * sys->precision ;
+			sys->o[i].y = (sys->o[i].y + sys->o[i].vely) * sys->precision ;
+			sys->o[i].z = (sys->o[i].z + sys->o[i].velz) * sys->precision ;
 			}
 	
 		// update the time

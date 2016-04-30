@@ -5,39 +5,13 @@
 
 //Prototypes
 	void SaveObject(tinf *, tobj *);
-
-/***
- * UpdateActive update the active list and the nactive var
- * 
- */
-	void UpdateActive(tsys *sys);
-	void UpdateActive(tsys *sys) {
-		
-		//counters
-		short i;
-		
-		//reset the number of object active
-		sys->nactive=0;
-		
-		//loop
-		for (i=0; i!=NUMOGG; i++) {
-			//if the object is active(!=0 so even error statuses) add it at the list and update the counters
-			if(sys->o[i].kind != 0) {
-				sys->active[sys->nactive] = i;
-				sys->nactive++;
-			}
-		}
-	
-	
-		return;
-	}
- 
- 
+	void Setmaxoutput(tinf *inf);
+	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n);
+	void InitSystem (tsys *sys, tinf *inf);
 
 /*** Update Maxoutput is a function that update maxoutput
  * 
  *	*/
-	void Setmaxoutput(tinf *inf);
 	void Setmaxoutput(tinf *inf) {
 		inf->maxoutput = (inf->width - 2 * FRAMELUN) * (inf->height - 2 * FRAMELUN -1);
 		return;
@@ -53,9 +27,6 @@
  * 	-this function is a bit :| Poker Face
  * 	-this is a recursive function
  */
-
-	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n);
-	
 	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n) {
 		
 		// What is going to be printed. If the function go in segmentation fault, increase it
@@ -292,3 +263,48 @@
 	
 		return;	
 	}
+
+/***
+ * InitSystem is a function that initialize a new system
+ */
+	void InitSystem (tsys *sys, tinf *inf) {
+		
+			//counter for loops
+			short l;
+			//to give to OPS
+			int c;
+		
+			//reset the system's time
+			sys->year = 0;
+			sys->hour = 0;
+			sys->day = 0;
+			sys->min = 0;
+			sys->sec = 0;
+			sys->millisec = 0;
+		
+			// Ask the name of the new system
+			c = NAMELUN-1;
+			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", &c, 0);
+			scanf("%s", sys->name);
+			fflush(stdin);
+
+			// Ask the user how many object initialize now.
+			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
+			SafeIScan(inf, &sys->nactive);
+			for (; ;) {
+				if(sys->nactive >= 0)
+					break;
+				OPSE (inf, "Wrong value: Must be put a number bigger than zero!", 0, 0);
+				SafeIScan(inf, &sys->nactive);
+			}
+			
+			//alloc the object array
+			sys->o = (tobj *) malloc ( sizeof(tobj) * sys->nactive );
+			
+			// Initialize the objects
+			for (l=0; l!=sys->nactive; l++)
+				InitObject(inf, &sys->o[l], sys->Skind, l+1);
+	 
+		return;
+	}
+

@@ -60,7 +60,7 @@
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
-			obj = &sys->o[sys->active[i]];
+			obj = &sys->o[i];
 			//Tell the name, kind and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
