@@ -36,14 +36,11 @@
 	#define BUFFERINPUTSIZE 25
 	
 	// the max lenght of a command word
-	#define COMMANDLENGHT 8
+	#define COMMANDLENGHT 16
 	
-	// The max lenght of a variable cvar (see NUMCVAR)
-	#define LENGHTCVAR 16
+	//When you alloc the object buffer, this is how many object you delete or create when you resize
+	#define OBJBUFSIZE 8
 	
-	// the lenght of a tab
-	#define TABLEN 14
-
 	// The frame that Rmotor uses and his size
 	#define FRAME "# "
 	#define FRAMER " #"		//FRAME R(ight)

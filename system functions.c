@@ -5,9 +5,11 @@
 
 //Prototypes
 	void SaveObject(tinf *, tobj *);
-	void Setmaxoutput(tinf *inf);
-	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n);
-	void InitSystem (tsys *sys, tinf *inf);
+	void Setmaxoutput(tinf *);
+	void InitObject (tinf *, tobj *, tSkind *, short);
+	void InitSystem (tsys *, tinf *);
+	void ResizeObject(tinf *, tobj **, short, short);
+	void ResetObject(tobj *);
 
 /*** Update Maxoutput is a function that update maxoutput
  * 
@@ -291,6 +293,7 @@
 			// Ask the user how many object initialize now.
 			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
 			SafeIScan(inf, &sys->nactive);
+			sys->nalloc = sys->nactive;
 			for (; ;) {
 				if(sys->nactive >= 0)
 					break;
@@ -307,4 +310,55 @@
 	 
 		return;
 	}
+	
+	
+	/***
+	 * This function resize the buffer of object
+	 */
+	 
+	void ResizeObject(tinf *inf, tobj **pointer, short old_size, short new_size) {
+		//counter for loop and input
+		int i;
+		//the new buffer whit control whit RAM overload
+		tobj *new_pointer = (tobj *) malloc (sizeof(tobj) * new_size);
+		if (new_pointer == NULL) {
+			OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
+			scanf("%d", &i);
+			if(i == 0) {
+				ResizeObject(inf, pointer, old_size, new_size);
+				return;
+			}
+			else {
+				OPS(inf, "The program chrash if continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
+				scanf("I'm a stupid string whitout any sense");
+			}
+		}
+		//put in the new buffer the old buffer content
+		for(i=0; i!=old_size; i++)
+			new_pointer[i] = *pointer[i];
+		//delete the old buffer
+		free(*pointer);
+		//set the new object
+		for(i=old_size; i!=new_size; i++) {
+			ResetObject(&new_pointer[i]);
+		}
+		//put in the old pointer the new address
+		*pointer = new_pointer;
+		
+		return;
+	}
+	
+	/***
+	 * This function reset a object destroying all his attribute
+	 */
+	void ResetObject(tobj *obj) {
+		
+		//reset ALL!!!
+		strcpy(obj->name, "\0");
+		strcpy(obj->kind, "Void");
+		obj->mass = 0;
+		
+		return;
+	}
+	
 

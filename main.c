@@ -75,7 +75,6 @@
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	struct system {
 		char name [NAMELUN];
-		
 		float precision;		// Precision of the simulation (in second). [Pmotor needs it]
 		int year;
 		short day;
@@ -83,7 +82,8 @@
 		short min;
 		short sec;
 		short millisec;
-		int nactive;			//the number of objects
+		int nactive;		//number of objects active
+		int nalloc;			//number of objects allocated
 		tobj *o;
 		long double G;
 		tSkind *Skind;			// The pointer at the structure that coontein all the kind
@@ -110,18 +110,7 @@
 		
 		//an input variable
 		char input;
-				
-		// Read the a file and load the kinds
-		Fkind = fopen("kinds.knd", "r");
-		if(Fkind != NULL) {
-			kind = InitKind(Fkind);
-			sys.Skind = kind;
-			fclose(Fkind);
-		}
-		else {
-			OPSE(&inf, "Can't open kind.knd file whit definition of object's type. Program can works whit problems and issues", 0, 0);
-			scanf("%c", &input);
-		}
+		
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
@@ -139,6 +128,19 @@
 		
 		// set num precision
 		inf.numprecision = 4;
+		
+		// Read the a file and load the kinds
+		Fkind = fopen("kinds.knd", "r");
+		if(Fkind != NULL) {
+			kind = InitKind(Fkind);
+			sys.Skind = kind;
+			fclose(Fkind);
+		}
+		else {
+			OPSE(&inf, "Can't open kind.knd file whit definition of object's type. Program can works whit problems and issues", 0, 0);
+			scanf("%c", &input);
+		}
+		
 
 		// call the shell
 		Shell (&sys, &inf);

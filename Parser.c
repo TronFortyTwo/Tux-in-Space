@@ -27,38 +27,18 @@
  * The parser command now are:
  * 	
  * 		- Continue
- * 		exit from Parser whitout action. Is a command whitout function
  * 
- * 		- Change
- * 				NameObj
- * 						name
- * 						kind
- * 						mass
- * 						x
- * 						y
- * 						z
- * 						fast
- * 							x
- * 							y
- * 							z
- * 				system
- * 						name
- * 						G
- * 						time
- * 		change datas about objects
- * 
+ * 		- Create
  * 
  * 
  */
  
 	/** Prototipes: */
 	// The main function
-	void Parser(tsys *sys, tinf *inf, char tag);
+	void Parser(tsys *, tinf *, char);
 	// functions called only from Parser:
-	// Reask reask for the instruction if the instruction is wrong
-	int Reask(tinf *inf, char command[]);
-	// Change function change system and objects's data
-	int Change(tsys *sys);
+	int Reask(tinf *, char *);
+	void Create(tsys *, tinf *);
 	
 
 	
@@ -70,7 +50,7 @@
 	void Parser(tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned
-		char input[COMMANDLENGHT];
+		char input[COMMANDLENGHT+1];
 		
 		// Now for every possible command call command call the correct command's function.
 		// when you write a new command, you must add the corrispondent if and add it
@@ -82,8 +62,8 @@
 			if (strcmp("continue", input) == 0)
 				break;
 			// change
-			else if (strcmp("change", input) == 0) {
-				Change(sys);
+			else if (strcmp("create", input) == 0) {
+				Create(sys, inf);
 				break;
 			}
 			// wrong command
@@ -130,11 +110,33 @@
 	}
 	
 	/***
-	 * The Change function modifies datas.
-	 * see up for sytax.
-	 * 
+	 * The create function create a new object
 	 */
-	 int Change (tsys *sys) {
+	
+	void Create(tsys *sys, tinf *inf) {
 		
-		return 0;
+		//if there isn't any space for a new object resize the object buffer
+		if (sys->nactive == sys->nalloc) {
+			ResizeObject(inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
 		}
+	
+		//initialize the new object
+		InitObject(inf, &sys->o[sys->nactive], sys->Skind, 0);
+		sys->nactive++;
+	
+		return;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
