@@ -60,15 +60,19 @@
 	}
 	
 	/***
-	 * Given a name, this function return the pointer to that kind
+	 * Given a name, this function return the pointer to that kind. If there isn't any kind whit that name return NULL
 	 */
 	tkind *KindSearchName(tSkind *kind, char *name) {
 		//counter
 		int i;
 		//the loop that search the kind whit the true name
-		for(i=0; 0 == strcmp(kind->kind[i].name, name); i++);
+		for(i=0; i!=kind->number; i++) {
+			//if the two name are equal
+			if (0 == strcmp(kind->kind[i].name, name))
+				 return &kind->kind[i];
+		};
 		
-		return &kind->kind[i];
+		return NULL;
 	}
 	
 	
@@ -82,7 +86,10 @@
 		tkind *kind_point;
 		//Search the kind whit that name
 		kind_point = KindSearchName (kind, name);
-		return kind_point->description;
+		if(kind_point!=NULL)
+			return kind_point->description;
+		else
+			return "This object kind doesn't exist";
 	}
 	
 	/***
@@ -94,6 +101,8 @@
 		tkind *kind_point;
 		//Search the kind whit that name
 		kind_point = KindSearchName (kind, name);
-		//return the pointer to the parent name
-		return kind_point->parent;
+		if(kind_point!=NULL)
+			return kind_point->description;
+		else
+			return "This object kind doesn't exist";
 	}

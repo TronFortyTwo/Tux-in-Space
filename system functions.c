@@ -35,7 +35,7 @@
 		int ipos = 0;
 		long double lvar[7];
 		int lpos=0;
-		//counter
+		//counter and flags
 		int i;
 		int w;
 	
@@ -52,7 +52,7 @@
 		strcat (reffub, "\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
-		// if the user don't want to load an object
+		// if the user want to load an object
 		if(0 != strcmp(reffub, "n")) {
 			//add the extension (.object) and the path objects/
 			strcat(reffub, ".object");
@@ -95,7 +95,7 @@
 			do {
 				// reset the temp buffer
 				strcpy(reffub, buffer);
-				//make a line of space
+				// new line
 				strcat(reffub, "\n");
 				// the loop that choose right kinds
 				for (i=0, w=0; i!=knd->number; i++) {
@@ -117,7 +117,7 @@
 				}
 				// print the reffub and scanf the user answer
 				OPS(inf, reffub, ivar, lvar);
-				scanf("input");
+				scanf("%s", input);
 				//if the user choose back make name NULL
 				if(strcmp(input, "back") == 0) {
 					strcpy(name, "NULL");
@@ -136,9 +136,15 @@
 					OPS(inf, reffub, ivar, lvar);
 					scanf("%s", input);
 				}
-				//else assign to the name the input
-				else
-					strcpy(name, input);
+				//else assign at the name the input if a kind whit this name exist
+				else {
+					if(NULL != KindSearchName (knd, input))
+						strcpy(name, input);
+					else {
+						OPSE(inf, "The name of the kind of object you typed doesn't exist. Press a somehing to contnue", 0, 0);
+						scanf("%s", input);
+					}
+				}
 			} while(1);
 			
 			// ask about the mass

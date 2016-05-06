@@ -25,7 +25,8 @@
 
 	// include definition of constants
 	#include "constants.h"
-
+	
+	
 	// The structure that represent a kind of a object
 	struct objtype {
 		char name [NAMELUN];
@@ -71,18 +72,18 @@
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	struct system {
 		char name [NAMELUN];
-		float precision;		// Precision of the simulation (in second). [Pmotor needs it]
+		float precision;	// Precision of the simulation (in second). [Pmotor needs it]
 		int year;
 		int day;
 		int hour;
 		int min;
 		int sec;
 		int millisec;
-		int nactive;		//number of objects active
-		int nalloc;			//number of objects allocated
+		int nactive;	//number of objects active
+		int nalloc;	//number of objects allocated
 		tobj *o;			//the pointer to the dinamic allocated array of objects
 		long double G;
-		tSkind *Skind;			// The pointer at the structure that coontein all the kind
+		tSkind *Skind;		// The pointer at the structure that coontein all the kind
 	};
 	typedef struct system tsys;
 

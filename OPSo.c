@@ -40,22 +40,17 @@
 		int lpos=0;
 		// counters
 		int i;
-		int count;
 		// pointer to a object
 		tobj *obj;
 		
-		// Printf the line whit the time.
-		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n");
+		// Printf the line whit the time and two lines of '-'
+		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
 		ivar[0] = sys->year;
 		ivar[1] = sys->day;
 		ivar[2] = sys->hour;
 		ivar[3] = sys->min;
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
-		// Write two lines of '-'
-		for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
-			strcat (buffer, "--");
-		}
 		
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
@@ -77,9 +72,7 @@
 			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
 			// A line of '-'
-			for(count=0; count!=inf->width-TWOFRAMELUN; count++) {
-				strcat (buffer, "-");
-			}
+			strcat (buffer, "%f-");
 		}
 		
 		//tell to Rmotor what is done

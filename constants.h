@@ -22,7 +22,6 @@
  * 
  */
 
-
 	// The lenght of a name of an object, a system or a kind
 	#define NAMELUN 64
 	
