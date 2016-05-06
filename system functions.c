@@ -5,19 +5,10 @@
 
 //Prototypes
 	void SaveObject(tinf *, tobj *);
-	void Setmaxoutput(tinf *);
-	void InitObject (tinf *, tobj *, tSkind *, short);
+	void InitObject (tinf *, tobj *, tSkind *, int);
 	void InitSystem (tsys *, tinf *);
-	void ResizeObject(tinf *, tobj **, short, short);
+	void ResizeObject(tinf *, tobj **, int, int);
 	void ResetObject(tobj *);
-
-/*** Update Maxoutput is a function that update maxoutput
- * 
- *	*/
-	void Setmaxoutput(tinf *inf) {
-		inf->maxoutput = (inf->width - 2 * FRAMELUN) * (inf->height - 2 * FRAMELUN -1);
-		return;
-	}
 
 
 /***
@@ -29,7 +20,7 @@
  * 	-this function is a bit :| Poker Face
  * 	-this is a recursive function
  */
-	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n) {
+	void InitObject (tinf *inf, tobj *obj, tSkind *knd, int n) {
 		
 		// What is going to be printed. If the function go in segmentation fault, increase it
 		char buffer [BUFFERSIZE];
@@ -41,12 +32,12 @@
 		FILE *objfile;
 		// array to give to Rmotor whit counters
 		int ivar[2];
-		short ipos = 0;
+		int ipos = 0;
 		long double lvar[7];
-		short lpos=0;
+		int lpos=0;
 		//counter
-		short i;
-		short w;
+		int i;
+		int w;
 	
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
@@ -75,7 +66,9 @@
 				return;
 			}
 			// Read name, kind and mass and close the file
-			fscanf(objfile, "%s\n%s\n%Lf", obj->name, obj->kind, &obj->mass);
+			ScanFString(obj->name, objfile);
+			ScanFString(obj->kind, objfile);
+			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
 			//tell name, kind and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
@@ -94,7 +87,6 @@
 			ivar[ipos] = NAMELUN-1;
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
-			fflush(stdin);
 			strcat(buffer, obj->name);
 			// ask about the kind (categoria throught subcategoria)
 			strcat(buffer, "\n\ntype of the object:  ");
@@ -121,11 +113,11 @@
 				}
 				//else add the back and the description button
 				else {
-					strcat(reffub, "\n---back\n---for a short description type descr");
+					strcat(reffub, "\n---back\n---for a description type descr");
 				}
 				// print the reffub and scanf the user answer
 				OPS(inf, reffub, ivar, lvar);
-				scanf("%s", input);
+				scanf("input");
 				//if the user choose back make name NULL
 				if(strcmp(input, "back") == 0) {
 					strcpy(name, "NULL");
@@ -137,8 +129,7 @@
 					strcpy(reffub, "OBJECT DESCRIPTION: ");
 					strcat(reffub, input);
 					strcat(reffub, "\n\n");
-					KindDescriptionFromName (knd, input);
-					strcat(reffub, input);
+					strcat(reffub, KindDescriptionFromName (knd, input));
 					strcat(reffub, "\n\nThis kind of object is under the category: ");
 					strcat(reffub, KindParentFromName(knd, input) );
 					strcat(reffub, "\n\nPress a button to continue");
@@ -272,7 +263,7 @@
 	void InitSystem (tsys *sys, tinf *inf) {
 		
 			//counter for loops
-			short l;
+			int l;
 			//to give to OPS
 			int c;
 		
@@ -288,7 +279,6 @@
 			c = NAMELUN-1;
 			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", &c, 0);
 			scanf("%s", sys->name);
-			fflush(stdin);
 
 			// Ask the user how many object initialize now.
 			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
@@ -316,21 +306,15 @@
 	 * This function resize the buffer of object
 	 */
 	 
-	void ResizeObject(tinf *inf, tobj **pointer, short old_size, short new_size) {
+	void ResizeObject(tinf *inf, tobj **pointer, int old_size, int new_size) {
 		//counter for loop and input
 		int i;
 		//the new buffer whit control whit RAM overload
 		tobj *new_pointer = (tobj *) malloc (sizeof(tobj) * new_size);
 		if (new_pointer == NULL) {
-			OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
-			scanf("%d", &i);
-			if(i == 0) {
+			for(; pointer != NULL;){
+				OPSML(inf);
 				ResizeObject(inf, pointer, old_size, new_size);
-				return;
-			}
-			else {
-				OPS(inf, "The program chrash if continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
-				scanf("I'm a stupid string whitout any sense");
 			}
 		}
 		//put in the new buffer the old buffer content
@@ -353,7 +337,7 @@
 	 */
 	void ResetObject(tobj *obj) {
 		
-		//reset ALL!!!
+		//reset !!!
 		strcpy(obj->name, "\0");
 		strcpy(obj->kind, "Void");
 		obj->mass = 0;

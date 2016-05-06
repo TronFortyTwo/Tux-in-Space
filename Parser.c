@@ -57,7 +57,6 @@
 		
 		for ( ; ; ) {
 			scanf("%s", input);
-			fflush(stdin);
 			// continue
 			if (strcmp("continue", input) == 0)
 				break;
@@ -89,12 +88,11 @@
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
 		strcat(buffer, " that you wrote is unknow. Do you want to write another command? [y/n]");
-		OPS(inf, buffer, 0, 0);
+		OPSE(inf, buffer, 0, 0);
 		
 		for(;;){
 			// a loop that exit 0 or 1
 			scanf("%s", command);
-			fflush(stdin);
 			// if postitive return 0
 			if (command[0] == 'y') {
 				OPS(inf, "What is your command?", 0, 0);

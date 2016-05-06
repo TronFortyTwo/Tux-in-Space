@@ -20,8 +20,6 @@
 
 #########################################################################################################################################################################################################
 # This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution, is a collection of structures for the other functions and contein file's initialization		#
-# Questa è la funzione principale del programma e non ha un vero scopo ma fa da piattaforma per compilazione ed esecuzione e raggruppa le strutture e inizializza i file di configurazione				#
-# 																																																		#
 #########################################################################################################################################################################################################
 */
 
@@ -47,8 +45,6 @@
 	struct info {
 		// Visual mode (0 = Only OPS)
 		int vmode;
-		// Maxoutput is the maximum number of char that can be printed (not consider the frames)
-		int maxoutput;
 		// The number of columns and lines that Rmotor's function must use.
 		int width;
 		int height;
@@ -77,14 +73,14 @@
 		char name [NAMELUN];
 		float precision;		// Precision of the simulation (in second). [Pmotor needs it]
 		int year;
-		short day;
-		short hour;
-		short min;
-		short sec;
-		short millisec;
+		int day;
+		int hour;
+		int min;
+		int sec;
+		int millisec;
 		int nactive;		//number of objects active
 		int nalloc;			//number of objects allocated
-		tobj *o;
+		tobj *o;			//the pointer to the dinamic allocated array of objects
 		long double G;
 		tSkind *Skind;			// The pointer at the structure that coontein all the kind
 	};
@@ -97,8 +93,6 @@
 	// Funzione principale
 
 	int main (int argc, char *argv[]) {
-		
-		printf("\t\tCSpace\n\nLoading...\n");
 		
 		// definition of the structures
 		tinf inf;
@@ -116,9 +110,9 @@
 		// height and width are respectively the number of height and width that Rmotor can use for printing
 		inf.height = 50;
 		inf.width = 100;
-	
-		// maxoutput is the max number of character that Rmotor can effectevely use (there are four width and five lines occupied by the frame)
-		Setmaxoutput(&inf);
+		
+		//print that is loading
+		OPS(&inf, "LOADING CSPACE........\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);
 		
 		// the vmode is setted 0 (onlyOPS)
 		inf.vmode = 0;
@@ -132,7 +126,7 @@
 		// Read the a file and load the kinds
 		Fkind = fopen("kinds.knd", "r");
 		if(Fkind != NULL) {
-			kind = InitKind(Fkind);
+			kind = InitKind(Fkind, &inf);
 			sys.Skind = kind;
 			fclose(Fkind);
 		}

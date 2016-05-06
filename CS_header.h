@@ -27,12 +27,13 @@
 // External standard library
 	#include <stdio.h>
 	#include <stdlib.h>
-	#include <math.h>
 	#include <string.h>
+	#include <math.h>
 	
 // Prototype of some function called from everywhere
 	int OPS(tinf *inf, char *, int *, long double *);
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
+	void OPSML(tinf *inf);
 	
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "string functions.c"

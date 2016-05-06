@@ -23,42 +23,48 @@
  *
  * Prototipes:
  */
-	tSkind *InitKind (FILE *);
-	char *KindDescriptionFromName (tSkind *kind, char *name);
-	tkind *KindSearchName (tSkind *kind, char *name);
-	char *KindParentFromName (tSkind *kind, char *name);
+	tSkind *InitKind (FILE *, tinf *);
+	char *KindDescriptionFromName (tSkind *, char *);
+	tkind *KindSearchName (tSkind *, char *);
+	char *KindParentFromName (tSkind *, char *);
  
 	/***
 	 * The function InitObject set the kind structure reading it from a file and return his address
 	 */
-	tSkind *InitKind (FILE *stream) {
+	tSkind *InitKind (FILE *stream, tinf *inf) {
 		
 		// The kind mean structure (static because must be passed to others functions)
 		static tSkind types_struct;
 		//counter
-		short i;
+		int i;
 	
 		// read how many kinds there are in the file
 		fscanf(stream, "%i\n\n", &types_struct.number);
 		
-		//alloc enought spaces for all the one kind structure
+		//alloc enought spaces for all the tkind structure
 		types_struct.kind = (tkind *) malloc (types_struct.number * sizeof(tkind));
+		for(; types_struct.kind == NULL;) {
+			OPSML(inf);
+			types_struct.kind = (tkind *) malloc (types_struct.number * sizeof(tkind));
+		}
 		
 		for (i=0; i!=types_struct.number; i++) {
-			fscanf(stream, "%s\n", types_struct.kind[i].name);
-			fscanf(stream, "%s\n", types_struct.kind[i].description);
-			fscanf(stream, "%s\n\n", types_struct.kind[i].parent);
+			//scan name, description and parent
+			ScanFString (types_struct.kind[i].name, stream);
+			ScanFString (types_struct.kind[i].description, stream);
+			ScanFString (types_struct.kind[i].parent, stream);
+			fscanf(stream, "\n");
 		}
 	
 		return &types_struct;
 	}
 	
 	/***
-	 * This function gave a name, return the pointer to that kind
+	 * Given a name, this function return the pointer to that kind
 	 */
 	tkind *KindSearchName(tSkind *kind, char *name) {
 		//counter
-		short i;
+		int i;
 		//the loop that search the kind whit the true name
 		for(i=0; 0 == strcmp(kind->kind[i].name, name); i++);
 		
@@ -68,7 +74,7 @@
 	
 	
 	/***
-	 * This function write in the string dest the descripiton of the kind name
+	 * This function return the descripiton of the kind name
 	 */ 
 	char *KindDescriptionFromName (tSkind *kind, char *name) {
 
@@ -80,7 +86,7 @@
 	}
 	
 	/***
-	 * This function write in the string dest the parent of the kind name
+	 * This function return the parent of the kind name
 	 */ 
 	char *KindParentFromName (tSkind *kind, char *name) {
 	

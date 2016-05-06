@@ -35,7 +35,7 @@
  *	--------------------------------------------elaboration
  *	5)Goto 2 or goto 6
  *	
- *  6)Retrun to main
+ *  6)Return to main
  * 
  * 
  */
@@ -64,7 +64,7 @@
 			}
 			
 			// call the instruction parser
-			Parser(sys, inf, 's' );
+			Parser(sys, inf, 's');
 			
 			// call the phisic motor
 			Pmotor(sys);

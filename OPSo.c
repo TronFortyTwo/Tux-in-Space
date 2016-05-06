@@ -37,10 +37,10 @@
 		// the array to give to Rmotor whit size
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
-		short lpos=0;
+		int lpos=0;
 		// counters
-		short i;
-		short count;
+		int i;
+		int count;
 		// pointer to a object
 		tobj *obj;
 		
