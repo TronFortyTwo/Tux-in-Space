@@ -1,0 +1,10 @@
+#This file is an example file on now a object file is made
+#In the first line we have the name
+Example
+#In the second line we have the type
+Example Type
+#In the third line we have the mass (in tons, each tons is 1000 Kg)
+123677774000
+#
+#NOTE:
+#-Not put spaces and '\n' where don't request

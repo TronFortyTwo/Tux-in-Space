@@ -98,7 +98,6 @@
 		// definition of the structures
 		tinf inf;
 		tsys sys;
-		tSkind *kind;
 		
 		// The kinds file
 		FILE *Fkind;
@@ -113,7 +112,7 @@
 		inf.width = 100;
 		
 		//print that is loading
-		OPS(&inf, "LOADING CSPACE........\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);
+		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);
 		
 		// the vmode is setted 0 (onlyOPS)
 		inf.vmode = 0;
@@ -127,21 +126,19 @@
 		// Read the a file and load the kinds
 		Fkind = fopen("kinds.knd", "r");
 		if(Fkind != NULL) {
-			kind = InitKind(Fkind, &inf);
-			sys.Skind = kind;
+			sys.Skind = InitKind(Fkind, &inf);
 			fclose(Fkind);
 		}
 		else {
 			OPSE(&inf, "Can't open kind.knd file whit definition of object's type. Program can works whit problems and issues", 0, 0);
 			scanf("%c", &input);
 		}
-		
 
 		// call the shell
 		Shell (&sys, &inf);
 		
 		//free the memory
-		free(kind);
+		free(sys.Skind);
 		
 		return 0;
 	}

@@ -41,7 +41,6 @@
 	#include "string functions.c"
 	#include "kind.c"
 	#include "system functions.c"
-	#include "mathematical functions.c"
 	#include "OnlyPrintfSystem.c"
 	#include "OPSo.c"
 	#include "menù.c"

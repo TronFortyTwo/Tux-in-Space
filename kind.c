@@ -102,7 +102,7 @@
 		//Search the kind whit that name
 		kind_point = KindSearchName (kind, name);
 		if(kind_point!=NULL)
-			return kind_point->description;
+			return kind_point->parent;
 		else
 			return "This object kind doesn't exist";
 	}

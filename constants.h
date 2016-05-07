@@ -26,7 +26,7 @@
 	#define NAMELUN 64
 	
 	// The size of a kind's description. It must is bigger than NAMELUN
-	#define DESCRIPTIONSIZE 256
+	#define DESCRIPTIONSIZE 1024
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024
