@@ -79,8 +79,8 @@
 		int min;
 		int sec;
 		int millisec;
-		int nactive;	//number of objects active
-		int nalloc;	//number of objects allocated
+		int nactive;		//number of objects active
+		int nalloc;			//number of objects allocated
 		tobj *o;			//the pointer to the dinamic allocated array of objects
 		long double G;
 		tSkind *Skind;		// The pointer at the structure that coontein all the kind
