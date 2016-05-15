@@ -28,7 +28,6 @@
  * 
  * 
  */
-	int OPSo (tsys *sys, tinf *inf);
 
 	int OPSo (tsys *sys, tinf *inf) {
 		
@@ -56,10 +55,10 @@
 		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[i];
-			//Tell the name, kind and mass
+			//Tell the name, type and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			strcat(buffer, obj->kind);
+			strcat(buffer, obj->type);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;

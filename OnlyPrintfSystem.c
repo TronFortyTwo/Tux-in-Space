@@ -28,13 +28,7 @@
  * 	OnlyPrintfSystem is often called OPS
  * 
  */
- 
-	//prototype for the OPS's functions
-	
-	void PrintInt (tinf *, int, int *, int *);
-	void PrintLongDouble (tinf *, long double *, int *, int *);
-	void PrintString(tinf *, char *, int, int *, int *);
-	
+
  /**Only Printf System */
 	int OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
 	

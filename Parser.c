@@ -32,16 +32,6 @@
  * 
  * 
  */
- 
-	/** Prototipes: */
-	// The main function
-	void Parser(tsys *, tinf *, char);
-	// functions called only from Parser:
-	int Reask(tinf *, char *);
-	void Create(tsys *, tinf *);
-	
-
-	
 
 /**
  * The main function
@@ -119,7 +109,7 @@
 		}
 	
 		//initialize the new object
-		InitObject(inf, &sys->o[sys->nactive], sys->Skind, 0);
+		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);
 		sys->nactive++;
 	
 		return;

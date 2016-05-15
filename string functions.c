@@ -21,20 +21,14 @@
  * HERE we have function that help whit using the strings and whit input-output
  * 
  */
-
-	//prototypes:
-	void ChangeChar(char *, char, char);
-	void SafeIScan(tinf *inf, int *dest);
-	void PrintLine (tinf *inf, char character[], int num);
-	void ScanFString(char *dest, FILE *stream);
 	
 /***
- * This function scan a string WHIT space, to use when scanning a name, a kind...
+ * This function scan a string WHIT space, to use when scanning a name, a type...
  * 
  * */
 
 /***
- * This function scan a string WHIT space, to use when scanning a name, a kind... but from a file
+ * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 
  * */
 	void ScanFString(char *dest, FILE *stream){
@@ -112,7 +106,7 @@ void SafeIScan(tinf *inf, int *dest) {
 				break;
 		strcpy(buffer, "The number ");
 		strcat(buffer, input);
-		strcat(buffer, "that you gave is too big or too small!\n\nPlease, kind another number between %i and %i");
+		strcat(buffer, "that you gave is too big or too small!\n\nPlease, type another number between %i and %i");
 		OPSE(inf, buffer, ivar, 0);
 		scanf("%s", input);
 		fflush(stdin);

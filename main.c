@@ -27,20 +27,20 @@
 	#include "constants.h"
 	
 	
-	// The structure that represent a kind of a object
+	// The structure that represent a type of a object
 	struct objtype {
 		char name [NAMELUN];
 		char description [DESCRIPTIONSIZE];
 		char parent [NAMELUN];
 	};
-	typedef struct objtype tkind;
+	typedef struct objtype ttype;
 	
-	// The structure whit all the kinds
+	// The structure whit all the types
 	struct TypesStruct {
 		int number;
-		tkind *kind;			// This is a pointer to an array
+		ttype *type;			// This is a pointer to an array
 	};
-	typedef struct TypesStruct tSkind;
+	typedef struct TypesStruct tStype;
 
 	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	struct info {
@@ -54,11 +54,11 @@
 	};
 	typedef struct info tinf;
 
-	// definition of the kind of the object's structures
+	// definition of the type of the object's structures
 	// structure of one object
 	struct object {
 		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
-		char kind [NAMELUN];	// the kind of object.
+		char type [NAMELUN];	// the type of object.
 		long double mass;		// the mass
 		long double x;   		// the coordinate x
 		long double y;			// the coordinate y
@@ -83,7 +83,7 @@
 		int nalloc;			//number of objects allocated
 		tobj *o;			//the pointer to the dinamic allocated array of objects
 		long double G;
-		tSkind *Skind;		// The pointer at the structure that coontein all the kind
+		tStype *Stype;		// The pointer at the structure that coontein all the type
 	};
 	typedef struct system tsys;
 
@@ -99,8 +99,8 @@
 		tinf inf;
 		tsys sys;
 		
-		// The kinds file
-		FILE *Fkind;
+		// The types file
+		FILE *Ftype;
 		
 		//an input variable
 		char input;
@@ -123,14 +123,14 @@
 		// set num precision
 		inf.numprecision = 4;
 		
-		// Read the a file and load the kinds
-		Fkind = fopen("kinds.knd", "r");
-		if(Fkind != NULL) {
-			sys.Skind = InitKind(Fkind, &inf);
-			fclose(Fkind);
+		// Read the a file and load the types
+		Ftype = fopen("types.typ", "r");
+		if(Ftype != NULL) {
+			sys.Stype = Inittype(Ftype, &inf);
+			fclose(Ftype);
 		}
 		else {
-			OPSE(&inf, "Can't open kind.knd file whit definition of object's type. Program can works whit problems and issues", 0, 0);
+			OPSE(&inf, "Can't open type.typ file whit definition of object's type. Program can works whit problems and issues", 0, 0);
 			scanf("%c", &input);
 		}
 
@@ -138,7 +138,7 @@
 		Shell (&sys, &inf);
 		
 		//free the memory
-		free(sys.Skind);
+		free(sys.Stype);
 		
 		return 0;
 	}

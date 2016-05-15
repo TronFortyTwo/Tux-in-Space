@@ -40,9 +40,6 @@
  * 
  */
 	
-	void Shell (tsys *sys, tinf *inf);
-	
-	
 	void Shell (tsys *sys, tinf *inf) {
 
 		// Retruning value from the function. 0 if all is good

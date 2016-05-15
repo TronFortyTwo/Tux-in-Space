@@ -22,10 +22,10 @@
  * 
  */
 
-	// The lenght of a name of an object, a system or a kind
+	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
 	
-	// The size of a kind's description. It must is bigger than NAMELUN
+	// The size of a type's description. It must is bigger than NAMELUN
 	#define DESCRIPTIONSIZE 1024
 	
 	//the size of a buffer of character
@@ -47,6 +47,4 @@
 	#define TWOFRAMELUN 4
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
-	
-	// 
 

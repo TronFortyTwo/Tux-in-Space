@@ -22,10 +22,6 @@
  * The returning value is a number that shell need for know what do
  * 
  */
- 
- 
-	int Menu(tinf *inf);
-
 	int Menu (tinf *inf) {
 		
 		// A variable that save the scanf of an input. And do other too...

@@ -11,9 +11,6 @@
  * 		-inerzia delle masse
  */
 
-
-void Pmotor (tsys *sys);
-
 void Pmotor (tsys *sys) {
 	
 		// Counters for loops
@@ -56,23 +53,27 @@ void Pmotor (tsys *sys) {
 			}
 	
 		// update the time
-		for(sys->millisec = 1000 * sys->precision; sys->millisec >= 1000; ) {
-			if (sys->millisec >= 1000 ) {
-				for (; sys->millisec >1000; sys->sec++, sys->millisec = sys->millisec - 1000);
-				if (sys->sec >= 60) {
-					for (; sys->sec > 60; sys->min++, sys->sec = sys->sec-60);
-					if (sys->min >= 60) {
-						for (; sys->min > 60; sys->hour++, sys->min = sys->min-60);
-						if (sys->hour >= 24){
-							for (; sys->hour > 24; sys->day++, sys->hour = sys->hour-24);
-							if (sys->day >= 365) {
-								for (; sys->day > 365; sys->year++, sys->day = sys->day-365);
-							}
-						}
-					}
-				}
-			}
+		for(sys->millisec=sys->precision*1000; sys->millisec>=1000; ) {
+			sys->sec++;
+			sys->millisec=sys->millisec-1000;
 		}
-	
+		for(; sys->sec>=60; ) {
+			sys->min++;
+			sys->sec=sys->sec-60;
+		}
+		for(; sys->min>=60; ) {
+			sys->hour++;
+			sys->min=sys->min-60;
+		}
+		for(; sys->hour>=24; ) {
+			sys->day++;
+			sys->hour=sys->hour-24;
+		}
+		for(; sys->day>=365;) {
+			sys->year++;
+			sys->day=sys->day-365;
+		}
+		
+		
 		return;
 		}
