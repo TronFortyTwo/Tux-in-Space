@@ -102,7 +102,128 @@
 			return "This object type doesn't exist";
 	}
 	 
-	 
+	/***
+	 * In the kind browser you can browse types in the type.typ file, see descriptions and choose one type to return to the calling function
+	 * 
+	 * file is the source struct
+	 * title is an intestation to write as title
+	 * if v is 0 we woudn't	return a type (so the UI changes respect 1)
+	 * if v isn't 0			return a type
+	 */ 
+	ttype *TypeBrowser(tinf *inf, tStype *Stype, char *title) {
+		 
+		//in the gerarchic tree of type, is the common parent that the types shown have
+		char commonparent[NAMELUN] = "NULL";
+		// static buffer and dinamic buffer
+		char sbuf[BUFFERSIZE];
+		char dbuf[BUFFERSIZE];
+		//temp pointer
+		ttype *temp;
+		//temp string
+		char number[4];
+		//counters
+		int i;
+		int num;
+		//pointer for numbers
+		ttype *npoint [Stype->number];
+		//input
+		int input;
+		
+		//initialize the buffers
+		strcpy (sbuf, "TYPE BROWSER\n\n");
+		strcat (sbuf, title);
+		strcpy (sbuf, "\n\n");
+		
+		//the main loop
+		do {
+			//reset the dinamic buffer
+			strcpy(dbuf, sbuf);
+			//write in the dbuf the parent if one else a generic word
+			if (strcmp(commonparent, "NULL") != 0)
+				strcat(dbuf, commonparent);
+			else
+				strcat(dbuf, "Object");
+			strcat(dbuf, ":\n\n");
+			//search for types that have have as parent commonparent and add them to the buffer
+			i=0;
+			num=0;
+			do{
+				//if the type has commonparent as parent
+				if(strcmp(Stype->type[i].parent, commonparent) == 0) {
+					snprintf(number, 3, "%d", num+1);
+					strcat(dbuf, ") ");
+					strcat(dbuf, Stype->type[i].name);
+					strcat(dbuf, "\n");
+					npoint[num] = &Stype->type[i];
+					num++;
+				}
+				//go to the next type
+				i++;
+			}
+			while(i!=Stype->number);
+			//add the description button
+			num++;
+			snprintf(number, 3, "%d", num);
+			strcat(dbuf, "\n");
+			strcat(dbuf, number);
+			strcat(dbuf, ") description of an object\n");
+			//add the back button
+			num++;
+			snprintf(number, 3, "%d", num);
+			strcat(dbuf, number);
+			strcat(dbuf, ") back");
+			
+			// scan input
+			SafeIScan(inf, &input);
+			
+			// control that the value given is exact
+			if (input < 1)
+				if (input > num){
+					OPSE(inf, "The value %i that you have typed is wrong! press a button to return to the menù and make another choice", &input, 0);
+					continue;
+				}
+			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
+			if (input < num-2){
+				strcpy(commonparent, Stype->type[input-1].name);
+				num = 0;
+				for(i=0; i!=Stype->number; i++) {
+					if(strcmp(commonparent, Stype->type[i].parent) == 0)
+						num++;
+				}
+				if(num > 0)
+					return &Stype->type[input-1];
+				continue;
+			}
+			//if is the description button
+			if (input == num-1){
+				OPS(inf, "TYPE BROWSER\n\nOf which type of object do you want an explaination? [type its number]", 0, 0);
+				SafeIScan(inf, &input);
+				//reset the buffer and display description
+				strcpy(dbuf, sbuf);
+				strcat(dbuf, "Type of object description:   ");
+				temp = typeSearchName(Stype, npoint[input-1]->name);
+				strcat(dbuf, temp->name);
+				strcat(dbuf, "\n\nDescription:   ");
+				strcat(dbuf, temp->description);
+				if(strcmp(temp->parent, "NULL") != 0) {  
+					strcat(dbuf, "\n\nThis object is under the category:   ");
+					strcat(dbuf, temp->parent);
+				}
+				strcat(dbuf, "\n\nPress a number to continue");
+				OPS(inf, dbuf, 0, 0);
+				SafeIScan(inf, &input);
+				continue;
+			}
+			//if is the back button return to the start
+			if (input == num){
+				strcpy (commonparent, "NULL");
+				continue;
+			}
+		}
+		while(1);
+		 
+		return NULL;
+	}
 	 
 	 
 	 

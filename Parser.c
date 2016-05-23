@@ -37,7 +37,7 @@
  * The main function
  * of the parser
  */
-	void Parser(tsys *sys, tinf *inf, char tag) {
+	void Parser(tStype *Stype, tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned
 		char input[COMMANDLENGHT+1];
@@ -52,7 +52,7 @@
 				break;
 			// change
 			else if (strcmp("create", input) == 0) {
-				Create(sys, inf);
+				Create(Stype, sys, inf);
 				break;
 			}
 			// wrong command
@@ -101,11 +101,11 @@
 	 * The create function create a new object
 	 */
 	
-	void Create(tsys *sys, tinf *inf) {
+	void Create(tStype *Stype, tsys *sys, tinf *inf) {
 		
 		//if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc) {
-			ResizeObject(inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
+			ResizeObject(Stype, inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
 		}
 	
 		//initialize the new object

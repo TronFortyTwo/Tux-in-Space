@@ -41,9 +41,10 @@
 	void PrintLongDouble (tinf *, long double *, int *, int *);
 	void PrintString(tinf *, char *, int, int *, int *);
 	int OPSo (tsys *sys, tinf *inf);
-	void Parser(tsys *, tinf *, char);
+	void Parser(tStype *Stype, tsys *, tinf *, char);
 	int Reask(tinf *, char *);
-	void Create(tsys *, tinf *);
+	void Create(tStype *Stype, tsys *, tinf *);
+	ttype *TypeBrowser(tinf *inf, tStype *Stype, char *title);
 	void Pmotor (tsys *sys);
 	void Shell (tsys *sys, tinf *inf);
 	void ChangeChar(char *, char, char);
@@ -53,8 +54,8 @@
 	void SaveObject(tinf *, tobj *);
 	void InitObject (tinf *, tobj *, tStype *, int);
 	void InitSystem (tsys *, tinf *);
-	void ResizeObject(tinf *, tobj **, int, int);
-	void ResetObject(tobj *);	
+	void ResizeObject(tStype *, tinf *, tobj **, int, int);
+	void ResetObject(tStype *, tobj *);	
 	tStype *Inittype (FILE *, tinf *);
 	char *typeDescriptionFromName (tStype *, char *);
 	ttype *typeSearchName (tStype *, char *);

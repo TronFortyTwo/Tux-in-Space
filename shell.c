@@ -61,7 +61,7 @@
 			}
 			
 			// call the instruction parser
-			Parser(sys, inf, 's');
+			Parser(sys->Stype, sys, inf, 's');
 			
 			// call the phisic motor
 			Pmotor(sys);

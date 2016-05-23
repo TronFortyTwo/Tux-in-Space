@@ -28,12 +28,12 @@
 	
 	
 	// The structure that represent a type of a object
-	struct objtype {
+	struct zStype {
 		char name [NAMELUN];
 		char description [DESCRIPTIONSIZE];
 		char parent [NAMELUN];
 	};
-	typedef struct objtype ttype;
+	typedef struct zStype ttype;
 	
 	// The structure whit all the types
 	struct TypesStruct {
@@ -58,7 +58,7 @@
 	// structure of one object
 	struct object {
 		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
-		char type [NAMELUN];	// the type of object.
+		ttype *type;			// the type of object.
 		long double mass;		// the mass
 		long double x;   		// the coordinate x
 		long double y;			// the coordinate y
@@ -116,9 +116,6 @@
 		
 		// the vmode is setted 0 (onlyOPS)
 		inf.vmode = 0;
-	
-		// the precision is setted 1 calcolation every 2 second
-		sys.precision = 2;
 		
 		// set num precision
 		inf.numprecision = 4;

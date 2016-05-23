@@ -55,7 +55,7 @@
 			//Tell the name, type and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			strcat(buffer, obj->type);
+			strcat(buffer, obj->type->name);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;

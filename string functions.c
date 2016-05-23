@@ -21,11 +21,6 @@
  * HERE we have function that help whit using the strings and whit input-output
  * 
  */
-	
-/***
- * This function scan a string WHIT space, to use when scanning a name, a type...
- * 
- * */
 
 /***
  * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
