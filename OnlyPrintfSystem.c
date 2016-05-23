@@ -17,11 +17,11 @@
 #    Foundation, Inc.														#
 #############################################################################
 
- * The function OnlyPrintfSystem: print word in a simple behavior and adapts on the value of width and height
+ * The function OnlyPrintfSystem: print words in a simple behavior that adapts on the value of width and height
  * 
  * The advantages on use OnlyPrintfSystem is:
  * 		- A simply but nice automatic impagination that all function could use whit a simple call 
- * 		- make the program nice and smart
+ * 		- make the program nice
  * 		- A very more simple algoritm (faster and lighter) respect more complex mode of Rmotor not writted yet, but equally can adapts the width and height numbers
  *
  * 	NOTE:
@@ -30,7 +30,7 @@
  */
 
  /**Only Printf System */
-	int OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
+	void OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
 	
 	//loop counter
 	int i;
@@ -134,7 +134,7 @@
 	
 	// finish the function
 	free(buf);
-	return 0;
+	return;
 	}
 	
 /***
@@ -164,14 +164,14 @@
  */	
 	void OPSML(tinf *inf) {
 		
-		int i;
+		int i;	//(i)nput
 		
 		OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
 		scanf("%d", &i);
 		if(i == 0)
 			return;
 		else {
-			OPS(inf, "The program chrash if continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
+			OPS(inf, "The program crash if you continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
 			scanf("I'm a stupid string whitout any sense");
 		}
 		return;

@@ -38,7 +38,7 @@
 	// The structure whit all the types
 	struct TypesStruct {
 		int number;
-		ttype *type;			// This is a pointer to an array
+		ttype *type;			// This is a pointer to a member of an array
 	};
 	typedef struct TypesStruct tStype;
 
@@ -124,7 +124,7 @@
 		inf.numprecision = 4;
 		
 		// Read the a file and load the types
-		Ftype = fopen("types.typ", "r");
+		Ftype = fopen("type.typ", "r");
 		if(Ftype != NULL) {
 			sys.Stype = Inittype(Ftype, &inf);
 			fclose(Ftype);

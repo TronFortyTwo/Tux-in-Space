@@ -14,7 +14,7 @@
  */
 	void InitObject (tinf *inf, tobj *obj, tStype *typ, int n) {
 		
-		// What is going to be printed. If the function go in segmentation fault, increase it
+		// What is going to be printed. If the buffers go in overflow increase its size
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
 		// name of the object to load and the name of a type of object
@@ -91,13 +91,14 @@
 				strcat(reffub, "\n");
 				// the loop that choose right types
 				for (i=0, w=0; i!=typ->number; i++) {
-					// if name variable is = typ->type[i]->parent add it at the reffub 
+					// if name variable is = typ->type[i].parent add the type at the reffub 
 					if(strcmp(name, typ->type[i].parent) == 0) {
 						strcat (reffub, "\n-");
 						strcat (reffub, typ->type[i].name);
 						w++;
 					}
 				}
+				printf("corbezzolo\n");
 				//if the type hasn't any subtype exit the loop remembing name as type
 				if (w == 0){
 					strcpy(obj->type, name);

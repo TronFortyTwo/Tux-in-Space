@@ -23,9 +23,6 @@
  * 
  * printf an intestation whit the current time and other stuff, then reserve some space for information about principal objects
  * 
- * NOTE:
- * For smart allocation, this is a recursive function, so the last two paramater when normally calling the function must be setted to 0
- * 
  * 
  */
 
