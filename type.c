@@ -126,13 +126,14 @@
 		int num;
 		//pointer for numbers
 		ttype *npoint [Stype->number];
-		//input
+		//inputs
 		int input;
+		int input2;
 		
 		//initialize the buffers
 		strcpy (sbuf, "TYPE BROWSER\n\n");
 		strcat (sbuf, title);
-		strcpy (sbuf, "\n\n");
+		strcat (sbuf, "\n\n");
 		
 		//the main loop
 		do {
@@ -161,6 +162,9 @@
 				i++;
 			}
 			while(i!=Stype->number);
+			
+			printf("\nfirst loop passed\n");
+			
 			//add the description button
 			num++;
 			snprintf(number, 3, "%d", num);
@@ -173,6 +177,9 @@
 			strcat(dbuf, number);
 			strcat(dbuf, ") back");
 			
+			//print
+			OPS(inf, dbuf, NULL, NULL);
+			
 			// scan input
 			SafeIScan(inf, &input);
 			
@@ -180,8 +187,10 @@
 			if (input < 1)
 				if (input > num){
 					OPSE(inf, "The value %i that you have typed is wrong! press a button to return to the menù and make another choice", &input, 0);
+					SafeIScan(inf, &input2);
 					continue;
 				}
+			
 			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
 			if (input < num-2){
 				strcpy(commonparent, Stype->type[input-1].name);
@@ -197,7 +206,7 @@
 			//if is the description button
 			if (input == num-1){
 				OPS(inf, "TYPE BROWSER\n\nOf which type of object do you want an explaination? [type its number]", 0, 0);
-				SafeIScan(inf, &input);
+				SafeIScan(inf, &input2);
 				//reset the buffer and display description
 				strcpy(dbuf, sbuf);
 				strcat(dbuf, "Type of object description:   ");
@@ -211,7 +220,7 @@
 				}
 				strcat(dbuf, "\n\nPress a number to continue");
 				OPS(inf, dbuf, 0, 0);
-				SafeIScan(inf, &input);
+				SafeIScan(inf, &input2);
 				continue;
 			}
 			//if is the back button return to the start
@@ -219,6 +228,7 @@
 				strcpy (commonparent, "NULL");
 				continue;
 			}
+			
 		}
 		while(1);
 		 

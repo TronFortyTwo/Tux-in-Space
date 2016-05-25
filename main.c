@@ -108,7 +108,7 @@
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 50;
+		inf.height = 40;
 		inf.width = 100;
 		
 		//print that is loading
