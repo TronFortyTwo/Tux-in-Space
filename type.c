@@ -162,12 +162,10 @@
 				i++;
 			}
 			while(i!=Stype->number);
-			
-			printf("\nfirst loop passed\n");
-			
+		
 			//add the description button
 			num++;
-			snprintf(number, 3, "%d", num);
+			snprintf(number, 4, "%d", num);
 			strcat(dbuf, "\n");
 			strcat(dbuf, number);
 			strcat(dbuf, ") description of an object\n");
@@ -186,7 +184,7 @@
 			// control that the value given is exact
 			if (input < 1)
 				if (input > num){
-					OPSE(inf, "The value %i that you have typed is wrong! press a button to return to the menù and make another choice", &input, 0);
+					OPSE(inf, "The value that you have typed is wrong! press a button to return to the menù and make another choice", NULL, NULL);
 					SafeIScan(inf, &input2);
 					continue;
 				}
