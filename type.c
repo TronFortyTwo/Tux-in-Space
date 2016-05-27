@@ -131,9 +131,8 @@
 		int input2;
 		
 		//initialize the buffers
-		strcpy (sbuf, "TYPE BROWSER\n\n");
-		strcat (sbuf, title);
-		strcat (sbuf, "\n\n");
+		strcpy (sbuf, title);
+		strcat (sbuf, "\n");
 		
 		//the main loop
 		do {
@@ -152,6 +151,7 @@
 				//if the type has commonparent as parent
 				if(strcmp(Stype->type[i].parent, commonparent) == 0) {
 					snprintf(number, 3, "%d", num+1);
+					strcat(dbuf, number);
 					strcat(dbuf, ") ");
 					strcat(dbuf, Stype->type[i].name);
 					strcat(dbuf, "\n");
@@ -180,24 +180,25 @@
 			
 			// scan input
 			SafeIScan(inf, &input);
+			input--;
 			
 			// control that the value given is exact
-			if (input < 1)
+			if (input < 0)
 				if (input > num){
-					OPSE(inf, "The value that you have typed is wrong! press a button to return to the menù and make another choice", NULL, NULL);
+					OPSE(inf, "The value that you have typed is wrong! press a button to return to the menù and to make another choice", NULL, NULL);
 					SafeIScan(inf, &input2);
 					continue;
 				}
 			
 			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
-			if (input < num-2){
-				strcpy(commonparent, Stype->type[input-1].name);
-				num = 0;
+			if (input <= num-2) {
+				strcpy(commonparent, npoint[num]->name);
+				input2 = 0;
 				for(i=0; i!=Stype->number; i++) {
 					if(strcmp(commonparent, Stype->type[i].parent) == 0)
-						num++;
+						input2++;
 				}
-				if(num > 0)
+				if(input2 > 0)
 					return &Stype->type[input-1];
 				continue;
 			}

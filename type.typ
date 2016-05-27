@@ -4,6 +4,14 @@ Celestial object
 Descriptions coming soon
 NULL
 
+Artficial object
+Description coming soon
+NULL
+
+Spaceship
+Description coming soon
+Artificial object
+
 Planet
 Descriptions coming soon
 Celestial object
