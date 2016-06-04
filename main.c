@@ -38,7 +38,7 @@
 	// The structure whit all the types
 	struct TypesStruct {
 		int number;
-		ttype *type;			// This is a pointer to a member of an array
+		ttype *type;			// This is a pointer to the first member of the arrays that conteins all the types
 	};
 	typedef struct TypesStruct tStype;
 
@@ -105,11 +105,10 @@
 		//an input variable
 		char input;
 		
-		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 40;
-		inf.width = 100;
+		inf.height = 60;
+		inf.width = 90;
 		
 		//print that is loading
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);

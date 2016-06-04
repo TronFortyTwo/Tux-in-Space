@@ -30,7 +30,7 @@
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		// the array to give to Rmotor whit size
+		// the array to give to Rmotor whit size. there are 7 long double for every object (mass, x, y, z, velx, vely, velz)
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
 		int lpos=0;
@@ -71,7 +71,7 @@
 			strcat (buffer, "%f-");
 		}
 		
-		//tell to Rmotor what is done
+		//tell to Rmotor what has done
 		OPS(inf, buffer, ivar, lvar);
 		
 		// dealloc the arrays

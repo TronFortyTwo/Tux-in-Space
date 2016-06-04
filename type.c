@@ -123,9 +123,9 @@
 		char number[4];
 		//counters
 		int i;
-		int num;
-		//pointer for numbers
-		ttype *npoint [Stype->number];
+		int maxnum;
+		//pointer to the first member of an array where are stored the pointer to the right types, whit order from the number printed
+		ttype **npoint = (ttype **) malloc (sizeof(ttype *) * Stype->number);
 		//inputs
 		int input;
 		int input2;
@@ -146,17 +146,17 @@
 			strcat(dbuf, ":\n\n");
 			//search for types that have have as parent commonparent and add them to the buffer
 			i=0;
-			num=0;
+			maxnum=0;
 			do{
 				//if the type has commonparent as parent
 				if(strcmp(Stype->type[i].parent, commonparent) == 0) {
-					snprintf(number, 3, "%d", num+1);
+					snprintf(number, 3, "%d", maxnum+1);
 					strcat(dbuf, number);
 					strcat(dbuf, ") ");
 					strcat(dbuf, Stype->type[i].name);
 					strcat(dbuf, "\n");
-					npoint[num] = &Stype->type[i];
-					num++;
+					npoint[maxnum] = &Stype->type[i];
+					maxnum++;
 				}
 				//go to the next type
 				i++;
@@ -164,66 +164,76 @@
 			while(i!=Stype->number);
 		
 			//add the description button
-			num++;
-			snprintf(number, 4, "%d", num);
+			maxnum++;
+			snprintf(number, 4, "%d", maxnum);
 			strcat(dbuf, "\n");
 			strcat(dbuf, number);
 			strcat(dbuf, ") description of an object\n");
 			//add the back button
-			num++;
-			snprintf(number, 3, "%d", num);
+			maxnum++;
+			snprintf(number, 3, "%d", maxnum);
 			strcat(dbuf, number);
-			strcat(dbuf, ") back");
+			strcat(dbuf, ") back to the top of the tree");
 			
 			//print
 			OPS(inf, dbuf, NULL, NULL);
 			
 			// scan input
 			SafeIScan(inf, &input);
-			input--;
 			
-			// control that the value given is exact
-			if (input < 0)
-				if (input > num){
-					OPSE(inf, "The value that you have typed is wrong! press a button to return to the menù and to make another choice", NULL, NULL);
-					SafeIScan(inf, &input2);
-					continue;
-				}
+			// make the numbers start from zero and go to the higher number-1
+			input--;
+			maxnum--;
+			
+			// control that the value given is valid, if not, restart.
+			if (input < 0) {
+				continue;
+			}
+			if (input > maxnum) {
+				continue;
+			}
 			
 			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
-			if (input <= num-2) {
-				strcpy(commonparent, npoint[num]->name);
+			if (input < maxnum-1) {
+				printf("\ninput:%i\n", input);
+				printf("maxnum:%i\n", maxnum);
+				printf("common:%s\n", commonparent);
+				printf("point:%p\n", npoint[maxnum]);
+				printf("delta:%s\n", npoint[maxnum]->name);
+				strcpy(commonparent, npoint[maxnum]->name);
 				input2 = 0;
 				for(i=0; i!=Stype->number; i++) {
 					if(strcmp(commonparent, Stype->type[i].parent) == 0)
 						input2++;
 				}
-				if(input2 > 0)
+				if(input2 > 0) {
+					free(*npoint);
 					return &Stype->type[input-1];
+				}
 				continue;
 			}
 			//if is the description button
-			if (input == num-1){
-				OPS(inf, "TYPE BROWSER\n\nOf which type of object do you want an explaination? [type its number]", 0, 0);
+			if (input == maxnum-1){
+				OPS(inf, "Of which type of object do you want an explaination? [type its maxnumber]", 0, 0);
 				SafeIScan(inf, &input2);
-				//reset the buffer and display description
-				strcpy(dbuf, sbuf);
-				strcat(dbuf, "Type of object description:   ");
 				temp = typeSearchName(Stype, npoint[input-1]->name);
-				strcat(dbuf, temp->name);
+				strcpy(dbuf, temp->name);
+				strcat(dbuf, ":");
 				strcat(dbuf, "\n\nDescription:   ");
 				strcat(dbuf, temp->description);
 				if(strcmp(temp->parent, "NULL") != 0) {  
-					strcat(dbuf, "\n\nThis object is under the category:   ");
+					strcat(dbuf, "\n\nThis type of object is under the category:   ");
 					strcat(dbuf, temp->parent);
 				}
-				strcat(dbuf, "\n\nPress a number to continue");
+				else
+					strcat(dbuf, "\n\nThis type of object isn't under any category");
+				strcat(dbuf, "\n\nPress a maxnumber to continue");
 				OPS(inf, dbuf, 0, 0);
 				SafeIScan(inf, &input2);
 				continue;
 			}
 			//if is the back button return to the start
-			if (input == num){
+			if (input == maxnum){
 				strcpy (commonparent, "NULL");
 				continue;
 			}

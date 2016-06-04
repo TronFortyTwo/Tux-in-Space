@@ -151,7 +151,6 @@
 		//set the buffer
 		strcpy(buffer, "ERROR!\n\n");
 		strcat(buffer, message);
-		strcat(buffer, "\n\nwaiting...");
 		//printf the buffer
 		OPS(inf, buffer, ivar, lvar);
 		//exit the function
