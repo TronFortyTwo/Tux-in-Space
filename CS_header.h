@@ -33,6 +33,7 @@
 	#include <math.h>
 	
 // Prototype of some function called from everywhere
+	void ResProp(long double *,long double *,long double *,long double *, int x);
 	void OPS(tinf *inf, char *, int *, long double *);
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
 	void OPSML(tinf *inf);

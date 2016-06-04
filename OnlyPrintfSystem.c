@@ -171,9 +171,9 @@
 			return;
 		else {
 			OPS(inf, "The program crash if you continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
-			scanf("I'm a stupid string whitout any sense");
+			scanf("i ciaogebpfwrg");
 		}
-		return;
+		return ;
 	}
 
 

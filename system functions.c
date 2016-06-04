@@ -204,13 +204,16 @@
 			//to give to OPS and counter
 			int c;
 		
-			//reset the system's time
+			//set the system's time
 			sys->year = 0;
 			sys->hour = 0;
 			sys->day = 0;
 			sys->min = 0;
 			sys->sec = 0;
 			sys->millisec = 0;
+			
+			//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
+			sys->G = 667e-19;
 			
 			// Ask the name of the new system
 			c = NAMELUN-1;
