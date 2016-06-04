@@ -23,12 +23,26 @@
  */
 
 /***
+ * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
+ * 
+ * */
+	void ScanFString(char *dest, FILE *stream){
+	
+		fscanf(stream, "%99[^\n]%*1[\n]", dest);
+	
+		return;
+	}
+
+
+
+
+
+/***
  * 	The function ChangeChar take a string and in it remove all a char and change it whit an other
  * */
-	void ChangeChar(char *, char, char);
 	void ChangeChar(char *string, char first, char later) {
 		// counter for loops
-		short i;
+		int i;
 		
 		// a loop
 		for(i=0; string[i]!='\0'; i++) {
@@ -44,14 +58,12 @@
 /*** PrintLine is a function that printf a height of characters
  * 		can be setted a number num of character that don't be printed
  *	*/
-	void PrintLine (tinf *inf, char character[], int num);
-	
-	void PrintLine (tinf *inf, char character[], int num) {
+	void PrintLine (tinf *inf, char *character, int num) {
 		
-		short p;	//(p)rinted
+		int p;	//(p)rinted
 
 		for ( p=0; p!=inf->width-num; p++) {
-			printf("%s", character);
+			printf("%c", *character);
 			}
 
 		return;
@@ -61,8 +73,6 @@
  * SafeIScanf scan an int value more "safely" that the normal scanf() function
  * 
  * */
-
-void SafeIScan(tinf *inf, int *dest);
 void SafeIScan(tinf *inf, int *dest) {
 	
 	//this buffer remember all the input
@@ -91,7 +101,7 @@ void SafeIScan(tinf *inf, int *dest) {
 				break;
 		strcpy(buffer, "The number ");
 		strcat(buffer, input);
-		strcat(buffer, "that you gave is too big or too small!\n\nPlease, kind another number between %i and %i");
+		strcat(buffer, " that you gave is too big or too small!\n\nPlease, type another number between %i and %i");
 		OPSE(inf, buffer, ivar, 0);
 		scanf("%s", input);
 		fflush(stdin);

@@ -23,48 +23,39 @@
  * 
  * printf an intestation whit the current time and other stuff, then reserve some space for information about principal objects
  * 
- * NOTE:
- * For smart allocation, this is a recursive function, so the last two paramater when normally calling the function must be setted to 0
- * 
  * 
  */
-	int OPSo (tsys *sys, tinf *inf);
 
 	int OPSo (tsys *sys, tinf *inf) {
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		// the array to give to Rmotor whit size
+		// the array to give to Rmotor whit size. there are 7 long double for every object (mass, x, y, z, velx, vely, velz)
 		int ivar[5];
 		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
-		short lpos=0;
+		int lpos=0;
 		// counters
-		short i;
-		short count;
+		int i;
 		// pointer to a object
 		tobj *obj;
 		
-		// Printf the line whit the time.
-		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n");
+		// Printf the line whit the time and two lines of '-'
+		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
 		ivar[0] = sys->year;
 		ivar[1] = sys->day;
 		ivar[2] = sys->hour;
 		ivar[3] = sys->min;
 		ivar[4] = sys->sec;
 		ivar[5] = sys->millisec;
-		// Write two lines of '-'
-		for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
-			strcat (buffer, "--");
-		}
 		
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
 			//set the pointer to the object we are using
 			obj = &sys->o[i];
-			//Tell the name, kind and mass
+			//Tell the name, type and mass
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
-			strcat(buffer, obj->kind);
+			strcat(buffer, obj->type->name);
 			strcat(buffer, " | ");
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;
@@ -77,12 +68,10 @@
 			lvar[lpos++]= obj->z;
 			lvar[lpos++]= obj->velz;
 			// A line of '-'
-			for(count=0; count!=inf->width-TWOFRAMELUN; count++) {
-				strcat (buffer, "-");
-			}
+			strcat (buffer, "%f-");
 		}
 		
-		//tell to Rmotor what is done
+		//tell to Rmotor what has done
 		OPS(inf, buffer, ivar, lvar);
 		
 		// dealloc the arrays

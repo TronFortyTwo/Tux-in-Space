@@ -3,21 +3,6 @@
  * 
  */
 
-//Prototypes
-	void SaveObject(tinf *, tobj *);
-	void Setmaxoutput(tinf *inf);
-	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n);
-	void InitSystem (tsys *sys, tinf *inf);
-
-/*** Update Maxoutput is a function that update maxoutput
- * 
- *	*/
-	void Setmaxoutput(tinf *inf) {
-		inf->maxoutput = (inf->width - 2 * FRAMELUN) * (inf->height - 2 * FRAMELUN -1);
-		return;
-	}
-
-
 /***
  * 	This function InitObject initialize a new object and ask information about it
  * 
@@ -27,24 +12,21 @@
  * 	-this function is a bit :| Poker Face
  * 	-this is a recursive function
  */
-	void InitObject (tinf *inf, tobj *obj, tSkind *knd, short n) {
+	void InitObject (tinf *inf, tobj *obj, tStype *Stype, int n) {
 		
-		// What is going to be printed. If the function go in segmentation fault, increase it
+		// What is going to be printed. If the buffers go in overflow increase its size
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
-		// name of the object to load and the name of a kind of object
+		// name of the object to load and the name of a type of object
 		char name[NAMELUN+17];
 		char input[DESCRIPTIONSIZE];
 		// object to load
 		FILE *objfile;
 		// array to give to Rmotor whit counters
 		int ivar[2];
-		short ipos = 0;
+		int ipos = 0;
 		long double lvar[7];
-		short lpos=0;
-		//counter
-		short i;
-		short w;
+		int lpos=0;
 	
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
@@ -56,10 +38,10 @@
 		}
 		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
+		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you don't want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
-		// if the user don't want to load an object
+		// if the user want to load an object
 		if(0 != strcmp(reffub, "n")) {
 			//add the extension (.object) and the path objects/
 			strcat(reffub, ".object");
@@ -69,21 +51,23 @@
 			if(objfile==NULL) {
 				OPSE(inf, "The file you would to load doesn't exist!\nRestart initialization sequence", 0, 0);
 				SafeIScan(inf, &ivar[0]);
-				InitObject(inf, obj, knd, n);
+				InitObject(inf, obj, Stype, n);
 				return;
 			}
-			// Read name, kind and mass and close the file
-			fscanf(objfile, "%s\n%s\n%Lf", obj->name, obj->kind, &obj->mass);
+			// Read name, type and mass and close the file
+			ScanFString(obj->name, objfile);
+			ScanFString(input, objfile);
+			obj->type = typeSearchName(Stype, input);
+			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
-			//tell name, kind and mass whitout ask
+			//tell name, type and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
-			strcat(buffer, obj->kind);
-			strcat(buffer, reffub);
+			strcat(buffer, obj->type->name);
 			strcat(buffer, "\n\nmass:  ");
 		}
-		//if not
+		//if the user doesn't want to load from a file an object
 		else {
 			// some space and ask about the name
 			strcat (buffer, "\n\n\nname:    ");
@@ -92,64 +76,12 @@
 			ivar[ipos] = NAMELUN-1;
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
-			fflush(stdin);
 			strcat(buffer, obj->name);
-			// ask about the kind (categoria throught subcategoria)
-			strcat(buffer, "\n\ntype of the object:  ");
-			strcpy(name, "NULL");
-			// the loop that ask for the kind browsing throught the gerarchic kind structure
-			do {
-				// reset the temp buffer
-				strcpy(reffub, buffer);
-				//make a line of space
-				strcat(reffub, "\n");
-				// the loop that choose right kinds
-				for (i=0, w=0; i!=knd->number; i++) {
-					// if name variable is = knd->kind[i]->parent add it at the reffub 
-					if(strcmp(name, knd->kind[i].parent) == 0) {
-						strcat (reffub, "\n-");
-						strcat (reffub, knd->kind[i].name);
-						w++;
-					}
-				}
-				//if the kind hasn't any subtype exit the loop remembing name as kind
-				if (w == 0){
-					strcpy(obj->kind, name);
-					break;
-				}
-				//else add the back and the description button
-				else {
-					strcat(reffub, "\n---back\n---for a short description type descr");
-				}
-				// print the reffub and scanf the user answer
-				OPS(inf, reffub, ivar, lvar);
-				scanf("%s", input);
-				//if the user choose back make name NULL
-				if(strcmp(input, "back") == 0) {
-					strcpy(name, "NULL");
-				}
-				//if the user ask a description show a description of the object
-				else if(strcmp(input, "descr") == 0) {
-					OPS(inf, "OBJECT DESCRIPTION\n\nOf which kind of object do you want an explaination?", ivar, lvar);
-					scanf("%s", input);
-					strcpy(reffub, "OBJECT DESCRIPTION: ");
-					strcat(reffub, input);
-					strcat(reffub, "\n\n");
-					KindDescriptionFromName (knd, input);
-					strcat(reffub, input);
-					strcat(reffub, "\n\nThis kind of object is under the category: ");
-					strcat(reffub, KindParentFromName(knd, input) );
-					strcat(reffub, "\n\nPress a button to continue");
-					OPS(inf, reffub, ivar, lvar);
-					scanf("%s", input);
-				}
-				//else assign to the name the input
-				else
-					strcpy(name, input);
-			} while(1);
-			
+			// ask about the type
+			obj->type = TypeBrowser(inf, Stype, "Let's choose the type of object for your new object");
+			strcat(buffer, "\n\ntype:    ");
+			strcat(buffer, obj->type->name);
 			// ask about the mass
-			strcat(buffer, obj->kind);
 			strcat(buffer, "\n\nmass:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (t) 1 ton = 1000 Kg");
@@ -221,7 +153,7 @@
 			SaveObject(inf, obj);
 		}
 		if(ivar[0] == 0)
-			InitObject(inf, obj, knd, n);
+			InitObject(inf, obj, Stype, n);
 		return;
 	}
 
@@ -253,11 +185,11 @@
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%s\n%Lf", obj->name, obj->kind, obj->mass);
+		fprintf(dest, "%s\n%s\n%Lf", obj->name, obj->type->name, obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
-		scanf("%c", &input);
+		scanf("%s", &input);
 		fflush(stdin);
 		
 	
@@ -269,9 +201,7 @@
  */
 	void InitSystem (tsys *sys, tinf *inf) {
 		
-			//counter for loops
-			short l;
-			//to give to OPS
+			//to give to OPS and counter
 			int c;
 		
 			//reset the system's time
@@ -281,16 +211,20 @@
 			sys->min = 0;
 			sys->sec = 0;
 			sys->millisec = 0;
-		
+			
 			// Ask the name of the new system
 			c = NAMELUN-1;
 			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", &c, 0);
 			scanf("%s", sys->name);
-			fflush(stdin);
-
+			
+			// Ask the user for the precision of the simulation
+			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nPrecision of the simulation:\nHigher numbers make the simulation lighter for your hardware, but the result is less precise", &c, 0);
+			scanf("%f", &sys->precision);
+			
 			// Ask the user how many object initialize now.
 			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
 			SafeIScan(inf, &sys->nactive);
+			sys->nalloc = sys->nactive;
 			for (; ;) {
 				if(sys->nactive >= 0)
 					break;
@@ -302,9 +236,53 @@
 			sys->o = (tobj *) malloc ( sizeof(tobj) * sys->nactive );
 			
 			// Initialize the objects
-			for (l=0; l!=sys->nactive; l++)
-				InitObject(inf, &sys->o[l], sys->Skind, l+1);
+			for (c=0; c!=sys->nactive; c++)
+				InitObject(inf, &sys->o[c], sys->Stype, c+1);
 	 
 		return;
 	}
+	
+	
+	/***
+	 * This function resize the buffer of object
+	 */
+	 
+	void ResizeObject(tStype *Stype, tinf *inf, tobj **pointer, int old_size, int new_size) {
+		//counter for loop and input
+		int i;
+		//the new buffer whit control whit RAM overload
+		tobj *new_pointer = (tobj *) malloc (sizeof(tobj) * new_size);
+		if (new_pointer == NULL) {
+			for(; pointer != NULL;){
+				OPSML(inf);
+				ResizeObject(Stype, inf, pointer, old_size, new_size);
+			}
+		}
+		//put in the new buffer the old buffer content
+		for(i=0; i!=old_size; i++)
+			new_pointer[i] = *pointer[i];
+		//delete the old buffer
+		free(*pointer);
+		//set the new object
+		for(i=old_size; i!=new_size; i++) {
+			ResetObject(Stype, &new_pointer[i]);
+		}
+		//put in the old pointer the new address
+		*pointer = new_pointer;
+		
+		return;
+	}
+	
+	/***
+	 * This function reset a object destroying all his attribute
+	 */
+	void ResetObject(tStype *Stype, tobj *obj) {
+		
+		//reset !!!
+		strcpy(obj->name, "\0");
+		obj->type = typeSearchName(Stype, "Void");
+		
+		return;
+	}
+	
 

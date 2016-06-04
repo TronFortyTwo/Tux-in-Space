@@ -17,242 +17,124 @@
 #    Foundation, Inc.														#
 #############################################################################
 
- * The function OnlyPrintfSystem: print word in a simple behavior and adapts on the value of width and height
+ * The function OnlyPrintfSystem: print words in a simple behavior that adapts on the value of width and height
  * 
  * The advantages on use OnlyPrintfSystem is:
  * 		- A simply but nice automatic impagination that all function could use whit a simple call 
- * 		- make the program nice and smart
+ * 		- make the program nice
  * 		- A very more simple algoritm (faster and lighter) respect more complex mode of Rmotor not writted yet, but equally can adapts the width and height numbers
  *
  * 	NOTE:
  * 	OnlyPrintfSystem is often called OPS
  * 
  */
- 
-	//prototype for the OPS's functions
-	
-	void PrintInt (tinf *, int, short *, short *);
-	void PrintLongDouble (tinf *, long double *, short *, short *);
-	void PrintString(tinf *, char *, short, short *, short *);
-	
+
  /**Only Printf System */
-	int OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
+	void OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
 	
+	//loop counter
+	int i;
 	// the number of lines alredy printfed
-	short linedone = 0;
+	int linedone;
 	// the number of character in a line alredy printfed
-	short columndone = 0;
+	int columndone;
 	// the number of character of phrase printed
-	short chardone = 0;
+	int chardone;
 	// the position in the arrays
-	short ipos=0;
-	short lpos=0;
+	int ipos=0;
+	int lpos=0;
+	// the buffer to print, his size and position
+	int size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
+	char *buf = (char *) malloc (sizeof(char)*size);
+	int bufpos = 0;
 	
-	// make some space
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	//signal if there is a memory leack
+	while (buf == NULL) {
+		OPSML(inf);
+		buf = (char *) malloc (sizeof(char)*((inf->width-TWOFRAMELUN)*(inf->height-5)+1));
+	};
 	
-	// printf the first character of the frame like first linr
-	PrintLine(inf, FRAMESTART, 0);
-	printf("\n");
-	
-	// printf the second linr continuing whit the frame
-	printf(FRAME);
-	PrintLine(inf, FRAMEEND, 4);
-	printf("%s\n", FRAMER);
-	
-	//a loop that printf every linr
-	for( linedone=2; linedone!=inf->height-3; linedone++) {
+	//OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
+	for(chardone=0; bufpos!=size-1;) {
 		
-		//printf the frame
-		printf("%s", FRAME);
-		
-		//a loop that fill the height
-		for (columndone=FRAMELUN; columndone < inf->width-FRAMELUN; ) {
-			
-			// If the character is a new height
-			if(phrase[chardone]=='\n') {
-				// printf spaces to complete the height
-				PrintLine(inf, " ", columndone + FRAMELUN);
-				// update the counter
+		//dinamic printing!
+		if(phrase[chardone] == '%') {
+			chardone++;
+			//an int value to print
+			if(phrase[chardone] == 'i') {
+				bufpos = bufpos + sprintf(&buf[bufpos], "%d", ivar[ipos]);
+				ipos++;
 				chardone++;
-				// exit the loop because the height has been printed
-				break;
 			}
-			
-			// if the character is a space on the start of the height don't printf it
-			else if ((phrase[chardone] == ' ') && (columndone == FRAMELUN) ) {
-				// update positon on phrase[] but don't printf it
+			//a long double value to print
+			else if(phrase[chardone] == 'l') {
+				bufpos = bufpos + sprintf(&buf[bufpos], "%Lf", lvar[lpos]);
+				lpos++;
 				chardone++;
-				continue;
 			}
-			
-			// if the character is a % start dinamic printing
-			else if (phrase[chardone] == '%') {
+			//a line to print
+			else if(phrase[chardone] == 'f') {
 				chardone++;
-				// if is an i call PrintInt
-				if (phrase[chardone] == 'i') {
-					PrintInt(inf, ivar[ipos], &columndone, &linedone);
-					ipos++;
-				}
-				// if is an l call PrintLongDouble
-				else if (phrase[chardone] == 'l') {
-					PrintLongDouble(inf, &lvar[lpos], &columndone, &linedone);
-					lpos++;
-				}
-				// if is a L finish the height whit phrase[chardone+1]
-				else if (phrase[chardone] == 'f') {
-					PrintLine(inf, &phrase[chardone+1], TWOFRAMELUN+columndone);
-					chardone++;
-					columndone = inf->width-FRAMELUN;
+				for(i=0; i!=inf->width; i++) {
+					strncat(&buf[bufpos], &phrase[chardone], 1);
+					bufpos++;
 				}
 				chardone++;
-				continue;
-			}
-			
-			// else if the character is not the end string character (a normal character) print it
-			else if (phrase [chardone] != '\0') {
-				// write it, update counter variables and go to the next character
-				printf("%c", phrase[chardone]);
-				chardone++;
-				columndone++;
-				continue;
-			}
-			
-			// else the character is the '\0', so print blank height
-			else {
-				// write it, update counter variables and go to the next character
-				PrintLine(inf, " ", FRAMELUN+columndone);
-				break;
 			}
 		}
-		
-		//printf the frame and new height
-		printf("%s\n", FRAMER);
-		
-	}
-	
-	// printf the last two line of the frame
-	printf("%s", FRAME);
-	PrintLine(inf, FRAMEEND, 4);
-	printf("%s\n", FRAMER);
-	PrintLine(inf, FRAMESTART, 0);
-	printf("\n");
-	
-	// if the char to print are finished ask user for input
-	if (phrase[chardone == '\0']) {
-		printf("%s:", FRAME);
-	}
-	// if not recall OPS to finish the printing
-	else {
-		printf("PRESS 0 TO CONTINUE PRINTING");
-		scanf("0");
-		OPS(inf, &phrase[chardone+1], &ivar[ipos], &lvar[lpos]);
-	}
-	
-	// return 0
-	return 0;
-	}
-
-
-
-
-
-
-
-
-/***
- * 	The function PrintInt print an int whit the OPS's style
- * 	n is the number
- * 	columndone is the pointer to columndone
- * 	linedone is the pointer to linedone
- * 	inf is the pointer to inf
- * 	return the new value of columndone or -1 if error
- * 
- */
-
-	void PrintInt (tinf *inf, int n, short *columndone, short *linedone) {
-		
-		// the size in character of the number
-		short size;
-		
-		//take size
-		size = GetSize(n, 0);
-		
-		//if the number is too big for the height
-		if(*columndone+TWOFRAMELUN+size >= inf->width){
-			//if there isn't another clear height
-			if(*linedone+3 == inf->height){
-				//complete the height
-				PrintLine(inf, " ", TWOFRAMELUN+*columndone);
-				printf("%s\n", FRAMER);
-				//update teh counters
-				*columndone=inf->width;
-				//exit the function
-				return;
-			}
-			//complete the height and update counter
-			PrintLine(inf, " ", TWOFRAMELUN+*columndone);
-			printf("%s\n%s", FRAMER, FRAME);
-			*columndone = FRAMELUN;
-			*linedone = *linedone+1;
-			//printf the int
-			printf("%i", n);
-			//update the counter
-			*columndone=*columndone+size;
+		// a normal character
+		else if(phrase[chardone] != '\0') {
+			buf[bufpos] = phrase[chardone];
+			chardone++;
+			bufpos++;
 		}
-		//if the number isn't to big for the height
+		//end of string
 		else {
-			//printf the number
-			printf("%i", n);
-			//update columndone
-			*columndone=*columndone+size;
+			buf[bufpos] = ' ';
+			bufpos++;
 		}
-		
-		return;
 	}
-
-/***
- * The function PrintLongDouble printf a long double whit the OPS's nice style
- * 
- */
-	void PrintLongDouble (tinf *inf, long double *n, short *columndone, short *linedone) {
-		
-		// if a long double occupies more than a height (whit the frame), it will not be printfed
-		char *buffer = (char *) malloc ((inf->width-TWOFRAMELUN)*sizeof(char));
-		// the size of the number
-		short size;
-		// caluculate size
-		size = snprintf(buffer, inf->width-TWOFRAMELUN, "%+'.*Lf",inf->numprecision, *n);
-		// if the number don't overflow the height
-		if(*columndone+TWOFRAMELUN+size <= inf->width) {
-			//printf it
-			printf("%s", buffer);
-			//update the counters
-			*columndone=*columndone+size;
+	
+	//OPS PART TWO: print the buf
+	bufpos=0;
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	//the first two line of the frame
+	PrintLine(inf, FRAMESTART, 0);
+	printf("\n%s", FRAME);
+	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
+	printf("%s\n", FRAMER);
+	//printf the buf
+	for(linedone=0; linedone!=inf->height-5; linedone++) {
+		//the frame
+		printf("%s", FRAME);
+		for(columndone=0; columndone!=inf->width-TWOFRAMELUN; columndone++) {
+			if (buf[bufpos] != '\n') {
+				printf("%c", buf[bufpos]);
+				bufpos++;
 			}
-		// else, if the number is more big than the space remaining in the height
-		else{
-			//if there isn't any new height to print
-			if(*linedone+3 == inf->height){
-				//complete the height
-				PrintLine(inf, " ", TWOFRAMELUN+*columndone);
-				printf("%s\n", FRAMER);
-				//update teh counters
-				*columndone=inf->width;
-				//exit the function
-				return;
+			else {
+				PrintLine(inf, " ", columndone+TWOFRAMELUN);
+				bufpos++;
+				if(linedone < inf->height-5) {
+					linedone++;
+					printf("%s\n%s", FRAMER, FRAME);
+					columndone = -1;
+				}
 			}
-			//complete the height whit spaces
-			PrintLine(inf, " ", *columndone+TWOFRAMELUN);
-			//do the frame and new height
-			printf("%s\n%s", FRAME, FRAMER);
-			//printf the number
-			printf("%s", buffer);
-			//update the counters
-			*columndone=FRAMELUN+size;
-			*linedone=*linedone+1;
 		}
-		return;
+		//the frame
+		printf("%s\n", FRAMER);
+	}
+	//last lines
+	printf("%s", FRAME);
+	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
+	printf("%s\n", FRAMER);
+	PrintLine(inf, FRAMESTART, 0);
+	printf("\n%s: ", FRAME);
+	
+	// finish the function
+	free(buf);
+	return;
 	}
 	
 /***
@@ -260,7 +142,7 @@
  */
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar){
 		//size of message
-		short size;
+		int size;
 		size = strlen(message);
 		//the message to print
 		char *buffer = (char *) malloc ((32+size)*sizeof(char));
@@ -269,7 +151,6 @@
 		//set the buffer
 		strcpy(buffer, "ERROR!\n\n");
 		strcat(buffer, message);
-		strcat(buffer, "\n\nwaiting...");
 		//printf the buffer
 		OPS(inf, buffer, ivar, lvar);
 		//exit the function
@@ -277,8 +158,23 @@
 		return;
 	}
 
-
-
+/***
+ * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack and manage the situation
+ */	
+	void OPSML(tinf *inf) {
+		
+		int i;	//(i)nput
+		
+		OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
+		scanf("%d", &i);
+		if(i == 0)
+			return;
+		else {
+			OPS(inf, "The program crash if you continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
+			scanf("I'm a stupid string whitout any sense");
+		}
+		return;
+	}
 
 
 

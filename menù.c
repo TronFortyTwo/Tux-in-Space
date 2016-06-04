@@ -19,17 +19,9 @@
 
  *
  * This function is the mean menù of the program
- * The returning value is a number that shell need for know how to initialize obj
- * 
- * NOTE:
- * In this function we call Rmotor, but the only the OPS. Then we don't need to know the *objstruct, so we tell to Rmotor that it is 0. 
- * 
+ * The returning value is a number that shell need for know what do
  * 
  */
- 
- 
-	int Menu(tinf *inf);
-
 	int Menu (tinf *inf) {
 		
 		// A variable that save the scanf of an input. And do other too...
@@ -53,10 +45,8 @@
 				inputandothers = inf->width;
 				OPS (inf,"New number of columns (now %i):", &inputandothers, 0);
 				SafeIScan(inf, &inf->width);
-				Setmaxoutput(inf);
 				inputandothers = inf->height;
 				OPS (inf, "New number of lines (now %i):", &inputandothers, 0);
-				Setmaxoutput(inf);
 				SafeIScan(inf, &inf->height);
 				inputandothers = inf->numprecision;
 				OPS (inf, "New number of number's decimal printed (now %i):", &inputandothers, 0);

@@ -35,13 +35,10 @@
  *	--------------------------------------------elaboration
  *	5)Goto 2 or goto 6
  *	
- *  6)Retrun to main
+ *  6)Return to main
  * 
  * 
  */
-	
-	void Shell (tsys *sys, tinf *inf);
-	
 	
 	void Shell (tsys *sys, tinf *inf) {
 
@@ -64,7 +61,7 @@
 			}
 			
 			// call the instruction parser
-			Parser(sys, inf, 's' );
+			Parser(sys->Stype, sys, inf, 's');
 			
 			// call the phisic motor
 			Pmotor(sys);

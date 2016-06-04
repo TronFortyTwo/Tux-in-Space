@@ -22,12 +22,11 @@
  * 
  */
 
-
-	// The lenght of a name of an object, a system or a kind
+	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
 	
-	// The size of a kind's description. It must is bigger than NAMELUN
-	#define DESCRIPTIONSIZE 256
+	// The size of a type's description. It must is bigger than NAMELUN
+	#define DESCRIPTIONSIZE 1024
 	
 	//the size of a buffer of character
 	#define BUFFERSIZE 1024
@@ -36,14 +35,11 @@
 	#define BUFFERINPUTSIZE 25
 	
 	// the max lenght of a command word
-	#define COMMANDLENGHT 8
+	#define COMMANDLENGHT 16
 	
-	// The max lenght of a variable cvar (see NUMCVAR)
-	#define LENGHTCVAR 16
+	//When you alloc the object buffer, this is how many object you delete or create when you resize
+	#define OBJBUFSIZE 8
 	
-	// the lenght of a tab
-	#define TABLEN 14
-
 	// The frame that Rmotor uses and his size
 	#define FRAME "# "
 	#define FRAMER " #"		//FRAME R(ight)
@@ -51,6 +47,4 @@
 	#define TWOFRAMELUN 4
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
-	
-	// 
 

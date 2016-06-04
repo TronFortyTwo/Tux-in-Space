@@ -27,63 +27,32 @@
  * The parser command now are:
  * 	
  * 		- Continue
- * 		exit from Parser whitout action. Is a command whitout function
  * 
- * 		- Change
- * 				NameObj
- * 						name
- * 						kind
- * 						mass
- * 						x
- * 						y
- * 						z
- * 						fast
- * 							x
- * 							y
- * 							z
- * 				system
- * 						name
- * 						G
- * 						time
- * 		change datas about objects
- * 
+ * 		- Create
  * 
  * 
  */
- 
-	/** Prototipes: */
-	// The main function
-	void Parser(tsys *sys, tinf *inf, char tag);
-	// functions called only from Parser:
-	// Reask reask for the instruction if the instruction is wrong
-	int Reask(tinf *inf, char command[]);
-	// Change function change system and objects's data
-	int Change(tsys *sys);
-	
-
-	
 
 /**
  * The main function
  * of the parser
  */
-	void Parser(tsys *sys, tinf *inf, char tag) {
+	void Parser(tStype *Stype, tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned
-		char input[COMMANDLENGHT];
+		char input[COMMANDLENGHT+1];
 		
 		// Now for every possible command call command call the correct command's function.
 		// when you write a new command, you must add the corrispondent if and add it
 		
 		for ( ; ; ) {
 			scanf("%s", input);
-			fflush(stdin);
 			// continue
 			if (strcmp("continue", input) == 0)
 				break;
 			// change
-			else if (strcmp("change", input) == 0) {
-				Change(sys);
+			else if (strcmp("create", input) == 0) {
+				Create(Stype, sys, inf);
 				break;
 			}
 			// wrong command
@@ -109,12 +78,11 @@
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
 		strcat(buffer, " that you wrote is unknow. Do you want to write another command? [y/n]");
-		OPS(inf, buffer, 0, 0);
+		OPSE(inf, buffer, 0, 0);
 		
 		for(;;){
 			// a loop that exit 0 or 1
 			scanf("%s", command);
-			fflush(stdin);
 			// if postitive return 0
 			if (command[0] == 'y') {
 				OPS(inf, "What is your command?", 0, 0);
@@ -130,11 +98,33 @@
 	}
 	
 	/***
-	 * The Change function modifies datas.
-	 * see up for sytax.
-	 * 
+	 * The create function create a new object
 	 */
-	 int Change (tsys *sys) {
+	
+	void Create(tStype *Stype, tsys *sys, tinf *inf) {
 		
-		return 0;
+		//if there isn't any space for a new object resize the object buffer
+		if (sys->nactive == sys->nalloc) {
+			ResizeObject(Stype, inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
 		}
+	
+		//initialize the new object
+		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);
+		sys->nactive++;
+	
+		return;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
