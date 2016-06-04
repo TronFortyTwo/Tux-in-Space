@@ -60,7 +60,7 @@
 			strcat(buffer, " mass of %l Kg");
 			lvar[lpos++] = obj->mass;
 			//Tell the x '\n', the y a '\n' and the z
-			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis:%l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
+			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
 			lvar[lpos++]= obj->x;
 			lvar[lpos++]= obj->velx;
 			lvar[lpos++]= obj->y;
@@ -70,6 +70,8 @@
 			// A line of '-'
 			strcat (buffer, "%f-");
 		}
+		
+		printf("ciao\n");
 		
 		//tell to Rmotor what has done
 		OPS(inf, buffer, ivar, lvar);

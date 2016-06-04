@@ -18,9 +18,9 @@
 #############################################################################################
 
 
-#########################################################################################################################################################################################################
-# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution, is a collection of structures for the other functions and contein file's initialization		#
-#########################################################################################################################################################################################################
+#################################################################################################################################################################################################################
+# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution, is a collection of structures definitions for the other functions and contein file's initialization	#
+#################################################################################################################################################################################################################
 */
 
 	// include definition of constants
@@ -108,7 +108,7 @@
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
 		inf.height = 60;
-		inf.width = 90;
+		inf.width = 180;
 		
 		//print that is loading
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);

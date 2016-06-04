@@ -47,10 +47,10 @@ void Pmotor (tsys *sys) {
 		}
 		// move the objects
 		for (i=0; i!=sys->nactive; i++) {
-			sys->o[i].x = (sys->o[i].x + sys->o[i].velx) * sys->precision ;
-			sys->o[i].y = (sys->o[i].y + sys->o[i].vely) * sys->precision ;
-			sys->o[i].z = (sys->o[i].z + sys->o[i].velz) * sys->precision ;
-			}
+			sys->o[i].x = sys->o[i].x + sys->o[i].velx * sys->precision ;
+			sys->o[i].y = sys->o[i].y + sys->o[i].vely * sys->precision ;
+			sys->o[i].z = sys->o[i].z + sys->o[i].velz * sys->precision ;
+		}
 	
 		// update the time
 		for(sys->millisec=sys->precision*1000; sys->millisec>=1000; ) {

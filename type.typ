@@ -150,6 +150,7 @@ Star
 
 Generic object
 We don't know the nature of a Generic object
+System
 
 Not_initialized
 When a object is allocated but not initialized yet

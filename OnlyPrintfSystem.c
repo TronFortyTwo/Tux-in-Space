@@ -75,8 +75,8 @@
 			//a line to print
 			else if(phrase[chardone] == 'f') {
 				chardone++;
-				for(i=0; i!=inf->width; i++) {
-					strncat(&buf[bufpos], &phrase[chardone], 1);
+				for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
+					buf[bufpos] = phrase[chardone];
 					bufpos++;
 				}
 				chardone++;
