@@ -130,7 +130,7 @@
 	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
 	printf("%s\n", FRAMER);
 	PrintLine(inf, FRAMESTART, 0);
-	printf("\n%s:", FRAME);
+	printf("\n%s: ", FRAME);
 	
 	// finish the function
 	free(buf);

@@ -117,15 +117,13 @@
 		// static buffer and dinamic buffer
 		char sbuf[BUFFERSIZE];
 		char dbuf[BUFFERSIZE];
-		//temp pointer
-		ttype *temp;
 		//temp string
 		char number[4];
 		//counters
 		int i;
 		int maxnum;
-		//pointer to the first member of an array where are stored the pointer to the right types, whit order from the number printed
-		ttype **npoint = (ttype **) malloc (sizeof(ttype *) * Stype->number);
+		//the number m at the position n represent that if the user pick the number n he mean the Stype->type[m]
+		int *npoint = (int *) malloc (sizeof(int) * Stype->number);
 		//inputs
 		int input;
 		int input2;
@@ -155,7 +153,7 @@
 					strcat(dbuf, ") ");
 					strcat(dbuf, Stype->type[i].name);
 					strcat(dbuf, "\n");
-					npoint[maxnum] = &Stype->type[i];
+					npoint[maxnum] = i;
 					maxnum++;
 				}
 				//go to the next type
@@ -186,44 +184,40 @@
 			maxnum--;
 			
 			// control that the value given is valid, if not, restart.
-			if (input < 0) {
+			if (input < 0)
 				continue;
-			}
-			if (input > maxnum) {
+			if (input > maxnum)
 				continue;
-			}
 			
 			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
 			if (input < maxnum-1) {
-				printf("\ninput:%i\n", input);
-				printf("maxnum:%i\n", maxnum);
-				printf("common:%s\n", commonparent);
-				printf("point:%p\n", npoint[maxnum]);
-				printf("delta:%s\n", npoint[maxnum]->name);
-				strcpy(commonparent, npoint[maxnum]->name);
+				strcpy(commonparent, Stype->type[npoint[input]].name);
 				input2 = 0;
 				for(i=0; i!=Stype->number; i++) {
 					if(strcmp(commonparent, Stype->type[i].parent) == 0)
 						input2++;
 				}
 				if(input2 > 0) {
-					free(*npoint);
-					return &Stype->type[input-1];
+					free(npoint);
+					return &Stype->type[input];
 				}
 				continue;
 			}
 			//if is the description button
 			if (input == maxnum-1){
-				OPS(inf, "Of which type of object do you want an explaination? [type its maxnumber]", 0, 0);
+				OPS(inf, "Of which type of object do you want an explaination? [type its number]", 0, 0);
 				SafeIScan(inf, &input2);
-				temp = typeSearchName(Stype, npoint[input-1]->name);
-				strcpy(dbuf, temp->name);
+				if (input < 0)
+					continue;
+				if (input > maxnum)
+					continue;
+				strcpy(dbuf, Stype->type[input2].name);
 				strcat(dbuf, ":");
 				strcat(dbuf, "\n\nDescription:   ");
-				strcat(dbuf, temp->description);
-				if(strcmp(temp->parent, "NULL") != 0) {  
+				strcat(dbuf, Stype->type[input2].description);
+				if(strcmp(Stype->type[input2].parent, "NULL") != 0) {  
 					strcat(dbuf, "\n\nThis type of object is under the category:   ");
-					strcat(dbuf, temp->parent);
+					strcat(dbuf, Stype->type[input2].parent);
 				}
 				else
 					strcat(dbuf, "\n\nThis type of object isn't under any category");

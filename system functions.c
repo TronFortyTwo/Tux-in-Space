@@ -38,7 +38,7 @@
 		}
 		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you not want to create a new object.\n");
+		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you don't want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
 		// if the user want to load an object
@@ -68,7 +68,7 @@
 			strcat(buffer, reffub);
 			strcat(buffer, "\n\nmass:  ");
 		}
-		//if not
+		//if the user doesn't want to load from a file an object
 		else {
 			// some space and ask about the name
 			strcat (buffer, "\n\n\nname:    ");
@@ -79,11 +79,10 @@
 			scanf("%s", obj->name);
 			strcat(buffer, obj->name);
 			// ask about the type
-			
 			obj->type = TypeBrowser(inf, Stype, "Let's choose the type of object for your new object");
-			
-			// ask about the mass
+			strcat(buffer, "\n\ntype:    ");
 			strcat(buffer, obj->type->name);
+			// ask about the mass
 			strcat(buffer, "\n\nmass:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (t) 1 ton = 1000 Kg");
