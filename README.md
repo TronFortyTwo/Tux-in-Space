@@ -1,7 +1,7 @@
 # CSpace
 CSpace: the pure C space's simulator
 
-This program is a simulator build from scratch. I don't decided if is a game or a 'professional' simulator or both of two yet.
+This program is a simulator. I don't decided if is a game or a 'professional' simulator or both of two yet.
 The program simulates the moving, under the phisic's law, of planets, spaceships, suns, or elsewhere;
 whit the possibility of piloting spaceship alredy created in this system, that a user can creates and modify easily.
 
