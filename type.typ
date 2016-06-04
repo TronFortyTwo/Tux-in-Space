@@ -1,11 +1,11 @@
-39
+40
 
 Celestial object
 Descriptions coming soon
 NULL
 
-Artficial object
-Description coming soon
+Artificial object
+A object that has been built by a man
 NULL
 
 Spaceship
@@ -147,6 +147,9 @@ Neutron star
 Cataclysmic variable star
 Descriptions coming soon
 Star
+
+Generic object
+We don't know the nature of a Generic object
 
 Not_initialized
 When a object is allocated but not initialized yet

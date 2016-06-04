@@ -161,10 +161,19 @@
 			}
 			while(i!=Stype->number);
 		
+			//add the Generic type button (if in a branch)
+			maxnum++;
+			snprintf(number, 3, "%d", maxnum);
+			strcat(dbuf, number);
+			strcat(dbuf, ") Generic ");
+			if(strcmp(commonparent, "NULL") != 0)
+				strcat(dbuf, commonparent);
+			else
+				strcat(dbuf, " object");
 			//add the description button
 			maxnum++;
 			snprintf(number, 4, "%d", maxnum);
-			strcat(dbuf, "\n");
+			strcat(dbuf, "\n\n");
 			strcat(dbuf, number);
 			strcat(dbuf, ") description of an object\n");
 			//add the back button
@@ -173,13 +182,14 @@
 			strcat(dbuf, number);
 			strcat(dbuf, ") back to the top of the tree");
 			
+			
 			//print
 			OPS(inf, dbuf, NULL, NULL);
 			
 			// scan input
 			SafeIScan(inf, &input);
 			
-			// make the numbers start from zero and go to the higher number-1
+			// make the numbers start from zero and to higher number-1
 			input--;
 			maxnum--;
 			
@@ -190,27 +200,45 @@
 				continue;
 			
 			//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
-			if (input < maxnum-1) {
+			if (input < maxnum-2) {
 				strcpy(commonparent, Stype->type[npoint[input]].name);
 				input2 = 0;
 				for(i=0; i!=Stype->number; i++) {
 					if(strcmp(commonparent, Stype->type[i].parent) == 0)
 						input2++;
 				}
-				if(input2 > 0) {
+				if(input2 == 0) {
+					input = npoint[input];
 					free(npoint);
 					return &Stype->type[input];
 				}
 				continue;
 			}
+			//if is the generic type button
+			if (input == maxnum-2){
+				free(npoint);
+				if(strcmp(commonparent, "NULL") != 0)
+					return typeSearchName(Stype, commonparent);
+				else
+					return typeSearchName(Stype, "Generic object");
+			}
 			//if is the description button
 			if (input == maxnum-1){
 				OPS(inf, "Of which type of object do you want an explaination? [type its number]", 0, 0);
 				SafeIScan(inf, &input2);
-				if (input < 0)
+				input2--;
+				if (input2 < 0)
 					continue;
-				if (input > maxnum)
+				if (input2 > maxnum)
 					continue;
+				//if is the generic object type (that is a strange type) use this particular procedure
+				if(strcmp(commonparent, "NULL") == 0) {
+					if (maxnum-2 == input2) {
+						OPS(inf, "There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", 0, 0);
+						SafeIScan(inf, &input2);
+						continue;
+					}
+				}
 				strcpy(dbuf, Stype->type[input2].name);
 				strcat(dbuf, ":");
 				strcat(dbuf, "\n\nDescription:   ");
@@ -221,7 +249,7 @@
 				}
 				else
 					strcat(dbuf, "\n\nThis type of object isn't under any category");
-				strcat(dbuf, "\n\nPress a maxnumber to continue");
+				strcat(dbuf, "\n\nPress a number to continue");
 				OPS(inf, dbuf, 0, 0);
 				SafeIScan(inf, &input2);
 				continue;

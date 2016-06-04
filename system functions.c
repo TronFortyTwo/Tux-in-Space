@@ -65,7 +65,6 @@
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
 			strcat(buffer, obj->type->name);
-			strcat(buffer, reffub);
 			strcat(buffer, "\n\nmass:  ");
 		}
 		//if the user doesn't want to load from a file an object
@@ -190,7 +189,7 @@
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
-		scanf("%c", &input);
+		scanf("%s", &input);
 		fflush(stdin);
 		
 	
