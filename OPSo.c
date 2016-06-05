@@ -57,7 +57,7 @@
 			strcat(buffer, " | ");
 			strcat(buffer, obj->type->name);
 			strcat(buffer, " | ");
-			strcat(buffer, " mass of %l Kg");
+			strcat(buffer, " mass of %l tons");
 			lvar[lpos++] = obj->mass;
 			//Tell the x '\n', the y a '\n' and the z
 			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");

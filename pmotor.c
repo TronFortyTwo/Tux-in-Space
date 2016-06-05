@@ -58,9 +58,9 @@ void Pmotor (tsys *sys) {
 				force = (sys->o[i].mass * sys->o[l].mass * sys->G) / (dist*dist);
 				// for the calculate of the module F of i, I use this:		x : force = mass l : (mass i + mass l)
 				temp2 = (sys->o[l].mass + sys->o[i].mass);
-				ResProp(&temp2, &force, &sys->o[l].mass, &temp2, 1);
+				ResProp(&temp2, &force, &sys->o[i].mass, &temp2, 1);
 				// then the same thing for l
-				ResProp(&temp3, &force, &sys->o[i].mass, &temp2, 1);
+				ResProp(&temp3, &force, &sys->o[l].mass, &temp2, 1);
 				// now sum the vel [i] whit:		number to sum to i : distx = vector(temp2) : dist		then repeate for others coordinates
 				ResProp(&sum, &distx, &temp2, &dist, 1);
 				sys->o[i].velx = sys->o[i].velx + sum;

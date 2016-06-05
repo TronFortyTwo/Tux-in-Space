@@ -1,5 +1,3 @@
-40
-
 Celestial object
 Descriptions coming soon
 NULL
@@ -159,3 +157,5 @@ System
 Void
 A void object isn't an object, is the type of an allocated object structure but not used
 System
+
+END OF FILE

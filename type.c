@@ -17,41 +17,52 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * In this file there are functions that manage type
+ * In this file there are functions that manage types and type.typ file
  * 
- *
- *
- * Prototipes:
  */
 	/***
 	 * The function InitObject set the type structure reading it from a file and return his address
 	 */
 	tStype *Inittype (FILE *stream, tinf *inf) {
 		
-		// The type mean structure (static because must be passed to others functions)
-		static tStype types_struct;
+		// The type's mean structure (static because must be passed to others functions)
+		static tStype Stype;
 		//counter
 		int i;
+		//a temp buffer
+		char buffer[DESCRIPTIONSIZE];
 	
 		// read how many types there are in the file
-		fscanf(stream, "%i\n\n", &types_struct.number);
+		Stype.number = 0;
+		do{
+			ScanFString (buffer, stream);
+			if(strcmp(buffer, "END OF FILE") == 0)
+				break;
+			ScanFString (buffer, stream);
+			ScanFString (buffer, stream);
+			fscanf(stream, "\n");
+			Stype.number++;
+		}
+		while(1);
+		
+		rewind(stream);
 		
 		//alloc enought spaces for all the ttype structure
-		types_struct.type = (ttype *) malloc (types_struct.number * sizeof(ttype));
-		for(; types_struct.type == NULL;) {
+		Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
+		for(; Stype.type == NULL;) {
 			OPSML(inf);
-			types_struct.type = (ttype *) malloc (types_struct.number * sizeof(ttype));
+			Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
 		}
 		
-		for (i=0; i!=types_struct.number; i++) {
+		for (i=0; i!=Stype.number; i++) {
 			//scan name, description and parent
-			ScanFString (types_struct.type[i].name, stream);
-			ScanFString (types_struct.type[i].description, stream);
-			ScanFString (types_struct.type[i].parent, stream);
+			ScanFString (Stype.type[i].name, stream);
+			ScanFString (Stype.type[i].description, stream);
+			ScanFString (Stype.type[i].parent, stream);
 			fscanf(stream, "\n");
 		}
 	
-		return &types_struct;
+		return &Stype;
 	}
 	
 	/***
