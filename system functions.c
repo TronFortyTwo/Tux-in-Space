@@ -199,50 +199,54 @@
 /***
  * InitSystem is a function that initialize a new system
  */
-	void InitSystem (tsys *sys, tinf *inf) {
+	tsys *InitSystem (tinf *inf, tStype *Stype) {
 		
 			//to give to OPS and counter
 			int c;
+			//the system to create
+			static tsys sys;
 		
+			//set the type struct pointer
+			sys.Stype = Stype;
 			//set the system's time
-			sys->year = 0;
-			sys->hour = 0;
-			sys->day = 0;
-			sys->min = 0;
-			sys->sec = 0;
-			sys->millisec = 0;
+			sys.year = 0;
+			sys.hour = 0;
+			sys.day = 0;
+			sys.min = 0;
+			sys.sec = 0;
+			sys.millisec = 0;
 			
 			//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
-			sys->G = 667e-19;
+			sys.G = 667e-19;
 			
 			// Ask the name of the new system
 			c = NAMELUN-1;
 			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", &c, 0);
-			scanf("%s", sys->name);
+			scanf("%s", sys.name);
 			
 			// Ask the user for the precision of the simulation
 			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nPrecision of the simulation:\nHigher numbers make the simulation lighter for your hardware, but the result is less precise", &c, 0);
-			scanf("%f", &sys->precision);
+			scanf("%f", &sys.precision);
 			
 			// Ask the user how many object initialize now.
 			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
-			SafeIScan(inf, &sys->nactive);
-			sys->nalloc = sys->nactive;
+			SafeIScan(inf, &sys.nactive);
+			sys.nalloc = sys.nactive;
 			for (; ;) {
-				if(sys->nactive >= 0)
+				if(sys.nactive >= 0)
 					break;
 				OPSE (inf, "Wrong value: Must be put a number bigger than zero!", 0, 0);
-				SafeIScan(inf, &sys->nactive);
+				SafeIScan(inf, &sys.nactive);
 			}
 			
 			//alloc the object array
-			sys->o = (tobj *) malloc ( sizeof(tobj) * sys->nactive );
+			sys.o = (tobj *) malloc ( sizeof(tobj) * sys.nactive );
 			
 			// Initialize the objects
-			for (c=0; c!=sys->nactive; c++)
-				InitObject(inf, &sys->o[c], sys->Stype, c+1);
+			for (c=0; c!=sys.nactive; c++)
+				InitObject(inf, &sys.o[c], sys.Stype, c+1);
 	 
-		return;
+		return &sys;
 	}
 	
 	

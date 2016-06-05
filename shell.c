@@ -16,11 +16,7 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-
-
-
- * Questa sarà il guscio di ogni motore che amministrerà le cose e
- * comunicherà coll'esterno
+ *
  * This is the shell that connect the engines and the user
  * 
  *	Structure of Shell:
@@ -29,7 +25,7 @@
  *	--------------------------------------------elaboration
  *	2)Converse whit the phisic motor (Pmotor)
  *	--------------------------------------------elaboration
- *	3)Converse whit the graphic motor (Rmotor)
+ *	3)Converse whit the user via OPSo or others
  *	--------------------------------------------elaboration
  *	4)Converse whit the user
  *	--------------------------------------------elaboration
@@ -40,17 +36,20 @@
  * 
  */
 	
-	void Shell (tsys *sys, tinf *inf) {
+	void Shell (tinf *inf, tStype *Stype) {
 
-		// Retruning value from the function. 0 if all is good
+		// Retruning value from the function
 		int staterec;
+		
+		//the pointer to a system
+		tsys *sys;
 	
 		// Call the mean menù, it tell to shell what to do.
 		staterec = Menu(inf);
 
 		// If the menù answered 0 the program initialize the system as new
 		if (staterec == 0)
-			InitSystem(sys, inf);
+			sys = InitSystem(inf, Stype);
 	
 		// The simulation loop (infinite)
 		for ( ; ; ) {

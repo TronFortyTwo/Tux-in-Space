@@ -97,7 +97,7 @@
 		
 		// definition of the structures
 		tinf inf;
-		tsys sys;
+		tStype *Stype;
 		
 		// The types file
 		FILE *Ftype;
@@ -122,7 +122,7 @@
 		// Read the a file and load the types
 		Ftype = fopen("type.typ", "r");
 		if(Ftype != NULL) {
-			sys.Stype = Inittype(Ftype, &inf);
+			Stype = Inittype(Ftype, &inf);
 			fclose(Ftype);
 		}
 		else {
@@ -131,10 +131,10 @@
 		}
 
 		// call the shell
-		Shell (&sys, &inf);
+		Shell (&inf, Stype);
 		
 		//free the memory
-		free(sys.Stype);
+		free(Stype);
 		
 		return 0;
 	}

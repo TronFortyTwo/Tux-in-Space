@@ -71,8 +71,6 @@
 			strcat (buffer, "%f-");
 		}
 		
-		printf("ciao\n");
-		
 		//tell to Rmotor what has done
 		OPS(inf, buffer, ivar, lvar);
 		
