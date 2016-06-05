@@ -72,7 +72,7 @@
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	struct system {
 		char name [NAMELUN];
-		float precision;	// Precision of the simulation (in second). [Pmotor needs it]
+		long double precision;	// Precision of the simulation (in second). [Pmotor needs it]
 		int year;
 		int day;
 		int hour;

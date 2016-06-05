@@ -205,6 +205,9 @@
 			int c;
 			//the system to create
 			static tsys sys;
+			//the buffers (dinamic and static)
+			char sbuf[BUFFERSIZE];
+			char dbuf[BUFFERSIZE];
 		
 			//set the type struct pointer
 			sys.Stype = Stype;
@@ -219,17 +222,25 @@
 			//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
 			sys.G = 667e-19;
 			
-			// Ask the name of the new system
+			// Ask for the name of the new system
 			c = NAMELUN-1;
-			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nWhat is the name of this new system? [no spaces] [max %i characters]", &c, 0);
+			strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
+			strcpy(dbuf, sbuf);
+			strcat(dbuf, " of the system:\n    Isn't allowed any spaces and can be of a maximum of %i characters");
+			OPS (inf, dbuf, &c, 0);
 			scanf("%s", sys.name);
-			
-			// Ask the user for the precision of the simulation
-			OPS (inf, "NEW SYSTEM INITIALIZATION\n\nPrecision of the simulation:\nHigher numbers make the simulation lighter for your hardware, but the result is less precise", &c, 0);
-			scanf("%f", &sys.precision);
-			
-			// Ask the user how many object initialize now.
-			OPS(inf, "NEW SYSTEM INITIALIZATION\n\ndo you want to configure some object of the system now?\nDigit the number of object you want to set up now\n\n (you could add, remove and modify objects in the system later, in runtime)", 0, 0);
+			strcat(sbuf, ":    ");
+			strcat(sbuf, sys.name);
+			//ask for the precision
+			strcat(sbuf, "\n\nprecision");
+			strcpy(dbuf, sbuf);
+			strcat(dbuf, " of the simulation:\n    Means how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
+			OPS (inf, dbuf, 0, 0);
+			scanf("%Lf", &sys.precision);
+			strcat(sbuf, ":    %l\n\n\n");
+			// ask if initialize new objects
+			strcat(sbuf, "Configuration of the system complete. But the system doesn't have any object to work on yet. Type the number of object do you want to create now. You can press zero to go directly to the new system created whitout create any new object, however you can create, modify and delete object later, while the simulation is going");
+			OPS(inf, sbuf, 0, &sys.precision);
 			SafeIScan(inf, &sys.nactive);
 			sys.nalloc = sys.nactive;
 			for (; ;) {
@@ -281,7 +292,7 @@
 	}
 	
 	/***
-	 * This function reset a object destroying all his attribute
+	 * This function reset a object destroying his attribute
 	 */
 	void ResetObject(tStype *Stype, tobj *obj) {
 		
