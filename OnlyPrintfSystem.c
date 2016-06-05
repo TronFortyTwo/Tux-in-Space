@@ -107,11 +107,19 @@
 	for(linedone=0; linedone!=inf->height-5; linedone++) {
 		//the frame
 		printf("%s", FRAME);
+		//print the buf
 		for(columndone=0; columndone!=inf->width-TWOFRAMELUN; columndone++) {
+			//a space in the first column is ignored
+			if (buf[bufpos] == ' ')
+				if(columndone == 0) {
+					bufpos++;
+				}
+			//a normal character
 			if (buf[bufpos] != '\n') {
 				printf("%c", buf[bufpos]);
 				bufpos++;
 			}
+			//a '\n' character
 			else {
 				PrintLine(inf, " ", columndone+TWOFRAMELUN);
 				bufpos++;
