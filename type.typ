@@ -1,17 +1,20 @@
 Celestial object
-Descriptions coming soon
+A celestial object is a natural object
 NULL
 
-Artificial object
-A object that has been built by a man
+Artificial objectThe product of an intentional human manufacture, often are build whit metals
 NULL
 
-Spaceship
-Description coming soon
+Spacecraft
+Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
 Artificial object
+
+Spaceplane
+Often winged, a spaceplane is a spacecraft designed only for manned flight. For example the Space Shuttle is a spaceplane
+Spacecraft
 
 Planet
-Descriptions coming soon
+a planet is a celestial body that is rounded by its own gravity because is massive enought, has cleared its neightbouring region of planetesimal and doesn't have thermonuclear fusion into it for is mass
 Celestial object
 
 Giant planet
@@ -24,6 +27,10 @@ Giant planet
 
 Ice giant
 Descriptions coming soon
+Giant planet
+
+Mega-Earth
+Description coming soon
 Giant planet
 
 Mini-Neptune
