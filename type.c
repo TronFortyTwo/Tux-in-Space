@@ -35,11 +35,11 @@
 		// read how many types there are in the file
 		Stype.number = 0;
 		do{
-			ScanFString (buffer, stream);
+			ScanFString (buffer, stream);				//name
 			if(strcmp(buffer, "END OF FILE") == 0)
 				break;
-			ScanFString (buffer, stream);
-			ScanFString (buffer, stream);
+			ScanFString (buffer, stream);				//description
+			ScanFString (buffer, stream);				//parent
 			fscanf(stream, "\n");
 			Stype.number++;
 		}
@@ -61,21 +61,21 @@
 			ScanFString (Stype.type[i].parent, stream);
 			fscanf(stream, "\n");
 		}
-	
+
 		return &Stype;
 	}
 	
 	/***
 	 * Given a name, this function return the pointer to that type. If there isn't any type whit that name return NULL
 	 */
-	ttype *typeSearchName(tStype *type, char *name) {
+	ttype *typeSearchName(tStype *Stype, char *name) {
 		//counter
 		int i;
 		//the loop that search the type whit the true name
-		for(i=0; i!=type->number; i++) {
+		for(i=0; i!=Stype->number; i++) {
 			//if the two name are equal
-			if (0 == strcmp(type->type[i].name, name))
-				 return &type->type[i];
+			if (0 == strcmp(Stype->type[i].name, name))
+				 return &Stype->type[i];
 		};
 		
 		return NULL;

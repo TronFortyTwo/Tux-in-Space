@@ -28,7 +28,7 @@
  * */
 	void ScanFString(char *dest, FILE *stream){
 	
-		fscanf(stream, "%99[^\n]%*1[\n]", dest);
+		fscanf(stream, "%9999[^\n]%*1[\n]", dest);
 	
 		return;
 	}

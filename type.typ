@@ -167,5 +167,3 @@ Descriptions coming soon
 Compact star
 
 END OF FILE
-
-Note: please: if you add a new type, insert it in alphabetic order
