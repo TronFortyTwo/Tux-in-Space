@@ -69,21 +69,27 @@
 	};
 	typedef struct object tobj;
 	
-	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
-	struct system {
-		char name [NAMELUN];
-		long double precision;	// Precision of the simulation (in second). [Pmotor needs it]
+	//in this structure is conteined a moment
+	struct time {
 		int year;
 		int day;
 		int hour;
 		int min;
 		int sec;
 		int millisec;
-		int nactive;		//number of objects active
-		int nalloc;			//number of objects allocated
-		tobj *o;			//the pointer to the dinamic allocated array of objects
+	};
+	typedef struct time ttime;
+	
+	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
+	struct system {
+		char name [NAMELUN];
+		long double precision;	// Precision of the simulation (in second). [Pmotor needs it]
+		ttime stime;			// the time of the simulation
+		int nactive;			// number of objects active
+		int nalloc;				// number of objects allocated
+		tobj *o;				// the pointer to the dinamic allocated array of objects
 		long double G;
-		tStype *Stype;		// The pointer at the structure that coontein all the type
+		tStype *Stype;			// The pointer at the structure that coontein all the type
 	};
 	typedef struct system tsys;
 
@@ -119,14 +125,14 @@
 		// set num precision
 		inf.numprecision = 4;
 		
-		// Read the a file and load the types
+		// Read the types from a file
 		Ftype = fopen("type.typ", "r");
 		if(Ftype != NULL) {
 			Stype = Inittype(Ftype, &inf);
 			fclose(Ftype);
 		}
 		else {
-			OPSE(&inf, "Can't open type.typ file whit definition of object's type. Program can works whit problems and issues", 0, 0);
+			OPSE(&inf, "Can't open type.typ file whit definition of object's type. Program will works whit problems and issues", 0, 0);
 			scanf("%c", &input);
 		}
 

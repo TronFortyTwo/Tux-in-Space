@@ -26,16 +26,10 @@
  * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 
  * */
-	void ScanFString(char *dest, FILE *stream){
-	
+	void ScanFString(char *dest, FILE *stream) {
 		fscanf(stream, "%99999[^\n]%*1[\n]", dest);
-	
 		return;
 	}
-
-
-
-
 
 /***
  * 	The function ChangeChar take a string and in it remove all a char and change it whit an other

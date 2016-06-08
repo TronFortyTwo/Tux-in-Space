@@ -31,18 +31,21 @@
 	#include <stdlib.h>
 	#include <string.h>
 	#include <math.h>
+	#include <time.h>
 	
 // Prototype of some function called from everywhere
+	int GetBiggerStime(ttime *, ttime *);
 	void ResProp(long double *,long double *,long double *,long double *, int x);
 	void OPS(tinf *inf, char *, int *, long double *);
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
 	void OPSML(tinf *inf);
+	ttime Jump(ttime *now, tinf *inf, long double *precision);
 	int Menu(tinf *inf);
 	void PrintInt (tinf *, int, int *, int *);
 	void PrintLongDouble (tinf *, long double *, int *, int *);
 	void PrintString(tinf *, char *, int, int *, int *);
 	int OPSo (tsys *sys, tinf *inf);
-	void Parser(tStype *Stype, tsys *, tinf *, char);
+	ttime Parser(tStype *Stype, tsys *, tinf *, char);
 	int Reask(tinf *, char *);
 	void Create(tStype *Stype, tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);

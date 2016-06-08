@@ -41,12 +41,12 @@
 		
 		// Printf the line whit the time and two lines of '-'
 		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
-		ivar[0] = sys->year;
-		ivar[1] = sys->day;
-		ivar[2] = sys->hour;
-		ivar[3] = sys->min;
-		ivar[4] = sys->sec;
-		ivar[5] = sys->millisec;
+		ivar[0] = sys->stime.year;
+		ivar[1] = sys->stime.day;
+		ivar[2] = sys->stime.hour;
+		ivar[3] = sys->stime.min;
+		ivar[4] = sys->stime.sec;
+		ivar[5] = sys->stime.millisec;
 		
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {

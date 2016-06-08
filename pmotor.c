@@ -82,32 +82,64 @@
 		}
 	
 		// update the time
-		for(sys->millisec=sys->precision*1000; sys->millisec>=1000; ) {
-			sys->sec++;
-			sys->millisec=sys->millisec-1000;
+		for(sys->stime.millisec=sys->precision*1000; sys->stime.millisec>=1000; ) {
+			sys->stime.sec++;
+			sys->stime.millisec -= 1000;
 		}
-		for(; sys->sec>=60; ) {
-			sys->min++;
-			sys->sec=sys->sec-60;
+		for(; sys->stime.sec>=60; ) {
+			sys->stime.min++;
+			sys->stime.sec -= 60;
 		}
-		for(; sys->min>=60; ) {
-			sys->hour++;
-			sys->min=sys->min-60;
+		for(; sys->stime.min>=60; ) {
+			sys->stime.hour++;
+			sys->stime.min -= 60;
 		}
-		for(; sys->hour>=24; ) {
-			sys->day++;
-			sys->hour=sys->hour-24;
+		for(; sys->stime.hour>=24; ) {
+			sys->stime.day++;
+			sys->stime.hour -= 24;
 		}
-		for(; sys->day>=365;) {
-			sys->year++;
-			sys->day=sys->day-365;
+		for(; sys->stime.day>=365;) {
+			sys->stime.year++;
+			sys->stime.day -= 365;
 		}
 		
 		
 		return;
 		}
 	
-	
-	
-	
+	/***
+	 * this function chek which of the time structure given is the farest ( 1 january 2015 farest than 12 december 1942)
+	 * return 0 if is the first
+	 * 		  1 if is the second
+	 * 		  2 if are =
+	 * NOTE:
+	 * the times must is written correctlty (for example not 1024 hour and 71 minutes)
+	 */
+		int GetBiggerStime(ttime *o, ttime *t) {
+			if(o->year > t->year)
+				return 0;
+			if (o->year < t->year)
+				return 1;
+			if(o->day > t->day)
+				return 0;
+			if (o->day < t->day)
+				return 1;
+			if(o->hour > t->hour)
+				return 0;
+			if (o->hour < t->hour)
+				return 1;
+			if(o->min > t->min)
+				return 0;
+			if (o->min < t->min)
+				return 1;
+			if(o->sec > t->sec)
+				return 0;
+			if (o->sec < t->sec)
+				return 1;
+			if(o->millisec > t->millisec)
+				return 0;
+			if (o->millisec < t->millisec)
+				return 1;
+			return 2;
+		}
 	

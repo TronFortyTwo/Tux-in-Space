@@ -27,7 +27,7 @@
  * The parser command now are:
  * 	
  * 		- Continue
- * 
+ * 		- jump
  * 		- Create
  * 
  * 
@@ -37,19 +37,25 @@
  * The main function
  * of the parser
  */
-	void Parser(tStype *Stype, tsys *sys, tinf *inf, char tag) {
+	ttime Parser(tStype *Stype, tsys *sys, tinf *inf, char tag) {
 		
 		// what is scanned
 		char input[COMMANDLENGHT+1];
+		//the time we want
+		ttime t = sys->stime;
 		
-		// Now for every possible command call command call the correct command's function.
+		// Now for every possible command call the correct command's function or simply do it if is short.
 		// when you write a new command, you must add the corrispondent if and add it
-		
 		for ( ; ; ) {
 			scanf("%s", input);
 			// continue
 			if (strcmp("continue", input) == 0)
 				break;
+			//jump
+			else if (strcmp("jump", input) == 0) {
+				t = Jump(&sys->stime, inf, &sys->precision);
+				break;
+			}
 			// change
 			else if (strcmp("create", input) == 0) {
 				Create(Stype, sys, inf);
@@ -64,7 +70,7 @@
 			}
 		}
 
-	return;
+	return t;
 	}
 	
 	/**
@@ -97,6 +103,25 @@
 		}
 	}
 	
+	
+	/***
+	 * The Jump function make the simulation wait for a time 
+	 */
+	ttime Jump(ttime *now, tinf *inf, long double *precision){
+		char buffer[BUFFERSIZE];
+		ttime t;
+		strcpy(buffer, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds");
+		OPS(inf, buffer, NULL, precision);
+		scanf("%d", &t.year);
+		scanf("%d", &t.day);
+		scanf("%d", &t.hour);
+		scanf("%d", &t.min);
+		scanf("%d", &t.sec);
+		scanf("%d", &t.millisec);
+		return t;
+	}
+	
+	
 	/***
 	 * The create function create a new object
 	 */
@@ -106,6 +131,7 @@
 		//if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc) {
 			ResizeObject(Stype, inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
+			sys->nalloc += OBJBUFSIZE;
 		}
 	
 		//initialize the new object

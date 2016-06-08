@@ -22,17 +22,13 @@
  *	Structure of Shell:
  *
  *	1)Receive basic instruction from Main
- *	--------------------------------------------elaboration
  *	2)Converse whit the phisic motor (Pmotor)
- *	--------------------------------------------elaboration
  *	3)Converse whit the user via OPSo or others
- *	--------------------------------------------elaboration
  *	4)Converse whit the user
- *	--------------------------------------------elaboration
  *	5)Goto 2 or goto 6
- *	
  *  6)Return to main
  * 
+ * 	whit some others elaboration in the middle
  * 
  */
 	
@@ -40,9 +36,10 @@
 
 		// Retruning value from the function
 		int staterec;
-		
 		//the pointer to a system
 		tsys *sys;
+		//a time var
+		ttime stime;
 	
 		// Call the mean menù, it tell to shell what to do.
 		staterec = Menu(inf);
@@ -50,6 +47,9 @@
 		// If the menù answered 0 the program initialize the system as new
 		if (staterec == 0)
 			sys = InitSystem(inf, Stype);
+	
+		//update this
+		stime = sys->stime;
 	
 		// The simulation loop (infinite)
 		for ( ; ; ) {
@@ -60,11 +60,17 @@
 			}
 			
 			// call the instruction parser
-			Parser(sys->Stype, sys, inf, 's');
+			stime = Parser(sys->Stype, sys, inf, 's');
 			
-			// call the phisic motor
-			Pmotor(sys);
-				
+			// call the phisic motor how many times as Parser asks
+			do {
+				Pmotor(sys);
+				if(GetBiggerStime(&stime, &sys->stime) == 1)
+					break;
+				if(GetBiggerStime(&stime, &sys->stime) == 2)
+					break;
+			}
+			while(1);
 		}
 
 		return;
