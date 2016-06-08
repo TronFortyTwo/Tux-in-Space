@@ -51,6 +51,11 @@
 			// continue
 			if (strcmp("continue", input) == 0)
 				break;
+			// the help
+			else if (strcmp("help", input) == 0) {
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-continue\n-create\n-jump\n\ninsert a command:", NULL, NULL);
+				continue;
+			}
 			//jump
 			else if (strcmp("jump", input) == 0) {
 				t = Jump(&sys->stime, inf, &sys->precision);
@@ -59,7 +64,8 @@
 			// change
 			else if (strcmp("create", input) == 0) {
 				Create(Stype, sys, inf);
-				break;
+				OPS(inf, "Insert a new command:", NULL, NULL);
+				continue;
 			}
 			// wrong command
 			else {
