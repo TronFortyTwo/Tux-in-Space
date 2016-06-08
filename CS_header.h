@@ -35,15 +35,13 @@
 	
 // Prototype of some function called from everywhere
 	int GetBiggerStime(ttime *, ttime *);
-	void ResProp(long double *,long double *,long double *,long double *, int x);
+	void UpdateTime(ttime *stime);
 	void OPS(tinf *inf, char *, int *, long double *);
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
 	void OPSML(tinf *inf);
 	ttime Jump(ttime *now, tinf *inf, long double *precision);
+	ttime Wait(ttime *now, tinf *inf, long double *precision);
 	int Menu(tinf *inf);
-	void PrintInt (tinf *, int, int *, int *);
-	void PrintLongDouble (tinf *, long double *, int *, int *);
-	void PrintString(tinf *, char *, int, int *, int *);
 	int OPSo (tsys *sys, tinf *inf);
 	ttime Parser(tStype *Stype, tsys *, tinf *, char);
 	int Reask(tinf *, char *);
@@ -51,7 +49,6 @@
 	ttype *TypeBrowser(tinf *, tStype *, char *);
 	void Pmotor (tsys *);
 	void Shell (tinf *, tStype *);
-	void ChangeChar(char *, char, char);
 	void SafeIScan(tinf *inf, int *dest);
 	void PrintLine (tinf *inf, char character[], int);
 	void ScanFString(char *dest, FILE *stream);	

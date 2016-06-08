@@ -35,7 +35,7 @@
 	#define BUFFERINPUTSIZE 25
 	
 	// the max lenght of a command word
-	#define COMMANDLENGHT 16
+	#define COMMANDLENGHT 12
 	
 	//When you alloc the object buffer, this is how many object you delete or create when you resize
 	#define OBJBUFSIZE 8

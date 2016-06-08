@@ -49,11 +49,11 @@
 		for ( ; ; ) {
 			scanf("%s", input);
 			// continue
-			if (strcmp("continue", input) == 0)
+			if (strcmp("step", input) == 0)
 				break;
 			// the help
 			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-continue\n-create\n-jump\n\ninsert a command:", NULL, NULL);
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n\ninsert a command:", NULL, NULL);
 				continue;
 			}
 			//jump
@@ -61,7 +61,12 @@
 				t = Jump(&sys->stime, inf, &sys->precision);
 				break;
 			}
-			// change
+			//wait
+			else if (strcmp("wait", input) == 0) {
+				t = Wait(&sys->stime, inf, &sys->precision);
+				break;
+			}
+			// create
 			else if (strcmp("create", input) == 0) {
 				Create(Stype, sys, inf);
 				OPS(inf, "Insert a new command:", NULL, NULL);
@@ -109,15 +114,35 @@
 		}
 	}
 	
+	/***
+	 * The Wait function make the simulation wait for a while. The user say how much 
+	 */
+	ttime Wait(ttime *now, tinf *inf, long double *precision){
+		ttime t;
+		OPS(inf,"WAIT\n\nInsert the information about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", NULL, precision);
+		scanf("%d", &t.year);
+		scanf("%d", &t.day);
+		scanf("%d", &t.hour);
+		scanf("%d", &t.min);
+		scanf("%d", &t.sec);
+		scanf("%d", &t.millisec);
+		t.millisec += now->millisec;
+		t.sec += now->sec;
+		t.min += now->min;
+		t.hour += now->hour;
+		t.day += now->day;
+		t.year += now->year;
+		UpdateTime(&t);
+		return t;
+	}
 	
 	/***
-	 * The Jump function make the simulation wait for a time 
+	 * The Jump function make the simulation jump to a determined time 
 	 */
 	ttime Jump(ttime *now, tinf *inf, long double *precision){
-		char buffer[BUFFERSIZE];
+		//the time the user would to go
 		ttime t;
-		strcpy(buffer, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds");
-		OPS(inf, buffer, NULL, precision);
+		OPS(inf, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds" , NULL, precision);
 		scanf("%d", &t.year);
 		scanf("%d", &t.day);
 		scanf("%d", &t.hour);

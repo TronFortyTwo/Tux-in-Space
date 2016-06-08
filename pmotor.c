@@ -80,32 +80,39 @@
 			sys->o[i].y = sys->o[i].y + sys->o[i].vely * sys->precision;
 			sys->o[i].z = sys->o[i].z + sys->o[i].velz * sys->precision;
 		}
-	
 		// update the time
-		for(sys->stime.millisec=sys->precision*1000; sys->stime.millisec>=1000; ) {
-			sys->stime.sec++;
-			sys->stime.millisec -= 1000;
-		}
-		for(; sys->stime.sec>=60; ) {
-			sys->stime.min++;
-			sys->stime.sec -= 60;
-		}
-		for(; sys->stime.min>=60; ) {
-			sys->stime.hour++;
-			sys->stime.min -= 60;
-		}
-		for(; sys->stime.hour>=24; ) {
-			sys->stime.day++;
-			sys->stime.hour -= 24;
-		}
-		for(; sys->stime.day>=365;) {
-			sys->stime.year++;
-			sys->stime.day -= 365;
-		}
-		
+		sys->stime.millisec=sys->precision*1000;
+		UpdateTime(&sys->stime);
 		
 		return;
 		}
+	
+	/**
+	 * The function update time make the time right, for example whitout 72 mins, 42 hour...
+	 */
+	void UpdateTime(ttime *stime){
+		for(; stime->millisec>=1000; ) {
+			stime->sec++;
+			stime->millisec -= 1000;
+		}
+		for(; stime->sec>=60; ) {
+			stime->min++;
+			stime->sec -= 60;
+		}
+		for(; stime->min>=60; ) {
+			stime->hour++;
+			stime->min -= 60;
+		}
+		for(; stime->hour>=24; ) {
+			stime->day++;
+			stime->hour -= 24;
+		}
+		for(; stime->day>=365;) {
+			stime->year++;
+			stime->day -= 365;
+		}
+		return;
+	}
 	
 	/***
 	 * this function chek which of the time structure given is the farest ( 1 january 2015 farest than 12 december 1942)
