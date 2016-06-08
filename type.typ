@@ -18,6 +18,10 @@ Brown Dwarf
 Descriptions coming soon
 Celestial object
 
+Carbon Planet
+A carbon planet is a planet that contein much carbon, and a minor quantity of oxygen
+Planet
+
 Cataclysmic variable star
 Descriptions coming soon
 Star
@@ -27,7 +31,7 @@ A celestial object is a natural object
 NULL
 
 Chthonian planet
-Descriptions coming soon
+A chtonian planet is an hypotetical planet generated from the stripping away (hydrodinamic escape) of a Gas Giant atmosphere, composed of Helium and Hydrogen. The remaining core composed of metal and rocky form this class of celestial body
 Planet
 
 Comet
@@ -62,17 +66,29 @@ Giant planet
 Descriptions coming soon
 Planet
 
+Helium planet
+An helium planet is a planet whit an atmosphere composly mainly by helium
+Planet
+
 Hot Jupiter
-Descriptions coming soon
+A Hot Neptune is a giant gas planet that is very similar to Neptune but is much hotter that it
 Gas giant
 
 Hot Neptune
-Descriptions coming soon
+A Hot Neptune is a giant gas planet that is very similar to Neptune but is much hotter that it
 Gas giant
 
 Ice giant
 Descriptions coming soon
 Giant planet
+
+Iron planet
+an iron planet is a planet whit the core composed mainly of iron and whit mantle very little or whitout any mantle
+Planet
+
+Lava planet
+A lava planet is a type of terrestrial planet whit the surface completely covered whit lava
+Terrestrial planet
 
 Magnetar
 Descriptions coming soon
@@ -167,3 +183,6 @@ Descriptions coming soon
 Compact star
 
 END OF FILE
+
+NOTE:
+Please keep the alphabetical order
