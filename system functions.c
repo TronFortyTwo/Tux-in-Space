@@ -25,7 +25,7 @@
 		// array to give to Rmotor whit counters
 		int ivar[2];
 		int ipos = 0;
-		long double lvar[7];
+		long double lvar[8];
 		int lpos=0;
 	
 		// Title
@@ -58,13 +58,17 @@
 			ScanFString(obj->name, objfile);
 			ScanFString(input, objfile);
 			obj->type = typeSearchName(Stype, input);
+			fscanf(objfile, "%Lf", &obj->radius);
 			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
-			//tell name, type and mass whitout ask
+			//tell name, type, radius and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
 			strcat(buffer, obj->type->name);
+			strcat(buffer, "\n\nradius:  %l");
+			lvar[lpos] = obj->radius;
+			lpos++;
 			strcat(buffer, "\n\nmass:  ");
 		}
 		//if the user doesn't want to load from a file an object
@@ -81,13 +85,20 @@
 			obj->type = TypeBrowser(inf, Stype, "Let's choose the type of object for your new object");
 			strcat(buffer, "\n\ntype:    ");
 			strcat(buffer, obj->type->name);
+			// ask about the radius
+			strcat(buffer, "\n\nradius:  ");
+			strcpy(reffub, buffer);
+			strcat(reffub, " (Km)");
+			OPS(inf, reffub, ivar, lvar);
+			scanf("%Lf", &obj->radius);
+			lvar[lpos] = obj->radius;
+			lpos++;
 			// ask about the mass
-			strcat(buffer, "\n\nmass:  ");
+			strcat(buffer, "%l\n\nmass:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (t) 1 ton = 1000 Kg");
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%Lf", &obj->mass);
-			fflush(stdin);
 		}
 		// ask about the x
 		lvar[lpos]=obj->mass;
@@ -176,7 +187,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | everyother = y]", 0, 0);
+			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", 0, 0);
 			scanf("%c", &input);
 			fflush(stdin);
 			if(input == 'n')

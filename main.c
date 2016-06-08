@@ -59,6 +59,7 @@
 	struct object {
 		char name [NAMELUN];	// the name of the object (es.: Earth, My_Planet, Moon)
 		ttype *type;			// the type of object.
+		long double	radius;		// the object for now are sphere, so this is the ray
 		long double mass;		// the mass
 		long double x;   		// the coordinate x
 		long double y;			// the coordinate y
