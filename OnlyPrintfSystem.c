@@ -171,16 +171,11 @@
  */	
 	void OPSML(tinf *inf) {
 		
-		int i;	//(i)nput
+		char i;	//(i)nput
 		
-		OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
-		scanf("%d", &i);
-		if(i == 0)
-			return;
-		else {
-			OPS(inf, "The program crash if you continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
-			scanf("i ciaogebpfwrg");
-		}
+		OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Press something to retry", 0, 0);
+		scanf("%s", &i);
+		
 		return ;
 	}
 

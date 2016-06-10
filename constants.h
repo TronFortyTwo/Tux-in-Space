@@ -21,7 +21,8 @@
  * In this file there are all the constant (#define)
  * 
  */
-
+	#define PI 245850922/78256779
+	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
 	

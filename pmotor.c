@@ -18,17 +18,15 @@
 #############################################################################################
  */
  /********************************************************************************
- *
- *
- * This is the motor that emules the phisic law
+ *This is the motor that emules the phisic law
  * 
  * Now the side effect that this function generated on struct obj are caused by:
  *		-Gravity force
  * 		-Inertia of mass
- *
+ *		-impacts beetween them
  */
 
-	void Pmotor (tsys *sys) {
+	void Pmotor (tsys *sys, tinf *inf) {
 	
 		// Counters for loops
 		int i, l;
@@ -44,14 +42,14 @@
 		for(i=0; i!=sys->nactive; i++) {
 			// a loop that consider every planet (i+1 because whit l<i is alredy made, and whit i=l the two objects are the same)
 			for (l=i+1; l!= sys->nactive; l++) {
-				//calculate the axis' distance (always >0)
+				// calculate the axis' distance (always >0)
 				distx = sys->o[i].x - sys->o[l].x;
 				disty = sys->o[i].y - sys->o[l].y;
 				distz = sys->o[i].z - sys->o[l].z;
-				//calculate the distance whit pitagora
+				// calculate the distance whit pitagora
 				dist = sqrtl (distx*distx + disty*disty);
 				dist = sqrtl (distz*distz + dist*dist);
-				//the force and his ortogonal component
+				// the force and his ortogonal component
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				fx = f * distx / dist;		// fx : f = distx : dist
 				fy = f * disty / dist;
@@ -64,7 +62,7 @@
 				sys->o[i].velx = sys->o[i].velx + ax * sys->precision;
 				sys->o[i].vely = sys->o[i].vely + ay * sys->precision;
 				sys->o[i].velz = sys->o[i].velz + az * sys->precision;
-				//the aceleration of l
+				// the aceleration of l
 				ax = fx / sys->o[l].mass;
 				ay = fy / sys->o[l].mass;
 				az = fz / sys->o[l].mass;
@@ -72,6 +70,8 @@
 				sys->o[l].velx = sys->o[l].velx + ax * sys->precision;
 				sys->o[l].vely = sys->o[l].vely + ay * sys->precision;
 				sys->o[l].velz = sys->o[l].velz + az * sys->precision;
+				// impact engine
+				Impact(sys, inf, i, l, dist);
 			}
 		}
 		// move the objects
@@ -86,6 +86,65 @@
 		
 		return;
 		}
+	
+	/**
+	 * Impact check and manage impact between objects
+	 * for now only merge the two object, but advanced behavior coming soon
+	 */
+	void Impact (tsys *sys, tinf *inf, int i, int l, long double dist) {
+		
+		// if the two object don't hit return
+		if (sys->o[i].radius + sys->o[l].radius > dist)
+			return;
+	
+		tobj obj;			// the new object
+		char name[NAMELUN];	// the new name (the name of the bigger)
+		ttype *type;		// the new type (the type of the bigger)
+		long double vol;	// the volume of the new object, used to calculate the new radius
+		int bigger;			// store i if the bigger is i, else l
+		
+		// assign the name and the type of the bigger
+		if(sys->o[i].mass > sys->o[l].mass) {
+			strcpy(name, sys->o[i].name);
+			type = sys->o[i].type;
+			bigger = i;
+		}
+		else {
+			strcpy(name, sys->o[l].name);
+			type = sys->o[l].type;
+			bigger = l;
+		}
+		// the volume is the sum of the two volume V = 4/3 * r^3 * Pi
+		vol = ((4/3) * PI * sys->o[l].radius * sys->o[l].radius * sys->o[l].radius) + ((4/3) * PI * sys->o[i].radius * sys->o[i].radius * sys->o[i].radius);
+		
+		// merge the two previous object
+		obj = CreateObject(
+			sys->Stype,
+			name,
+			type,
+			sys->o[i].mass + sys->o[l].mass,	// the mass is the sum of the two
+			pow((vol * 3)/(4 * PI), 1.0/3),		// V = 4/3 * r^3 * Pi --> (V * 3)/(4 * PI) = r^3
+			sys->o[bigger].x,					// x of the bigger
+			sys->o[bigger].y,					// y of the bigger
+			sys->o[bigger].z,					// z of the bigger
+			(sys->o[i].velx * sys->o[i].mass) * (sys->o[l].velx * sys->o[l].mass)/(sys->o[i].mass + sys->o[l].mass),	// smart average
+			(sys->o[i].vely * sys->o[i].mass) * (sys->o[l].vely * sys->o[l].mass)/(sys->o[i].mass + sys->o[l].mass),	// smart average
+			(sys->o[i].velz * sys->o[i].mass) * (sys->o[l].velz * sys->o[l].mass)/(sys->o[i].mass + sys->o[l].mass)		// smart average
+		);
+		
+		//create the new object in the place of i
+		sys->o[i] = obj;
+		//move the last object in the place of the place where l was
+		sys->o[l] = sys->o[sys->nactive];
+		//update counter
+		sys->nactive--;
+		//if needed, resize the array of objects
+		if (sys->nalloc - sys->nactive >= OBJBUFSIZE) {
+			ReduceObjBuf(sys, inf);
+		}
+		
+		return;
+	}
 	
 	/**
 	 * The function update time make the time right, for example whitout 72 mins, 42 hour...

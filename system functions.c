@@ -273,34 +273,59 @@
 	
 	
 	/***
-	 * This function resize the buffer of object
+	 * This function reduce the object buffer size
 	 */
 	 
-	void ResizeObject(tStype *Stype, tinf *inf, tobj **pointer, int old_size, int new_size) {
-		//counter for loop and input
-		int i;
-		//the new buffer whit control whit RAM overload
-		tobj *new_pointer = (tobj *) malloc (sizeof(tobj) * new_size);
-		if (new_pointer == NULL) {
-			for(; pointer != NULL;){
-				OPSML(inf);
-				ResizeObject(Stype, inf, pointer, old_size, new_size);
-			}
-		}
-		//put in the new buffer the old buffer content
-		for(i=0; i!=old_size; i++)
-			new_pointer[i] = *pointer[i];
-		//delete the old buffer
-		free(*pointer);
-		//set the new object
-		for(i=old_size; i!=new_size; i++) {
-			ResetObject(Stype, &new_pointer[i]);
-		}
-		//put in the old pointer the new address
-		*pointer = new_pointer;
+	void ReduceObjBuf(tsys *sys, tinf *inf) {
 		
+		tobj *newo;		//(new o)bject buffer
+		int c;			//(c)ounter
+		
+		// create a new buffer whit less objects
+		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE));
+		if(newo == NULL)
+			for(; newo == NULL; newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE)))
+				OPSML(inf);
+		// update counter
+		sys->nalloc -= OBJBUFSIZE;
+		// copy what is stored in the old buffer in the new buffer
+		for(c=0; c!= sys->nalloc; c++)
+			newo[c] = sys->o[c];
+		// delete the old buffer
+		free(sys->o);
+		// point sys->o at the new buffer
+		sys->o = newo;
+		//if can be reduced more, recall itself
+		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
+			ReduceObjBuf(sys, inf);
+	
 		return;
 	}
+	
+	/***
+	 * This function make the object buffer size bigger
+	 */
+	void ExtendObjBuf(tsys *sys, tinf *inf){
+	
+		tobj *newo;		//(new o)bject buffer
+		int c;			//(c)ounter
+		// create a new buffer whit more objects
+		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
+		if(newo == NULL)
+			for(; newo == NULL; newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE)))
+				OPSML(inf);
+		// copy what is stored in the old buffer in the new buffer
+		for(c=0; c!= sys->nalloc; c++)
+			newo[c] = sys->o[c];
+		// update counter
+		sys->nalloc += OBJBUFSIZE;
+		// delete the old buffer
+		free(sys->o);
+		// point sys->o at the new buffer
+		sys->o = newo;
+		return;
+	}
+	
 	
 	/***
 	 * This function reset a object destroying his attribute
@@ -308,10 +333,33 @@
 	void ResetObject(tStype *Stype, tobj *obj) {
 		
 		//reset !!!
-		strcpy(obj->name, "\0");
 		obj->type = typeSearchName(Stype, "Void");
 		
 		return;
 	}
 	
-
+	/***
+	 * The function CreateObject creates and return a new object from argurment given
+	 */
+	tobj CreateObject (tStype *Stype, char * name, ttype * type, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {
+		//the new object
+		tobj obj;
+		strcpy(obj.name, name);
+		obj.type = type;
+		obj.mass = mass;
+		obj.radius = radius;
+		obj.x = x;
+		obj.y = y;
+		obj.z = z;
+		obj.velx = velx;
+		obj.vely = vely;
+		obj.velz = velz;
+		return obj;
+	}
+	
+	
+	
+	
+	
+	
+	

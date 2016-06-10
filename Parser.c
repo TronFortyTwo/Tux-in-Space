@@ -160,10 +160,8 @@
 	void Create(tStype *Stype, tsys *sys, tinf *inf) {
 		
 		//if there isn't any space for a new object resize the object buffer
-		if (sys->nactive == sys->nalloc) {
-			ResizeObject(Stype, inf, &sys->o, sys->nalloc, sys->nalloc+OBJBUFSIZE);
-			sys->nalloc += OBJBUFSIZE;
-		}
+		if (sys->nactive == sys->nalloc)
+			ExtendObjBuf(sys, inf);
 	
 		//initialize the new object
 		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);

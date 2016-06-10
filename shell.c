@@ -64,7 +64,7 @@
 			
 			// call the phisic motor how many times as Parser asks
 			do {
-				Pmotor(sys);
+				Pmotor(sys, inf);
 				if(GetBiggerStime(&stime, &sys->stime) == 1)
 					break;
 				if(GetBiggerStime(&stime, &sys->stime) == 2)
