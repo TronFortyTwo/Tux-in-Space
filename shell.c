@@ -19,16 +19,7 @@
  *
  * This is the shell that connect the engines and the user
  * 
- *	Structure of Shell:
- *
- *	1)Receive basic instruction from Main
- *	2)Converse whit the phisic motor (Pmotor)
- *	3)Converse whit the user via OPSo or others
- *	4)Converse whit the user
- *	5)Goto 2 or goto 6
- *  6)Return to main
- * 
- * 	whit some others elaboration in the middle
+ * whit some others elaboration in the middle
  * 
  */
 	
@@ -52,7 +43,7 @@
 		stime = sys->stime;
 	
 		// The simulation loop (infinite)
-		for ( ; ; ) {
+		do {
 		
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
@@ -64,14 +55,15 @@
 			
 			// call the phisic motor how many times as Parser asks
 			do {
-				Pmotor(sys);
 				if(GetBiggerStime(&stime, &sys->stime) == 1)
 					break;
 				if(GetBiggerStime(&stime, &sys->stime) == 2)
 					break;
+				Pmotor(sys, inf);
 			}
 			while(1);
 		}
+		while(1);
 
 		return;
 	}

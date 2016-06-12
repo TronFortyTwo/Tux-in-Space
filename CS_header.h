@@ -34,20 +34,24 @@
 	#include <time.h>
 	
 // Prototype of some function called from everywhere
+	tobj *SearchObject(tsys *sys, char *name);
+	tobj CreateObject (tStype *, char *, ttype *, long double, long double, long double, long double, long double, long double, long double, long double);
+	void Info(tsys *sys, tinf *inf);
 	int GetBiggerStime(ttime *, ttime *);
+	void Impact (tsys *, tinf *);
 	void UpdateTime(ttime *stime);
 	void OPS(tinf *inf, char *, int *, long double *);
 	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar);
-	void OPSML(tinf *inf);
+	void OPSML(tinf *inf, char *);
 	ttime Jump(ttime *now, tinf *inf, long double *precision);
 	ttime Wait(ttime *now, tinf *inf, long double *precision);
 	int Menu(tinf *inf);
 	int OPSo (tsys *sys, tinf *inf);
 	ttime Parser(tStype *Stype, tsys *, tinf *, char);
-	int Reask(tinf *, char *);
+	void Reask(tinf *, char *);
 	void Create(tStype *Stype, tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);
-	void Pmotor (tsys *);
+	void Pmotor (tsys *, tinf *inf);
 	void Shell (tinf *, tStype *);
 	void SafeIScan(tinf *inf, int *dest);
 	void PrintLine (tinf *inf, char character[], int);
@@ -55,7 +59,7 @@
 	void SaveObject(tinf *, tobj *);
 	void InitObject (tinf *, tobj *, tStype *, int);
 	tsys *InitSystem (tinf *, tStype *);
-	void ResizeObject(tStype *, tinf *, tobj **, int, int);
+	void ReduceObjBuf(tsys *sys, tinf *inf);
 	void ResetObject(tStype *, tobj *);	
 	tStype *Inittype (FILE *, tinf *);
 	char *typeDescriptionFromName (tStype *, char *);

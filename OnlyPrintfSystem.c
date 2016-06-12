@@ -50,7 +50,7 @@
 	
 	//signal if there is a memory leack
 	while (buf == NULL) {
-		OPSML(inf);
+		OPSML(inf, "OPS");
 		buf = (char *) malloc (sizeof(char)*((inf->width-TWOFRAMELUN)*(inf->height-5)+1));
 	};
 	
@@ -169,19 +169,14 @@
 /***
  * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack and manage the situation
  */	
-	void OPSML(tinf *inf) {
+	void OPSML(tinf *inf, char *data) {
 		
-		int i;	//(i)nput
+		char i[2];	//(i)nput
 		
-		OPSE(inf, "The program has a problem whit memory allocation. Probably the RAM is overload. Retry? [y=0 n!=0]", 0, 0);
-		scanf("%d", &i);
-		if(i == 0)
-			return;
-		else {
-			OPS(inf, "The program crash if you continue whitout this memory allocation. It's more elegant stop it here", 0, 0);
-			scanf("i ciaogebpfwrg");
-		}
-		return ;
+		printf ("\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		scanf("%s", i);
+		
+		return;
 	}
 
 

@@ -31,14 +31,14 @@
 		// Title
 		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
 		// A number
-		if(n >= 0){
+		if(n > 0){
 			strcat(buffer, "object number %i");
 			ivar[ipos] = n;
 			ipos++;
 		}
 		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you don't want to create a new object.\n");
+		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you want to create a new object.\n");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
 		// if the user want to load an object
@@ -54,14 +54,14 @@
 				InitObject(inf, obj, Stype, n);
 				return;
 			}
-			// Read name, type and mass and close the file
+			// Read name, type, mass and radius and close the file
 			ScanFString(obj->name, objfile);
 			ScanFString(input, objfile);
 			obj->type = typeSearchName(Stype, input);
 			fscanf(objfile, "%Lf", &obj->radius);
 			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
-			//tell name, type, radius and mass whitout ask
+			// tell name, type, radius and mass whitout ask
 			strcat(buffer, "\n\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
@@ -188,15 +188,14 @@
 		if(dest != NULL) {
 			fclose(dest);
 			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", 0, 0);
-			scanf("%c", &input);
-			fflush(stdin);
+			scanf("%s", &input);
 			if(input == 'n')
 				return;
 		}
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%s\n%Lf", obj->name, obj->type->name, obj->mass);
+		fprintf(dest, "%s\n%s\n%Lf\n%Lf", obj->name, obj->type->name, obj->radius ,obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
@@ -273,34 +272,71 @@
 	
 	
 	/***
-	 * This function resize the buffer of object
+	 * This function reduce the object buffer size
 	 */
 	 
-	void ResizeObject(tStype *Stype, tinf *inf, tobj **pointer, int old_size, int new_size) {
-		//counter for loop and input
-		int i;
-		//the new buffer whit control whit RAM overload
-		tobj *new_pointer = (tobj *) malloc (sizeof(tobj) * new_size);
-		if (new_pointer == NULL) {
-			for(; pointer != NULL;){
-				OPSML(inf);
-				ResizeObject(Stype, inf, pointer, old_size, new_size);
-			}
-		}
-		//put in the new buffer the old buffer content
-		for(i=0; i!=old_size; i++)
-			new_pointer[i] = *pointer[i];
-		//delete the old buffer
-		free(*pointer);
-		//set the new object
-		for(i=old_size; i!=new_size; i++) {
-			ResetObject(Stype, &new_pointer[i]);
-		}
-		//put in the old pointer the new address
-		*pointer = new_pointer;
+	void ReduceObjBuf(tsys *sys, tinf *inf) {
 		
+		tobj *newo;		//(new o)bject buffer
+		int c;			//(c)ounter
+		
+		// create a new buffer whit less objects
+		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE));
+		do{
+			if(newo != NULL)
+				break;
+			else {
+				OPSML(inf, "ReduceObjBuf");
+				newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
+			}	
+		}
+		while(1);
+		// update counter
+		sys->nalloc -= OBJBUFSIZE;
+		// copy what is stored in the old buffer in the new buffer
+		for(c=0; c!= sys->nalloc; c++)
+			newo[c] = sys->o[c];
+		// delete the old buffer
+		free(sys->o);
+		// point sys->o at the new buffer
+		sys->o = newo;
+		//if can be reduced more, recall itself
+		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
+			ReduceObjBuf(sys, inf);
+	
 		return;
 	}
+	
+	/***
+	 * This function make the object buffer size bigger
+	 */
+	void ExtendObjBuf(tsys *sys, tinf *inf){
+	
+		tobj *newo;		//(new o)bject buffer
+		int c;			//(c)ounter
+		// create a new buffer whit more objects
+		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
+		do{
+			if(newo != NULL)
+				break;
+			else {
+				OPSML(inf, "ExtendObjBuf");
+				newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
+			}	
+		}
+		while(1);
+		// copy what is stored in the old buffer in the new buffer
+		for(c=0; c!= sys->nalloc; c++)
+			newo[c] = sys->o[c];
+		// update counter
+		sys->nalloc += OBJBUFSIZE;
+		// delete the old buffer
+		free(sys->o);
+		// point sys->o at the new buffer
+		sys->o = newo;
+		return;
+	}
+	
 	
 	/***
 	 * This function reset a object destroying his attribute
@@ -308,10 +344,44 @@
 	void ResetObject(tStype *Stype, tobj *obj) {
 		
 		//reset !!!
-		strcpy(obj->name, "\0");
 		obj->type = typeSearchName(Stype, "Void");
 		
 		return;
 	}
 	
-
+	/***
+	 * The function CreateObject creates and return a new object from argurment given
+	 */
+	tobj CreateObject (tStype *Stype, char * name, ttype * type, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {
+		//the new object
+		tobj obj;
+		strcpy(obj.name, name);
+		obj.type = type;
+		obj.mass = mass;
+		obj.radius = radius;
+		obj.x = x;
+		obj.y = y;
+		obj.z = z;
+		obj.velx = velx;
+		obj.vely = vely;
+		obj.velz = velz;
+		return obj;
+	}
+	
+	/***
+	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
+	 */
+	tobj *SearchObject(tsys *sys, char *name) {
+		
+		int i;
+		
+		for (i=0; i != sys->nactive; i++)
+			if(strcmp(sys->o[i].name, name) == 0)
+				return &sys->o[i];
+		
+		return NULL;
+	}
+	
+	
+	
+	

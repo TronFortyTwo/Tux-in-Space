@@ -50,7 +50,7 @@
 		//alloc enought spaces for all the ttype structure
 		Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
 		for(; Stype.type == NULL;) {
-			OPSML(inf);
+			OPSML(inf, "Inittype");
 			Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
 		}
 		
@@ -226,7 +226,7 @@
 				continue;
 			}
 			//if is the generic type button
-			if (input == maxnum-2){
+			if (input == maxnum-2) {
 				free(npoint);
 				if(strcmp(commonparent, "NULL") != 0)
 					return typeSearchName(Stype, commonparent);
