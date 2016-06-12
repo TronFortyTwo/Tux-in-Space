@@ -49,19 +49,32 @@
 		for ( ; ; ) {
 			scanf("%s", input);
 			// continue
-			if (strcmp("step", input) == 0)
+			if (strcmp("step", input) == 0) {
+				t.millisec += 1000 * sys->precision;
+				UpdateTime(&t);
 				break;
+			}
 			// the help
 			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n\ninsert a command:", NULL, NULL);
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n\ninsert a command:", NULL, NULL);
 				continue;
 			}
-			//jump
+			// jump
 			else if (strcmp("jump", input) == 0) {
 				t = Jump(&sys->stime, inf, &sys->precision);
 				break;
 			}
-			//wait
+			// info
+			else if (strcmp("info", input) == 0) {
+				Info(sys, inf);
+				continue;
+			}
+			// print
+			else if (strcmp("print", input) == 0) {
+				OPSo(sys, inf);
+				continue;
+			}
+			// wait
 			else if (strcmp("wait", input) == 0) {
 				t = Wait(&sys->stime, inf, &sys->precision);
 				break;
@@ -69,15 +82,13 @@
 			// create
 			else if (strcmp("create", input) == 0) {
 				Create(Stype, sys, inf);
-				OPS(inf, "Insert a new command:", NULL, NULL);
+				OPSo(sys, inf);
 				continue;
 			}
 			// wrong command
 			else {
-				if (Reask(inf, input) == 0)
-					continue;
-				else
-					break;
+				Reask(inf, input);
+				continue;
 			}
 		}
 
@@ -86,33 +97,60 @@
 	
 	/**
 	 * The Reask function. Reask the input
-	 * Retrun 0 if the user want to rewrite a command, 1 if not
-	 * 
 	 */
-	int Reask(tinf *inf, char *command){
+	void Reask(tinf *inf, char *command){
 		// the answer of the user
 		char buffer[BUFFERSIZE];
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
-		strcat(buffer, " that you wrote is unknow. Do you want to write another command? [y/n]");
+		strcat(buffer, " that you wrote is unknow. Write another command");
 		OPSE(inf, buffer, 0, 0);
 		
-		for(;;){
-			// a loop that exit 0 or 1
-			scanf("%s", command);
-			// if postitive return 0
-			if (command[0] == 'y') {
-				OPS(inf, "What is your command?", 0, 0);
-				return 0;
-			}
-			// if negative return 1
-			else if (command[0] == 'n')
-				return 1;
-			// if wrong reask
-			else
-				OPS (inf, "Please answer 'y' or 'n'", 0, 0);
-		}
+		return;
 	}
+	
+	/***
+	 * Shows functions
+	 */
+	void Info(tsys *sys, tinf *inf) {
+	
+		char buffer[BUFFERSIZE];
+		tobj *obj;
+		long double c[8];
+		
+		strcpy(buffer, "INFO\n\nSystem ");
+		strcat(buffer, sys->name);
+		strcat(buffer, " whit %i object\n\nOf which object do you want informations? press 0 to quit");
+		OPS(inf, buffer, &sys->nactive, NULL);
+		scanf("%s", buffer);
+		if(strcmp(buffer, "0") == 0){
+			OPS(inf, "Insert a new command", NULL, NULL);
+			return;
+		}
+		obj = SearchObject(sys, buffer);
+		if(obj == NULL){
+			OPS(inf, "INFO\n\nno object whit this name is been found. press a button to continue", NULL, NULL);
+			scanf("%s", buffer);
+			return;
+		}	
+		strcpy (buffer, "INFO object ");
+		strcat (buffer, obj->name);
+		strcat (buffer, "\n\ntype: ");
+		strcat (buffer, obj->type->name);
+		strcat (buffer, "\n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:");
+		c[0] = obj->mass;
+		c[1] = obj->radius;
+		c[2] = obj->x;
+		c[3] = obj->y;
+		c[4] = obj->z;
+		c[5] = obj->velx;
+		c[6] = obj->vely; 
+		c[7] = obj->velz; 
+		OPS(inf, buffer, NULL, c);
+		scanf("%s", buffer);
+		return;
+	}
+	
 	
 	/***
 	 * The Wait function make the simulation wait for a while. The user say how much 
@@ -166,7 +204,7 @@
 		//initialize the new object
 		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);
 		sys->nactive++;
-	
+
 		return;
 	}
 	

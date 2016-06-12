@@ -32,7 +32,7 @@
 		char buffer[BUFFERSIZE];
 		// the array to give to Rmotor whit size. there are 7 long double for every object (mass, x, y, z, velx, vely, velz)
 		int ivar[5];
-		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 7);
+		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 6);
 		int lpos=0;
 		// counters
 		int i;
@@ -56,9 +56,6 @@
 			strcat(buffer, obj->name);
 			strcat(buffer, " | ");
 			strcat(buffer, obj->type->name);
-			strcat(buffer, " | ");
-			strcat(buffer, " mass of %l tons");
-			lvar[lpos++] = obj->mass;
 			//Tell the x '\n', the y a '\n' and the z
 			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
 			lvar[lpos++]= obj->x;

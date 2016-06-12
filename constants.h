@@ -21,10 +21,10 @@
  * In this file there are all the constant (#define)
  * 
  */
-	#define PI 245850922/78256779
+	#define PI (245850922/78256779)
 	
 	// The lenght of a name of an object, a system or a type
-	#define NAMELUN 64
+	#define NAMELUN 32
 	
 	// The size of a type's description. It must is bigger than NAMELUN
 	#define DESCRIPTIONSIZE 512
