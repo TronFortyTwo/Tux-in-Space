@@ -51,7 +51,7 @@
 			}
 			
 			// call the instruction parser
-			stime = Parser(sys->Stype, sys, inf, 's');
+			stime = Parser(sys, inf);
 			
 			// call the phisic motor how many times as Parser asks
 			do {

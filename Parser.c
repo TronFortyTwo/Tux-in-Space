@@ -16,19 +16,8 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-
  *
- * This is the instruction's parser. elaborate the input and do what these phrases in this strange human language would say.
- * The parser is smart(or not enought smart) and if you don't write all the word, he equally know what you mean
- * 
- * The parser now work for:
- * 		- shell. in main loop whit only OPS (s)
- * 
- * The parser command now are:
- * 	
- * 		- Continue
- * 		- jump
- * 		- Create
+ * This is the instruction's parser. elaborate the input and do what these sentences in this strange human language would say.
  * 
  * 
  */
@@ -37,7 +26,7 @@
  * The main function
  * of the parser
  */
-	ttime Parser(tStype *Stype, tsys *sys, tinf *inf, char tag) {
+	ttime Parser(tsys *sys, tinf *inf) {
 		
 		// what is scanned
 		char input[COMMANDLENGHT+1];
@@ -81,8 +70,13 @@
 			}
 			// create
 			else if (strcmp("create", input) == 0) {
-				Create(Stype, sys, inf);
+				Create(sys, inf);
 				OPSo(sys, inf);
+				continue;
+			}
+			// save
+			else if (strcmp("save", input) == 0) {
+				SaveSys(sys, inf);
 				continue;
 			}
 			// wrong command
@@ -99,13 +93,11 @@
 	 * The Reask function. Reask the input
 	 */
 	void Reask(tinf *inf, char *command){
-		// the answer of the user
 		char buffer[BUFFERSIZE];
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
-		strcat(buffer, " that you wrote is unknow. Write another command");
-		OPSE(inf, buffer, 0, 0);
-		
+		strcat(buffer, " that you wrote is unknow. Write another command:");
+		OPSE(inf, buffer, 0, 0);	
 		return;
 	}
 	
@@ -117,7 +109,7 @@
 		char buffer[BUFFERSIZE];
 		tobj *obj;
 		long double c[8];
-		
+
 		strcpy(buffer, "INFO\n\nSystem ");
 		strcat(buffer, sys->name);
 		strcat(buffer, " whit %i object\n\nOf which object do you want informations? press 0 to quit");
@@ -195,7 +187,7 @@
 	 * The create function create a new object
 	 */
 	
-	void Create(tStype *Stype, tsys *sys, tinf *inf) {
+	void Create(tsys *sys, tinf *inf) {
 		
 		//if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc)

@@ -175,7 +175,7 @@
 	
 		//the path where the object must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+16];
-		char input;
+		char input[2];
 		FILE *dest;
 		
 		//Write the path
@@ -188,20 +188,18 @@
 		if(dest != NULL) {
 			fclose(dest);
 			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", 0, 0);
-			scanf("%s", &input);
-			if(input == 'n')
+			scanf("%s", input);
+			if(strcmp(input, "n") == 0)
 				return;
 		}
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%s\n%Lf\n%Lf", obj->name, obj->type->name, obj->radius ,obj->mass);
+		fprintf(dest, "%s\n%s\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->radius ,obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
-		scanf("%s", &input);
-		fflush(stdin);
-		
+		scanf("%s", input);		
 	
 		return;	
 	}
@@ -337,15 +335,57 @@
 		return;
 	}
 	
+	/***
+	 * Save a system in the directory Systems/
+	 */
+	void SaveSys(tsys *sys, tinf *inf){
+		
+		//the path where the system must be saved, an input variable and the destination file pointer
+		char path[NAMELUN+13];
+		char input[2];
+		FILE *dest;
+		// counter
+		int i;
+		
+		//Write the path
+		strcpy(path, "Systems/");
+		strcat(path, sys->name);
+		strcat(path, ".sys");
+		
+		//control that the file isn't alredy existent
+		dest = fopen(path, "r");
+		if(dest != NULL) {
+			fclose(dest);
+			OPS(inf, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", NULL, NULL);
+			scanf("%s", input);
+			if(strcmp(input, "n") == 0)
+				return;
+		}
+	
+		// Write the object
+		dest = fopen (path, "w");
+		// Write information about the system
+		fprintf (dest, "%s\n%.128Lf\n%d\n%.128Lf\n", sys->name, sys->precision, sys->nactive, sys->G);
+		fprintf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
+		// write the system's object's datas
+		for(i=0; i!=sys->nactive; i++) {
+			fprintf(dest, "%s\n%s\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", sys->o[i].name, sys->o[i].type->name, sys->o[i].radius ,sys->o[i].mass ,sys->o[i].x ,sys->o[i].y ,sys->o[i].z ,sys->o[i].velx ,sys->o[i].vely ,sys->o[i].velz);
+		}
+		fclose(dest);
+	
+		OPS(inf, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL, NULL);
+		scanf("%s", input);		
+	
+		return;
+	}
+	
 	
 	/***
-	 * This function reset a object destroying his attribute
+	 * This function reset a object
 	 */
 	void ResetObject(tStype *Stype, tobj *obj) {
-		
 		//reset !!!
 		obj->type = typeSearchName(Stype, "Void");
-		
 		return;
 	}
 	
