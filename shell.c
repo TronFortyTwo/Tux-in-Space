@@ -67,5 +67,8 @@
 		}
 		while(1);
 
+		//delete the system created
+		free(sys);
+
 		return;
 	}
