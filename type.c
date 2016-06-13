@@ -78,6 +78,7 @@
 				 return &Stype->type[i];
 		};
 		
+		printf("typeSearchName: No type whit the name %s has been found!\n", name);
 		return NULL;
 	}
 	

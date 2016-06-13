@@ -31,28 +31,30 @@
 		tsys *sys;
 		//a time var
 		ttime stime;
-	
-		// Call the mean menù, it tell to shell what to do.
-		staterec = Menu(inf);
-
-		// If the menù answered 0 the program initialize the system as new
-		if (staterec == 0)
-			sys = InitSystem(inf, Stype);
-	
+		
+		do {
+			// Call the mean menù, it tell to shell what to do.
+			staterec = Menu(inf);
+			// If the menù answered 0 the program initialize the system as new
+			if (staterec == 0)
+				sys = InitSystem(inf, Stype);
+			if (staterec == 1)
+				sys = LoadSystem(inf, Stype);
+			if (sys != NULL)
+				break;
+		}
+		while(1);
 		//update this
 		stime = sys->stime;
 	
 		// The simulation loop (infinite)
 		do {
-		
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
 				OPSo (sys, inf);
 			}
-			
 			// call the instruction parser
 			stime = Parser(sys, inf);
-			
 			// call the phisic motor how many times as Parser asks
 			do {
 				if(GetBiggerStime(&stime, &sys->stime) == 1)

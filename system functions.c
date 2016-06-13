@@ -209,63 +209,63 @@
  */
 	tsys *InitSystem (tinf *inf, tStype *Stype) {
 		
-			//to give to OPS and counter
-			int c;
-			//the system to create
-			static tsys sys;
-			//the buffers (dinamic and static)
-			char sbuf[BUFFERSIZE];
-			char dbuf[BUFFERSIZE];
+		//to give to OPS and counter
+		int c;
+		//the system to create
+		static tsys sys;
+		//the buffers (dinamic and static)
+		char sbuf[BUFFERSIZE];
+		char dbuf[BUFFERSIZE];
 		
-			//set the type struct pointer
-			sys.Stype = Stype;
-			//set the system's time
-			sys.stime.year = 0;
-			sys.stime.hour = 0;
-			sys.stime.day = 0;
-			sys.stime.min = 0;
-			sys.stime.sec = 0;
-			sys.stime.millisec = 0;
-			
-			//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
-			sys.G = 667e-19;
-			
-			// Ask for the name of the new system
-			c = NAMELUN-1;
-			strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
-			strcpy(dbuf, sbuf);
-			strcat(dbuf, " of the system:\n    Isn't allowed any spaces and can be of a maximum of %i characters");
-			OPS (inf, dbuf, &c, 0);
-			scanf("%s", sys.name);
-			strcat(sbuf, ":    ");
-			strcat(sbuf, sys.name);
-			//ask for the precision
-			strcat(sbuf, "\n\nprecision");
-			strcpy(dbuf, sbuf);
-			strcat(dbuf, " of the simulation:\n    Means how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
-			OPS (inf, dbuf, 0, 0);
-			scanf("%Lf", &sys.precision);
-			strcat(sbuf, ":    %l\n\n\n");
-			// ask if initialize new objects
-			strcat(sbuf, "Configuration of the system complete. But the system doesn't have any object to work on yet. Type the number of object do you want to create now. You can press zero to go directly to the new system created whitout create any new object, however you can create, modify and delete object later, while the simulation is going");
-			OPS(inf, sbuf, 0, &sys.precision);
+		//set the type struct pointer
+		sys.Stype = Stype;
+		//set the system's time
+		sys.stime.year = 0;
+		sys.stime.hour = 0;
+		sys.stime.day = 0;
+		sys.stime.min = 0;
+		sys.stime.sec = 0;
+		sys.stime.millisec = 0;
+		
+		//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
+		sys.G = 667e-19;
+		
+		// Ask for the name of the new system
+		c = NAMELUN-1;
+		strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
+		strcpy(dbuf, sbuf);
+		strcat(dbuf, " of the system:\n    Isn't allowed any spaces and can be of a maximum of %i characters");
+		OPS (inf, dbuf, &c, 0);
+		scanf("%s", sys.name);
+		strcat(sbuf, ":    ");
+		strcat(sbuf, sys.name);
+		//ask for the precision
+		strcat(sbuf, "\n\nprecision");
+		strcpy(dbuf, sbuf);
+		strcat(dbuf, " of the simulation:\n    Means how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
+		OPS (inf, dbuf, 0, 0);
+		scanf("%Lf", &sys.precision);
+		strcat(sbuf, ":    %l\n\n\n");
+		// ask if initialize new objects
+		strcat(sbuf, "Configuration of the system complete. But the system doesn't have any object to work on yet. Type the number of object do you want to create now. You can press zero to go directly to the new system created whitout create any new object, however you can create, modify and delete object later, while the simulation is going");
+		OPS(inf, sbuf, 0, &sys.precision);
+		SafeIScan(inf, &sys.nactive);
+		sys.nalloc = sys.nactive;
+		for (; ;) {
+			if(sys.nactive >= 0)
+				break;
+			OPSE (inf, "Wrong value: Must be put a number bigger than zero!", 0, 0);
 			SafeIScan(inf, &sys.nactive);
-			sys.nalloc = sys.nactive;
-			for (; ;) {
-				if(sys.nactive >= 0)
-					break;
-				OPSE (inf, "Wrong value: Must be put a number bigger than zero!", 0, 0);
-				SafeIScan(inf, &sys.nactive);
-			}
+		}
+		
+		//alloc the object array
+		sys.o = (tobj *) malloc ( sizeof(tobj) * sys.nactive );
 			
-			//alloc the object array
-			sys.o = (tobj *) malloc ( sizeof(tobj) * sys.nactive );
-			
-			// Initialize the objects
-			for (c=0; c!=sys.nactive; c++)
-				InitObject(inf, &sys.o[c], sys.Stype, c+1);
+		// Initialize the objects
+		for (c=0; c!=sys.nactive; c++)
+			InitObject(inf, &sys.o[c], sys.Stype, c+1);
 	 
-		return &sys;
+	 	return &sys;
 	}
 	
 	
@@ -365,7 +365,7 @@
 		// Write the object
 		dest = fopen (path, "w");
 		// Write information about the system
-		fprintf (dest, "%s\n%.128Lf\n%d\n%.128Lf\n", sys->name, sys->precision, sys->nactive, sys->G);
+		fprintf (dest, "%.128Lf\n%d\n%.128Lf\n",  sys->precision, sys->nactive, sys->G);
 		fprintf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
 		// write the system's object's datas
 		for(i=0; i!=sys->nactive; i++) {
@@ -378,7 +378,54 @@
 	
 		return;
 	}
+	/**
+	 * Load a system from a file
+	 * create a new system and return his pointer
+	 */
+	tsys *LoadSystem(tinf *inf, tStype *Stype){
 	
+		static tsys sys;		// static because must be used by all the program (see InitSystem())
+		char path[NAMELUN+12];	// the file of the system
+		FILE *dest;				// the file of the system
+		int i;					// counter
+		//ask which system
+		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL, NULL);
+		scanf("%s", sys.name);
+		//write the path
+		strcpy (path, "Systems/");
+		strcat (path, sys.name);
+		strcat (path, ".sys");
+		//open the file
+		dest = fopen(path, "r");
+		if (dest == NULL) {
+			OPSE(inf, "A system whit that name doesn't exist! Type something to continue and return to the menù", NULL, NULL);
+			scanf("%s", path);
+			return NULL;
+		}
+		//scanf system's informations
+		fscanf (dest, "%Lf\n%d\n%Lf\n", &sys.precision, &sys.nactive, &sys.G);
+		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys.stime.year, &sys.stime.day, &sys.stime.hour, &sys.stime.min, &sys.stime.sec, &sys.stime.millisec);
+		//alloc memory
+		sys.nalloc = sys.nactive;
+		do{
+			sys.o = (tobj *) malloc (sizeof(tobj) * sys.nalloc);
+			if (sys.o != NULL)
+				break;
+			OPSML(inf, "LoadSystem");
+		}
+		while(1);
+		//fscanf for objects datas
+		for(i=0; i!=sys.nactive; i++) {
+			ScanFString(sys.o[i].name, dest);
+			ScanFString(path, dest);
+			fscanf(dest, "%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys.o[i].radius, &sys.o[i].mass, &sys.o[i].x, &sys.o[i].y, &sys.o[i].z, &sys.o[i].velx, &sys.o[i].vely, &sys.o[i].velz);
+			sys.o[i].type = typeSearchName(Stype, path);
+		}
+		
+		sys.Stype = Stype;
+		
+		return &sys;
+	}
 	
 	/***
 	 * This function reset a object

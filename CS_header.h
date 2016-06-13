@@ -46,7 +46,7 @@
 	ttime Wait(ttime *, tinf *, long double *);
 	int Menu(tinf *);
 	int OPSo (tsys *, tinf *);
-	ttime Parser( tsys *, tinf *);
+	ttime Parser(tsys *, tinf *);
 	void Reask(tinf *, char *);
 	void SaveSys(tsys *sys, tinf *inf);
 	void Create(tsys *, tinf *);

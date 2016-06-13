@@ -2,13 +2,13 @@
 CSpace: the pure C space's simulator
 
 This program is a simulator. I don't decided if is a game or a 'professional' simulator or both of two yet.
-The program simulates the moving, under the phisic's law, of planets, spaceships, suns, or something else.
+The program simulates the moving, under the phisic's law, of planets, spaceships, suns, and everything else.
 
 for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
 Elsewhere, you can compile the program easily whit "gcc -lm -Wall -o -g main.c destination_file" in the master directory.
-You are encouraged of start use and test this program.
+You are encouraged enjoy and test this program.
 
 Status
 ------

@@ -77,6 +77,7 @@
 			// save
 			else if (strcmp("save", input) == 0) {
 				SaveSys(sys, inf);
+				OPS(inf, "Insert a new command", NULL, NULL);
 				continue;
 			}
 			// wrong command
