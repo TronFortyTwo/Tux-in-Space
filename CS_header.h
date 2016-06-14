@@ -33,7 +33,8 @@
 	#include <math.h>
 	#include <time.h>
 	
-// Prototype of some function called from everywhere
+// Prototypes
+	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *sys, char *name);
 	tobj CreateObject (tStype *, char *, ttype *, long double, long double, long double, long double, long double, long double, long double, long double);
 	void Info(tsys *sys, tinf *inf);

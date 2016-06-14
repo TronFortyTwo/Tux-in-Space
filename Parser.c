@@ -74,6 +74,11 @@
 				OPSo(sys, inf);
 				continue;
 			}
+			// quit / exit
+			else if ((strcmp("quit", input) == 0) || (strcmp("exit", input) == 0)) {
+				t = Quit(sys, inf, &sys->stime);
+				break;
+			}
 			// save
 			else if (strcmp("save", input) == 0) {
 				SaveSys(sys, inf);
@@ -103,7 +108,32 @@
 	}
 	
 	/***
-	 * Shows functions
+	 * This function prepare the parser to quit
+	 */
+	ttime Quit (tsys *sys, tinf *inf, ttime *now){
+		
+		ttime t;	 	//this is the escape time
+		char input[2];		
+		//ask for confirm to quit
+		OPS(inf, "CSPACE\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", NULL, NULL);
+		scanf("%s", input);
+		//if doesn't want to quit return now
+		if (input[0] == 'n')
+			return *now;
+		if (input[0] == 's')
+			SaveSys(sys, inf);
+		else if (input[0] != 'y') {
+			OPS(inf, "Unrecognized input! please insert y/n/s\n\ninsert a new command:", NULL, NULL);
+			return *now;
+		}
+		// now we prepare the quit event
+		t = *now;
+		t.year = QUITSIGNAL;		// <------ THIS IS THE SIGNAL THAT WE WANT TO QUIT
+		return t;
+	}
+	
+	/***
+	 * Info about the system and the objects
 	 */
 	void Info(tsys *sys, tinf *inf) {
 	

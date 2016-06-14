@@ -55,6 +55,9 @@
 			}
 			// call the instruction parser
 			stime = Parser(sys, inf);
+			//check if the user want to exit
+			if(stime.year == QUITSIGNAL)
+				break;
 			// call the phisic motor how many times as Parser asks
 			do {
 				if(GetBiggerStime(&stime, &sys->stime) == 1)
@@ -67,7 +70,7 @@
 		}
 		while(1);
 
-		//delete the system created
+		//delete the system
 		free(sys);
 
 		return;

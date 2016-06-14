@@ -102,6 +102,8 @@
 
 	int main (int argc, char *argv[]) {
 		
+		// INITIALIZATION
+		
 		// definition of the structures
 		tinf inf;
 		tStype *Stype;
@@ -133,15 +135,21 @@
 			fclose(Ftype);
 		}
 		else {
-			OPSE(&inf, "Can't open type.typ file whit definition of object's type\nPress a button to exit the program", 0, 0);
+			OPSE(&inf, "Can't open the file type.typ conteiner of the definitions of object's types\nPress a button to exit the program", 0, 0);
 			scanf("%s", input);
 			return 0;
 		}
 
-		// call the shell
-		Shell (&inf, Stype);
+		// RUNNING THE PROGRAM
+		do{
+			// call the shell
+			Shell (&inf, Stype);
+		}
+		while(1);
 		
-		//free the memory
+		// EXITING
+		
+		// free the memory
 		free(Stype);
 		
 		return 0;

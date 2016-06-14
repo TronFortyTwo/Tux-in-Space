@@ -23,6 +23,9 @@
  */
 	#define PI (245850922/78256779)
 	
+	// The value that the variable year assumes if the user want to quit
+	#define QUITSIGNAL -3
+	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 32
 	
@@ -43,9 +46,9 @@
 	
 	// The frame that Rmotor uses and his size
 	#define FRAME "# "
-	#define FRAMER " #"		//FRAME R(ight)
-	#define FRAMELUN 2
-	#define TWOFRAMELUN 4
+	#define FRAMER " #"		// FRAME R(ight)
+	#define FRAMELUN 2		// FRAME LENGHT
+	#define TWOFRAMELUN 4	// 2 * FRAME LENGHT
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 
