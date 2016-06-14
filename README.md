@@ -12,7 +12,4 @@ You are encouraged enjoy and test this program.
 
 Status
 ------
-The program is in pre-alpha status: this mean that the code is far from being complete.
-
-Future version:  
-ALPHA 1: this version will be released when the program has a scheleton of all its principal component
+The program is in alpha status: this mean that the code is far away from being complete, but is alredy **usable**, even whit many bugs and ugly things
