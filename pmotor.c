@@ -21,9 +21,9 @@
  *This is the motor that emules the phisic law
  * 
  * Now the side effect that this function generated on struct obj are caused by:
- *		-Gravity force
- * 		-Inertia of mass
- *		-impacts beetween them (working on)
+ *		- Gravity force
+ * 		- Inertia of mass
+ *		- impacts beetween them
  */
 
 	void Pmotor (tsys *sys, tinf *inf) {
@@ -36,12 +36,10 @@
 		long double f, fx, fy, fz;
 		// the aceleration
 		long double ax, ay, az;
-		// Gravity force
-		// a loop that operate var active for all the active objects
+		
+		// GRAVITY
 		for(i=0; i!=sys->nactive; i++) {
-			for (l=0; l!= sys->nactive; l++) {
-				if(l == i)
-					continue;
+			for (l=i+1; l!=sys->nactive; l++) {
 				// calculate the axis' distance
 				distx = sys->o[i].x - sys->o[l].x;
 				disty = sys->o[i].y - sys->o[l].y;
@@ -57,17 +55,41 @@
 				fx = f * distx / dist;		// fx : f = distx : dist
 				fy = f * disty / dist;
 				fz = f * distz / dist;
-				// the aceleration (F = m * a -> a = F / m)
+				// the aceleration for i(F = m * a -> a = F / m)
 				ax = - fx / sys->o[i].mass;
 				ay = - fy / sys->o[i].mass;
 				az = - fz / sys->o[i].mass;
-				// update the velocity (V = V + a * t)
+				// update the velocity of i(V = V + a * t)
 				sys->o[i].velx = sys->o[i].velx + ax * sys->precision;
 				sys->o[i].vely = sys->o[i].vely + ay * sys->precision;
 				sys->o[i].velz = sys->o[i].velz + az * sys->precision;
+				// the aceleration for l(F = m * a -> a = F / m)
+				ax = - fx / sys->o[l].mass;
+				ay = - fy / sys->o[l].mass;
+				az = - fz / sys->o[l].mass;
+				// update the velocity of l(V = V + a * t)
+				sys->o[l].velx = sys->o[l].velx + ax * sys->precision;
+				sys->o[l].vely = sys->o[l].vely + ay * sys->precision;
+				sys->o[l].velz = sys->o[l].velz + az * sys->precision;
 			}
 		}
-		// move the objects
+		// IMPACTS (Will be going very complex, this is only a base)
+		for(i=0; i!=sys->nactive; i++) {
+			for (l=i+1; l!=sys->nactive; l++) {
+				// calculate the axis' distance
+				distx = sys->o[i].x - sys->o[l].x;
+				disty = sys->o[i].y - sys->o[l].y;
+				distz = sys->o[i].z - sys->o[l].z;
+				// calculate the distance whit pitagora
+				dist = sqrtl (distx*distx + disty*disty);
+				dist = sqrtl (distz*distz + dist*dist);
+				// if doesn't hit continue
+				if (sys->o[i].radius + sys->o[l].radius < dist);
+					continue;
+				printf("Hit event between %s and %s\n", sys->o[i].name, sys->o[l].name);
+			}
+		}
+		// INERTIA
 		for (i=0; i!=sys->nactive; i++) {
 			sys->o[i].x = sys->o[i].x + sys->o[i].velx * sys->precision;
 			sys->o[i].y = sys->o[i].y + sys->o[i].vely * sys->precision;

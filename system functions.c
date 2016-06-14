@@ -402,7 +402,6 @@
 					break;
 			}
 			while(1);
-		while(1);
 		char path[NAMELUN+12];	// the file of the system
 		FILE *dest;				// the file of the system
 		int i;					// counter

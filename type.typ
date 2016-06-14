@@ -46,6 +46,10 @@ Contact binary
 Descriptions coming soon
 Small body
 
+Debris
+Debrises are spacecraft remaining, stages used and discarded that often travel in the spaces freely
+Spacecraft
+
 Dwarf planet
 Descriptions coming soon
 Minor planet

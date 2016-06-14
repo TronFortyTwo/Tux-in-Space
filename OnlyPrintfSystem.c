@@ -173,7 +173,7 @@
 		
 		char i[2];	//(i)nput
 		
-		printf ("\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		printf ("\n\n\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
 		scanf("%s", i);
 		
 		return;
