@@ -23,7 +23,7 @@
  * 
  */
 	
-	void Shell (tinf *inf, tStype *Stype) {
+	int Shell (tinf *inf, tStype *Stype) {
 
 		// Retruning value from the function
 		int staterec;
@@ -38,8 +38,10 @@
 			// If the menù answered 0 the program initialize the system as new
 			if (staterec == 0)
 				sys = InitSystem(inf, Stype);
-			if (staterec == 1)
+			else if (staterec == 1)
 				sys = LoadSystem(inf, Stype);
+			else if (staterec == QUITSIGNAL)		//there is no need to free(sys) like below because sys here isn't allocated yet
+				return QUITSIGNAL;
 			if (sys != NULL)
 				break;
 		}
@@ -73,5 +75,5 @@
 		//delete the system
 		free(sys);
 
-		return;
+		return 0;
 	}

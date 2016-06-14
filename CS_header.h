@@ -53,7 +53,7 @@
 	void Create(tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);
 	void Pmotor (tsys *, tinf *inf);
-	void Shell (tinf *, tStype *);
+	int Shell (tinf *, tStype *);
 	void SafeIScan(tinf *inf, int *dest);
 	void PrintLine (tinf *inf, char character[], int);
 	void ScanFString(char *dest, FILE *stream);	

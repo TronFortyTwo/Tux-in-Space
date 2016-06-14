@@ -143,14 +143,15 @@
 		// RUNNING THE PROGRAM
 		do{
 			// call the shell
-			Shell (&inf, Stype);
+			if (Shell (&inf, Stype) == QUITSIGNAL)
+				break;
 		}
 		while(1);
 		
 		// EXITING
 		
-		// free the memory
-		free(Stype);
+		// goodbye message
+		OPS (&inf, "CSPACE\n\n\n\n\n___________SEE YOU LATER!", NULL, NULL);
 		
 		return 0;
 	}
