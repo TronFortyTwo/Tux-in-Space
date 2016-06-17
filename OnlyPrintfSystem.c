@@ -81,6 +81,12 @@
 				}
 				chardone++;
 			}
+			// the % character (%%)
+			else if(phrase[chardone] == '%'){
+				chardone++;
+				buf[bufpos] = '%';
+				bufpos++;
+			} 
 		}
 		// a normal character
 		else if(phrase[chardone] != '\0') {
