@@ -53,6 +53,9 @@
 				inputandothers = inf->numprecision;
 				OPS (inf, "New number of number's decimal printed (now %i):", &inputandothers, NULL);
 				SafeIScan(inf, &inf->numprecision);
+				OPS (inf, "Output mode:\n1)Only OnlyPrintfSystem based\n&tdThis option allow only textual output whitout any image but is fast and nice\n&t02)ASCII AIB (PRE-ALPHA!!)\n&tdThe Abstract Image Builde option allow images and a GUI but using a terminal interface. For now is unusable", NULL, NULL);
+				SafeIScan(inf, &inf->vmode);
+				inf->vmode--;
 			}
 			// if information printf the license
 			else if(inputandothers == 4){

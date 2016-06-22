@@ -31,8 +31,6 @@
 		return;
 	}
 
-
-
 /*** PrintLine is a function that printf a line of characters
  * 	can be setted a number num of character that don't be printed
  *	*/
