@@ -23,8 +23,11 @@
  */
 	#define PI (245850922/78256779)
 	
-	// The value that the variable year assumes if the user want to quit
-	#define QUITSIGNAL -3
+	// The number of space when a description
+	#define THEETDESCR 5
+	
+	// The value that the variable ttime.year assumes if the user want to quit
+	#define QUITSIGNAL -1
 	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 32

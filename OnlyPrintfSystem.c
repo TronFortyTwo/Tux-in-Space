@@ -138,7 +138,7 @@
 				//if is a (t)heet directive
 				else if(buf[bufpos] == 't') {
 					bufpos++;
-					//scan the new number (max one digit)
+					// scan the new number (max one digit)
 					if (buf[bufpos] == '0') theet=0;
 					else if (buf[bufpos] == '1') theet=1;
 					else if (buf[bufpos] == '2') theet=2;
@@ -149,6 +149,8 @@
 					else if (buf[bufpos] == '7') theet=7;
 					else if (buf[bufpos] == '8') theet=8;
 					else if (buf[bufpos] == '9') theet=9;
+					// or scan a letter whit a meaning 
+					else if (buf[bufpos] == 'd') theet = THEETDESCR;	//for a description
 				}
 				bufpos++;
 			}

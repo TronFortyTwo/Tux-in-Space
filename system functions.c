@@ -38,7 +38,7 @@
 		}
 		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\n\n\nDo you want to load a saved object?\nDigit the name of the object you want to load or 'n' if you want to create a new object.\n");
+		strcat (reffub, "\n\n\nDo you want to load a saved object?\n&tdDigit the name of the object you want to load or 'n' if you want to create a new object.");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
 		// if the user want to load an object
@@ -76,7 +76,7 @@
 			// some space and ask about the name
 			strcat (buffer, "\n\n\nname:    ");
 			strcpy (reffub, buffer);
-			strcat (reffub, "\nThe name of the object must be of a maximum of %i characters and spaces are not allowed");
+			strcat (reffub, "\n&tdThe name of the object must be of a maximum of %i characters and spaces are not allowed");
 			ivar[ipos] = NAMELUN-1;
 			OPS(inf, reffub, ivar, lvar);
 			scanf("%s", obj->name);
@@ -242,7 +242,7 @@
 		c = NAMELUN-1;
 		strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
 		strcpy(dbuf, sbuf);
-		strcat(dbuf, " of the system:\n    Isn't allowed any spaces and can be of a maximum of %i characters");
+		strcat(dbuf, " of the system:\n&tdIsn't allowed any spaces and can be of a maximum of %i characters");
 		OPS (inf, dbuf, &c, 0);
 		scanf("%s", sys->name);
 		strcat(sbuf, ":    ");
@@ -250,7 +250,7 @@
 		//ask for the precision
 		strcat(sbuf, "\n\nprecision");
 		strcpy(dbuf, sbuf);
-		strcat(dbuf, " of the simulation:\n    Means how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
+		strcat(dbuf, " of the simulation:\n&tdMeans how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
 		OPS (inf, dbuf, 0, 0);
 		scanf("%Lf", &sys->precision);
 		strcat(sbuf, ":    %l\n\n\n");
