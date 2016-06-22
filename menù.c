@@ -30,7 +30,7 @@
 		for(;;) {
 		
 			//Principal menù, first screen	
-			OPS(inf, "|   CSPACE: The space's simulator\n\n\n1) New system\n2) Load system\n\n3) Settings\n4) Information\n\n5) Quit", NULL, NULL);
+			OPS(inf, "&t5CSPACE: The space's simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) Information\n\n5) Quit", NULL, NULL);
 			SafeIScan(inf, &inputandothers);
 			fflush(stdin);
 			

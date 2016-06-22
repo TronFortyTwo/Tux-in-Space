@@ -34,13 +34,17 @@
 	
 	//loop counter
 	int i;
-	// the number of lines alredy printfed
+	// counter for lines
 	int linedone;
-	// the number of character in a line alredy printfed
+	// counter for columns
 	int columndone;
-	// the number of character of phrase printed
+	// the number of character of phrase elaborated
 	int chardone;
-	// the position in the arrays
+	// the number of space to leave blank at the start of every line (max one digit)
+	int theet = 0;
+	// one if the buf is finished
+	int bufend = 0;
+	// the position in the int and long double arrays
 	int ipos=0;
 	int lpos=0;
 	// the buffer to print, his size and position
@@ -57,7 +61,7 @@
 	//OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
 	for(chardone=0; bufpos!=size-1;) {
 		
-		//dinamic printing!
+		//dinamic printing! (character that mean other character, here translated)
 		if(phrase[chardone] == '%') {
 			chardone++;
 			//an int value to print
@@ -72,7 +76,7 @@
 				lpos++;
 				chardone++;
 			}
-			//a line to print
+			//a line to print , f mean '(f)inish line' | example: %f. => a line of '.', but whitout '\n'
 			else if(phrase[chardone] == 'f') {
 				chardone++;
 				for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
@@ -82,11 +86,11 @@
 				chardone++;
 			}
 			// the % character (%%)
-			else if(phrase[chardone] == '%'){
+			else if(phrase[chardone] == '%' ){
 				chardone++;
 				buf[bufpos] = '%';
 				bufpos++;
-			} 
+			}
 		}
 		// a normal character
 		else if(phrase[chardone] != '\0') {
@@ -96,8 +100,11 @@
 		}
 		//end of string
 		else {
-			buf[bufpos] = ' ';
+			//put in the buffer the END directive (&e) and exit
+			buf[bufpos] = '&';
 			bufpos++;
+			buf[bufpos] = 'e';
+			break;
 		}
 	}
 	
@@ -115,20 +122,59 @@
 		printf("%s", FRAME);
 		//print the buf
 		for(columndone=0; columndone!=inf->width-TWOFRAMELUN; columndone++) {
-			//a space in the first column is ignored
-			if (buf[bufpos] == ' ')
-				if(columndone == 0) {
+			
+			// PART ONE: check for directives. a directive started whit '&'
+			if (buf[bufpos] == '&') {
+				bufpos++;
+				//if is the '&' character
+				if(buf[bufpos] == '&') {
+					printf("&");
 					bufpos++;
 				}
-			//a normal character
-			if (buf[bufpos] != '\n') {
+				//if is the (e)nd directive
+				else if(buf[bufpos] == 'e') {
+					bufend++;
+				} 
+				//if is a (t)heet directive
+				else if(buf[bufpos] == 't') {
+					bufpos++;
+					//scan the new number (max one digit)
+					if (buf[bufpos] == '0') theet=0;
+					else if (buf[bufpos] == '1') theet=1;
+					else if (buf[bufpos] == '2') theet=2;
+					else if (buf[bufpos] == '3') theet=3;
+					else if (buf[bufpos] == '4') theet=4;
+					else if (buf[bufpos] == '5') theet=5;
+					else if (buf[bufpos] == '6') theet=6;
+					else if (buf[bufpos] == '7') theet=7;
+					else if (buf[bufpos] == '8') theet=8;
+					else if (buf[bufpos] == '9') theet=9;
+				}
+				bufpos++;
+			}
+			
+			// PART TWO: print the buffer
+			// if the buffer is finished print only spaces
+			if (bufend == 1)
+				printf(" ");
+			// print the number of spaces conteined in theet if at the start of the line
+			else if (columndone < theet)
+				printf(" ");
+			// a space in the first column is ignored (calculating that the first column can have )
+			else if ((columndone == theet) && (buf[bufpos] == ' ')) {
+				bufpos++;
+				columndone--;
+			}
+			// a normal character
+			else if (buf[bufpos] != '\n') {
 				printf("%c", buf[bufpos]);
 				bufpos++;
 			}
-			//a '\n' character
+			// a '\n' character
 			else {
 				PrintLine(inf, " ", columndone+TWOFRAMELUN);
 				bufpos++;
+				// if there isn't space for more line
 				if(linedone < inf->height-5) {
 					linedone++;
 					printf("%s\n%s", FRAMER, FRAME);

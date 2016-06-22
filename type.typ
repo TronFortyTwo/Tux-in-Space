@@ -1,5 +1,5 @@
 Artificial object
-The product of an intentional human manufacture, often are build whit metals
+The product of an intentional human manufacture, often buildt whit metals
 NULL
 
 Asteroid
@@ -23,7 +23,7 @@ A carbon planet is a planet that contein much carbon, and a minor quantity of ox
 Planet
 
 Cataclysmic variable star
-Descriptions coming soon
+Description coming soon
 Star
 
 Celestial object
@@ -35,15 +35,15 @@ A chtonian planet is an hypotetical planet generated from the stripping away (hy
 Planet
 
 Comet
-Descriptions coming soon
+Description coming soon
 Small body
 
 Compact star
-Descriptions coming soon
+Description coming soon
 Star
 
 Contact binary
-Descriptions coming soon
+Description coming soon
 Small body
 
 Debris
@@ -51,15 +51,15 @@ Debrises are spacecraft remaining, stages used and discarded that often travel i
 Spacecraft
 
 Dwarf planet
-Descriptions coming soon
+Description coming soon
 Minor planet
 
 Earth analog
-Descriptions coming soon
+An Earth analog is a terrestrial planet whit characteristich much similar to the Earth's characteristics
 Terrestrial planet
 
 Gas giant
-Descriptions coming soon
+Description coming soon
 Giant planet
 
 Generic object
@@ -67,7 +67,7 @@ We don't know the nature of a Generic object
 System
 
 Giant planet
-Descriptions coming soon
+Description coming soon
 Planet
 
 Helium planet
@@ -83,7 +83,7 @@ A Hot Neptune is a giant gas planet that is very similar to Neptune but is much 
 Gas giant
 
 Ice giant
-Descriptions coming soon
+Description coming soon
 Giant planet
 
 Iron planet
@@ -103,19 +103,19 @@ A Mega-Earth is a terrestrial planet ten or more times more massive than Earth, 
 Terrestrial planet
 
 Meteroid
-Descriptions coming soon
+Description coming soon
 Small body
 
 Micrometeroid
-Descriptions coming soon
+Description coming soon
 Meteroid
 
 Mini-Neptune
-Descriptions coming soon
+Description coming soon
 Planet
 
 Minor planet
-Descriptions coming soon
+Description coming soon
 Planet
 
 Minor-planet moon
@@ -123,7 +123,7 @@ Is a moon orbiting a minor planet
 Minor planet
 
 Neutron star
-Descriptions coming soon
+Description coming soon
 Compact star
 
 Not_initialized
@@ -131,7 +131,7 @@ When a object is allocated but not initialized yet
 System
 
 Ocean planet
-Descriptions coming soon
+Description coming soon
 Planet
 
 Planet
@@ -139,11 +139,11 @@ a planet is a celestial body that is rounded by its own gravity because is massi
 Celestial object
 
 Planetesimal
-Descriptions coming soon
+Description coming soon
 Small body
 
 Pulsar
-Descriptions coming soon
+Description coming soon
 Neutron star
 
 Rogue planet
@@ -151,7 +151,7 @@ A rogue planet is a planet that orbit the galaxy directly, whitout take part of 
 Planet
 
 Small body
-Descriptions coming soon
+Description coming soon
 Celestial object
 
 Spacecraft
@@ -163,11 +163,11 @@ Often winged, a spaceplane is a spacecraft designed only for manned flight. For 
 Spacecraft
 
 Star
-Descriptions coming soon
+Description coming soon
 Celestial object
 
 Sub-brown dwarf
-Descriptions coming soon
+Description coming soon
 Brown dwarf
 
 Super Earth
@@ -175,7 +175,7 @@ A super Earth is a terrestrial planet massive two to five Earth masses, more mas
 Planet
 
 Terrestrial planet
-Descriptions coming soon
+Description coming soon
 Planet
 
 Void
@@ -183,7 +183,7 @@ A void object isn't an object, is the type of an allocated object structure but 
 System
 
 White dwarf
-Descriptions coming soon
+Description coming soon
 Compact star
 
 END OF FILE

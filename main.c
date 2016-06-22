@@ -116,8 +116,8 @@
 		
 		// default things for struct inf are setted.
 		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 44;
-		inf.width = 180;
+		inf.height = 38;
+		inf.width = 60;
 		
 		//print that is loading
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);
@@ -151,7 +151,7 @@
 		// EXITING
 		
 		// goodbye message
-		OPS (&inf, "CSPACE\n\n\n\n\n___________SEE YOU LATER!", NULL, NULL);
+		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL, NULL);
 		
 		return 0;
 	}
