@@ -23,7 +23,7 @@
 		// object to load
 		FILE *objfile;
 		// array to give to Rmotor whit counters
-		int ivar[2];
+		int ivar[5];
 		int ipos = 0;
 		long double lvar[8];
 		int lpos=0;
@@ -54,10 +54,13 @@
 				InitObject(inf, obj, Stype, n);
 				return;
 			}
-			// Read name, type, mass and radius and close the file
+			// Read name, type, radius, mass and color, then close the file
 			ScanFString(obj->name, objfile);
 			ScanFString(input, objfile);
 			obj->type = typeSearchName(Stype, input);
+			fscanf(objfile, "%d", &obj->color.red);
+			fscanf(objfile, "%d", &obj->color.green);
+			fscanf(objfile, "%d", &obj->color.blue);
 			fscanf(objfile, "%Lf", &obj->radius);
 			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
@@ -66,6 +69,13 @@
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
 			strcat(buffer, obj->type->name);
+			strcat(buffer, "\n\ncolor:  %i %i %i");
+			ivar[ipos] = obj->color.red;
+			ipos++;
+			ivar[ipos] = obj->color.green;
+			ipos++;
+			ivar[ipos] = obj->color.blue;
+			ipos++;
 			strcat(buffer, "\n\nradius:  %l");
 			lvar[lpos] = obj->radius;
 			lpos++;
@@ -85,8 +95,20 @@
 			obj->type = TypeBrowser(inf, Stype, "Let's choose the type of object for your new object");
 			strcat(buffer, "\n\ntype:    ");
 			strcat(buffer, obj->type->name);
+			//ask about the color
+			strcat(buffer, "\n\ncolor:  ");
+			strcpy(reffub, buffer);
+			strcat(reffub, "\n&tdThe color of the new object must be composed of three numbers whit value 0 to 255, the first is the red, the second the green and the third the blue");
+			OPS(inf, reffub, ivar, lvar);
+			obj->color = ScanColor(inf);
+			ivar[ipos] = obj->color.red;
+			ipos++;
+			ivar[ipos] = obj->color.green;
+			ipos++;
+			ivar[ipos] = obj->color.blue;
+			ipos++;
 			// ask about the radius
-			strcat(buffer, "\n\nradius:  ");
+			strcat(buffer, " %i %i %i \n\nradius:  ");
 			strcpy(reffub, buffer);
 			strcat(reffub, " (Km)");
 			OPS(inf, reffub, ivar, lvar);
@@ -167,7 +189,7 @@
 			InitObject(inf, obj, Stype, n);
 		return;
 	}
-
+ 
 /***
  * The SaveObject function save a object in a file
  */
@@ -195,7 +217,7 @@
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%s\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->radius ,obj->mass);
+		fprintf(dest, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->color.red, obj->color.green, obj->color.blue,  obj->radius ,obj->mass);
 		fclose(dest);
 	
 		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
@@ -377,7 +399,7 @@
 		fprintf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
 		// write the system's object's datas
 		for(i=0; i!=sys->nactive; i++) {
-			fprintf(dest, "%s\n%s\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", sys->o[i].name, sys->o[i].type->name, sys->o[i].radius ,sys->o[i].mass ,sys->o[i].x ,sys->o[i].y ,sys->o[i].z ,sys->o[i].velx ,sys->o[i].vely ,sys->o[i].velz);
+			fprintf(dest, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", sys->o[i].name, sys->o[i].type->name, sys->o[i].color.red, sys->o[i].color.green, sys->o[i].color.blue, sys->o[i].radius ,sys->o[i].mass ,sys->o[i].x ,sys->o[i].y ,sys->o[i].z ,sys->o[i].velx ,sys->o[i].vely ,sys->o[i].velz);
 		}
 		fclose(dest);
 	
@@ -436,7 +458,7 @@
 		for(i=0; i!=sys->nactive; i++) {
 			ScanFString(sys->o[i].name, dest);
 			ScanFString(path, dest);
-			fscanf(dest, "%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
+			fscanf(dest, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].color.red, &sys->o[i].color.green, &sys->o[i].color.blue, &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
 			sys->o[i].type = typeSearchName(Stype, path);
 		}
 		
@@ -457,11 +479,12 @@
 	/***
 	 * The function CreateObject creates and return a new object from argurment given
 	 */
-	tobj CreateObject (tStype *Stype, char * name, ttype * type, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {
+	tobj CreateObject (tStype *Stype, char * name, ttype * type, tcolor color, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {
 		//the new object
 		tobj obj;
 		strcpy(obj.name, name);
 		obj.type = type;
+		obj.color = color;
 		obj.mass = mass;
 		obj.radius = radius;
 		obj.x = x;

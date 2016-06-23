@@ -21,8 +21,8 @@
 /***
  * This is CSpace's header file
  * 
- * Contein even the definition of constants
  */
+
 
 // External standard library
 	#include <stdint.h>
@@ -36,7 +36,7 @@
 // Prototypes
 	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *sys, char *name);
-	tobj CreateObject (tStype *, char *, ttype *, long double, long double, long double, long double, long double, long double, long double, long double);
+	tobj CreateObject (tStype *, char *, ttype *,tcolor , long double, long double, long double, long double, long double, long double, long double, long double);
 	void Info(tsys *sys, tinf *inf);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *stime);
@@ -69,6 +69,7 @@
  
 	
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
+	#include "color.c"
 	#include "AIB.c"
 	#include "string functions.c"
 	#include "type.c"

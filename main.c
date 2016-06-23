@@ -67,6 +67,7 @@
 		long double velx;		// the fast of the movement in x
 		long double vely;		// the fast of the movement in y
 		long double velz;		// the fast of the movement in z
+		tcolor color;			// the color
 	};
 	typedef struct object tobj;
 	

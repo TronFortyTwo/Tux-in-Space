@@ -22,41 +22,73 @@
  * The aim for now is to create a function parallel to OPSo but whit a GUI
  * 
  */
- 
+	//this are the code that refer to a template (see template.which)
+	#define TEMPLATE_IRREGULAR 0
+	#define TEMPLATE_POINT 1
+	#define TEMPLATE_CIRCLE 2
+	
 	//this structure contein a circle
-	struct circle {
+	struct Circle {
 		double radius;	//the radius of the circle
 	};
-	typedef struct circle tcircle;
+	typedef struct Circle tcircle;
 	
 	//this structure contein the template of a irregular sprite
-	struct irregular {
+	struct Irregular {
 		// Not supported for now
 	};
-	typedef struct irregular tirregular;
+	typedef struct Irregular tirregular;
 	
 	//this union contein data about the tamplate of a sprite. there are the templates of mean template (like a circle) and a irregular template
-	union template {
+	union Template {
 		tcircle circle;
 		tirregular iregg;
-		int template;		//define which template is used
+		int which;		//define which template is used
+						//if is TEMPLATE_POINT, there's no need to a structure because point haven't any data to store
 	};
-	typedef union template ttemplate;
+	typedef union Template ttemplate;
 	
 	//this struct contein data about a sprite
-	struct sprite {
+	struct Sprite {
 		double x;
 		double y;		// coordinates
 		double z;
 		double deep;	// the deep of the sprite; deepest sprites are covered by nearest.
-		ttemplate tamplate;
+		ttemplate template;
 	};
-	typedef struct sprite tsprite;
+	typedef struct Sprite tsprite;
 	
 	// The structure that contein an image
-	struct image {
-		int background;		// background color
+	struct Image {
+		tcolor background;	// background color (256 colors max for now)
 		tsprite *sprite;	// pointer to the sprites
 		int nsprite;		// the number of sprites
 	};
-	typedef struct image timage;
+	typedef struct Image timage;
+
+	/** 
+	 * the function AIB that draw in an image structure what happen in the system structure given
+	 * (Abstract Image Builder)
+	 */
+	timage AIB (tsys *sys, tinf *inf) {
+		
+		timage image;	//the image
+		int i;			//counter for loops
+		
+		// set the background black (we are in the space)
+		image.background = Color_black();
+		// set the number of frame
+		image.nsprite = sys->nactive;
+		// alloc spaces for the sprites and check for correct allocation
+		image.sprite = (tsprite *) malloc (sizeof(tsprite) * image.nsprite);
+		do{	if (image.sprite != NULL)	break;
+			OPSML(inf, "AIB");
+			image.sprite = (tsprite *) malloc (sizeof(tsprite) * image.nsprite);
+		} while(1);
+	
+		for (i=0; i!=sys->nactive; i++) {
+			
+		}
+
+		return image;
+	}

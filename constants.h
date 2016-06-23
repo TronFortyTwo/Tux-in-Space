@@ -21,6 +21,15 @@
  * In this file there are all the constant (#define)
  * 
  */
+	
+	//define the type that we use as color
+	struct scolor{
+		int red;
+		int green;
+		int blue;
+	};
+	typedef struct scolor tcolor;
+
 	#define PI (245850922/78256779)
 	
 	// The number of space when a description

@@ -139,14 +139,15 @@
 	
 		char buffer[BUFFERSIZE];
 		tobj *obj;
-		long double c[8];
+		long double lc[8];
+		int ic[3];
 
 		strcpy(buffer, "INFO\n\nSystem ");
 		strcat(buffer, sys->name);
-		strcat(buffer, " whit %i object\n\nOf which object do you want informations? press 0 to quit");
+		strcat(buffer, " whit %i objects\n\nOf which object do you want informations? press 'n' to quit");
 		OPS(inf, buffer, &sys->nactive, NULL);
 		scanf("%s", buffer);
-		if(strcmp(buffer, "0") == 0){
+		if(strcmp(buffer, "n") == 0){
 			OPS(inf, "Insert a new command", NULL, NULL);
 			return;
 		}
@@ -160,16 +161,19 @@
 		strcat (buffer, obj->name);
 		strcat (buffer, "\n\ntype: ");
 		strcat (buffer, obj->type->name);
-		strcat (buffer, "\n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:");
-		c[0] = obj->mass;
-		c[1] = obj->radius;
-		c[2] = obj->x;
-		c[3] = obj->y;
-		c[4] = obj->z;
-		c[5] = obj->velx;
-		c[6] = obj->vely; 
-		c[7] = obj->velz; 
-		OPS(inf, buffer, NULL, c);
+		strcat (buffer, "\n\ncolor: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:");
+		ic[0] = obj->color.red;
+		ic[1] = obj->color.green;
+		ic[2] = obj->color.blue;
+		lc[0] = obj->mass;
+		lc[1] = obj->radius;
+		lc[2] = obj->x;
+		lc[3] = obj->y;
+		lc[4] = obj->z;
+		lc[5] = obj->velx;
+		lc[6] = obj->vely; 
+		lc[7] = obj->velz; 
+		OPS(inf, buffer, ic, lc);
 		scanf("%s", buffer);
 		return;
 	}
