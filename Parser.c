@@ -45,7 +45,7 @@
 			}
 			// the help
 			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n\ninsert a command:", NULL, NULL);
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-quit\n\ninsert a command:", NULL, NULL);
 				continue;
 			}
 			// jump

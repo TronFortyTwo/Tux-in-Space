@@ -51,6 +51,9 @@
 		int height;
 		// number of character used for printing the deciamal of a long double
 		int numprecision;
+		// information about the point of view (for AIB)
+		char viex_axis;
+		long double view_distance;
 	};
 	typedef struct info tinf;
 

@@ -84,7 +84,7 @@
 				dist = sqrtl (distx*distx + disty*disty);
 				dist = sqrtl (distz*distz + dist*dist);
 				// if doesn't hit continue
-				if (sys->o[i].radius + sys->o[l].radius < dist);
+				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
 				printf("Hit event between %s and %s\n", sys->o[i].name, sys->o[l].name);
 			}

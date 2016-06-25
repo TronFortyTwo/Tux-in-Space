@@ -73,6 +73,7 @@
 		while(1);
 
 		//delete the system
+		free(sys->o);
 		free(sys);
 
 		return 0;

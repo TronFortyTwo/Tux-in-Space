@@ -86,6 +86,8 @@
 			image.sprite = (tsprite *) malloc (sizeof(tsprite) * image.nsprite);
 		} while(1);
 	
+		//the view point is in an axis. Can be
+
 		for (i=0; i!=sys->nactive; i++) {
 			
 		}

@@ -37,6 +37,7 @@
  */
 	tcolor ScanColor(tinf *);
 	tcolor ScanColor(tinf *inf) {
+		
 		tcolor color;	//our color
 		//scan them and chek if the value given are true
 		scanf("%d", &color.red);
