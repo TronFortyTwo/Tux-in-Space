@@ -40,7 +40,7 @@
 				sys = InitSystem(inf, Stype);
 			else if (staterec == 1)
 				sys = LoadSystem(inf, Stype);
-			else if (staterec == QUITSIGNAL)		//there is no need to free(sys) like below because sys here isn't allocated yet
+			else if (staterec == QUITSIGNAL)		//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
 				return QUITSIGNAL;
 			if (sys != NULL)
 				break;

@@ -92,6 +92,11 @@
 				bufpos++;
 			}
 		}
+		// the bip character
+		else if(phrase[chardone] == '\a') {
+			printf("\a");	//bip the bip but don't transfer it to the second part
+			chardone++;
+		}
 		// a normal character
 		else if(phrase[chardone] != '\0') {
 			buf[bufpos] = phrase[chardone];

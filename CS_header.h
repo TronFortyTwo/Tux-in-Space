@@ -34,6 +34,7 @@
 	#include <time.h>
 	
 // Prototypes
+	void DeleteObject(tinf *, tsys *);
 	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *sys, char *name);
 	tobj CreateObject (tStype *, char *, ttype *,tcolor , long double, long double, long double, long double, long double, long double, long double, long double);
@@ -61,7 +62,6 @@
 	void InitObject (tinf *, tobj *, tStype *, int);
 	tsys *InitSystem (tinf *, tStype *);
 	void ReduceObjBuf(tsys *sys, tinf *inf);
-	void ResetObject(tStype *, tobj *);	
 	tStype *Inittype (FILE *, tinf *);
 	char *typeDescriptionFromName (tStype *, char *);
 	ttype *typeSearchName (tStype *, char *);

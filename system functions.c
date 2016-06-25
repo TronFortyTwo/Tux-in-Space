@@ -468,15 +468,6 @@
 	}
 	
 	/***
-	 * This function reset a object
-	 */
-	void ResetObject(tStype *Stype, tobj *obj) {
-		//reset !!!
-		obj->type = typeSearchName(Stype, "Void");
-		return;
-	}
-	
-	/***
 	 * The function CreateObject creates and return a new object from argurment given
 	 */
 	tobj CreateObject (tStype *Stype, char * name, ttype * type, tcolor color, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {

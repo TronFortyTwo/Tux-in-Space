@@ -45,7 +45,7 @@
 			}
 			// the help
 			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-quit\n\ninsert a command:", NULL, NULL);
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-quit\n-delete\n\ninsert a command:", NULL, NULL);
 				continue;
 			}
 			// jump
@@ -83,6 +83,11 @@
 			else if (strcmp("save", input) == 0) {
 				SaveSys(sys, inf);
 				OPS(inf, "Insert a new command", NULL, NULL);
+				continue;
+			}
+			// delete an object
+			else if ((strcmp("delete", input) == 0)||(strcmp("remove", input) == 0)) {
+				DeleteObject(inf, sys);
 				continue;
 			}
 			// wrong command
@@ -133,6 +138,41 @@
 	}
 	
 	/***
+	 * This function delete an object
+	 */
+	void DeleteObject(tinf *inf, tsys *sys) {
+		
+		char name[NAMELUN];	//the name of the object
+		tobj *obj;			//the pointer to the object
+		
+		//ask the user for the name
+		OPS(inf, "Which object do you want do delete?\n\n&t1Press 'n' to quit", NULL, NULL);
+		scanf("%s", name);
+		if (strcmp(name, "n") == 0){
+			OPS(inf, "Insert a new command", NULL, NULL);
+			return;
+		}
+		
+		//search the object
+		obj = SearchObject(sys, name);
+		if (obj == NULL) {	//if there isn't any object whit that name
+			OPSE(inf, "There isn't any object whit that name!\n\nInsert a new command", NULL, NULL);
+			return;
+		}
+		
+		//delete the object moving the last object in the position of this object, and, if needed resize the object buffer
+		*obj = sys->o[sys->nactive-1];
+		
+		sys->nactive--;
+		if (sys->nalloc - sys->nactive >= OBJBUFSIZE)
+			ReduceObjBuf(sys, inf);
+		
+		OPS(inf, "Insert a new command:", NULL, NULL);
+		
+		return;
+	}
+	
+	/***
 	 * Info about the system and the objects
 	 */
 	void Info(tsys *sys, tinf *inf) {
@@ -144,7 +184,7 @@
 
 		strcpy(buffer, "INFO\n\nSystem ");
 		strcat(buffer, sys->name);
-		strcat(buffer, " whit %i objects\n\nOf which object do you want informations? press 'n' to quit");
+		strcat(buffer, " whit %i objects\n\nOf which object do you want informations? press 'n' to not remove any object");
 		OPS(inf, buffer, &sys->nactive, NULL);
 		scanf("%s", buffer);
 		if(strcmp(buffer, "n") == 0){
