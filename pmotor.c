@@ -34,8 +34,6 @@
 		long double dist, distx, disty, distz;
 		// the force, and his ortogonal components
 		long double f, fx, fy, fz;
-		// the aceleration
-		long double ax, ay, az;
 		
 		// GRAVITY
 		for(i=0; i!=sys->nactive; i++) {
@@ -56,21 +54,15 @@
 				fy = f * disty / dist;
 				fz = f * distz / dist;
 				// the aceleration for i(F = m * a -> a = F / m)
-				ax = - fx / sys->o[i].mass;
-				ay = - fy / sys->o[i].mass;
-				az = - fz / sys->o[i].mass;
 				// update the velocity of i(V = V + a * t)
-				sys->o[i].velx = sys->o[i].velx + ax * sys->precision;
-				sys->o[i].vely = sys->o[i].vely + ay * sys->precision;
-				sys->o[i].velz = sys->o[i].velz + az * sys->precision;
+				sys->o[i].velx = sys->o[i].velx + (- fx / sys->o[i].mass) * sys->precision;
+				sys->o[i].vely = sys->o[i].vely + (- fy / sys->o[i].mass) * sys->precision;
+				sys->o[i].velz = sys->o[i].velz + (- fz / sys->o[i].mass) * sys->precision;
 				// the aceleration for l(F = m * a -> a = F / m)
-				ax = - fx / sys->o[l].mass;
-				ay = - fy / sys->o[l].mass;
-				az = - fz / sys->o[l].mass;
 				// update the velocity of l(V = V + a * t)
-				sys->o[l].velx = sys->o[l].velx + ax * sys->precision;
-				sys->o[l].vely = sys->o[l].vely + ay * sys->precision;
-				sys->o[l].velz = sys->o[l].velz + az * sys->precision;
+				sys->o[l].velx = sys->o[l].velx + (- fx / sys->o[l].mass) * sys->precision;
+				sys->o[l].vely = sys->o[l].vely + (- fy / sys->o[l].mass) * sys->precision;
+				sys->o[l].velz = sys->o[l].velz + (- fz / sys->o[l].mass) * sys->precision;
 			}
 		}
 		// IMPACTS (Will be going very complex, this is only a base)
