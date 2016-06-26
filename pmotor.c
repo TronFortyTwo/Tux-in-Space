@@ -72,8 +72,8 @@
 		//counters
 		int i,l;
 		
-		for(i=0; i!=sys->nactive; i++) {
-			for (l=i+1; l!=sys->nactive; l++) {	
+		for(i=0; i < sys->nactive; i++) {
+			for (l=i+1; l < sys->nactive; l++) {	
 				// calculate the axis' distance
 				distx = sys->o[i].x - sys->o[l].x;
 				disty = sys->o[i].y - sys->o[l].y;
@@ -125,8 +125,8 @@
 		//the new object
 		tobj newobj;
 		
-		for(i=0; i!=sys->nactive; i++) {
-			for (l=i+1; l!=sys->nactive; l++) {
+		for(i=0; i < sys->nactive; i++) {
+			for (l=i+1; l < sys->nactive; l++) {
 				// calculate the axis' distance
 				distx = sys->o[i].x - sys->o[l].x;
 				disty = sys->o[i].y - sys->o[l].y;
@@ -137,6 +137,7 @@
 				// if doesn't hit continue
 				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
+			
 				// an object is bigger if has mass AND radius much bigger, else make the bigger a random one, but whit advantages (see below at the else)
 				if ((sys->o[i].mass > sys->o[l].mass*BIGGER_TOLERANCE) && (sys->o[i].radius > sys->o[l].radius*BIGGER_TOLERANCE))
 					bigger = i;
@@ -181,7 +182,7 @@
 				newobj.velz = ((sys->o[i].velz * sys->o[i].mass) + (sys->o[l].velz * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
 				// to calculate the radius we calculate the volum of the two object, we sum the two and we get the radius of the new volume  V = (4/3) r3 * PI ||| r3 = V * 3/(4*PI)
 				newobj.radius = pow(((4/3 * powl(sys->o[i].radius, 3) * PI) + (4/3 * powl(sys->o[i].radius, 3) * PI)) * 3 / (4 * PI), 1/3);
-				
+					
 				//write the new object in the place of i
 				sys->o[i] = newobj;
 				//move the last object in the place of l
@@ -190,6 +191,7 @@
 				sys->nactive--;
 				if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 					ReduceObjBuf(sys, inf);
+				
 			}
 		}
 		return;
