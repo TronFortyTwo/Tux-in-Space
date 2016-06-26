@@ -214,7 +214,6 @@
 		lc[6] = obj->vely; 
 		lc[7] = obj->velz; 
 		OPS(inf, buffer, ic, lc);
-		scanf("%s", buffer);
 		return;
 	}
 	

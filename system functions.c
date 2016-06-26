@@ -348,9 +348,12 @@
 			if(newo != NULL)
 				break;
 			else {
-				OPSML(inf, "ExtendObjBuf");
-				newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
-			}	
+				do{
+					OPSML(inf, "ExtendObjBuf");
+					newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
+				}
+				while(newo == NULL);
+			}
 		}
 		while(1);
 		// copy what is stored in the old buffer in the new buffer
@@ -467,25 +470,6 @@
 		return sys;
 	}
 	
-	/***
-	 * The function CreateObject creates and return a new object from argurment given
-	 */
-	tobj CreateObject (tStype *Stype, char * name, ttype * type, tcolor color, long double mass, long double radius, long double x, long double y, long double z, long double velx, long double vely, long double velz) {
-		//the new object
-		tobj obj;
-		strcpy(obj.name, name);
-		obj.type = type;
-		obj.color = color;
-		obj.mass = mass;
-		obj.radius = radius;
-		obj.x = x;
-		obj.y = y;
-		obj.z = z;
-		obj.velx = velx;
-		obj.vely = vely;
-		obj.velz = velz;
-		return obj;
-	}
 	
 	/***
 	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
