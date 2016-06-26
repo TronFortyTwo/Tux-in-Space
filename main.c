@@ -28,12 +28,12 @@
 	
 	
 	// The structure that represent a type of a object
-	struct zStype {
+	struct sStype {
 		char name [NAMELUN];
 		char description [DESCRIPTIONSIZE];
 		char parent [NAMELUN];
 	};
-	typedef struct zStype ttype;
+	typedef struct sStype ttype;
 	
 	// The structure whit all the types
 	struct TypesStruct {
@@ -156,6 +156,9 @@
 		
 		// goodbye message
 		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL, NULL);
+		
+		//free the memory
+		free(Stype->type);
 		
 		return 0;
 	}

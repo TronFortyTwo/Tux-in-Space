@@ -25,62 +25,22 @@
  * 		- Inertia of mass
  *		- impacts beetween them
  */
+ 
+	///prototypes of the phisic related functions
+	void Gravity(tsys *);
+	void Impacts(tsys *);
 
 	void Pmotor (tsys *sys, tinf *inf) {
 	
 		// Counters for loops
-		int i, l;
-		// Distance between objects, and his ortogonal components
-		long double dist, distx, disty, distz;
-		// the force, and his ortogonal components
-		long double f, fx, fy, fz;
+		int i;
 		
-		// GRAVITY
-		for(i=0; i!=sys->nactive; i++) {
-			for (l=i+1; l!=sys->nactive; l++) {
-				// calculate the axis' distance
-				distx = sys->o[i].x - sys->o[l].x;
-				disty = sys->o[i].y - sys->o[l].y;
-				distz = sys->o[i].z - sys->o[l].z;
-				// calculate the distance whit pitagora
-				dist = sqrtl (distx*distx + disty*disty);
-				dist = sqrtl (distz*distz + dist*dist);
-				// if dist = 0, is bad. so
-				if(dist == 0)
-					dist = 0.000000001;
-				// the force and his ortogonal components
-				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
-				fx = f * distx / dist;		// fx : f = distx : dist
-				fy = f * disty / dist;
-				fz = f * distz / dist;
-				// the aceleration for i(F = m * a -> a = F / m)
-				// update the velocity of i(V = V + a * t)
-				sys->o[i].velx = sys->o[i].velx + (- fx / sys->o[i].mass) * sys->precision;
-				sys->o[i].vely = sys->o[i].vely + (- fy / sys->o[i].mass) * sys->precision;
-				sys->o[i].velz = sys->o[i].velz + (- fz / sys->o[i].mass) * sys->precision;
-				// the aceleration for l(F = m * a -> a = F / m)
-				// update the velocity of l(V = V + a * t)
-				sys->o[l].velx = sys->o[l].velx + (- fx / sys->o[l].mass) * sys->precision;
-				sys->o[l].vely = sys->o[l].vely + (- fy / sys->o[l].mass) * sys->precision;
-				sys->o[l].velz = sys->o[l].velz + (- fz / sys->o[l].mass) * sys->precision;
-			}
-		}
-		// IMPACTS (Will be going very complex, this is only a base)
-		for(i=0; i!=sys->nactive; i++) {
-			for (l=i+1; l!=sys->nactive; l++) {
-				// calculate the axis' distance
-				distx = sys->o[i].x - sys->o[l].x;
-				disty = sys->o[i].y - sys->o[l].y;
-				distz = sys->o[i].z - sys->o[l].z;
-				// calculate the distance whit pitagora
-				dist = sqrtl (distx*distx + disty*disty);
-				dist = sqrtl (distz*distz + dist*dist);
-				// if doesn't hit continue
-				if (sys->o[i].radius + sys->o[l].radius < dist)
-					continue;
-				printf("Hit event between %s and %s\n", sys->o[i].name, sys->o[l].name);
-			}
-		}
+		//GRAVITY
+		Gravity(sys);
+		
+		// IMPACTS
+		Impacts(sys);
+		
 		// INERTIA
 		for (i=0; i!=sys->nactive; i++) {
 			sys->o[i].x = sys->o[i].x + sys->o[i].velx * sys->precision;
@@ -93,8 +53,79 @@
 		UpdateTime(&sys->stime);
 		
 		return;
-		}
+	}
 
+
+	/***
+	 * GRAVITY
+	 */
+	void Gravity(tsys *sys) {
+		
+		// the force, and his ortogonal components
+		long double dist, distx, disty, distz;
+		//the force and his ortogonal component
+		long double f;
+		//counters
+		int i,l;
+		
+		for(i=0; i!=sys->nactive; i++) {
+			for (l=i+1; l!=sys->nactive; l++) {	
+				// calculate the axis' distance
+				distx = sys->o[i].x - sys->o[l].x;
+				disty = sys->o[i].y - sys->o[l].y;
+				distz = sys->o[i].z - sys->o[l].z;
+				// calculate the distance whit pitagora
+				dist = sqrtl (distx*distx + disty*disty);
+				dist = sqrtl (distz*distz + dist*dist);
+				// if dist = 0, is bad. so
+				if(dist == 0)
+				dist = 0.000000001;
+				// the force and his ortogonal components
+				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
+				// fx : f = distx : dist
+				// the aceleration for i(F = m * a -> a = F / m)
+				// update the velocity of i(V = V + a * t)
+				sys->o[i].velx = sys->o[i].velx + (-(f * distx / dist) / sys->o[i].mass) * sys->precision;
+				sys->o[i].vely = sys->o[i].vely + (-(f * disty / dist) / sys->o[i].mass) * sys->precision;
+				sys->o[i].velz = sys->o[i].velz + (-(f * distz / dist) / sys->o[i].mass) * sys->precision;
+				// the aceleration for l(F = m * a -> a = F / m)
+				// update the velocity of l(V = V + a * t)
+				sys->o[l].velx = sys->o[l].velx + (-(f * distx / dist) / sys->o[l].mass) * sys->precision;
+				sys->o[l].vely = sys->o[l].vely + (-(f * distx / dist) / sys->o[l].mass) * sys->precision;
+				sys->o[l].velz = sys->o[l].velz + (-(f * distx / dist) / sys->o[l].mass) * sys->precision;
+			}
+		}
+		return;
+	}
+
+	/***
+	 * Impacts between object
+	 * HERE THERE IS MUCH WORK TO DO IT MORE REALISTIC
+	 */
+	void Impacts(tsys *sys) {
+		
+		// the force, and his ortogonal components
+		long double dist, distx, disty, distz;
+		//counters for loops
+		int i, l;
+		
+		for(i=0; i!=sys->nactive; i++) {
+			for (l=i+1; l!=sys->nactive; l++) {
+				// calculate the axis' distance
+				distx = sys->o[i].x - sys->o[l].x;
+				disty = sys->o[i].y - sys->o[l].y;
+				distz = sys->o[i].z - sys->o[l].z;
+				// calculate the distance whit pitagora
+				dist = sqrtl (distx*distx + disty*disty);
+				dist = sqrtl (distz*distz + dist*dist);
+				// if doesn't hit continue
+				if (sys->o[i].radius + sys->o[l].radius < dist)
+					continue;
+				printf("Hit event between %s and %s", sys->o[i].name ,sys->o[l].name);
+			}
+		}
+		return;
+	}
 
 	/**
 	 * The function update time make the time right, for example whitout 72 mins, 42 hour...
@@ -124,7 +155,7 @@
 	}
 	
 	/***
-	 * this function chek which of the time structure given is the farest ( 1 january 2015 farest than 12 december 1942)
+	 * this function chek which of the time structure given is the farest ( 1 january 2015 is farest than 12 december 1942)
 	 * return 0 if is the first
 	 * 		  1 if is the second
 	 * 		  2 if are =

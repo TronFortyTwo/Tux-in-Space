@@ -25,7 +25,7 @@
 	 */
 	tStype *Inittype (FILE *stream, tinf *inf) {
 		
-		// The type's mean structure (static because must be passed to others functions)
+		// The type's mean structure (static because must be passed to other functions)
 		static tStype Stype;
 		//counter
 		int i;

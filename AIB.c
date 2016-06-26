@@ -86,11 +86,13 @@
 			image.sprite = (tsprite *) malloc (sizeof(tsprite) * image.nsprite);
 		} while(1);
 	
-		//the view point is in an axis. Can be
+		//NOTE: the view point is in the axis defined in inf.view_axis at a distance from the center defined in inf.view_distance
 
+		//take every object and calculate his sprite
 		for (i=0; i!=sys->nactive; i++) {
-			
+			//for now all the objects are spheres
 		}
-
+		
+		
 		return image;
 	}

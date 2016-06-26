@@ -32,6 +32,11 @@
 
 	#define PI (245850922/78256779)
 	
+	// The three axis must have different codes
+	#define X_AXIS 0
+	#define Y_AXIS 1
+	#define Z_AXIS 2
+	
 	// The number of space when a description
 	#define THEETDESCR 5
 	

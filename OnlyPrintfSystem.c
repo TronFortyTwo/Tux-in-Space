@@ -212,7 +212,7 @@
 		int size;
 		size = strlen(message);
 		//the message to print
-		char *buffer = (char *) malloc ((32+size)*sizeof(char));
+		char *buffer = (char *) malloc ((10+size)*sizeof(char));
 		//a nice bip
 		printf("\a");
 		//set the buffer
