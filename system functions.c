@@ -322,9 +322,8 @@
 		// update counter
 		sys->nalloc -= OBJBUFSIZE;
 		// copy what is stored in the old buffer in the new buffer
-		for(c=0; c!= sys->nalloc-1; c++){
+		for(c=0; c!= sys->nalloc-1; c++)
 			newo[c] = sys->o[c];
-		}
 		// delete the old buffer
 		free(sys->o);
 		// point sys->o at the new buffer

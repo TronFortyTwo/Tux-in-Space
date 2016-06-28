@@ -39,7 +39,7 @@
 			scanf("%s", input);
 			// continue
 			if (strcmp("step", input) == 0) {
-				t.millisec += 1000 * sys->precision;
+				t.millisec = t.millisec + (1000 * sys->precision);
 				UpdateTime(&t);
 				break;
 			}
@@ -96,7 +96,6 @@
 				continue;
 			}
 		}
-
 	return t;
 	}
 	
@@ -253,6 +252,7 @@
 		scanf("%d", &t.min);
 		scanf("%d", &t.sec);
 		scanf("%d", &t.millisec);
+		UpdateTime(&t);
 		return t;
 	}
 	

@@ -35,7 +35,6 @@
 	void DeleteObject(tinf *, tsys *);
 	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *sys, char *name);
-	tobj CreateObject (tStype *, char *, ttype *,tcolor , long double, long double, long double, long double, long double, long double, long double, long double);
 	void Info(tsys *sys, tinf *inf);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *stime);

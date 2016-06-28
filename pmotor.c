@@ -53,7 +53,7 @@
 		}
 		
 		// update the time
-		sys->stime.millisec=sys->precision*1000;
+		sys->stime.millisec += sys->precision * 1000;
 		UpdateTime(&sys->stime);
 		
 		return;
@@ -110,8 +110,8 @@
 	 * 	- elastics hits
 	 * 	- hit that take time
 	 * 	- partial hit
-	 * 	- creation of moon, asteroids and others from hits
-	 * 	- special hit mechanics depending on the type
+	 * 	- creation of moon, asteroids and other objects from hits
+	 * 	- special hit mechanics depending on the types of the objects
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
 		
@@ -201,26 +201,33 @@
 	 * The function update time make the time right, for example whitout 72 mins(max mins are 59), 42 hours(max hours are 23)...
 	 */
 	void UpdateTime(ttime *stime){
-		for(; stime->millisec>=1000; ) {
+		
+		while( stime->millisec>=1000 ){
 			stime->sec++;
 			stime->millisec -= 1000;
 		}
-		for(; stime->sec>=60; ) {
+		
+		while( stime->sec >= 60 ){
 			stime->min++;
 			stime->sec -= 60;
 		}
-		for(; stime->min>=60; ) {
+		
+		while( stime->min >= 60 ){
 			stime->hour++;
 			stime->min -= 60;
 		}
-		for(; stime->hour>=24; ) {
+		
+		while( stime->hour>=24 ){
 			stime->day++;
 			stime->hour -= 24;
 		}
-		for(; stime->day>=365;) {
+		
+		while( stime->day >= 365 ){
 			stime->year++;
 			stime->day -= 365;
 		}
+		
+		
 		return;
 	}
 	

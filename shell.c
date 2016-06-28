@@ -20,7 +20,6 @@
  * This is the shell that connect the engines and the user
  * 
  * whit some others elaboration in the middle
- * 
  */
 	
 	int Shell (tinf *inf, tStype *Stype) {
