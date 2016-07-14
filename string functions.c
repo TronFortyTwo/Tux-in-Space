@@ -18,7 +18,7 @@
 #############################################################################################
 
  *
- * HERE we have function that help whit using the strings and whit input-output
+ * Here we have function that help whit using the strings and whit input-output
  * 
  */
 

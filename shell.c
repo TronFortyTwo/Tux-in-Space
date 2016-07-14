@@ -33,7 +33,7 @@
 		
 		do {
 			// Call the mean menù, it tell to shell what to do.
-			staterec = Menu(inf);
+			staterec = Menu(inf, Stype);
 			// If the menù answered 0 the program initialize the system as new
 			if (staterec == 0)
 				sys = InitSystem(inf, Stype);
@@ -53,6 +53,9 @@
 			// call the output system accordingly to vmode
 			if (inf -> vmode == 0) {
 				OPSo (sys, inf);
+			}
+			if (inf -> vmode == 1) {
+				AIB_ASCII_renderizer(sys, inf);
 			}
 			// call the instruction parser
 			stime = Parser(sys, inf);

@@ -21,7 +21,7 @@
  * The returning value is a number that shell needs for know what do
  * 
  */
-	int Menu (tinf *inf) {
+	int Menu(tinf *inf, tStype *Stype) {
 		
 		// A variable that save the scanf of an input. And do other too...
 		int inputandothers;
@@ -39,9 +39,9 @@
 				return 0;
 				
 			// if "Load system" tell the Shell 1;
-			if (inputandothers == 2)
+			else if (inputandothers == 2)
 				return 1;
-		
+				
 			// If is setting can be changed value of some variabiles
 			else if (inputandothers == 3) {
 				inputandothers = inf->width;
@@ -53,7 +53,7 @@
 				inputandothers = inf->numprecision;
 				OPS (inf, "New number of number's decimal printed (now %i):", &inputandothers, NULL);
 				SafeIScan(inf, &inf->numprecision);
-				OPS (inf, "Output mode:\n1)Only OnlyPrintfSystem based\n&tdThis option allow only textual output whitout any image but is fast and nice\n&t02)AIB throught ASCII (PRE-ALPHA!!)\n&tdThe Abstract Image Builder option allow images and a GUI but using a terminal interface. For now is unusable", NULL, NULL);
+				OPS (inf, "Output mode:\n1)Only OnlyPrintfSystem based\n&tdThis option allow only textual output whitout any image but is fast and nice\n&t02)ASCII AIB renderizer (WORK IN PROGRESS)\n&tdThe Abstract Image Builder option allow images and a GUI but using a terminal interface. For now is unusable", NULL, NULL);
 				SafeIScan(inf, &inf->vmode);
 				inf->vmode--;
 			}
@@ -65,5 +65,6 @@
 			else if(inputandothers == 5)
 				return QUITSIGNAL;
 		}
-		return QUITSIGNAL;
+		
+		return 0;
 	}

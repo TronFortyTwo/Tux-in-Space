@@ -25,43 +25,114 @@
 	 */
 	tStype *Inittype (FILE *stream, tinf *inf) {
 		
-		// The type's mean structure (static because must be passed to other functions)
+		// The type's mean structure (static because is passed to other functions)
 		static tStype Stype;
-		//counter
-		int i;
+		//the default type
+		ttype defaultype;
 		//a temp buffer
-		char buffer[DESCRIPTIONSIZE];
+		char buffer[DESCRIPTIONSIZE + 16];
+		//counters
+		int i;
 	
-		// read how many types there are in the file
-		Stype.number = 0;
+		// count how many types there are in the file (-1 because there is the default type)
+		Stype.number = -1;
 		do{
-			ScanFString (buffer, stream);				//name
-			if(strcmp(buffer, "END OF FILE") == 0)
-				break;
-			ScanFString (buffer, stream);				//description
-			ScanFString (buffer, stream);				//parent
 			fscanf(stream, "\n");
-			Stype.number++;
+			ScanFString (buffer, stream);				// read a line
+			if (strcmp(buffer, "END OF FILE") == 0)		// if the file is finished exit
+				break;
+			else if (strncmp (buffer, "NAME:", 5) == 0)	// if is a new object memorize that there is a new object
+				Stype.number++;
 		}
 		while(1);
 		
 		rewind(stream);
 		
 		//alloc enought spaces for all the ttype structure
-		Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
+		Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 		for(; Stype.type == NULL;) {
 			OPSML(inf, "Inittype");
-			Stype.type = (ttype *) malloc (Stype.number * sizeof(ttype));
+			Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 		}
 		
-		for (i=0; i!=Stype.number; i++) {
-			//scan name, description and parent
-			ScanFString (Stype.type[i].name, stream);
-			ScanFString (Stype.type[i].description, stream);
-			ScanFString (Stype.type[i].parent, stream);
-			fscanf(stream, "\n");
+		//scan the DEFAULT TYPE
+		//name
+		ScanFString(buffer, stream);
+		strcpy(defaultype.name, &buffer[6]);
+		//description
+		ScanFString(buffer, stream);
+		strcpy(defaultype.description, &buffer[13]);
+		//the mass range
+		ScanFString(buffer, stream);
+		defaultype.mass_max = strtoll(&buffer[10], NULL, 0);
+		ScanFString(buffer, stream);
+		defaultype.mass_min = strtoll(&buffer[10], NULL, 0);
+		//the color range
+		ScanFString(buffer, stream);							// blue
+		defaultype.color_max.blue = strtod(&buffer[10], NULL);
+		ScanFString(buffer, stream);
+		defaultype.color_min.blue = strtod(&buffer[10], NULL);
+		ScanFString(buffer, stream);							// red
+		defaultype.color_max.red = strtod(&buffer[9], NULL);		
+		ScanFString(buffer, stream);								
+		defaultype.color_min.red = strtod(&buffer[9], NULL);		
+		ScanFString(buffer, stream);							//green
+		defaultype.color_max.green = strtod(&buffer[11], NULL);		
+		ScanFString(buffer, stream);								
+		defaultype.color_min.green = strtod(&buffer[11], NULL);		
+		//parent
+		ScanFString(buffer, stream);
+		strcpy(defaultype.parent, &buffer[8]);
+		fscanf(stream, "\n");
+		
+		//scan the other types
+		ScanFString(buffer, stream);
+		for(i=0; i != Stype.number; i++) {
+			//assign at the type the default values
+			Stype.type[i] = defaultype;
+			//scan customized values
+			strcpy(Stype.type[i].name, &buffer[6]);	//the name
+			do {
+				ScanFString(buffer, stream);
+				if(strncmp(buffer, "DESCRIPTION: ", 13) == 0)				//the description
+					strcpy(Stype.type[i].description, &buffer[13]);
+					
+				else if(strncmp(buffer, "MASS_MAX: ", 10) == 0) {			//the maximum mass
+					Stype.type[i].mass_max = strtod(&buffer[10], NULL);
+				}
+				else if(strncmp(buffer, "MASS_MIN: ", 10) == 0) {			//the minimum mass
+					Stype.type[i].mass_min = strtod(&buffer[10], NULL);
+				}
+				else if(strncmp(buffer, "BLUE_MIN: ", 10) == 0) {			//the minimum blue
+					Stype.type[i].color_min.blue = strtod(&buffer[10], NULL);
+				}
+				else if(strncmp(buffer, "BLUE_MAX: ", 10) == 0) {			//the maximum blue
+					Stype.type[i].color_max.blue = strtod(&buffer[10], NULL);
+				}
+				else if(strncmp(buffer, "RED_MIN: ", 9) == 0) {				//the minimum red
+					Stype.type[i].color_min.red = strtod(&buffer[9], NULL);
+				}
+				else if(strncmp(buffer, "RED_MAX: ", 9) == 0) {				//the minimum red
+					Stype.type[i].color_max.red = strtod(&buffer[9], NULL);
+				}
+				else if(strncmp(buffer, "GREEN_MAX: ", 11) == 0) {			//the maximum green
+					Stype.type[i].color_max.green = strtod(&buffer[11], NULL);
+				}
+				else if(strncmp(buffer, "GREEN_MIN: ", 11) == 0) {			//the minimum green
+					Stype.type[i].color_min.green = strtod(&buffer[11], NULL);
+				}
+				else if(strncmp(buffer, "PARENT: ", 8) == 0) {				//the parent
+					strcpy(Stype.type[i].parent, &buffer[8]);
+					fscanf(stream, "\n");
+				}
+				else{
+					break;
+				}
+			}
+			while(1);
 		}
-
+		PrintStype(&Stype);
+		
 		return &Stype;
 	}
 	
@@ -78,7 +149,7 @@
 				 return &Stype->type[i];
 		};
 		
-		printf("typeSearchName: No type whit the name %s has been found!\n", name);
+		printf("typeSearchName: No type whit the name %s has been found! Probably this is a bug!\n", name);
 		return NULL;
 	}
 	
@@ -96,7 +167,7 @@
 		if(type_point!=NULL)
 			return type_point->description;
 		else
-			return "This object type doesn't exist";
+			return "This object type doesn't exist! I'm a bug";
 	}
 	
 	/***
@@ -111,16 +182,14 @@
 		if(type_point!=NULL)
 			return type_point->parent;
 		else
-			return "This object type doesn't exist";
+			return "This object type doesn't exist! I'm a bug";
 	}
 	 
 	/***
-	 * In the kind browser you can browse types in the type.typ file, see descriptions and choose one type to return to the calling function
+	 * In the kind browser you can browse types read from type.typ file and stored in Stype, see descriptions and choose one type to return to the calling function
 	 * 
 	 * file is the source struct
 	 * title is an intestation to write as title
-	 * if v is 0 we woudn't	return a type (so the UI changes respect 1)
-	 * if v isn't 0			return a type
 	 */ 
 	ttype *TypeBrowser(tinf *inf, tStype *Stype, char *title) {
 		 
@@ -139,6 +208,9 @@
 		//inputs
 		int input;
 		int input2;
+		//array to give to OPS
+		long double c[2];
+		int ivar[6];
 		
 		//initialize the buffers
 		strcpy (sbuf, title);
@@ -173,7 +245,7 @@
 			}
 			while(i!=Stype->number);
 		
-			//add the Generic type button (if in a branch)
+			//add the Generic type button
 			maxnum++;
 			snprintf(number, 3, "%d", maxnum);
 			strcat(dbuf, number);
@@ -201,7 +273,7 @@
 			// scan input
 			SafeIScan(inf, &input);
 			
-			// make the numbers start from zero and to higher number-1
+			// make the numbers start from zero
 			input--;
 			maxnum--;
 			
@@ -241,7 +313,7 @@
 				input2--;
 				if (input2 < 0)
 					continue;
-				if (input2 > maxnum)
+				if (input2 >= maxnum)
 					continue;
 				//if is the generic object type (that is a strange type) use this particular procedure
 				if(strcmp(commonparent, "NULL") == 0) {
@@ -251,18 +323,38 @@
 						continue;
 					}
 				}
-				strcpy(dbuf, Stype->type[input2].name);
+				//if is the generic "commonparent" object
+				strcpy(dbuf, Stype->type[npoint[input2]].name);
 				strcat(dbuf, ":");
-				strcat(dbuf, "\n\nDescription:   ");
-				strcat(dbuf, Stype->type[input2].description);
-				if(strcmp(Stype->type[input2].parent, "NULL") != 0) {  
-					strcat(dbuf, "\n\nThis type of object is under the category:   ");
-					strcat(dbuf, Stype->type[input2].parent);
+				strcat(dbuf, "\n\nDescription: &t9");
+				strcat(dbuf, Stype->type[npoint[input2]].description);
+				if(strcmp(Stype->type[npoint[input2]].parent, "NULL") != 0) {  
+					strcat(dbuf, "&t0\nCategory:   ");
+					strcat(dbuf, Stype->type[npoint[input2]].parent);
 				}
 				else
-					strcat(dbuf, "\n\nThis type of object isn't under any category");
+					strcat(dbuf, "\nThis type of object isn't under any category");
+				//the mass range
+				strcat(dbuf, "\nMinimum mass: %l");
+				strcat(dbuf, "\nMaximum mass: ");
+				c[0] = Stype->type[npoint[input2]].mass_min;
+				if(Stype->type[npoint[input2]].mass_max == -1)
+					strcat(dbuf, "infinity");
+				else{
+					strcat(dbuf, "%l");
+					c[1] = Stype->type[npoint[input2]].mass_max;
+				}
+				//the color range
+				strcat(dbuf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
+				ivar[0] = Stype->type[npoint[input2]].color_min.red;
+				ivar[1] = Stype->type[npoint[input2]].color_max.red;
+				ivar[2] = Stype->type[npoint[input2]].color_min.green;
+				ivar[3] = Stype->type[npoint[input2]].color_max.green;
+				ivar[4] = Stype->type[npoint[input2]].color_min.blue;
+				ivar[5] = Stype->type[npoint[input2]].color_max.blue;
+				//finalizing the description page
 				strcat(dbuf, "\n\nPress a number to continue");
-				OPS(inf, dbuf, 0, 0);
+				OPS(inf, dbuf, ivar, c);
 				SafeIScan(inf, &input2);
 				continue;
 			}

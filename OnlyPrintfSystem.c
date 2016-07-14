@@ -122,11 +122,11 @@
 	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
 	printf("%s\n", FRAMER);
 	//printf the buf
-	for(linedone=0; linedone!=inf->height-5; linedone++) {
+	for(linedone=0; linedone < inf->height-5; linedone++) {
 		//the frame
 		printf("%s", FRAME);
 		//print the buf
-		for(columndone=0; columndone!=inf->width-TWOFRAMELUN; columndone++) {
+		for(columndone=0; columndone < inf->width-TWOFRAMELUN; columndone++) {
 			
 			// PART ONE: check for directives. a directive started whit '&'
 			if (buf[bufpos] == '&') {

@@ -1,4 +1,22 @@
 /*
+#############################################################################################
+#    CSpace - space simulator																#
+#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#																							#
+#    This program is free software; you can redistribute it and/or modify					#
+#    it under the terms of the GNU General Public License as published by					#
+#    the Free Software Foundation, version 3 or compatibles.								#
+#																							#
+#    This program is distributed in the hope that it will be useful,						#
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of							#
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the							#
+#    GNU General Public License for more details.											#
+#																							#
+#    You should have received a copy of the GNU General Public License						#
+#    along with this program; if not, write to the Free Software							#
+#    Foundation, Inc.																		#
+#############################################################################################
+ *
  * HERE we have functions that help whit the system of the program 
  * 
  */
@@ -14,7 +32,7 @@
  */
 	void InitObject (tinf *inf, tobj *obj, tStype *Stype, int n) {
 		
-		// What is going to be printed. If the buffers go in overflow increase its size
+		// What is going to be printed. If the buffers go in overflow increase its size (see constants.h)
 		char buffer [BUFFERSIZE];
 		char reffub [BUFFERSIZE];
 		// name of the object to load and the name of a type of object
@@ -25,11 +43,11 @@
 		// array to give to Rmotor whit counters
 		int ivar[5];
 		int ipos = 0;
-		long double lvar[8];
+		long double lvar[10];
 		int lpos=0;
 	
 		// Title
-		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n\n");
+		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n");
 		// A number
 		if(n > 0){
 			strcat(buffer, "object number %i");
@@ -38,7 +56,7 @@
 		}
 		// Ask user if he want to load a preexistent object
 		strcpy (reffub, buffer);
-		strcat (reffub, "\n\n\nDo you want to load a saved object?\n&tdDigit the name of the object you want to load or 'n' if you want to create a new object.");
+		strcat (reffub, "\n\nDo you want to load a saved object?\n&tdDigit the name of the object you want to load or 'n' if you want to create a new object.");
 		OPS(inf, reffub, ivar, lvar);
 		scanf("%s", reffub);
 		// if the user want to load an object
@@ -65,7 +83,7 @@
 			fscanf(objfile, "%Lf", &obj->mass);
 			fclose(objfile);
 			// tell name, type, radius and mass whitout ask
-			strcat(buffer, "\n\n\nname:    ");
+			strcat(buffer, "\n\nname:    ");
 			strcat(buffer, obj->name);
 			strcat(buffer, "\n\ntype of the object:  ");
 			strcat(buffer, obj->type->name);
@@ -84,7 +102,7 @@
 		//if the user doesn't want to load from a file an object
 		else {
 			// some space and ask about the name
-			strcat (buffer, "\n\n\nname:    ");
+			strcat (buffer, "\n\nname:    ");
 			strcpy (reffub, buffer);
 			strcat (reffub, "\n&tdThe name of the object must be of a maximum of %i characters and spaces are not allowed");
 			ivar[ipos] = NAMELUN-1;
@@ -100,7 +118,7 @@
 			strcpy(reffub, buffer);
 			strcat(reffub, "\n&tdThe color of the new object must be composed of three numbers whit value 0 to 255, the first is the red, the second the green and the third the blue");
 			OPS(inf, reffub, ivar, lvar);
-			obj->color = ScanColor(inf);
+			obj->color = ScanColor(inf, obj->type->color_min, obj->type->color_max);
 			ivar[ipos] = obj->color.red;
 			ipos++;
 			ivar[ipos] = obj->color.green;
@@ -115,15 +133,30 @@
 			scanf("%Lf", &obj->radius);
 			lvar[lpos] = obj->radius;
 			lpos++;
-			// ask about the mass
+			// ask about the mass (a loop because continue to ask if the mass is out of range)
 			strcat(buffer, "%l\n\nmass:  ");
-			strcpy(reffub, buffer);
-			strcat(reffub, " (t) 1 ton = 1000 Kg");
-			OPS(inf, reffub, ivar, lvar);
-			scanf("%Lf", &obj->mass);
+			do {
+				strcpy(reffub, buffer);
+				strcat(reffub, " (t) 1 ton = 1000 Kg\n&tdFor the type ");
+				strcat(reffub, obj->type->name);
+				strcat(reffub, " the mass must be:\nmin: %l\nmax: ");
+				lvar[lpos] = obj->type->mass_min;
+				if(obj->type->mass_max == -1)
+					strcat(reffub, "infinity");
+				else {
+					strcat(reffub, "%l");
+					lvar[lpos+1] = obj->type->mass_max;
+				}
+				OPS(inf, reffub, ivar, lvar);
+				scanf("%Lf", &obj->mass);
+				//the mass is valid if is below min mass and under max mass
+				if(obj->mass > obj->type->mass_min && ((obj->mass < obj->type->mass_max) || (obj->type->mass_max == -1)) )
+					break;
+			}
+			while(1);
 		}
 		// ask about the x
-		lvar[lpos]=obj->mass;
+		lvar[lpos] = obj->mass;
 		lpos++;
 		strcat(buffer, "%l\n\nposition of the object in the x axis:  ");
 		strcpy(reffub, buffer);
@@ -238,7 +271,7 @@
 		if(sys == NULL)
 			do {
 				OPSML(inf, "InitSystem");
-				tsys *sys = (tsys *) malloc (sizeof(tsys));
+				sys = (tsys *) malloc (sizeof(tsys));
 				if(sys != NULL)
 					break;
 			}
@@ -485,7 +518,4 @@
 		
 		return NULL;
 	}
-	
-	
-	
 	

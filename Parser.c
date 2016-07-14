@@ -45,7 +45,7 @@
 			}
 			// the help
 			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-quit\n-delete\n\ninsert a command:", NULL, NULL);
+				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-distance\n-quit\n-delete\n\ninsert a command:", NULL, NULL);
 				continue;
 			}
 			// jump
@@ -85,6 +85,11 @@
 				OPS(inf, "Insert a new command", NULL, NULL);
 				continue;
 			}
+			//distance
+			else if (strcmp("distance", input) == 0) {
+				DistanceCommand(sys, inf);
+				continue;
+			}
 			// delete an object
 			else if ((strcmp("delete", input) == 0)||(strcmp("remove", input) == 0)) {
 				DeleteObject(inf, sys);
@@ -107,7 +112,39 @@
 		strcpy(buffer, "Sorry. But the command ");
 		strcat(buffer, command);
 		strcat(buffer, " that you wrote is unknow. Write another command:");
-		OPSE(inf, buffer, 0, 0);	
+		OPSE(inf, buffer, 0, 0);
+		return;
+	}
+	
+	/***
+	 * This command calculate and show the distance between two objects
+	 */
+	void DistanceCommand(tsys *sys, tinf *inf){
+		
+		char name[NAMELUN];
+		tobj *o;
+		tobj *u;
+		long double distance[2];
+		
+		//ask which two object
+		OPS(inf, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:", NULL, NULL);
+		scanf("%s", name);
+		o = SearchObject(sys, name);
+		if(o == NULL) {
+			OPSE(inf, "There isn't any object whit that name!\n\nInsert a new command", NULL, NULL);
+			return;
+		}
+		OPS(inf, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:", NULL, NULL);
+		scanf("%s", name);
+		u = SearchObject(sys, name);
+		if(u == NULL) {
+			OPSE(inf, "There isn't any object whit that name!\n\nInsert a new command", NULL, NULL);
+			return;
+		}
+		distance[0] = Pitagora(o->x-u->x, o->y-u->y, o->z-u->z);
+		distance[1] = Pitagora(o->x+o->velx-(u->x+u->velx), o->y+o->vely-(u->y+u->vely), o->z+o->velz-(u->z+u->velz)) - distance[0];
+		OPS(inf, "DISTANCE\n\nThe distance between the two object is:\n&td%l Km\n&t0And, if the two object take constant velocity, the distance will change at a velocity of\n&td%l km/s\n\n&t0Insert a new command", NULL, distance);
+		
 		return;
 	}
 	
@@ -160,8 +197,7 @@
 		}
 		
 		//delete the object moving the last object in the position of this object, and, if needed resize the object buffer
-		*obj = sys->o[sys->nactive-1];
-		
+		*obj = sys->o[sys->nactive-1];		
 		sys->nactive--;
 		if (sys->nalloc - sys->nactive >= OBJBUFSIZE)
 			ReduceObjBuf(sys, inf);

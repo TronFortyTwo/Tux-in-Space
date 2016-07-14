@@ -29,9 +29,10 @@
 	///prototypes of the phisic related functions
 	void Gravity(tsys *);
 	void Impacts(tsys *, tinf *);
+	
 	///constant used by Impacts()
-	#define BIGGER_TOLERANCE 1.217
-	#define COLOR_PREDOMINANCE 1.5
+	#define BIGGER_TOLERANCE 1.3
+	#define COLOR_PREDOMINANCE 1.35
 	
 
 	void Pmotor (tsys *sys, tinf *inf) {
@@ -39,7 +40,7 @@
 		// Counters for loops
 		int i;
 		
-		//GRAVITY
+		// GRAVITY
 		Gravity(sys);
 		
 		// IMPACTS
@@ -47,12 +48,12 @@
 		
 		// INERTIA
 		for (i=0; i!=sys->nactive; i++) {
-			sys->o[i].x = sys->o[i].x + sys->o[i].velx * sys->precision;
-			sys->o[i].y = sys->o[i].y + sys->o[i].vely * sys->precision;
-			sys->o[i].z = sys->o[i].z + sys->o[i].velz * sys->precision;
+			sys->o[i].x += sys->o[i].velx * sys->precision;
+			sys->o[i].y += sys->o[i].vely * sys->precision;
+			sys->o[i].z += sys->o[i].velz * sys->precision;
 		}
 		
-		// update the time
+		// TIME
 		sys->stime.millisec += sys->precision * 1000;
 		UpdateTime(&sys->stime);
 		
@@ -67,7 +68,7 @@
 		
 		// the force, and his ortogonal components
 		long double dist, distx, disty, distz;
-		//the force and his ortogonal component
+		//the force
 		long double f;
 		//counters
 		int i,l;
@@ -79,25 +80,24 @@
 				disty = sys->o[i].y - sys->o[l].y;
 				distz = sys->o[i].z - sys->o[l].z;
 				// calculate the distance whit pitagora
-				dist = sqrtl (distx*distx + disty*disty);
-				dist = sqrtl (distz*distz + dist*dist);
+				dist = Pitagora(distx, disty, distz);
 				// if dist = 0, is bad. so
 				if(dist == 0)
 				dist = 0.000000001;
 				// the force and his ortogonal components
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
-				// the aceleration for i(F = m * a -> a = F / m)
-				// update the velocity of i(V = V + a * t)
-				sys->o[i].velx = sys->o[i].velx - ((f * distx / dist) / sys->o[i].mass) * sys->precision;
-				sys->o[i].vely = sys->o[i].vely - ((f * disty / dist) / sys->o[i].mass) * sys->precision;
-				sys->o[i].velz = sys->o[i].velz - ((f * distz / dist) / sys->o[i].mass) * sys->precision;
+				// the aceleration for i (F = m * a -> a = F / m)
+				// update the velocity of i (V += a * t)
+				sys->o[i].velx -= ((f * distx/dist) / sys->o[i].mass) * sys->precision;
+				sys->o[i].vely -= ((f * disty/dist) / sys->o[i].mass) * sys->precision;
+				sys->o[i].velz -= ((f * distz/dist) / sys->o[i].mass) * sys->precision;
 				// fx : f = distx : dist
-				// the aceleration for l(F = m * a -> a = F / m)
-				// update the velocity of l(V = V + a * t)
-				sys->o[l].velx = sys->o[l].velx + ((f * distx / dist) / sys->o[l].mass) * sys->precision;
-				sys->o[l].vely = sys->o[l].vely + ((f * distx / dist) / sys->o[l].mass) * sys->precision;
-				sys->o[l].velz = sys->o[l].velz + ((f * distx / dist) / sys->o[l].mass) * sys->precision;
+				// the aceleration for l (F = m * a -> a = F / m)
+				// update the velocity of l (V = V + a * t)
+				sys->o[l].velx += ((f * distx/dist) / sys->o[l].mass) * sys->precision;
+				sys->o[l].vely += ((f * disty/dist) / sys->o[l].mass) * sys->precision;
+				sys->o[l].velz += ((f * distz/dist) / sys->o[l].mass) * sys->precision;
 			}
 		}
 		return;
@@ -115,25 +115,20 @@
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
 		
-		// the force, and his ortogonal components
-		long double dist, distx, disty, distz;
-		//counters for loops
+		// counters for loops
 		int i, l;
-		//memorize i if the bigger is i, l if the bigger is l
+		// memorize i if the bigger is i, l if the bigger is l
 		int bigger;
 		int smaller;
-		//the new object
+		// the new object
 		tobj newobj;
+		// distance
+		long double dist;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=i+1; l < sys->nactive; l++) {
-				// calculate the axis' distance
-				distx = sys->o[i].x - sys->o[l].x;
-				disty = sys->o[i].y - sys->o[l].y;
-				distz = sys->o[i].z - sys->o[l].z;
 				// calculate the distance whit pitagora
-				dist = sqrtl (distx*distx + disty*disty);
-				dist = sqrtl (distz*distz + dist*dist);
+				dist = Pitagora (sys->o[i].x - sys->o[l].x, sys->o[i].y - sys->o[l].y, sys->o[i].z - sys->o[l].z);
 				// if doesn't hit continue
 				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
@@ -166,10 +161,22 @@
 				strcpy(newobj.name, sys->o[bigger].name);
 				// the type is the type of the bigger, so is alredy written
 				newobj.type = sys->o[bigger].type;
-				// the color is the average, but considering the radius
-				sys->o[bigger].color.blue = ((sys->o[bigger].color.blue * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.blue * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
-				sys->o[bigger].color.green = ((sys->o[bigger].color.green * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.green * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
-				sys->o[bigger].color.red = ((sys->o[bigger].color.red * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.red * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
+				// the color is the average, but considering the radius and the type's range
+				newobj.color.blue = ((sys->o[bigger].color.blue * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.blue * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
+				newobj.color.green = ((sys->o[bigger].color.green * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.green * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
+				newobj.color.red = ((sys->o[bigger].color.red * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.red * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
+				if(newobj.color.blue > newobj.type->color_max.blue)
+					newobj.color.blue = newobj.type->color_max.blue;
+				else if(newobj.color.blue < newobj.type->color_min.blue)
+					newobj.color.blue = newobj.type->color_min.blue;
+				if(newobj.color.red > newobj.type->color_max.red)
+					newobj.color.red = newobj.type->color_max.red;
+				else if(newobj.color.red < newobj.type->color_min.red)
+					newobj.color.red = newobj.type->color_min.red;
+				if(newobj.color.green > newobj.type->color_max.green)
+					newobj.color.green = newobj.type->color_max.green;
+				else if(newobj.color.green < newobj.type->color_min.green)
+					newobj.color.green = newobj.type->color_min.green;
 				// the mass is the sum
 				newobj.mass = sys->o[i].mass + sys->o[l].mass;
 				// the coordinates are the average
@@ -197,6 +204,16 @@
 		return;
 	}
 
+	/***
+	 * Pitagoras function calculate a diagonal distance from ortogonal component
+	 */
+	long double Pitagora(long double a, long double b, long double c){
+		long double t = sqrtl (a*a + b*b);	//(t)emp
+		return sqrtl (c*c + t*t);
+	}
+	long double Pitagora2D(long double a, long double b) {
+		return sqrtl (a*a + b*b);
+	}
 	/**
 	 * The function update time make the time right, for example whitout 72 mins(max mins are 59), 42 hours(max hours are 23)...
 	 */
