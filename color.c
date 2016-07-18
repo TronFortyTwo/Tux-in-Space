@@ -22,6 +22,7 @@
  ///prototypes
 	tcolor Color_black();
 	tcolor ScanColor(tinf *, tcolor, tcolor);
+	int ColorRangeCheck(tcolor, tcolor, tcolor);
 	
 /***
  * The Color_black return the black color
@@ -39,52 +40,78 @@
  */
 	tcolor ScanColor(tinf *inf, tcolor range_min, tcolor range_max) {
 		
+		DebugPrint(inf, "scancolor");
+		
 		tcolor color;	//our color
-		int ivar[3];	//the var to give to OPS
+		void *var[3];	//the vars to give to OPS
 		
 		//scan them and chek if the value given are true
 		//red
+		var[0] = &range_min.red;
+		var[1] = &range_max.red;
+		OPS(inf, "Put the value of the red:\n&tdThe value must be between %i and %i", var);
 		scanf("%d", &color.red);
 		do {
 			if((color.red <= range_max.red) && (color.red >= range_min.red))
 				break;
-			ivar[0] = color.red;
-			ivar[1] = range_min.red;
-			ivar[2] = range_max.red;
-			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the red component of the color", ivar, NULL);
+			var[0] = &color.red;
+			var[1] = &range_min.red;
+			var[2] = &range_max.red;
+			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the red component of the color", var);
 			scanf("%d", &color.red);
 		}
 		while(1);
 		//green
-		ivar[0] = range_min.green;
-		ivar[1] = range_max.green;
-		OPS(inf, "Put the value of the green:\n&tdThe value must be between %i and %i", ivar, NULL);
+		var[0] = &range_min.green;
+		var[1] = &range_max.green;
+		OPS(inf, "Put the value of the green:\n&tdThe value must be between %i and %i", var);
 		scanf("%d", &color.green);
 		do {
 			if((color.green <= range_max.green) && (color.green >= range_min.green))
 				break;
-			ivar[0] = color.green;
-			ivar[1] = range_min.green;
-			ivar[2] = range_max.green;
-			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", ivar, NULL);
+			var[0] = &color.green;
+			var[1] = &range_min.green;
+			var[2] = &range_max.green;
+			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", var);
 			scanf("%d", &color.green);
 		}
 		while(1);
 		//blue
-		ivar[0] = range_min.blue;
-		ivar[1] = range_max.blue;
-		OPS(inf, "Put the value of the blue:\n&tdThe value must be between %i and %i", ivar, NULL);
+		var[0] = &range_min.blue;
+		var[1] = &range_max.blue;
+		OPS(inf, "Put the value of the blue:\n&tdThe value must be between %i and %i", var);
 		scanf("%d", &color.blue);
 		do {
 			if((color.blue <= range_max.blue) && (color.blue >= range_min.blue))
 				break;
-			ivar[0] = color.blue;
-			ivar[1] = range_min.blue;
-			ivar[2] = range_max.blue;
-			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", ivar, NULL);
+			var[0] = &color.blue;
+			var[1] = &range_min.blue;
+			var[2] = &range_max.blue;
+			OPSE(inf, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", var);
 			scanf("%d", &color.blue);
 		}
 		while(1);
 		
 		return color;
+	}
+	
+	/***
+	 * This function check if the color given is in or out the color range given
+	 */
+	int ColorRangeCheck(tcolor color, tcolor min, tcolor max) {
+		
+		if(color.red < min.red)
+			return BADSIGNAL;
+		if(color.green < min.green)
+			return BADSIGNAL;
+		if(color.blue < min.blue)
+			return BADSIGNAL;
+		if(color.red > max.red)
+			return BADSIGNAL;
+		if(color.green > max.green)
+			return BADSIGNAL;
+		if(color.blue > max.blue)
+			return BADSIGNAL;
+		
+		return GOODSIGNAL;
 	}

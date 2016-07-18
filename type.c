@@ -34,6 +34,8 @@
 		//counters
 		int i;
 	
+		DebugPrint(inf, "Inittype");
+	
 		// count how many types there are in the file (-1 because there is the default type)
 		Stype.number = -1;
 		do{
@@ -131,15 +133,17 @@
 			}
 			while(1);
 		}
-		PrintStype(&Stype);
 		
+		PrintStype(inf, &Stype);
 		return &Stype;
 	}
 	
 	/***
 	 * Given a name, this function return the pointer to that type. If there isn't any type whit that name return NULL
 	 */
-	ttype *typeSearchName(tStype *Stype, char *name) {
+	ttype *typeSearchName(tinf *inf, tStype *Stype, char *name) {
+		DebugPrint(inf, "typesearchname");
+		
 		//counter
 		int i;
 		//the loop that search the type whit the true name
@@ -149,7 +153,9 @@
 				 return &Stype->type[i];
 		};
 		
-		printf("typeSearchName: No type whit the name %s has been found! Probably this is a bug!\n", name);
+		DebugPrint(inf, "typeSearchName: No type whit the name (read below) has been found! Probably this is a bug!\n");
+		DebugPrint(inf, name);
+		
 		return NULL;
 	}
 	
@@ -158,12 +164,13 @@
 	/***
 	 * This function return the descripiton of the type name
 	 */ 
-	char *typeDescriptionFromName (tStype *type, char *name) {
-
+	char *typeDescriptionFromName (tinf *inf, tStype *type, char *name) {
+		DebugPrint(inf, "typedescriptionfromname");
+		
 		// pointer to the requested type
 		ttype *type_point;
 		//Search the type whit that name
-		type_point = typeSearchName (type, name);
+		type_point = typeSearchName (inf, type, name);
 		if(type_point!=NULL)
 			return type_point->description;
 		else
@@ -173,12 +180,13 @@
 	/***
 	 * This function return the parent of the type name
 	 */ 
-	char *typeParentFromName (tStype *type, char *name) {
+	char *typeParentFromName (tinf *inf, tStype *type, char *name) {
+		DebugPrint(inf, "typeparentfromname");
 	
 		// pointer to the requested type
 		ttype *type_point;
 		//Search the type whit that name
-		type_point = typeSearchName (type, name);
+		type_point = typeSearchName (inf, type, name);
 		if(type_point!=NULL)
 			return type_point->parent;
 		else
@@ -193,6 +201,8 @@
 	 */ 
 	ttype *TypeBrowser(tinf *inf, tStype *Stype, char *title) {
 		 
+		DebugPrint(inf, "typebrowser");
+		
 		//in the gerarchic tree of type, is the common parent that the types shown have
 		char commonparent[NAMELUN] = "NULL";
 		// static buffer and dinamic buffer
@@ -209,8 +219,8 @@
 		int input;
 		int input2;
 		//array to give to OPS
-		long double c[2];
-		int ivar[6];
+		void *var[8];
+		int varpos;
 		
 		//initialize the buffers
 		strcpy (sbuf, title);
@@ -268,7 +278,7 @@
 			
 			
 			//print
-			OPS(inf, dbuf, NULL, NULL);
+			OPS(inf, dbuf, NULL);
 			
 			// scan input
 			SafeIScan(inf, &input);
@@ -302,13 +312,13 @@
 			if (input == maxnum-2) {
 				free(npoint);
 				if(strcmp(commonparent, "NULL") != 0)
-					return typeSearchName(Stype, commonparent);
+					return typeSearchName(inf, Stype, commonparent);
 				else
-					return typeSearchName(Stype, "Generic object");
+					return typeSearchName(inf, Stype, "Generic object");
 			}
 			//if is the description button
 			if (input == maxnum-1){
-				OPS(inf, "Of which type of object do you want an explaination? [type its number]", 0, 0);
+				OPS(inf, "Of which type of object do you want an explaination? [type its number]", NULL);
 				SafeIScan(inf, &input2);
 				input2--;
 				if (input2 < 0)
@@ -318,7 +328,7 @@
 				//if is the generic object type (that is a strange type) use this particular procedure
 				if(strcmp(commonparent, "NULL") == 0) {
 					if (maxnum-2 == input2) {
-						OPS(inf, "There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", 0, 0);
+						OPS(inf, "There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", NULL);
 						SafeIScan(inf, &input2);
 						continue;
 					}
@@ -328,8 +338,9 @@
 				strcat(dbuf, ":");
 				strcat(dbuf, "\n\nDescription: &t9");
 				strcat(dbuf, Stype->type[npoint[input2]].description);
+				strcat(dbuf, "&t0");
 				if(strcmp(Stype->type[npoint[input2]].parent, "NULL") != 0) {  
-					strcat(dbuf, "&t0\nCategory:   ");
+					strcat(dbuf, "\nCategory:   ");
 					strcat(dbuf, Stype->type[npoint[input2]].parent);
 				}
 				else
@@ -337,24 +348,32 @@
 				//the mass range
 				strcat(dbuf, "\nMinimum mass: %l");
 				strcat(dbuf, "\nMaximum mass: ");
-				c[0] = Stype->type[npoint[input2]].mass_min;
+				varpos=0;
+				var[varpos] = &Stype->type[npoint[input2]].mass_min;
+				varpos++;
 				if(Stype->type[npoint[input2]].mass_max == -1)
 					strcat(dbuf, "infinity");
 				else{
 					strcat(dbuf, "%l");
-					c[1] = Stype->type[npoint[input2]].mass_max;
+					var[varpos] = & Stype->type[npoint[input2]].mass_max;
+					varpos++;
 				}
 				//the color range
 				strcat(dbuf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
-				ivar[0] = Stype->type[npoint[input2]].color_min.red;
-				ivar[1] = Stype->type[npoint[input2]].color_max.red;
-				ivar[2] = Stype->type[npoint[input2]].color_min.green;
-				ivar[3] = Stype->type[npoint[input2]].color_max.green;
-				ivar[4] = Stype->type[npoint[input2]].color_min.blue;
-				ivar[5] = Stype->type[npoint[input2]].color_max.blue;
+				var[varpos] = & Stype->type[npoint[input2]].color_min.red;
+				varpos++;
+				var[varpos] = & Stype->type[npoint[input2]].color_max.red;
+				varpos++;
+				var[varpos] = & Stype->type[npoint[input2]].color_min.green;
+				varpos++;
+				var[varpos] = & Stype->type[npoint[input2]].color_max.green;
+				varpos++;
+				var[varpos] = & Stype->type[npoint[input2]].color_min.blue;
+				varpos++;
+				var[varpos] = & Stype->type[npoint[input2]].color_max.blue;
 				//finalizing the description page
 				strcat(dbuf, "\n\nPress a number to continue");
-				OPS(inf, dbuf, ivar, c);
+				OPS(inf, dbuf, var);
 				SafeIScan(inf, &input2);
 				continue;
 			}

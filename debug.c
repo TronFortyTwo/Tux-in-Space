@@ -22,22 +22,43 @@
  */
  
 ///Prototypes
-	void PrintStype(tStype *);
+	void PrintStype(tinf *, tStype *);
+	void DebugPrint(tinf *, char *);
 
 /***
  * This function print the Stype structure
  */
-	void PrintStype(tStype *Stype) {
+	void PrintStype(tinf *inf, tStype *Stype) {
 	
 		int i; //counter
+		char buffer[2048];
 		
 		printf("\nSTYPE PRINTING-------------------------\n");
 		
 		for (i=0; i!=Stype->number; i++) {
-			printf("\nNAME: %s\nDESCRIPTION: %s\nPARENT: %s\nMASS_MIN: %lf\nMASS_MAX: %lf\n", Stype->type[i].name, Stype->type[i].description, Stype->type[i].parent, Stype->type[i].mass_min, Stype->type[i].mass_max);
-			printf("BLUE_RANGE: %i - %i\n", Stype->type[i].color_min.blue, Stype->type[i].color_max.blue);
-			printf("RED_RANGE: %i - %i\n", Stype->type[i].color_min.red, Stype->type[i].color_max.red);
-			printf("GREEN_RANGE: %i - %i\n", Stype->type[i].color_min.green, Stype->type[i].color_max.green);
+			sprintf(buffer, "\nNAME: %s\nDESCRIPTION: %s\nPARENT: %s\nMASS_MIN: %lf\nMASS_MAX: %lf\nBLUE_RANGE: %i - %i\nRED_RANGE: %i - %i\nGREEN_RANGE: %i - %i\n", Stype->type[i].name, Stype->type[i].description, Stype->type[i].parent, Stype->type[i].mass_min, Stype->type[i].mass_max, Stype->type[i].color_min.blue, Stype->type[i].color_max.blue, Stype->type[i].color_min.red, Stype->type[i].color_max.red, Stype->type[i].color_min.green, Stype->type[i].color_max.green);
+			DebugPrint(inf, buffer);
 		}
+		return;
+	}
+
+/***
+ * This function write in the debug support (a file, stderr or something else) what is called to write
+ */
+	void DebugPrint(tinf *inf, char *txt) {
+		
+		if(inf->debug == 0)
+			return;
+		
+		// for now the debug support is a file
+		FILE *file;
+		file = fopen("debug.dbg", "a");
+		
+		// write what is requested (but whit a '\n')
+		fprintf(file, txt);
+		fprintf(file, "\n"); 
+		
+		fclose(file);
+		
 		return;
 	}

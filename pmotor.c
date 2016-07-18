@@ -16,26 +16,23 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
- */
- /********************************************************************************
+ *
  *This is the motor that emules the phisic law
  * 
  * Now the side effect that this function generated on struct obj are caused by:
- *		- Gravity force
- * 		- Inertia of mass
- *		- impacts beetween them
+ *		- Gravity force	
+ * 		- Inertia of mass 
+ *		- impacts beetween them (WORK IN PROGRESS)
  */
  
 	///prototypes of the phisic related functions
 	void Gravity(tsys *);
 	void Impacts(tsys *, tinf *);
 	
-	///constant used by Impacts()
-	#define BIGGER_TOLERANCE 1.3
-	#define COLOR_PREDOMINANCE 1.35
-	
 
 	void Pmotor (tsys *sys, tinf *inf) {
+		
+		DebugPrint(inf, "pmotor");
 	
 		// Counters for loops
 		int i;
@@ -44,7 +41,7 @@
 		Gravity(sys);
 		
 		// IMPACTS
-		Impacts(sys, inf);
+		// Impacts(sys, inf);
 		
 		// INERTIA
 		for (i=0; i!=sys->nactive; i++) {
@@ -114,6 +111,8 @@
 	 * 	- special hit mechanics depending on the types of the objects
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
+		
+		DebugPrint(inf, "impacts");
 		
 		// counters for loops
 		int i, l;
@@ -217,7 +216,7 @@
 	/**
 	 * The function update time make the time right, for example whitout 72 mins(max mins are 59), 42 hours(max hours are 23)...
 	 */
-	void UpdateTime(ttime *stime){
+	void UpdateTime(ttime *stime) {
 		
 		while( stime->millisec>=1000 ){
 			stime->sec++;

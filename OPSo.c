@@ -18,52 +18,52 @@
 #############################################################################################
 
  *
- * This is a function of the Rmotor principal function.
  * The purpose of this is to print the state of the objects using only the OPS (OnlyPrintfSystem).
  * 
- * printf an intestation whit the current time and other stuff, then reserve some space for information about principal objects
- * 
+ * printf an intestation whit the current time and other stuff, then reserve some space for information about the objects
  * 
  */
 
 	int OPSo (tsys *sys, tinf *inf) {
-		
+		DebugPrint(inf, "opso");
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		// the array to give to Rmotor whit size. there are 7 long double for every object (mass, x, y, z, velx, vely, velz)
-		int ivar[5];
-		long double *lvar = (long double *) malloc (sizeof(long double) * sys->nactive * 6);
-		int lpos=0;
+		// the array to give to Rmotor whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
+		void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
+		int pos;
 		// counters
 		int i;
-		// pointer to a object
-		tobj *obj;
 		
 		// Printf the line whit the time and two lines of '-'
 		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
-		ivar[0] = sys->stime.year;
-		ivar[1] = sys->stime.day;
-		ivar[2] = sys->stime.hour;
-		ivar[3] = sys->stime.min;
-		ivar[4] = sys->stime.sec;
-		ivar[5] = sys->stime.millisec;
+		var[0] = & sys->stime.year;
+		var[1] = & sys->stime.day;
+		var[2] = & sys->stime.hour;
+		var[3] = & sys->stime.min;
+		var[4] = & sys->stime.sec;
+		var[5] = & sys->stime.millisec;
 		
+		pos = 6;
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
-			//set the pointer to the object we are using
-			obj = &sys->o[i];
-			//Tell the name, type and mass
-			strcat(buffer, obj->name);
-			strcat(buffer, " | ");
-			strcat(buffer, obj->type->name);
-			//Tell the x '\n', the y a '\n' and the z
-			strcat(buffer, "\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
-			lvar[lpos++]= obj->x;
-			lvar[lpos++]= obj->velx;
-			lvar[lpos++]= obj->y;
-			lvar[lpos++]= obj->vely;
-			lvar[lpos++]= obj->z;
-			lvar[lpos++]= obj->velz;
+			// Tell the name, type and mass, the x, the y and the z
+			strcat(buffer, "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
+			var[pos] = sys->o[i].name;
+			pos++;
+			var[pos] = sys->o[i].type->name;
+			pos++;
+			var[pos] = &sys->o[i].x;
+			pos++;
+			var[pos] = &sys->o[i].velx;
+			pos++;
+			var[pos] = &sys->o[i].y;
+			pos++;
+			var[pos] = &sys->o[i].vely;
+			pos++;
+			var[pos] = &sys->o[i].z;
+			pos++;
+			var[pos] = &sys->o[i].velz;
+			pos++;
 			// A line of '-'
 			strcat (buffer, "%f-");
 		}
@@ -72,10 +72,10 @@
 			strcat(buffer, "\n&t1The system is empty. Use the 'create' command to create a new object");
 		
 		//tell to Rmotor what was done
-		OPS(inf, buffer, ivar, lvar);
+		OPS(inf, buffer, var);
 		
 		// dealloc the arrays
-		free(lvar);
+		free(var);
 		
 		return 0;
 	}

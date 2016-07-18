@@ -22,6 +22,15 @@
  * This is CSpace's header file
  * 
  */
+ 
+	// External standard library
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <math.h>
+	#include <time.h>
+	#include <limits.h>
+ 
 
 	#define PI (245850922/78256779)
 	
@@ -30,14 +39,21 @@
 	#define Y_AXIS 1
 	#define Z_AXIS 2
 	
-	// The number of space when a description
+	// The number of space in '&td'
 	#define THEETDESCR 5
+	
+	// A three char string that represent a picture of ALLERT or ATTENCTION
+	#define IRREGULARITY "(!)"
 	
 	// The value that the variable ttime.year assumes if the user want to quit
 	#define QUITSIGNAL -1
 	
+	// Values returned by functions
+	#define GOODSIGNAL 1
+	#define BADSIGNAL 2
+	
 	// The lenght of a name of an object, a system or a type
-	#define NAMELUN 32
+	#define NAMELUN 64
 	
 	// The size of a type's description. It must is bigger than NAMELUN
 	#define DESCRIPTIONSIZE 512
@@ -51,8 +67,8 @@
 	// the max lenght of a command word
 	#define COMMANDLENGHT 12
 	
-	//When you alloc the object buffer, this is how many object you delete or create when you resize
-	#define OBJBUFSIZE 8
+	// When you alloc the object buffer, this is how many object you delete or create when you resize
+	#define OBJBUFSIZE 4
 	
 	// The frame that Rmotor uses and his size
 	#define FRAME "# "
@@ -61,6 +77,13 @@
 	#define TWOFRAMELUN 4	// 2 * FRAME LENGHT
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
+
+	//constant used by the Impacts function (Pmotor)
+	#define BIGGER_TOLERANCE 1.3
+	#define COLOR_PREDOMINANCE 1.35
+
+	// flag is a value that can be only 0 or 1
+	typedef char flag;
 
 	//the type that we use as color
 	struct scolor{
@@ -91,10 +114,11 @@
 
 	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	struct info {
-		int vmode;					// Visual mode (0 = Only OPS)
+		int vmode;					// Visual mode
 		int width;					// The number of columns that the program use
 		int height;					// The number of lines that the program use
 		int numprecision;			// Number of character used for printing the deciamal of a long double
+		flag debug;					// is 0 if debug is off, 1 if on
 		int view_axis;				// Information about the point of view (for AIB)
 		long double view_distance;
 	};
@@ -140,27 +164,21 @@
 		tStype *Stype;			// The pointer at the structure that coontein all the type
 	};
 	typedef struct system tsys;
-
-// External standard library
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
-	#include <math.h>
-	#include <time.h>
 	
 // Prototypes
+	int LoadObject(tinf *, tobj *, tStype *, char *);
 	void DistanceCommand(tsys *, tinf *);
 	void AIB_ASCII_renderizer (tsys *, tinf *);
 	long double Pitagora(long double, long double, long double);
-	long double Pitagora2D(long double a, long double b);
+	long double Pitagora2D(long double, long double);
 	void DeleteObject(tinf *, tsys *);
 	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *, char *);
-	void Info(tsys *sys, tinf *);
+	void Info(tsys *, tinf *);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *);
-	void OPS(tinf *, char *, int *, long double *);
-	void OPSE(tinf *, char *, int *, long double *);
+	void OPS(tinf *, char *, void **);
+	void OPSE(tinf *, char *, void **);
 	void OPSML(tinf *, char *);
 	ttime Jump(ttime *, tinf *, long double *);
 	ttime Wait(ttime *, tinf *, long double *);
@@ -168,7 +186,7 @@
 	int OPSo (tsys *, tinf *);
 	ttime Parser(tsys *, tinf *);
 	void Reask(tinf *, char *);
-	void SaveSys(tsys *sys, tinf *);
+	void SaveSys(tsys *, tinf *);
 	void Create(tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);
 	void Pmotor (tsys *, tinf *);
@@ -179,11 +197,11 @@
 	void SaveObject(tinf *, tobj *);
 	void InitObject (tinf *, tobj *, tStype *, int);
 	tsys *InitSystem (tinf *, tStype *);
-	void ReduceObjBuf(tsys *sys, tinf *);
+	void ReduceObjBuf(tsys *, tinf *);
 	tStype *Inittype (FILE *, tinf *);
-	char *typeDescriptionFromName (tStype *, char *);
-	ttype *typeSearchName (tStype *, char *);
-	char *typeParentFromName (tStype *, char *);
+	char *typeDescriptionFromName (tinf *inf, tStype *, char *);
+	ttype *typeSearchName (tinf *, tStype *, char *);
+	char *typeParentFromName (tinf *inf, tStype *, char *);
  
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "debug.c"

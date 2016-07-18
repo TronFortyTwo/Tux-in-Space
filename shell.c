@@ -23,7 +23,7 @@
  */
 	
 	int Shell (tinf *inf, tStype *Stype) {
-
+		DebugPrint(inf, "shell");
 		// Retruning value from the function
 		int staterec;
 		//the pointer to a system

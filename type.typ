@@ -45,6 +45,10 @@ NAME: Chthonian planet
 DESCRIPTION: A chtonian planet is a planet generated from the hydrodinamic escape of a Gas Giant atmosphere. The remaining metal and rocky core form this planet
 PARENT: Planet
 
+NAME: Chose a type
+DESCRIPTION: for your new object
+PARENT: Whitout parent
+
 NAME: Comet
 PARENT: Small body
 
@@ -168,9 +172,6 @@ DESCRIPTION: A super Earth is a terrestrial planet massive two to five Earth mas
 MASS_MIN: 11000000000000000000000		
 MASS_MAX: 29863000000000000000000
 PARENT: Terrestrial planet
-
-NAME: TEST
-PARENT: Super Earth
 
 NAME: Terrestrial planet
 DESCRIPTION: A terrestrial planet is a planet composed mainly by rock and metal.

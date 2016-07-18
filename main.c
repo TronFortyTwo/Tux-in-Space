@@ -18,9 +18,9 @@
 #############################################################################################
 
 
-#################################################################################################################################################################################################################
-# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution, is a collection of structures definitions for the other functions and contein file's initialization	#
-#################################################################################################################################################################################################################
+#################################################################################################################################################
+# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution and contein file's initialization	#
+#################################################################################################################################################
 */
 
 	// Include the header file
@@ -30,7 +30,7 @@
 
 	int main (int argc, char *argv[]) {
 		
-		// INITIALIZATION
+		// INITIALIZATION OF THE PROGRAM
 		
 		// definition of the structures
 		tinf inf;
@@ -48,14 +48,17 @@
 		inf.width = 120;
 		
 		//print that is loading
-		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", 0, 0);
+		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
 		// the vmode is setted 0 (onlyOPS)
 		inf.vmode = 0;
-		
 		// set num precision
-		inf.numprecision = 4;
+		inf.numprecision = 6;
+		// set the debug to on
+		inf.debug = 1;
 		
+		DebugPrint(&inf, "main");
+	
 		// Read the types from a file
 		Ftype = fopen("type.typ", "r");
 		if(Ftype != NULL) {
@@ -63,23 +66,20 @@
 			fclose(Ftype);
 		}
 		else {
-			OPSE(&inf, "Can't open the file type.typ conteiner of the definitions of object's types\nPress a button to exit the program", 0, 0);
+			OPSE(&inf, "Can't open the file type.typ that conteins the type definitions\nPress a button to exit the program", NULL);
 			scanf("%s", input);
 			return 0;
 		}
 
+
 		// RUNNING THE PROGRAM
-		do{
-			// call the shell
-			if (Shell (&inf, Stype) == QUITSIGNAL)
-				break;
-		}
-		while(1);
+		while (Shell (&inf, Stype) != QUITSIGNAL);
 		
-		// EXITING
+		
+		// EXITING THE PROGRAM
 		
 		// goodbye message
-		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL, NULL);
+		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL);
 		
 		//free the memory
 		free(Stype->type);

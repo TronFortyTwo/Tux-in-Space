@@ -27,7 +27,7 @@
  * 
  * */
 	void ScanFString(char *dest, FILE *stream) {
-		fscanf(stream, "%99999[^\n]%*1[\n]", dest);
+		fscanf(stream, "%999999[^\n]%*1[\n]", dest);
 		return;
 	}
 
@@ -35,9 +35,7 @@
  * 	can be setted a number num of character that don't be printed
  *	*/
 	void PrintLine (tinf *inf, char *character, int num) {
-		
 		int p;	//(p)rinted
-
 		for ( p=0; p!=inf->width-num; p++) {
 			printf("%c", *character);
 			}
@@ -49,46 +47,44 @@
  * SafeIScanf scan an int value more "safely" that the normal scanf() function
  * 
  * */
-void SafeIScan(tinf *inf, int *dest) {
-	
-	//this buffer remember all the input
-	char input[BUFFERINPUTSIZE];
-	char buffer[BUFFERSIZE];
-	//this is the int value saved in buffer
-	long long int number;
-	//int values that are given to Rmotor
-	int ivar[2];
-	
-	//scanf the string
-	fflush(stdin);
-	scanf("%s", input);
+	void SafeIScan(tinf *inf, int *dest) {
+		DebugPrint(inf, "safeiscan");
 		
-	//call the function
-	number = strtoll(input, NULL, 0);
+		//this buffer remember all the input
+		char input[BUFFERINPUTSIZE];
+		//this is the int value saved in buffer
+		long long int number;
+		//int values that are given to OPS
+		void *var[3];
+		//temp variable
+		long long int temp;
 	
-	//set the max value of an int
-	ivar[0]= (int) pow(2, 8*sizeof(int) -1);
-	ivar[1]= -ivar[0];
-		
-	// reask the number until the number can fit the int number
-	for( ; ; ) {
-		if(number <= ivar[0])
-			if(number >= ivar[1])
-				break;
-		strcpy(buffer, "The number ");
-		strcat(buffer, input);
-		strcat(buffer, " that you gave is too big or too small!\n\nPlease, type another number between %i and %i");
-		OPSE(inf, buffer, ivar, 0);
+		//scanf the string
 		scanf("%s", input);
-		fflush(stdin);
+		
+		//call the function
 		number = strtoll(input, NULL, 0);
+		
+		// reask the number until the number can fit the int number
+		do {
+			if (number <=  INT_MAX)
+				if (number >= INT_MIN)
+					break;
+			temp = INT_MAX;
+			var[0] = input;
+			var[1] = &temp;
+			var[2] = &temp;
+			OPSE (inf, "The number %s that you gave is too big or too small!\n\nPlease, type another number between %i and -%i", var);
+			scanf("%s", input);
+			number = strtoll(input, NULL, 0);
+		}
+		while (1);
+
+		//assign the value
+		*dest = number;
+
+		return;
 	}
-
-	//assign the value
-	*dest = number;
-
-	return;
-}
 
 
 

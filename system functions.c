@@ -31,202 +31,197 @@
  * 	-this is a recursive function
  */
 	void InitObject (tinf *inf, tobj *obj, tStype *Stype, int n) {
+		DebugPrint(inf, "InitObject");
 		
-		// What is going to be printed. If the buffers go in overflow increase its size (see constants.h)
-		char buffer [BUFFERSIZE];
-		char reffub [BUFFERSIZE];
-		// name of the object to load and the name of a type of object
-		char name[NAMELUN+17];
-		char input[DESCRIPTIONSIZE];
-		// object to load
-		FILE *objfile;
-		// array to give to Rmotor whit counters
-		int ivar[5];
-		int ipos = 0;
-		long double lvar[10];
-		int lpos=0;
-	
-		// Title
-		strcpy(buffer, "NEW OBJECT INITIALIZATION:\n");
-		// A number
-		if(n > 0){
-			strcat(buffer, "object number %i");
-			ivar[ipos] = n;
-			ipos++;
-		}
-		// Ask user if he want to load a preexistent object
-		strcpy (reffub, buffer);
-		strcat (reffub, "\n\nDo you want to load a saved object?\n&tdDigit the name of the object you want to load or 'n' if you want to create a new object.");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%s", reffub);
-		// if the user want to load an object
-		if(0 != strcmp(reffub, "n")) {
-			//add the extension (.object) and the path objects/
-			strcat(reffub, ".object");
-			strcpy(name, "Objects/");
-			strcat(name, reffub);
-			objfile = fopen(name, "r");
-			if(objfile==NULL) {
-				OPSE(inf, "The file you would to load doesn't exist!\nRestart initialization sequence", 0, 0);
-				SafeIScan(inf, &ivar[0]);
-				InitObject(inf, obj, Stype, n);
-				return;
+		//variables
+		void *var[18];
+		int input;
+		int temp;
+		char comment[64];			// This is a buffer that contein comment of what is just been done
+		char mass_irregularity[3];	// assume the value IRREGULARITY if the mass is out of range
+		char color_irregularity[3];	// assume the value IRREGULARITY if the color is out of range
+		
+		// Initialize the object whit blank attributes
+		strcpy(obj->name, "Chose a name for your new object");
+		obj->type = typeSearchName(inf, Stype, "Chose a type");
+		obj->mass = 0;
+		obj->radius = 0;
+		obj->color.blue = 0;
+		obj->color.red = 0;
+		obj->color.green = 0;
+		obj->x = 0;
+		obj->y = 0;
+		obj->z = 0;
+		obj->velx = 0;
+		obj->vely = 0;
+		obj->velz = 0;
+		
+		// the loop
+		strcpy(comment, " ");
+		strcpy(mass_irregularity, " ");
+		strcpy(color_irregularity, " ");
+		
+		do{
+			// Print and scan the desire of the user
+			var[0] = obj->name;
+			var[1] = obj->type->name;
+			var[2] = obj->type->description;
+			var[3] = & obj->color.red;
+			var[4] = color_irregularity;
+			var[5] = & obj->color.green;
+			var[6] = & obj->color.blue;
+			var[7] = & obj->mass;
+			var[8] = mass_irregularity;
+			var[9] = & obj->radius;
+			var[10] = & obj->x;
+			var[11] = & obj->y;
+			var[12] = & obj->z;
+			var[13] = & obj->velx;
+			var[14] = & obj->vely;
+			var[15] = & obj->velz;
+			var[16] = comment;
+			OPS(inf, "INITIALIZE A NEW OBJECT\n\n1) name:         %s\n\n2) type:         %s\n&ti7%s&t0\n\n3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n\n4) mass:         %l   %s\n\n5) radius:       %l\n\n6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n\n7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n\n\n8) LOAD  the object from a file\n9) SAVE  this object in a file\n10) DONE\n\n%s", var);
+			SafeIScan(inf, &input);
+		
+			// Name
+			if(input == 1) {
+				temp = NAMELUN-1;
+				var[0] = &temp;
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character and can't contein spaces", var);
+				scanf("%s", obj->name);
+				strcpy(comment, "\nNew name assigned succefully!");
 			}
-			// Read name, type, radius, mass and color, then close the file
-			ScanFString(obj->name, objfile);
-			ScanFString(input, objfile);
-			obj->type = typeSearchName(Stype, input);
-			fscanf(objfile, "%d", &obj->color.red);
-			fscanf(objfile, "%d", &obj->color.green);
-			fscanf(objfile, "%d", &obj->color.blue);
-			fscanf(objfile, "%Lf", &obj->radius);
-			fscanf(objfile, "%Lf", &obj->mass);
-			fclose(objfile);
-			// tell name, type, radius and mass whitout ask
-			strcat(buffer, "\n\nname:    ");
-			strcat(buffer, obj->name);
-			strcat(buffer, "\n\ntype of the object:  ");
-			strcat(buffer, obj->type->name);
-			strcat(buffer, "\n\ncolor:  %i %i %i");
-			ivar[ipos] = obj->color.red;
-			ipos++;
-			ivar[ipos] = obj->color.green;
-			ipos++;
-			ivar[ipos] = obj->color.blue;
-			ipos++;
-			strcat(buffer, "\n\nradius:  %l");
-			lvar[lpos] = obj->radius;
-			lpos++;
-			strcat(buffer, "\n\nmass:  ");
-		}
-		//if the user doesn't want to load from a file an object
-		else {
-			// some space and ask about the name
-			strcat (buffer, "\n\nname:    ");
-			strcpy (reffub, buffer);
-			strcat (reffub, "\n&tdThe name of the object must be of a maximum of %i characters and spaces are not allowed");
-			ivar[ipos] = NAMELUN-1;
-			OPS(inf, reffub, ivar, lvar);
-			scanf("%s", obj->name);
-			strcat(buffer, obj->name);
-			// ask about the type
-			obj->type = TypeBrowser(inf, Stype, "Let's choose the type of object for your new object");
-			strcat(buffer, "\n\ntype:    ");
-			strcat(buffer, obj->type->name);
-			//ask about the color
-			strcat(buffer, "\n\ncolor:  ");
-			strcpy(reffub, buffer);
-			strcat(reffub, "\n&tdThe color of the new object must be composed of three numbers whit value 0 to 255, the first is the red, the second the green and the third the blue");
-			OPS(inf, reffub, ivar, lvar);
-			obj->color = ScanColor(inf, obj->type->color_min, obj->type->color_max);
-			ivar[ipos] = obj->color.red;
-			ipos++;
-			ivar[ipos] = obj->color.green;
-			ipos++;
-			ivar[ipos] = obj->color.blue;
-			ipos++;
-			// ask about the radius
-			strcat(buffer, " %i %i %i \n\nradius:  ");
-			strcpy(reffub, buffer);
-			strcat(reffub, " (Km)");
-			OPS(inf, reffub, ivar, lvar);
-			scanf("%Lf", &obj->radius);
-			lvar[lpos] = obj->radius;
-			lpos++;
-			// ask about the mass (a loop because continue to ask if the mass is out of range)
-			strcat(buffer, "%l\n\nmass:  ");
-			do {
-				strcpy(reffub, buffer);
-				strcat(reffub, " (t) 1 ton = 1000 Kg\n&tdFor the type ");
-				strcat(reffub, obj->type->name);
-				strcat(reffub, " the mass must be:\nmin: %l\nmax: ");
-				lvar[lpos] = obj->type->mass_min;
-				if(obj->type->mass_max == -1)
-					strcat(reffub, "infinity");
-				else {
-					strcat(reffub, "%l");
-					lvar[lpos+1] = obj->type->mass_max;
+			// Type
+			else if(input == 2) {
+				obj->type = TypeBrowser(inf, Stype, "Chose a new type for your new object");
+				strcpy(comment, "\nNew type assigned succefully!");
+			}
+			// Color
+			else if(input == 3) {
+				obj->color = ScanColor(inf, obj->type->color_min, obj->type->color_max);
+				strcpy(comment, "\nNew color assigned succefully!");
+			}
+			// Mass
+			else if(input == 4) {
+				var[0] = & obj->type->mass_min;
+				if (obj->type->mass_max == -1)
+					OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values start from %l", var);
+				else{
+					var[1] = & obj->type->mass_max;
+					OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values are between %l and %l", var);
 				}
-				OPS(inf, reffub, ivar, lvar);
-				scanf("%Lf", &obj->mass);
-				//the mass is valid if is below min mass and under max mass
-				if(obj->mass > obj->type->mass_min && ((obj->mass < obj->type->mass_max) || (obj->type->mass_max == -1)) )
+				scanf("%Lf", & obj->mass);
+				strcpy(comment, "\nNew mass assigned succefully!");
+			}
+			// Radius
+			else if(input == 5) {
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the radius of the new object:", var);
+				scanf("%Lf", &obj->radius);
+				strcpy(comment, "\nNew radius assigned succefully!");
+			}
+			// Coordiates
+			else if(input == 6) {
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the x axis of the new object:", var);
+				scanf("%Lf", &obj->x);
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the y axis of the new object:", var);
+				scanf("%Lf", &obj->y);
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the z axis of the new object:", var);
+				scanf("%Lf", &obj->z);
+				strcpy(comment, "\nNew coordinates assigned succefully!");
+			}
+			// Velocity
+			else if(input == 7) {
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the x axis of the new object:", var);
+				scanf("%Lf", &obj->velx);
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the y axis of the new object:", var);
+				scanf("%Lf", &obj->vely);
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the z axis of the new object:", var);
+				scanf("%Lf", &obj->velz);
+				strcpy(comment, "\nNew velocity assigned succefully!");
+			}
+			// LOAD
+			else if(input == 8) {
+				if (
+					LoadObject(inf, obj, Stype, obj->name)
+				)
+					strcpy(comment, "\nNew object loaded succefully!");
+				else
+					strcpy(comment, "\nCan't load the object! No object whit that name found!");
+			}
+			// SAVE
+			else if(input == 9) {
+				SaveObject(inf, obj);
+				strcpy(comment, "\nNew object saved succefully!");
+			}
+			// COMMAND UNRECOGNIZED
+			else if(input == 10)
+				strcpy(comment, "\nCannot exit! fix irregularity first");
+			
+			// check for IRREGALARITY
+			// irregularity: MASS
+			if ((obj->mass > obj->type->mass_min) && ((obj->mass < obj->type->mass_max) || (obj->type->mass_max == -1))) {
+				strcpy(mass_irregularity, "  ");
+			}
+			else {
+				strcpy(mass_irregularity, IRREGULARITY);
+				strcat(comment, "\n");
+				strcat(comment, IRREGULARITY);
+				strcat(comment, ": mass out of range");
+			}
+			// irregularity: COLOR
+			if (ColorRangeCheck(obj->color, obj->type->color_min, obj->type->color_max) == GOODSIGNAL)
+				strcpy(color_irregularity, " ");
+			else {
+				strcpy(color_irregularity, IRREGULARITY);
+				strcat(comment, "\n");
+				strcat(comment, IRREGULARITY);
+				strcat(comment, ": color out of range");
+			}
+			// EXIT
+			if(input == 10) {
+				if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0)))
 					break;
 			}
-			while(1);
 		}
-		// ask about the x
-		lvar[lpos] = obj->mass;
-		lpos++;
-		strcat(buffer, "%l\n\nposition of the object in the x axis:  ");
-		strcpy(reffub, buffer);
-		strcat(reffub, " (Km)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->x);
-		fflush(stdin);
-		// ask about the y
-		lvar[lpos]=obj->x;
-		lpos++;
-		strcat (buffer, "%l\n\nposition of the object in the y axis:  ");
-		strcpy (reffub, buffer);
-		strcat (reffub, " (Km)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->y);
-		fflush(stdin);
-		// ask about the z
-		lvar[lpos]=obj->y;
-		lpos++;
-		strcat (buffer, "%l\n\nposition of the object in the z axis:  ");
-		strcpy (reffub, buffer);
-		strcat (reffub, " (Km)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->z);
-		fflush(stdin);
-		// ask about the x's fast
-		lvar[lpos]=obj->z;
-		lpos++;
-		strcat (buffer, "%l\n\nfast of the object throught the x axis:  ");
-		strcpy (reffub, buffer);
-		strcat (reffub, " (Km/s)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->velx);
-		fflush(stdin);
-		// ask about the y's fast
-		lvar[lpos]=obj->velx;
-		lpos++;
-		strcat (buffer, "%l\n\nfast of the object throught the y axis:  ");
-		strcpy (reffub, buffer);
-		strcat (reffub, " (Km/s)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->vely);
-		fflush(stdin);
-		// ask about the z's fast
-		lvar[lpos]=obj->vely;
-		lpos++;
-		strcat (buffer, "%l\n\nfast of the object throught the z axis:  ");
-		strcpy (reffub, buffer);
-		strcat (reffub, " (Km/s)");
-		OPS(inf, reffub, ivar, lvar);
-		scanf("%Lf", &obj->velz);
-		fflush(stdin);
-		// finish the asking
-		lvar[lpos]=obj->velz;
-		lpos++;
-		strcat(buffer, "%l\n\nInitializing of the new object complete:\nPress 0 if you are not happy of this configuration and you want to reinitialize the object\nPress 1 if you want to save this object in a file\nPress a number that is >1 to continue");
-		OPS(inf, buffer, ivar, lvar);
-		SafeIScan(inf, ivar);
-		if(ivar[0] == 1) {
-			SaveObject(inf, obj);
-		}
-		if(ivar[0] == 0)
-			InitObject(inf, obj, Stype, n);
+		while(1);
+		
 		return;
+	}
+/***
+ * The load object function load from a file the information about a object
+ */
+	int LoadObject(tinf *inf, tobj *obj, tStype *Stype, char *name) {
+		DebugPrint(inf, "loadobject");
+		
+		FILE *ofile;			// (the) o(bject) file
+		char typename[NAMELUN];	// The name of type
+		
+		ofile = fopen(name, "r");
+		while(ofile == NULL) {
+			return BADSIGNAL;
+		}
+		
+		// Read type, color, radius and mass
+		ScanFString(typename, ofile);
+		obj->type = typeSearchName(inf, Stype, typename);
+		fscanf(ofile, "%d", &obj->color.red);
+		fscanf(ofile, "%d", &obj->color.green);
+		fscanf(ofile, "%d", &obj->color.blue);
+		fscanf(ofile, "%Lf", &obj->radius);
+		fscanf(ofile, "%Lf", &obj->mass);
+		
+		//close the file and exit
+		fclose(ofile);
+		
+		return GOODSIGNAL;
 	}
  
 /***
  * The SaveObject function save a object in a file
  */
 	void SaveObject(tinf *inf, tobj *obj) {
+	
+		DebugPrint(inf, "SaveObject");
 	
 		//the path where the object must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+16];
@@ -242,7 +237,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", 0, 0);
+			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", NULL);
 			scanf("%s", input);
 			if(strcmp(input, "n") == 0)
 				return;
@@ -253,9 +248,6 @@
 		fprintf(dest, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->color.red, obj->color.green, obj->color.blue,  obj->radius ,obj->mass);
 		fclose(dest);
 	
-		OPS(inf, "OBJECT SAVED WHIT SUCCESS!\n\nPress something to continue", 0, 0);
-		scanf("%s", input);		
-	
 		return;	
 	}
 
@@ -264,25 +256,24 @@
  */
 	tsys *InitSystem (tinf *inf, tStype *Stype) {
 		
-		//to give to OPS and counter
+		DebugPrint(inf, "Initsystem");
+		
+		// var to give to OPS and counter
 		int c;
-		//the system to create
+		void *var;
+		// the system to create
 		tsys *sys = (tsys *) malloc (sizeof(tsys));
-		if(sys == NULL)
-			do {
-				OPSML(inf, "InitSystem");
-				sys = (tsys *) malloc (sizeof(tsys));
-				if(sys != NULL)
-					break;
-			}
-			while(1);
-		//the buffers (dinamic and static)
+		while (sys == NULL) {
+			OPSML(inf, "sys");
+			sys = (tsys *) malloc (sizeof(tsys));
+		}
+		// the buffers (dinamic and static)
 		char sbuf[BUFFERSIZE];
 		char dbuf[BUFFERSIZE];
 		
-		//set the type struct pointer
+		// set the type struct pointer
 		sys->Stype = Stype;
-		//set the system's time
+		// set the system's time
 		sys->stime.year = 0;
 		sys->stime.hour = 0;
 		sys->stime.day = 0;
@@ -295,10 +286,11 @@
 		
 		// Ask for the name of the new system
 		c = NAMELUN-1;
+		var = &c;
 		strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
 		strcpy(dbuf, sbuf);
 		strcat(dbuf, " of the system:\n&tdIsn't allowed any spaces and can be of a maximum of %i characters");
-		OPS (inf, dbuf, &c, 0);
+		OPS (inf, dbuf, &var);
 		scanf("%s", sys->name);
 		strcat(sbuf, ":    ");
 		strcat(sbuf, sys->name);
@@ -306,23 +298,24 @@
 		strcat(sbuf, "\n\nprecision");
 		strcpy(dbuf, sbuf);
 		strcat(dbuf, " of the simulation:\n&tdMeans how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
-		OPS (inf, dbuf, 0, 0);
+		OPS (inf, dbuf, NULL);
 		scanf("%Lf", &sys->precision);
 		strcat(sbuf, ":    %l\n\n\n");
 		// ask if initialize new objects
 		strcat(sbuf, "Configuration of the system complete. But the system doesn't have any object to work on yet. Type the number of object do you want to create now. You can press zero to go directly to the new system created whitout create any new object, however you can create, modify and delete object later, while the simulation is going");
-		OPS(inf, sbuf, 0, &sys->precision);
+		var = &sys->precision;
+		OPS(inf, sbuf, &var);
 		SafeIScan(inf, &sys->nactive);
 		sys->nalloc = sys->nactive;
 		for (; ;) {
 			if(sys->nactive >= 0)
 				break;
-			OPSE (inf, "Wrong value: Must be put a number bigger than zero!", 0, 0);
+			OPSE (inf, "Wrong value: Must be put a number bigger than zero!", NULL);
 			SafeIScan(inf, &sys->nactive);
 		}
 		
 		//alloc the object array
-		sys->o = (tobj *) malloc ( sizeof(tobj) * sys->nactive );
+		sys->o = (tobj *) malloc ( sizeof(tobj[sys->nactive]) );
 			
 		// Initialize the objects
 		for (c=0; c!=sys->nactive; c++)
@@ -337,34 +330,32 @@
 	 */
 	 
 	void ReduceObjBuf(tsys *sys, tinf *inf) {
+	
+		DebugPrint(inf, "reduceobjbuf");
 		
 		tobj *newo;		//(new o)bject buffer
 		int c;			//(c)ounter
 		
 		// create a new buffer whit less objects
 		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE));
-		do{
-			if(newo != NULL)
-				break;
-			else {
-				OPSML(inf, "ReduceObjBuf");
-				newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
-			}	
+		while (newo == NULL) {
+			OPSML(inf, "ReduceObjBuf");
+			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 		}
-		while(1);
 		// update counter
 		sys->nalloc -= OBJBUFSIZE;
 		// copy what is stored in the old buffer in the new buffer
-		for(c=0; c!= sys->nalloc-1; c++)
+		for(c=0; c!= sys->nalloc; c++)
 			newo[c] = sys->o[c];
 		// delete the old buffer
 		free(sys->o);
 		// point sys->o at the new buffer
 		sys->o = newo;
-		//if can be reduced more, recall itself
+		// if can be reduced more, recall itself
 		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 			ReduceObjBuf(sys, inf);
-	
+			
+		//exit
 		free(newo);
 		return;
 	}
@@ -373,25 +364,19 @@
 	 * This function make the object buffer size bigger
 	 */
 	void ExtendObjBuf(tsys *sys, tinf *inf){
-	
+		DebugPrint(inf, "extendobjbuf");
+		
 		tobj *newo;		//(new o)bject buffer
 		int c;			//(c)ounter
+		
 		// create a new buffer whit more objects
-		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
-		do{
-			if(newo != NULL)
-				break;
-			else {
-				do{
-					OPSML(inf, "ExtendObjBuf");
-					newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc + OBJBUFSIZE));
-				}
-				while(newo == NULL);
-			}
+		newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
+		while (newo == NULL) {
+			OPSML(inf, "ExtendObjBuf");
+			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 		}
-		while(1);
 		// copy what is stored in the old buffer in the new buffer
-		for(c=0; c!= sys->nalloc; c++)
+		for(c=0; c!=sys->nalloc; c++)
 			newo[c] = sys->o[c];
 		// update counter
 		sys->nalloc += OBJBUFSIZE;
@@ -406,6 +391,8 @@
 	 * Save a system in the directory Systems/
 	 */
 	void SaveSys(tsys *sys, tinf *inf){
+		
+		DebugPrint(inf, "savesys");
 		
 		//the path where the system must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+13];
@@ -423,7 +410,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", NULL, NULL);
+			OPS(inf, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", NULL);
 			scanf("%s", input);
 			if(strcmp(input, "n") == 0)
 				return;
@@ -440,7 +427,7 @@
 		}
 		fclose(dest);
 	
-		OPS(inf, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL, NULL);
+		OPS(inf, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL);
 		scanf("%s", input);		
 	
 		return;
@@ -450,6 +437,8 @@
 	 * create a new system and return his pointer
 	 */
 	tsys *LoadSystem(tinf *inf, tStype *Stype){
+	
+		DebugPrint(inf, "loadsystem");
 	
 		//the system
 		tsys *sys = (tsys *) malloc (sizeof(tsys));
@@ -465,7 +454,7 @@
 		FILE *dest;				// the file of the system
 		int i;					// counter
 		//ask which system
-		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL, NULL);
+		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
 		scanf("%s", sys->name);
 		//write the path
 		strcpy (path, "Systems/");
@@ -474,7 +463,7 @@
 		//open the file
 		dest = fopen(path, "r");
 		if (dest == NULL) {
-			OPSE(inf, "A system whit that name doesn't exist! Type something to continue and return to the menù", NULL, NULL);
+			OPSE(inf, "A system whit that name doesn't exist! Type something to continue and return to the menù", NULL);
 			scanf("%s", path);
 			free(sys);
 			return NULL;
@@ -496,7 +485,7 @@
 			ScanFString(sys->o[i].name, dest);
 			ScanFString(path, dest);
 			fscanf(dest, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].color.red, &sys->o[i].color.green, &sys->o[i].color.blue, &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
-			sys->o[i].type = typeSearchName(Stype, path);
+			sys->o[i].type = typeSearchName(inf, Stype, path);
 		}
 		
 		sys->Stype = Stype;

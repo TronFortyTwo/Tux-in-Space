@@ -71,7 +71,7 @@
 	 * (Abstract Image Builder)
 	 */
 	timage AIB (tsys *sys, tinf *inf) {
-		
+		DebugPrint(inf, "AIB");
 		timage image;	// the image
 		int i, c;		// counters for loops
 		int *l;			// the state of the frames
@@ -178,7 +178,7 @@
  * The AIB ASCII renderizer renderizes the image created by the AIB and print it
  */
 	void AIB_ASCII_renderizer (tsys *sys, tinf *inf) {
-		
+		DebugPrint(inf, "aib_ascii_renderizer");
 		//counter for loop
 		int i;
 		
@@ -195,6 +195,8 @@
 			OPSML(inf, "AIB ASCII renderizer");
 		}
 		while(1);
+		
+		buffer[0] = '2';
 		
 		//start to renderize
 		for (i=0; i>image.nsprite; i++) {

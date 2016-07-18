@@ -22,7 +22,8 @@
  * The advantages on use OnlyPrintfSystem is:
  * 		- A simply but nice automatic impagination that all function could use whit a simple call 
  * 		- make the program nice
- * 		- A very more simple algoritm (faster and lighter) respect more complex mode of Rmotor not writted yet, but equally can adapts the width and height numbers
+ * 		- A very more simple algoritm (faster and lighter) respect more complex mode (like the AIB), but equally can adapts the width and height numbers
+ * 		- Use only of the Standard C library for now
  *
  * 	NOTE:
  * 	OnlyPrintfSystem is often called OPS
@@ -30,7 +31,8 @@
  */
 
  /**Only Printf System */
-	void OPS(tinf *inf, char *phrase, int *ivar, long double *lvar) {
+	void OPS(tinf *inf, char *phrase, void **var) {
+	DebugPrint(inf, "ops");
 	
 	//loop counter
 	int i;
@@ -45,38 +47,42 @@
 	// one if the buf is finished
 	int bufend = 0;
 	// the position in the int and long double arrays
-	int ipos=0;
-	int lpos=0;
+	int pos=0;
 	// the buffer to print, his size and position
 	int size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
-	char *buf = (char *) malloc (sizeof(char)*size);
-	int bufpos = 0;
-	
-	//signal if there is a memory leack
+	char *buf = (char *) malloc (sizeof(char[size]));
 	while (buf == NULL) {
 		OPSML(inf, "OPS");
-		buf = (char *) malloc (sizeof(char)*((inf->width-TWOFRAMELUN)*(inf->height-5)+1));
-	};
+		buf = (char *) malloc (sizeof(char[size]));
+	}
+	int bufpos = 0;
+	
 	
 	//OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
 	for(chardone=0; bufpos!=size-1;) {
 		
-		//dinamic printing! (character that mean other character, here translated)
+		// dinamic printing! (character that mean other character, here translated)
 		if(phrase[chardone] == '%') {
 			chardone++;
-			//an int value to print
+			// an int value to print
 			if(phrase[chardone] == 'i') {
-				bufpos = bufpos + sprintf(&buf[bufpos], "%d", ivar[ipos]);
-				ipos++;
+				bufpos += sprintf(&buf[bufpos], "%d", *((int *)var[pos]) );
+				pos++;
 				chardone++;
 			}
-			//a long double value to print
+			// a long double value to print
 			else if(phrase[chardone] == 'l') {
-				bufpos = bufpos + sprintf(&buf[bufpos], "%Lf", lvar[lpos]);
-				lpos++;
+				bufpos += sprintf(&buf[bufpos], "%Lf", *((long double *)var[pos]) );
+				pos++;
 				chardone++;
 			}
-			//a line to print , f mean '(f)inish line' | example: %f. => a line of '.', but whitout '\n'
+			// a string to print
+			else if(phrase[chardone] == 's') {
+				bufpos += sprintf(&buf[bufpos], "%s", (char *) var[pos]);
+				pos++;
+				chardone++;
+			}
+			// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 			else if(phrase[chardone] == 'f') {
 				chardone++;
 				for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
@@ -85,7 +91,7 @@
 				}
 				chardone++;
 			}
-			// the % character (%%)
+			// the '%' character (%%)
 			else if(phrase[chardone] == '%' ){
 				chardone++;
 				buf[bufpos] = '%';
@@ -155,7 +161,20 @@
 					else if (buf[bufpos] == '8') theet=8;
 					else if (buf[bufpos] == '9') theet=9;
 					// or scan a letter whit a meaning 
-					else if (buf[bufpos] == 'd') theet = THEETDESCR;	//for a description
+					else if (buf[bufpos] == 'd') theet = THEETDESCR;	// for a description
+					else if (buf[bufpos] == 'i') {						// for two digit theet
+						bufpos++;
+						if (buf[bufpos] == '0') theet=10;
+						else if (buf[bufpos] == '1') theet=11;
+						else if (buf[bufpos] == '2') theet=12;
+						else if (buf[bufpos] == '3') theet=13;
+						else if (buf[bufpos] == '4') theet=14;
+						else if (buf[bufpos] == '5') theet=15;
+						else if (buf[bufpos] == '6') theet=16;
+						else if (buf[bufpos] == '7') theet=17;
+						else if (buf[bufpos] == '8') theet=18;
+						else if (buf[bufpos] == '9') theet=19;
+					}	
 				}
 				bufpos++;
 			}
@@ -167,7 +186,7 @@
 			// print the number of spaces conteined in theet if at the start of the line
 			else if (columndone < theet)
 				printf(" ");
-			// a space in the first column is ignored (calculating that the first column can have )
+			// a space in the first column is ignored
 			else if ((columndone == theet) && (buf[bufpos] == ' ')) {
 				bufpos++;
 				columndone--;
@@ -207,19 +226,24 @@
 /***
  * OPSE (OnlyPrintfSystemError) printf an error message whit the OPS
  */
-	void OPSE(tinf *inf, char *message, int *ivar, long double *lvar){
+	void OPSE(tinf *inf, char *message, void **var){
+		DebugPrint(inf, "opse");
 		//size of message
 		int size;
 		size = strlen(message);
 		//the message to print
-		char *buffer = (char *) malloc ((10+size)*sizeof(char));
+		char *buffer = (char *) malloc (sizeof(char[10+size]));
+		while(buffer == NULL){
+			OPSML(inf, "OPSE");
+			buffer = (char *) malloc (sizeof(char[10+size]));
+		}
 		//a nice bip
 		printf("\a");
 		//set the buffer
 		strcpy(buffer, "ERROR!\n\n");
 		strcat(buffer, message);
 		//printf the buffer
-		OPS(inf, buffer, ivar, lvar);
+		OPS(inf, buffer, var);
 		//exit the function
 		free(buffer);
 		return;
@@ -229,10 +253,10 @@
  * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack and manage the situation
  */	
 	void OPSML(tinf *inf, char *data) {
-		
 		char i[2];	//(i)nput
-		
 		printf ("\n\n\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		DebugPrint(inf, "opsml: the program has problem whit memory allocation while:");
+		DebugPrint(inf, data);
 		scanf("%s", i);
 		
 		return;
