@@ -48,9 +48,12 @@
 	// The value that the variable ttime.year assumes if the user want to quit
 	#define QUITSIGNAL -1
 	
-	// Values returned by functions
+	// Values returned by functions (the two mean)
 	#define GOODSIGNAL 1
-	#define BADSIGNAL 2
+	#define BADSIGNAL 2	
+	// Advanced returned
+	#define FILE_ERR_SIG 3
+	#define CORRUPTED_SIG 4
 	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64

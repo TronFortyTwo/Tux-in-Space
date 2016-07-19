@@ -80,7 +80,7 @@
 			var[14] = & obj->vely;
 			var[15] = & obj->velz;
 			var[16] = comment;
-			OPS(inf, "INITIALIZE A NEW OBJECT\n\n1) name:         %s\n\n2) type:         %s\n&ti7%s&t0\n\n3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n\n4) mass:         %l   %s\n\n5) radius:       %l\n\n6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n\n7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n\n\n8) LOAD  the object from a file\n9) SAVE  this object in a file\n10) DONE\n\n%s", var);
+			OPS(inf, "INITIALIZE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object in a file\n%f-10) DONE\n\n%s", var);
 			SafeIScan(inf, &input);
 		
 			// Name
@@ -141,12 +141,14 @@
 			}
 			// LOAD
 			else if(input == 8) {
-				if (
-					LoadObject(inf, obj, Stype, obj->name)
-				)
-					strcpy(comment, "\nNew object loaded succefully!");
-				else
-					strcpy(comment, "\nCan't load the object! No object whit that name found!");
+				temp = LoadObject(inf, obj, Stype, obj->name);
+				strcpy(comment, "\n");
+				if (temp == GOODSIGNAL)
+					strcat(comment, "New object loaded succefully!");
+				else if (temp == FILE_ERR_SIG)
+					strcat(comment, "Can't load the object! No object whit that name found!");
+				else 		//CORRUPTED_SIG
+					strcat(comment, "Can't load the object! File corrupted or outdated!");
 			}
 			// SAVE
 			else if(input == 9) {
@@ -193,17 +195,26 @@
 	int LoadObject(tinf *inf, tobj *obj, tStype *Stype, char *name) {
 		DebugPrint(inf, "loadobject");
 		
-		FILE *ofile;			// (the) o(bject) file
-		char typename[NAMELUN];	// The name of type
+		FILE *ofile;				// (the) o(bject) file
+		char buffer [NAMELUN + 15];
+		ttype *type;				// temporany pointer
 		
-		ofile = fopen(name, "r");
-		while(ofile == NULL) {
-			return BADSIGNAL;
-		}
+		strcpy(buffer, "Objects/");
+		strcat(buffer, name);
+		strcat(buffer, ".object");
+		
+		ofile = fopen(buffer, "r");
+		while(ofile == NULL)
+			return FILE_ERR_SIG;
 		
 		// Read type, color, radius and mass
-		ScanFString(typename, ofile);
-		obj->type = typeSearchName(inf, Stype, typename);
+		ScanFString(buffer, ofile);
+		type = typeSearchName(inf, Stype, buffer);
+		if (type != NULL)
+			obj->type = type;
+		else
+			return CORRUPTED_SIG;
+		
 		fscanf(ofile, "%d", &obj->color.red);
 		fscanf(ofile, "%d", &obj->color.green);
 		fscanf(ofile, "%d", &obj->color.blue);

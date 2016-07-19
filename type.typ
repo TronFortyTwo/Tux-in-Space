@@ -63,6 +63,10 @@ NAME: Debris
 DESCRIPTION: Debrises are spacecraft remaining, stages used and discarded that often travel in the spaces freely and sometimes falls onto some planet surface
 PARENT: Spacecraft
 
+NAME: Deep Space Kraken
+DESCRIPTION: Terrifying enormous creature that destroy anything what encouter. No one survived his attacks to confirm his existent
+PARENT: Space Monster
+
 NAME: Dwarf planet
 PARENT: Minor planet
 
@@ -102,6 +106,10 @@ PARENT: Planet
 NAME: Lava planet
 DESCRIPTION: A lava planet is a type of terrestrial planet whit the surface completely covered whit lava
 PARENT: Terrestrial planet
+
+NAME: Leviatan
+DESCRIPTION: Enormous dragon of the space, the information about him are few. Seem that his diet is composed by the helium of the gas giant planets
+PARENT: Space Monster
 
 NAME: Magnetar
 DESCRIPTION: A magnetar is a Neutron star whit a very strong magnetic field
@@ -152,6 +160,10 @@ PARENT: Planet
 
 NAME: Small body
 PARENT: Celestial object
+
+NAME: Space Monster
+DESCRIPTION: As in the old times big and unknow creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
+PARENT: NULL
 
 NAME: Spacecraft
 DESCRIPTION: Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport

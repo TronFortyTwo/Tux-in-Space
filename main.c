@@ -19,7 +19,7 @@
 
 
 #################################################################################################################################################
-# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution and contein file's initialization	#
+# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution and contein files' initialization	#
 #################################################################################################################################################
 */
 
@@ -43,9 +43,9 @@
 		char input[2];
 		
 		// default things for struct inf are setted.
-		// height and width are respectively the number of height and width that Rmotor can use for printing
-		inf.height = 38;
-		inf.width = 120;
+		// height and width are respectively the number of height and width that the program can use for printing (The minimum recommended configuration is: height 40 and width 60)
+		inf.height = 41;
+		inf.width = 100;
 		
 		//print that is loading
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
