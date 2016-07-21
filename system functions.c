@@ -80,7 +80,7 @@
 			var[14] = & obj->vely;
 			var[15] = & obj->velz;
 			var[16] = comment;
-			OPS(inf, "INITIALIZE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object in a file\n%f-10) DONE\n\n%s", var);
+			OPS(inf, "CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object in a file\n%f-10) DONE\n\n%s", var);
 			SafeIScan(inf, &input);
 		
 			// Name
@@ -105,37 +105,37 @@
 			else if(input == 4) {
 				var[0] = & obj->type->mass_min;
 				if (obj->type->mass_max == -1)
-					OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values start from %l", var);
+					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values start from %l", var);
 				else{
 					var[1] = & obj->type->mass_max;
-					OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values are between %l and %l", var);
+					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values are between %l and %l", var);
 				}
 				scanf("%Lf", & obj->mass);
 				strcpy(comment, "\nNew mass assigned succefully!");
 			}
 			// Radius
 			else if(input == 5) {
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the radius of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the radius of the new object:", var);
 				scanf("%Lf", &obj->radius);
 				strcpy(comment, "\nNew radius assigned succefully!");
 			}
 			// Coordiates
 			else if(input == 6) {
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the x axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the x axis of the new object:", var);
 				scanf("%Lf", &obj->x);
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the y axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the y axis of the new object:", var);
 				scanf("%Lf", &obj->y);
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the position in the z axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the z axis of the new object:", var);
 				scanf("%Lf", &obj->z);
 				strcpy(comment, "\nNew coordinates assigned succefully!");
 			}
 			// Velocity
 			else if(input == 7) {
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the x axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the x axis of the new object:", var);
 				scanf("%Lf", &obj->velx);
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the y axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the y axis of the new object:", var);
 				scanf("%Lf", &obj->vely);
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the velocity in the z axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the z axis of the new object:", var);
 				scanf("%Lf", &obj->velz);
 				strcpy(comment, "\nNew velocity assigned succefully!");
 			}
@@ -143,12 +143,15 @@
 			else if(input == 8) {
 				temp = LoadObject(inf, obj, Stype, obj->name);
 				strcpy(comment, "\n");
-				if (temp == GOODSIGNAL)
+				if (temp == GOODSIGNAL)									//load success
 					strcat(comment, "New object loaded succefully!");
-				else if (temp == FILE_ERR_SIG)
-					strcat(comment, "Can't load the object! No object whit that name found!");
-				else 		//CORRUPTED_SIG
-					strcat(comment, "Can't load the object! File corrupted or outdated!");
+				else { 													//load failed
+					strcat(comment, "Can't load the object!");
+					if (temp == FILE_ERR_SIG)
+						strcat(comment, "No object whit that name found!");
+					else 		//CORRUPTED_SIG
+						strcat(comment, "File corrupted or outdated!");
+				}
 			}
 			// SAVE
 			else if(input == 9) {

@@ -41,7 +41,7 @@
 		Gravity(sys);
 		
 		// IMPACTS
-		// Impacts(sys, inf);
+		Impacts(sys, inf);
 		
 		// INERTIA
 		for (i=0; i!=sys->nactive; i++) {
