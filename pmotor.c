@@ -28,7 +28,8 @@
 	///prototypes of the phisic related functions
 	void Gravity(tsys *);
 	void Impacts(tsys *, tinf *);
-	
+	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
+		
 
 	void Pmotor (tsys *sys, tinf *inf) {
 		
@@ -80,7 +81,7 @@
 				dist = Pitagora(distx, disty, distz);
 				// if dist = 0, is bad. so
 				if(dist == 0)
-				dist = 0.000000001;
+				dist = 0.0000000001;
 				// the force and his ortogonal components
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
@@ -111,97 +112,129 @@
 	 * 	- special hit mechanics depending on the types of the objects
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
-		
 		DebugPrint(inf, "impacts");
 		
 		// counters for loops
 		int i, l;
-		// memorize i if the bigger is i, l if the bigger is l
-		int bigger;
-		int smaller;
-		// the new object
-		tobj newobj;
-		// distance
+		// the distance
 		long double dist;
 		
 		for(i=0; i < sys->nactive; i++) {
-			for (l=i+1; l < sys->nactive; l++) {
+			for (l=0; l < sys->nactive; l++) {
+				// if are the same object continue
+				if(l == i)
+					continue;
 				// calculate the distance whit pitagora
 				dist = Pitagora (sys->o[i].x - sys->o[l].x, sys->o[i].y - sys->o[l].y, sys->o[i].z - sys->o[l].z);
 				// if doesn't hit continue
 				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
-			
-				// an object is bigger if has mass AND radius much bigger, else make the bigger a random one, but whit advantages (see below at the else)
-				if ((sys->o[i].mass > sys->o[l].mass*BIGGER_TOLERANCE) && (sys->o[i].radius > sys->o[l].radius*BIGGER_TOLERANCE))
-					bigger = i;
-				else if ((sys->o[l].mass > sys->o[i].mass*BIGGER_TOLERANCE) && (sys->o[l].radius > sys->o[i].radius*BIGGER_TOLERANCE))
-					bigger = l;
-				else {
-					srand(time(NULL));
-					if 		( (rand()/RAND_MAX) > (sys->o[i].mass/(sys->o[l].mass+sys->o[i].mass)) )
-						bigger = l;
-					else if ( (rand()/RAND_MAX) < (sys->o[i].mass/(sys->o[l].mass+sys->o[i].mass)) )
-						bigger = i;
-					else {
-						srand(time(NULL));
-						if(rand() > 49)
-							bigger = i;
-						else
-							bigger = l;
-					}
+				
+				// For now there are only not elastic impacts.
+				// write the new object in the first of the two position
+				// then move the last object in the last of the two position
+				if (i < l) {
+					sys->o[i] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+					sys->o[l] = sys->o[sys->nactive-1];
 				}
-				//set the smaller
-				if(i == bigger)
-					smaller = l;
-				else
-					smaller = i;
-				// The new object mantein the name of the bigger. The new object is written in the bigger position
-				strcpy(newobj.name, sys->o[bigger].name);
-				// the type is the type of the bigger, so is alredy written
-				newobj.type = sys->o[bigger].type;
-				// the color is the average, but considering the radius and the type's range
-				newobj.color.blue = ((sys->o[bigger].color.blue * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.blue * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
-				newobj.color.green = ((sys->o[bigger].color.green * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.green * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
-				newobj.color.red = ((sys->o[bigger].color.red * sys->o[bigger].radius *COLOR_PREDOMINANCE) + (sys->o[smaller].color.red * sys->o[smaller].radius)) / (sys->o[bigger].radius*COLOR_PREDOMINANCE + sys->o[smaller].radius);
-				if(newobj.color.blue > newobj.type->color_max.blue)
-					newobj.color.blue = newobj.type->color_max.blue;
-				else if(newobj.color.blue < newobj.type->color_min.blue)
-					newobj.color.blue = newobj.type->color_min.blue;
-				if(newobj.color.red > newobj.type->color_max.red)
-					newobj.color.red = newobj.type->color_max.red;
-				else if(newobj.color.red < newobj.type->color_min.red)
-					newobj.color.red = newobj.type->color_min.red;
-				if(newobj.color.green > newobj.type->color_max.green)
-					newobj.color.green = newobj.type->color_max.green;
-				else if(newobj.color.green < newobj.type->color_min.green)
-					newobj.color.green = newobj.type->color_min.green;
-				// the mass is the sum
-				newobj.mass = sys->o[i].mass + sys->o[l].mass;
-				// the coordinates are the average
-				newobj.x = ((sys->o[i].x * sys->o[i].mass) + (sys->o[l].x * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				newobj.y = ((sys->o[i].y * sys->o[i].mass) + (sys->o[l].y * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				newobj.z = ((sys->o[i].z * sys->o[i].mass) + (sys->o[l].z * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				// the velocity is the average
-				newobj.velx = ((sys->o[i].velx * sys->o[i].mass) + (sys->o[l].velx * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				newobj.vely = ((sys->o[i].vely * sys->o[i].mass) + (sys->o[l].vely * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				newobj.velz = ((sys->o[i].velz * sys->o[i].mass) + (sys->o[l].velz * sys->o[l].mass)) / (sys->o[l].mass + sys->o[i].mass);
-				// to calculate the radius we calculate the volum of the two object, we sum the two and we get the radius of the new volume  V = (4/3) r3 * PI ||| r3 = V * 3/(4*PI)
-				newobj.radius = pow(((4/3 * powl(sys->o[i].radius, 3) * PI) + (4/3 * powl(sys->o[i].radius, 3) * PI)) * 3 / (4 * PI), 1/3);
-					
-				//write the new object in the place of i
-				sys->o[i] = newobj;
-				//move the last object in the place of l
-				sys->o[l] = sys->o[sys->nactive-1];
-				//update counter and if necessary resize the buffer
+				else {
+					sys->o[l] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+					sys->o[i] = sys->o[sys->nactive-1];
+				}
+
+				// update counter and if necessary resize the buffer
 				sys->nactive--;
 				if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 					ReduceObjBuf(sys, inf);
-				
+					
+				//restart the loop and exit
+				Impacts(sys, inf);
+				return;
 			}
 		}
 		return;
 	}
+
+	/***
+	 * This function create a new object from the impact of two objects given, and return hit
+	 */
+	tobj MergeObject_Impact(tinf *inf, tobj *oi, tobj *ol) {
+		DebugPrint(inf, "mergeobject_impact");
+		
+		// the new object
+		tobj newobj;
+		// variables
+		tobj *bigger;
+		tobj *smaller;
+		
+		// an object is bigger if has mass AND radius much bigger, else make the bigger a random one, but whit advantages (see below at the else)
+		if ((oi->mass > ol->mass*BIGGER_TOLERANCE) && (oi->radius > ol->radius*BIGGER_TOLERANCE))
+			bigger = oi;
+		else if ((ol->mass > oi->mass*BIGGER_TOLERANCE) && (ol->radius > oi->radius*BIGGER_TOLERANCE))
+			bigger = ol;
+		else {
+			srand(time(NULL));
+			if 		( (rand()/RAND_MAX) > (oi->mass/(ol->mass+oi->mass)) )
+				bigger = ol;
+			else if ( (rand()/RAND_MAX) < (oi->mass/(ol->mass+oi->mass)) )
+				bigger = oi;
+			else {
+				srand(time(NULL));
+				if(rand() > 49)
+					bigger = oi;
+				else
+					bigger = ol;
+			}
+		}
+		//set the smaller
+		if(oi == bigger)
+			smaller = ol;
+		else
+			smaller = oi;
+		// The new object mantein the name of the bigger. The new object is written in the bigger position
+		strcpy(newobj.name, bigger->name);
+		// the type is the type of the bigger, so is alredy written
+		newobj.type = bigger->type;
+		// the color is the average, but considering the radius and the type's range
+		newobj.color.blue = ((bigger->color.blue * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.blue * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		newobj.color.green = ((bigger->color.green * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.green * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		newobj.color.red = ((bigger->color.red * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.red * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		
+		if(newobj.color.blue > newobj.type->color_max.blue)
+			newobj.color.blue = newobj.type->color_max.blue;
+		else if(newobj.color.blue < newobj.type->color_min.blue)
+			newobj.color.blue = newobj.type->color_min.blue;
+		if(newobj.color.red > newobj.type->color_max.red)
+			newobj.color.red = newobj.type->color_max.red;
+		else if(newobj.color.red < newobj.type->color_min.red)
+			newobj.color.red = newobj.type->color_min.red;
+		if(newobj.color.green > newobj.type->color_max.green)
+			newobj.color.green = newobj.type->color_max.green;
+		else if(newobj.color.green < newobj.type->color_min.green)
+			newobj.color.green = newobj.type->color_min.green;
+		// the mass is the sum
+		newobj.mass = oi->mass + ol->mass;
+		// the coordinates are the average
+		newobj.x = ((oi->x * oi->mass) + (ol->x * ol->mass)) / (ol->mass + oi->mass);
+		newobj.y = ((oi->y * oi->mass) + (ol->y * ol->mass)) / (ol->mass + oi->mass);
+		newobj.z = ((oi->z * oi->mass) + (ol->z * ol->mass)) / (ol->mass + oi->mass);
+		// the velocity is the average
+		newobj.velx = ((oi->velx * oi->mass) + (ol->velx * ol->mass)) / (ol->mass + oi->mass);
+		newobj.vely = ((oi->vely * oi->mass) + (ol->vely * ol->mass)) / (ol->mass + oi->mass);
+		newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
+		// to calculate the radius we calculate the volum of the two object, we sum the two and we get the radius of the new volume  V = (4/3) r3 * PI ||| r3 = V * 3/(4*PI)
+		newobj.radius = pow(((4/3 * powl(oi->radius, 3) * PI) + (4/3 * powl(oi->radius, 3) * PI)) * 3 / (4 * PI), 1/3);
+
+		return newobj;
+	}
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+// THESE ARE MATHEMATICAL AND SYSTEM MANAGER FUNCTION THAT HELP GENERICALLY			//
+  //////////////////////////////////////////////////////////////////////////////////
+
+
 
 	/***
 	 * Pitagoras function calculate a diagonal distance from ortogonal component

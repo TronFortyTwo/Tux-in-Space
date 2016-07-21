@@ -498,8 +498,12 @@
 		for(i=0; i!=sys->nactive; i++) {
 			ScanFString(sys->o[i].name, dest);
 			ScanFString(path, dest);
-			fscanf(dest, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].color.red, &sys->o[i].color.green, &sys->o[i].color.blue, &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
 			sys->o[i].type = typeSearchName(inf, Stype, path);
+			if(sys->o[i].type == NULL)
+				DebugPrint(inf, "(!) the system to load seem corrupted!");
+			DebugPrint(inf, sys->o[i].type->name);
+			fscanf(dest, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].color.red, &sys->o[i].color.green, &sys->o[i].color.blue, &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
+			
 		}
 		
 		sys->Stype = Stype;

@@ -214,43 +214,38 @@
 	void Info(tsys *sys, tinf *inf) {
 		DebugPrint(inf, "info");
 		
-		char buffer[BUFFERSIZE];
 		tobj *obj;
-		void *var[11];
+		void *var[13];
+		char input[NAMELUN];
 
-		strcpy(buffer, "INFO\n\nSystem ");
-		strcat(buffer, sys->name);
-		strcat(buffer, " whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object information");
-		var[0] = &sys->nactive;
-		OPS(inf, buffer, var);
-		scanf("%s", buffer);
-		if(strcmp(buffer, "n") == 0){
+		var[0] = sys->name;
+		var[1] = &sys->nactive;
+		OPS(inf, "INFO\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object information", var);
+		scanf("%s", input);
+		if(strcmp(input, "n") == 0){
 			OPS(inf, "Insert a new command", NULL);
 			return;
 		}
-		obj = SearchObject(sys, buffer);
+		obj = SearchObject(sys, input);
 		if(obj == NULL){
 			OPS(inf, "INFO\n\nno object whit this name is been found. press a button to continue", NULL);
-			scanf("%s", buffer);
+			scanf("%s", input);
 			return;
 		}	
-		strcpy (buffer, "INFO object ");
-		strcat (buffer, obj->name);
-		strcat (buffer, "\n\ntype: ");
-		strcat (buffer, obj->type->name);
-		strcat (buffer, "\n\ncolor: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:");
-		var[0] = &obj->color.red;
-		var[1] = &obj->color.green;
-		var[2] = &obj->color.blue;
-		var[0] = &obj->mass;
-		var[1] = &obj->radius;
-		var[2] = &obj->x;
-		var[3] = &obj->y;
-		var[4] = &obj->z;
-		var[5] = &obj->velx;
-		var[6] = &obj->vely; 
-		var[7] = &obj->velz; 
-		OPS(inf, buffer, var);
+		var[0] = obj->name;
+		var[1] = obj->type->name;
+		var[2] = &obj->color.red;
+		var[3] = &obj->color.green;
+		var[4] = &obj->color.blue;
+		var[5] = &obj->mass;
+		var[6] = &obj->radius;
+		var[7] = &obj->x;
+		var[8] = &obj->y;
+		var[9] = &obj->z;
+		var[10] = &obj->velx;
+		var[11] = &obj->vely; 
+		var[12] = &obj->velz; 
+		OPS(inf, "INFO object %s\n\ntype: %s\n\ncolor: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:", var);
 		return;
 	}
 	

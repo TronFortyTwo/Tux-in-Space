@@ -19,7 +19,7 @@
 */
 
 /***
- * This is CSpace's header file
+ * This is CSpace header file
  * 
  */
  
@@ -45,15 +45,13 @@
 	// A three char string that represent a picture of ALLERT or ATTENCTION
 	#define IRREGULARITY "(!)"
 	
-	// The value that the variable ttime.year assumes if the user want to quit
-	#define QUITSIGNAL -1
-	
 	// Values returned by functions (the two mean)
 	#define GOODSIGNAL 1
 	#define BADSIGNAL 2	
-	// Advanced returned
+	// Advanced returned signals
 	#define FILE_ERR_SIG 3
 	#define CORRUPTED_SIG 4
+	#define QUITSIGNAL -1			// The value that the variable ttime.year assumes if the user want to quit
 	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
