@@ -281,9 +281,6 @@
 			OPSML(inf, "sys");
 			sys = (tsys *) malloc (sizeof(tsys));
 		}
-		// the buffers (dinamic and static)
-		char sbuf[BUFFERSIZE];
-		char dbuf[BUFFERSIZE];
 		
 		// set the type struct pointer
 		sys->Stype = Stype;
@@ -296,44 +293,20 @@
 		sys->stime.millisec = 0;
 		
 		//set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
-		sys->G = 667e-19;
+		sys->G = 6.67e-17;
 		
 		// Ask for the name of the new system
 		c = NAMELUN-1;
 		var = &c;
-		strcpy(sbuf, "NEW SYSTEM INITIALIZATION\n\nname");
-		strcpy(dbuf, sbuf);
-		strcat(dbuf, " of the system:\n&tdIsn't allowed any spaces and can be of a maximum of %i characters");
-		OPS (inf, dbuf, &var);
+		OPS (inf, "NEW SYSTEM INITIALIZATION\n\nname of the system:\n&tdIsn't allowed any spaces and can be of a maximum of %i characters", &var);
 		scanf("%s", sys->name);
-		strcat(sbuf, ":    ");
-		strcat(sbuf, sys->name);
 		//ask for the precision
-		strcat(sbuf, "\n\nprecision");
-		strcpy(dbuf, sbuf);
-		strcat(dbuf, " of the simulation:\n&tdMeans how often the simulator recalculate the data to produce more precise simulation. A simulation whit precision 2 mean that every two in-simulation-second the phisic motor rework the datas");
-		OPS (inf, dbuf, NULL);
+		OPS (inf, "NEW SYSTEM INITIALIZATION\n\nprecision of the simulation:\n&tdIndicate how much the simulation is precise. A big value mean leess precision but lighter hardware use.\nrecommended values: < 2", NULL);
 		scanf("%Lf", &sys->precision);
-		strcat(sbuf, ":    %l\n\n\n");
-		// ask if initialize new objects
-		strcat(sbuf, "Configuration of the system complete. But the system doesn't have any object to work on yet. Type the number of object do you want to create now. You can press zero to go directly to the new system created whitout create any new object, however you can create, modify and delete object later, while the simulation is going");
-		var = &sys->precision;
-		OPS(inf, sbuf, &var);
-		SafeIScan(inf, &sys->nactive);
-		sys->nalloc = sys->nactive;
-		for (; ;) {
-			if(sys->nactive >= 0)
-				break;
-			OPSE (inf, "Wrong value: Must be put a number bigger than zero!", NULL);
-			SafeIScan(inf, &sys->nactive);
-		}
 		
-		//alloc the object array
-		sys->o = (tobj *) malloc ( sizeof(tobj[sys->nactive]) );
-			
-		// Initialize the objects
-		for (c=0; c!=sys->nactive; c++)
-			InitObject(inf, &sys->o[c], sys->Stype, c+1);
+		sys->nactive = 0;
+		sys->nalloc = 0;
+		sys->o = NULL;
 	 
 	 	return sys;
 	}
@@ -344,7 +317,6 @@
 	 */
 	 
 	void ReduceObjBuf(tsys *sys, tinf *inf) {
-	
 		DebugPrint(inf, "reduceobjbuf");
 		
 		tobj *newo;		//(new o)bject buffer
@@ -368,7 +340,10 @@
 		// if can be reduced more, recall itself
 		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 			ReduceObjBuf(sys, inf);
-			
+		// if the buffer is empty, set the pointer to NULL
+		if(sys->nalloc == 0)
+			sys->o = NULL;
+		
 		//exit
 		free(newo);
 		return;
@@ -389,13 +364,15 @@
 			OPSML(inf, "ExtendObjBuf");
 			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 		}
+		
 		// copy what is stored in the old buffer in the new buffer
-		for(c=0; c!=sys->nalloc; c++)
+		for (c=0; c != sys->nalloc; c++)
 			newo[c] = sys->o[c];
 		// update counter
 		sys->nalloc += OBJBUFSIZE;
-		// delete the old buffer
-		free(sys->o);
+		// if the old buffer isn't empty, delete the old buffer
+		if(sys->o != NULL)
+			free(sys->o);
 		// point sys->o at the new buffer
 		sys->o = newo;
 		return;

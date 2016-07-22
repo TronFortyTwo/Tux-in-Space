@@ -245,7 +245,7 @@
 		var[10] = &obj->velx;
 		var[11] = &obj->vely; 
 		var[12] = &obj->velz; 
-		OPS(inf, "INFO object %s\n\ntype: %s\n\ncolor: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n\nmass: %l\n\nradius: %l\n\nx: %l\n\ny: %l\n\nz: %l\n\nvelocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n\nInsert a new command:", var);
+		OPS(inf, "INFO %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\ninsert a new command:", var);
 		return;
 	}
 	
@@ -303,11 +303,11 @@
 	
 	void Create(tsys *sys, tinf *inf) {
 		DebugPrint(inf, "create");
-		//if there isn't any space for a new object resize the object buffer
+		// if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc)
 			ExtendObjBuf(sys, inf);
 	
-		//initialize the new object
+		// initialize the new object
 		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);
 		sys->nactive++;
 
