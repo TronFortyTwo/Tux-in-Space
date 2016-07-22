@@ -118,6 +118,8 @@
 		int i, l;
 		// the distance
 		long double dist;
+		// sys->nactive at the start of the function
+		int nactivebefore = sys->nactive;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=0; l < sys->nactive; l++) {
@@ -146,12 +148,15 @@
 				sys->nactive--;
 				if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 					ReduceObjBuf(sys, inf);
-					
-				//restart the loop and exit
-				Impacts(sys, inf);
+				
 				return;
 			}
 		}
+		
+		// If some objects are merged, restart to recheck for impact from start
+		if (nactivebefore != sys->nactive)
+			Impacts(sys, inf);
+		
 		return;
 	}
 

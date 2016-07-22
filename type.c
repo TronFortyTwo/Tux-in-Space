@@ -153,7 +153,7 @@
 				 return &Stype->type[i];
 		};
 		
-		DebugPrint(inf, "typeSearchName: No type whit the name (read below) has been found! Probably this is a bug!\n");
+		DebugPrint(inf, "(!) No type whit the name (read below) has been found! Probably this is a bug!\n");
 		DebugPrint(inf, name);
 		
 		return NULL;

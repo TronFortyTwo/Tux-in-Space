@@ -45,8 +45,8 @@
 		tcolor color;	//our color
 		void *var[3];	//the vars to give to OPS
 		
-		//scan them and chek if the value given are true
-		//red
+		// scan them and chek if the value given are true
+		// red
 		var[0] = &range_min.red;
 		var[1] = &range_max.red;
 		OPS(inf, "Put the value of the red:\n&tdThe value must be between %i and %i", var);
@@ -61,7 +61,7 @@
 			scanf("%d", &color.red);
 		}
 		while(1);
-		//green
+		// green
 		var[0] = &range_min.green;
 		var[1] = &range_max.green;
 		OPS(inf, "Put the value of the green:\n&tdThe value must be between %i and %i", var);
@@ -76,7 +76,7 @@
 			scanf("%d", &color.green);
 		}
 		while(1);
-		//blue
+		// blue
 		var[0] = &range_min.blue;
 		var[1] = &range_max.blue;
 		OPS(inf, "Put the value of the blue:\n&tdThe value must be between %i and %i", var);

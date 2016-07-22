@@ -454,7 +454,10 @@
 	
 		DebugPrint(inf, "loadsystem");
 	
-		//the system
+		char path[NAMELUN+12];	// the file of the system
+		FILE *dest;				// the file of the system
+		int i;					// counter
+		// the new system. allocated dinamically because is accessed in many other function after the end of this function
 		tsys *sys = (tsys *) malloc (sizeof(tsys));
 		if(sys == NULL)
 			do {
@@ -464,17 +467,15 @@
 					break;
 			}
 			while(1);
-		char path[NAMELUN+12];	// the file of the system
-		FILE *dest;				// the file of the system
-		int i;					// counter
-		//ask which system
+		
+		// ask which system
 		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
 		scanf("%s", sys->name);
-		//write the path
+		// write the path
 		strcpy (path, "Systems/");
 		strcat (path, sys->name);
 		strcat (path, ".sys");
-		//open the file
+		// open the file
 		dest = fopen(path, "r");
 		if (dest == NULL) {
 			OPSE(inf, "A system whit that name doesn't exist! Type something to continue and return to the menù", NULL);
@@ -482,10 +483,10 @@
 			free(sys);
 			return NULL;
 		}
-		//scanf system's informations
+		// scanf system's informations
 		fscanf (dest, "%Lf\n%d\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
 		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
-		//alloc memory
+		// alloc memory
 		sys->nalloc = sys->nactive;
 		do{
 			sys->o = (tobj *) malloc (sizeof(tobj) * sys->nalloc);
@@ -494,7 +495,7 @@
 			OPSML(inf, "LoadSystem");
 		}
 		while(1);
-		//fscanf for objects datas
+		// fscanf for objects datas
 		for(i=0; i!=sys->nactive; i++) {
 			ScanFString(sys->o[i].name, dest);
 			ScanFString(path, dest);
