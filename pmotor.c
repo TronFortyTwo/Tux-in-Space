@@ -27,16 +27,15 @@
  
 	///prototypes of the phisic related functions
 	void Gravity(tsys *);
+	void Inertia(tsys *);
 	void Impacts(tsys *, tinf *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
-		
+	long double ComputeVolume (long double, long double);
+	
 
 	void Pmotor (tsys *sys, tinf *inf) {
-		
 		DebugPrint(inf, "pmotor");
 	
-		// Counters for loops
-		int i;
 		
 		// GRAVITY
 		Gravity(sys);
@@ -45,15 +44,27 @@
 		Impacts(sys, inf);
 		
 		// INERTIA
+		Inertia(sys);
+		
+		// TIME
+		sys->stime.millisec += sys->precision * 1000;
+		UpdateTime(&sys->stime);
+		
+		return;
+	}
+	
+	/***
+	 * INERTIA
+	 */
+	void Inertia(tsys *sys){
+		
+		int i;
+		
 		for (i=0; i!=sys->nactive; i++) {
 			sys->o[i].x += sys->o[i].velx * sys->precision;
 			sys->o[i].y += sys->o[i].vely * sys->precision;
 			sys->o[i].z += sys->o[i].velz * sys->precision;
 		}
-		
-		// TIME
-		sys->stime.millisec += sys->precision * 1000;
-		UpdateTime(&sys->stime);
 		
 		return;
 	}
@@ -161,14 +172,14 @@
 	}
 
 	/***
-	 * This function create a new object from the impact of two objects given, and return hit
+	 * This function create a new object from the impact of two objects given, as they are two liquid balls whit a coesion very very very high
 	 */
 	tobj MergeObject_Impact(tinf *inf, tobj *oi, tobj *ol) {
 		DebugPrint(inf, "mergeobject_impact");
 		
 		// the new object
 		tobj newobj;
-		// variables
+		// the two objects
 		tobj *bigger;
 		tobj *smaller;
 		
@@ -228,7 +239,7 @@
 		newobj.vely = ((oi->vely * oi->mass) + (ol->vely * ol->mass)) / (ol->mass + oi->mass);
 		newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
 		// to calculate the radius we calculate the volum of the two object, we sum the two and we get the radius of the new volume  V = (4/3) r3 * PI ||| r3 = V * 3/(4*PI)
-		newobj.radius = pow(((4/3 * powl(oi->radius, 3) * PI) + (4/3 * powl(oi->radius, 3) * PI)) * 3 / (4 * PI), 1/3);
+		newobj.radius = ComputeVolume(oi->radius, ol->radius);
 
 		return newobj;
 	}
@@ -239,7 +250,34 @@
 // THESE ARE MATHEMATICAL AND SYSTEM MANAGER FUNCTION THAT HELP GENERICALLY			//
   //////////////////////////////////////////////////////////////////////////////////
 
+	/***
+	 * This function compute the radius of a sphere from the radius of two sphere of equal mass if summed
+	 *
+	 * 	 V = 4 * PI * r^3 / 3
+	 * 		|
+	 * 		v
+	 * 	r^3 = V * 3 / (4 * PI)
+	 * 
+	 * THIS FUNCTION NEEDS OPTIMIZATION (!)
+	 * 
+	 */
+	long double ComputeVolume (long double r1, long double r2) {
+		
+		long double r;
 
+		r = ((4 * PI * r1 * r1 * r1)/ 3) + ((4 * PI * r2 * r2 * r2)/ 3);		// = V
+		printf("%Lf", r);
+		
+		r = r * 3 / (4 * PI); 													// = r * r * r			
+		printf("%Lf", r);
+		
+		r = powl(r, 1/3);														// = r
+		printf("%Lf", r);
+		
+		return r;
+	}
+	 
+	 
 
 	/***
 	 * Pitagoras function calculate a diagonal distance from ortogonal component

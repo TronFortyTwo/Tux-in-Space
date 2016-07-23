@@ -436,14 +436,10 @@
 		int i;					// counter
 		// the new system. allocated dinamically because is accessed in many other function after the end of this function
 		tsys *sys = (tsys *) malloc (sizeof(tsys));
-		if(sys == NULL)
-			do {
-				OPSML(inf, "InitSystem");
-				tsys *sys = (tsys *) malloc (sizeof(tsys));
-				if(sys != NULL)
-					break;
-			}
-			while(1);
+		while(sys == NULL){
+			OPSML(inf, "InitSystem");
+			sys = (tsys *) malloc (sizeof(tsys));
+		}
 		
 		// ask which system
 		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
@@ -464,9 +460,17 @@
 		fscanf (dest, "%Lf\n%d\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
 		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 		// alloc memory
-		sys->nalloc = sys->nactive;
+		sys->nalloc = 0;
+		do {
+			if(sys->nalloc < sys->nactive)
+				sys->nalloc += OBJBUFSIZE;
+			else
+				break;
+		}
+		while(1);
+		
 		do{
-			sys->o = (tobj *) malloc (sizeof(tobj) * sys->nalloc);
+			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 			if (sys->o != NULL)
 				break;
 			OPSML(inf, "LoadSystem");

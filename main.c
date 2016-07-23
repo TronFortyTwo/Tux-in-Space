@@ -32,11 +32,11 @@
 		
 		// INITIALIZATION OF THE PROGRAM
 		
-		// definition of the structures
+		// Basic structures
 		tinf inf;
 		tStype *Stype;
 		
-		// The types file
+		// The type.typ file
 		FILE *Ftype;
 		
 		//an input variable
@@ -73,16 +73,17 @@
 
 
 		// RUNNING THE PROGRAM
-		while (Shell (&inf, Stype) != QUITSIGNAL);
+		while 
+			(Shell (&inf, Stype) != QUITSIGNAL);
 		
 		
 		// EXITING THE PROGRAM
 		
-		// goodbye message
-		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL);
-		
 		//free the memory
 		free(Stype->type);
+		
+		// goodbye message
+		OPS (&inf, "CSPACE\n\n&t5SEE YOU LATER!", NULL);
 		
 		return 0;
 	}

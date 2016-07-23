@@ -27,6 +27,7 @@
  * of the parser
  */
 	ttime Parser(tsys *sys, tinf *inf) {
+		
 		DebugPrint(inf, "parser");
 		// what is scanned
 		char input[COMMANDLENGHT+1];
@@ -35,73 +36,48 @@
 		
 		// Now for every possible command call the correct command's function or simply do it if is short.
 		// when you write a new command, you must add the corrispondent if and add it
-		for ( ; ; ) {
-			scanf("%s", input);
-			// continue
-			if (strcmp("step", input) == 0) {
-				t.millisec = t.millisec + (1000 * sys->precision);
-				UpdateTime(&t);
-				break;
-			}
-			// the help
-			else if (strcmp("help", input) == 0) {
-				OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-print\n-info\n-save\n-distance\n-quit\n-delete\n\ninsert a command:", NULL);
-				continue;
-			}
-			// jump
-			else if (strcmp("jump", input) == 0) {
-				t = Jump(&sys->stime, inf, &sys->precision);
-				break;
-			}
-			// info
-			else if (strcmp("info", input) == 0) {
-				Info(sys, inf);
-				continue;
-			}
-			// print
-			else if (strcmp("print", input) == 0) {
-				OPSo(sys, inf);
-				continue;
-			}
-			// wait
-			else if (strcmp("wait", input) == 0) {
-				t = Wait(&sys->stime, inf, &sys->precision);
-				break;
-			}
-			// create
-			else if (strcmp("create", input) == 0) {
-				Create(sys, inf);
-				OPSo(sys, inf);
-				continue;
-			}
-			// quit / exit
-			else if ((strcmp("quit", input) == 0) || (strcmp("exit", input) == 0)) {
-				t = Quit(sys, inf, &sys->stime);
-				break;
-			}
-			// save
-			else if (strcmp("save", input) == 0) {
-				SaveSys(sys, inf);
-				OPS(inf, "Insert a new command", NULL);
-				continue;
-			}
-			//distance
-			else if (strcmp("distance", input) == 0) {
-				DistanceCommand(sys, inf);
-				continue;
-			}
-			// delete an object
-			else if ((strcmp("delete", input) == 0) || (strcmp("remove", input) == 0)) {
-				DeleteObject(inf, sys);
-				continue;
-			}
-			// wrong command
-			else {
-				Reask(inf, input);
-				continue;
-			}
+		scanf("%s", input);
+		// continue
+		if (strcmp("step", input) == 0) {
+			t.millisec = t.millisec + (1000 * sys->precision);
+			UpdateTime(&t);
 		}
-	return t;
+		// the help
+		else if (strcmp("help", input) == 0) {
+			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-info\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+			scanf("%s", input);
+		}
+		// jump
+		else if (strcmp("jump", input) == 0)
+			t = Jump(&sys->stime, inf, &sys->precision);
+			
+		// info
+		else if (strcmp("info", input) == 0)
+			Info(sys, inf);
+		// wait
+		else if (strcmp("wait", input) == 0)
+			t = Wait(&sys->stime, inf, &sys->precision);
+		// create
+		else if (strcmp("create", input) == 0)
+			Create(sys, inf);
+		// quit / exit
+		else if ((strcmp("quit", input) == 0) || (strcmp("exit", input) == 0))
+			t = Quit(sys, inf, &sys->stime);
+		// save
+		else if (strcmp("save", input) == 0)
+			SaveSys(sys, inf);
+		//distance
+		else if (strcmp("distance", input) == 0)
+			DistanceCommand(sys, inf);
+		// delete an object
+		else if ((strcmp("delete", input) == 0) || (strcmp("remove", input) == 0))
+			DeleteObject(inf, sys);
+		// wrong command
+		else {
+			Reask(inf, input);
+			Parser(sys, inf);
+		}
+		return t;
 	}
 	
 	/**
@@ -144,7 +120,8 @@
 		distance[1] = Pitagora(o->x+o->velx-(u->x+u->velx), o->y+o->vely-(u->y+u->vely), o->z+o->velz-(u->z+u->velz)) - distance[0];
 		var[0] = distance;
 		var[1] = &distance[1];
-		OPS(inf, "DISTANCE\n\nThe distance between the two object is:\n&td%l Km\n&t0And, if the two object take constant velocity, the distance will change at a velocity of\n&td%l km/s\n\n&t0Insert a new command", var);
+		OPS(inf, "DISTANCE\n\nThe distance between the two object is:\n&td%l Km\n&t0And, if the two object take constant velocity, the distance will change at a velocity of\n&td%l km/s\n\n&t0Press something to continue...", var);
+		scanf("%s", name);
 		
 		return;
 	}
@@ -154,6 +131,7 @@
 	 */
 	ttime Quit (tsys *sys, tinf *inf, ttime *now){
 		DebugPrint(inf, "quit");
+		
 		ttime t;	 	//this is the escape time
 		char input[2];		
 		//ask for confirm to quit
@@ -203,8 +181,6 @@
 		if (sys->nalloc - sys->nactive >= OBJBUFSIZE)
 			ReduceObjBuf(sys, inf);
 		
-		OPS(inf, "Insert a new command:", NULL);
-		
 		return;
 	}
 	
@@ -245,7 +221,8 @@
 		var[10] = &obj->velx;
 		var[11] = &obj->vely; 
 		var[12] = &obj->velz; 
-		OPS(inf, "INFO %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\ninsert a new command:", var);
+		OPS(inf, "INFO %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
+		scanf("%s", input);
 		return;
 	}
 	
@@ -257,7 +234,7 @@
 		DebugPrint(inf, "wait");
 		
 		ttime t;
-		void *var = &precision;
+		void *var = precision;
 		
 		OPS(inf,"WAIT\n\nInsert the information about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", &var);
 		scanf("%d", &t.year);
@@ -283,7 +260,7 @@
 		DebugPrint(inf, "jump");
 		
 		ttime t;
-		void *var = &precision;
+		void *var = precision;
 		
 		OPS(inf, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds" , &var);
 		scanf("%d", &t.year);

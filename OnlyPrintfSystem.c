@@ -45,7 +45,7 @@
 	// the number of space to leave blank at the start of every line (max one digit)
 	int theet = 0;
 	// one if the buf is finished
-	int bufend = 0;
+	flag bufend = 0;
 	// the position in the int and long double arrays
 	int pos=0;
 	// the buffer to print, his size and position
@@ -144,7 +144,7 @@
 				}
 				//if is the (e)nd directive
 				else if(buf[bufpos] == 'e') {
-					bufend++;
+					bufend = 1;
 				} 
 				//if is a (t)heet directive
 				else if(buf[bufpos] == 't') {

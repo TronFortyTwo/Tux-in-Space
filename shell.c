@@ -24,12 +24,16 @@
 	
 	int Shell (tinf *inf, tStype *Stype) {
 		DebugPrint(inf, "shell");
+		
 		// Retruning value from the function
 		int staterec;
 		//the pointer to a system
 		tsys *sys;
 		//a time var
 		ttime stime;
+		
+		//////////////////////////////////////////
+		//MENU AND SYSTEM INITIALIZATION
 		
 		do {
 			// Call the mean menù, it tell to shell what to do.
@@ -48,6 +52,9 @@
 		//update this
 		stime = sys->stime;
 	
+		////////////////////////////////
+		// SIMULATION LOOP
+	
 		// The simulation loop (infinite)
 		do {
 			// call the output system accordingly to vmode
@@ -55,7 +62,7 @@
 				OPSo (sys, inf);
 			}
 			if (inf -> vmode == 1) {
-				AIB_ASCII_renderizer(sys, inf);
+				AIB_ASCII_renderizer (sys, inf);
 			}
 			// call the instruction parser
 			stime = Parser(sys, inf);
@@ -63,14 +70,8 @@
 			if(stime.year == QUITSIGNAL)
 				break;
 			// call the phisic motor how many times as Parser asks
-			do {
-				if(GetBiggerStime(&stime, &sys->stime) == 1)
-					break;
-				if(GetBiggerStime(&stime, &sys->stime) == 2)
-					break;
+			while(GetBiggerStime(&stime, &sys->stime) == 0)
 				Pmotor(sys, inf);
-			}
-			while(1);
 		}
 		while(1);
 
