@@ -294,26 +294,10 @@
 	 * 		|
 	 * 		v
 	 * 	r^3 = V * 3 / (4 * PI)
-	 * 
-	 * THIS FUNCTION NEEDS OPTIMIZATION (!)
-	 * 
 	 */
 	long double ComputeVolume (long double r1, long double r2) {
-		
-		long double r;
-
-		r = ((4 * PI * r1 * r1 * r1)/ 3) + ((4 * PI * r2 * r2 * r2)/ 3);		// = V
-		printf("%Lf", r);
-		
-		r = r * 3 / (4 * PI); 													// = r * r * r			
-		printf("%Lf", r);
-		
-		r = powl(r, 1/3);														// = r
-		printf("%Lf", r);
-		
-		return r;
+		return pow((((4 * PI * r1 * r1 * r1)/ 3) + ((4 * PI * r2 * r2 * r2)/ 3)) * 3 / (4 * PI), 1.0/3.0);
 	}
-	 
 	 
 
 	/***
