@@ -62,8 +62,6 @@
 		
 		int i;
 		
-		
-		// start the threads
 		for (i=0; i!=sys->nactive; i++) {
 			sys->o[i].x += sys->o[i].velx * sys->precision;
 			sys->o[i].y += sys->o[i].vely * sys->precision;
@@ -81,11 +79,10 @@
 		
 		// counters
 		int i,l;
-		// the force, and his ortogonal components
+		// the force, and his ortogonal components (the dist variable is also used as temporany variable)
 		long double dist, distx, disty, distz;
 		//the force
 		long double f;
-		long double temp;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=i+1; l < sys->nactive; l++) {
@@ -98,20 +95,20 @@
 				// if dist = 0, is bad. so
 				if(dist == 0)
 					dist = 0.0000000001;
-				// the force and his ortogonal components
+				// the force
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
 				// the aceleration for i (F = m * a -> a = F / m)
 				// update the velocity of i and l(V += a * t)
-				temp = f * distx * sys->precision / dist;
-				sys->o[i].velx -= temp / sys->o[i].mass;
-				sys->o[l].velx += temp / sys->o[l].mass;
-				temp *= disty / distx;
-				sys->o[i].vely -= temp / sys->o[i].mass;
-				sys->o[l].vely += temp / sys->o[l].mass;
-				temp *= distz / distx;
-				sys->o[i].velz -= temp / sys->o[i].mass;
-				sys->o[l].velz += temp / sys->o[l].mass;
+				dist = f * distx * sys->precision / dist;
+				sys->o[i].velx -= dist / sys->o[i].mass;
+				sys->o[l].velx += dist / sys->o[l].mass;
+				dist *= disty / distx;
+				sys->o[i].vely -= dist / sys->o[i].mass;
+				sys->o[l].vely += dist / sys->o[l].mass;
+				dist *= distz / disty;
+				sys->o[i].velz -= dist / sys->o[i].mass;
+				sys->o[l].velz += dist / sys->o[l].mass;
 			}
 		}
 		
@@ -264,7 +261,7 @@
 	 * 	r^3 = V * 3 / (4 * PI)
 	 */
 	long double ComputeVolume (long double r1, long double r2) {
-		return pow((((4 * PI * r1 * r1 * r1)/ 3) + ((4 * PI * r2 * r2 * r2)/ 3)) * 3 / (4 * PI), 1.0/3.0);
+		return pow((r1 * r1 * r1) + (r2 * r2 * r2), 1.0/3.0);
 	}
 	 
 
@@ -283,32 +280,26 @@
 	 */
 	void UpdateTime(ttime *stime) {
 		
-		while( stime->millisec>=1000 ){
+		while( stime->millisec>=1000 ) {
 			stime->sec++;
 			stime->millisec -= 1000;
 		}
-		
-		while( stime->sec >= 60 ){
+		while( stime->sec >= 60 ) {
 			stime->min++;
 			stime->sec -= 60;
 		}
-		
-		while( stime->min >= 60 ){
+		while( stime->min >= 60 ) {
 			stime->hour++;
 			stime->min -= 60;
 		}
-		
 		while( stime->hour>=24 ){
 			stime->day++;
 			stime->hour -= 24;
 		}
-		
 		while( stime->day >= 365 ){
 			stime->year++;
 			stime->day -= 365;
 		}
-		
-		
 		return;
 	}
 	
