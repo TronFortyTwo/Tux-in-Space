@@ -28,27 +28,28 @@
 	///prototypes of the phisic related functions
 	void Gravity(tsys *, tinf *);
 	void Inertia(tsys *, tinf *);
-	void *Inertia_thread(void *);
 	void Impacts(tsys *, tinf *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
 	long double ComputeVolume (long double, long double);
 	
 
-	void Pmotor (tsys *sys, tinf *inf) {
-		DebugPrint(inf, "pmotor");
+	void Pmotor (tsys *sys, tinf *inf, ttime dest) {
 		
-		// GRAVITY
-		Gravity(sys, inf);
+		while (GetBiggerStime (&dest, &sys->stime) == 0) {
 		
-		// IMPACTS
-		Impacts(sys, inf);
+			// GRAVITY
+			Gravity(sys, inf);
 		
-		// INERTIA
-		Inertia(sys, inf);
+			// IMPACTS
+			Impacts(sys, inf);
 		
-		// TIME
-		sys->stime.millisec += sys->precision * 1000;
-		UpdateTime(&sys->stime);
+			// INERTIA
+			Inertia(sys, inf);
+		
+			// TIME
+			sys->stime.millisec += sys->precision * 1000;
+			UpdateTime(&sys->stime);
+		}
 		
 		return;
 	}
@@ -61,47 +62,15 @@
 		
 		int i;
 		
-		pthread_t *thread = (pthread_t *) malloc (sizeof(pthread_t[sys->nactive]));
-		targ *t_arg = (targ *) malloc (sizeof(targ[sys->nactive]));
-		
-		while(thread == NULL){
-			OPSML(inf, "inertia");
-			thread = (pthread_t *) malloc (sizeof(pthread_t[sys->nactive]));
-		}
-		while(t_arg == NULL){
-			OPSML(inf, "inertia");
-			t_arg = (targ *) malloc (sizeof(targ[sys->nactive]));
-		}
 		
 		// start the threads
 		for (i=0; i!=sys->nactive; i++) {
-			t_arg[i].pos = i;
-			t_arg[i].sys = sys;
-			if( pthread_create(&thread[i], NULL, Inertia_thread, &t_arg[i]) )
-				DebugPrint(inf, "inertia: failed to create thread");
-		}	
-		
-		// join the threads
-		for (i=0; i!=sys->nactive; i++) {
-			if( pthread_join(thread[i], NULL) )
-				DebugPrint(inf, "inertia: failed to create thread");
+			sys->o[i].x += sys->o[i].velx * sys->precision;
+			sys->o[i].y += sys->o[i].vely * sys->precision;
+			sys->o[i].z += sys->o[i].velz * sys->precision;
 		}
 		
-		// free the memory and exit
-		free(thread);
-		free(t_arg);
 		return;
-	}
-	
-	/***
-	 * INERTIA THREAD
-	 */
-	void *Inertia_thread(void *arg) {
-		targ a = *((targ *) arg);
-		a.sys->o[a.pos].x += a.sys->o[a.pos].velx * a.sys->precision;
-		a.sys->o[a.pos].y += a.sys->o[a.pos].vely * a.sys->precision;
-		a.sys->o[a.pos].z += a.sys->o[a.pos].velz * a.sys->precision;
-		return NULL;
 	}
 
 
@@ -116,6 +85,7 @@
 		long double dist, distx, disty, distz;
 		//the force
 		long double f;
+		long double temp;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=i+1; l < sys->nactive; l++) {
@@ -132,16 +102,16 @@
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
 				// the aceleration for i (F = m * a -> a = F / m)
-				// update the velocity of i (V += a * t)
-				sys->o[i].velx -= ((f * distx/dist) / sys->o[i].mass) * sys->precision;
-				sys->o[i].vely -= ((f * disty/dist) / sys->o[i].mass) * sys->precision;
-				sys->o[i].velz -= ((f * distz/dist) / sys->o[i].mass) * sys->precision;
-				// fx : f = distx : dist
-				// the aceleration for l (F = m * a -> a = F / m)
-				// update the velocity of l (V = V + a * t)
-				sys->o[l].velx += ((f * distx/dist) / sys->o[l].mass) * sys->precision;
-				sys->o[l].vely += ((f * disty/dist) / sys->o[l].mass) * sys->precision;
-				sys->o[l].velz += ((f * distz/dist) / sys->o[l].mass) * sys->precision;
+				// update the velocity of i and l(V += a * t)
+				temp = f * distx * sys->precision / dist;
+				sys->o[i].velx -= temp / sys->o[i].mass;
+				sys->o[l].velx += temp / sys->o[l].mass;
+				temp *= disty / distx;
+				sys->o[i].vely -= temp / sys->o[i].mass;
+				sys->o[l].vely += temp / sys->o[l].mass;
+				temp *= distz / distx;
+				sys->o[i].velz -= temp / sys->o[i].mass;
+				sys->o[l].velz += temp / sys->o[l].mass;
 			}
 		}
 		
@@ -160,7 +130,6 @@
 	 * 	- special hit mechanics depending on the types of the objects
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
-		DebugPrint(inf, "impacts");
 		
 		// counters for loops
 		int i, l;
@@ -212,7 +181,6 @@
 	 * This function create a new object from the impact of two objects given, as they are two liquid balls whit a coesion very very very high
 	 */
 	tobj MergeObject_Impact(tinf *inf, tobj *oi, tobj *ol) {
-		DebugPrint(inf, "mergeobject_impact");
 		
 		// the new object
 		tobj newobj;

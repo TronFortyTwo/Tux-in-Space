@@ -70,8 +70,7 @@
 			if(stime.year == QUITSIGNAL)
 				break;
 			// call the phisic motor how many times as Parser asks
-			while(GetBiggerStime(&stime, &sys->stime) == 0)
-				Pmotor(sys, inf);
+			Pmotor(sys, inf, stime);
 		}
 		while(1);
 

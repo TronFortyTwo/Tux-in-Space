@@ -212,7 +212,7 @@
 	void SaveSys(tsys *, tinf *);
 	void Create(tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);
-	void Pmotor (tsys *, tinf *);
+	void Pmotor (tsys *, tinf *, ttime dest);
 	int Shell (tinf *, tStype *);
 	void SafeIScan(tinf *, int *);
 	void PrintLine (tinf *, char *, int);
