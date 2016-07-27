@@ -7,7 +7,7 @@ The program simulates the moving, under the phisic's law, of planets, spaceships
 for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
-Elsewhere, you can compile the program easily whit "gcc -lm -Wall -o -g main.c destination_file" in the master directory.
+Elsewhere, you can compile the program easily whit "gcc -Wall -o -g main.c destination_file -lm -lpthread" in the master directory.
 You are encouraged enjoy and test this program.
 
 Status

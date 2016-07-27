@@ -30,9 +30,15 @@
 	#include <math.h>
 	#include <time.h>
 	#include <limits.h>
+	// POSIX for multhithread
+	#include <pthread.h>
  
 
+
 	#define PI (245850922/78256779)
+	
+	// The maximum number of thread
+	#define MAXTHREAD 1024
 	
 	// The three axis must have different codes
 	#define X_AXIS 0
@@ -86,7 +92,7 @@
 	// flag is a value that can be only 0 or 1
 	typedef char flag;
 
-	//the type that we use as color
+	// the type that we use as color
 	struct scolor{
 		int red;
 		int green;
@@ -166,7 +172,23 @@
 	};
 	typedef struct system tsys;
 	
-// Prototypes
+	// In pmotor, is the parametrer function that the thread takes
+	struct thread_arg_struct_simple{
+		tsys *sys;
+		int pos;
+	};
+	typedef struct thread_arg_struct_simple targ; 
+	struct thread_arg_struct_expanded{
+		tsys *sys;
+		int i;
+		int l;
+	};
+	typedef struct thread_arg_struct_expanded targe; 
+
+
+	
+	
+	// functions prototypes
 	int LoadObject(tinf *, tobj *, tStype *, char *);
 	void DistanceCommand(tsys *, tinf *);
 	void AIB_ASCII_renderizer (tsys *, tinf *);

@@ -33,7 +33,7 @@
 		int i; //counter
 		char buffer[2048];
 		
-		printf("\nSTYPE PRINTING-------------------------\n");
+		DebugPrint(inf, "\nSTYPE PRINTING-------------------------\n");
 		
 		for (i=0; i!=Stype->number; i++) {
 			sprintf(buffer, "\nNAME: %s\nDESCRIPTION: %s\nPARENT: %s\nMASS_MIN: %lf\nMASS_MAX: %lf\nBLUE_RANGE: %i - %i\nRED_RANGE: %i - %i\nGREEN_RANGE: %i - %i\n", Stype->type[i].name, Stype->type[i].description, Stype->type[i].parent, Stype->type[i].mass_min, Stype->type[i].mass_max, Stype->type[i].color_min.blue, Stype->type[i].color_max.blue, Stype->type[i].color_min.red, Stype->type[i].color_max.red, Stype->type[i].color_min.green, Stype->type[i].color_max.green);

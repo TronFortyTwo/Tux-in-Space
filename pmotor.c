@@ -26,8 +26,9 @@
  */
  
 	///prototypes of the phisic related functions
-	void Gravity(tsys *);
-	void Inertia(tsys *);
+	void Gravity(tsys *, tinf *);
+	void Inertia(tsys *, tinf *);
+	void *Inertia_thread(void *);
 	void Impacts(tsys *, tinf *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
 	long double ComputeVolume (long double, long double);
@@ -35,16 +36,15 @@
 
 	void Pmotor (tsys *sys, tinf *inf) {
 		DebugPrint(inf, "pmotor");
-	
 		
 		// GRAVITY
-		Gravity(sys);
+		Gravity(sys, inf);
 		
 		// IMPACTS
 		Impacts(sys, inf);
 		
 		// INERTIA
-		Inertia(sys);
+		Inertia(sys, inf);
 		
 		// TIME
 		sys->stime.millisec += sys->precision * 1000;
@@ -55,35 +55,70 @@
 	
 	/***
 	 * INERTIA
+	 * the thread manager and the thread function
 	 */
-	void Inertia(tsys *sys){
+	void Inertia(tsys *sys, tinf *inf) {
 		
 		int i;
 		
-		for (i=0; i!=sys->nactive; i++) {
-			sys->o[i].x += sys->o[i].velx * sys->precision;
-			sys->o[i].y += sys->o[i].vely * sys->precision;
-			sys->o[i].z += sys->o[i].velz * sys->precision;
+		pthread_t *thread = (pthread_t *) malloc (sizeof(pthread_t[sys->nactive]));
+		targ *t_arg = (targ *) malloc (sizeof(targ[sys->nactive]));
+		
+		while(thread == NULL){
+			OPSML(inf, "inertia");
+			thread = (pthread_t *) malloc (sizeof(pthread_t[sys->nactive]));
+		}
+		while(t_arg == NULL){
+			OPSML(inf, "inertia");
+			t_arg = (targ *) malloc (sizeof(targ[sys->nactive]));
 		}
 		
+		// start the threads
+		for (i=0; i!=sys->nactive; i++) {
+			t_arg[i].pos = i;
+			t_arg[i].sys = sys;
+			if( pthread_create(&thread[i], NULL, Inertia_thread, &t_arg[i]) )
+				DebugPrint(inf, "inertia: failed to create thread");
+		}	
+		
+		// join the threads
+		for (i=0; i!=sys->nactive; i++) {
+			if( pthread_join(thread[i], NULL) )
+				DebugPrint(inf, "inertia: failed to create thread");
+		}
+		
+		// free the memory and exit
+		free(thread);
+		free(t_arg);
 		return;
+	}
+	
+	/***
+	 * INERTIA THREAD
+	 */
+	void *Inertia_thread(void *arg) {
+		targ a = *((targ *) arg);
+		a.sys->o[a.pos].x += a.sys->o[a.pos].velx * a.sys->precision;
+		a.sys->o[a.pos].y += a.sys->o[a.pos].vely * a.sys->precision;
+		a.sys->o[a.pos].z += a.sys->o[a.pos].velz * a.sys->precision;
+		return NULL;
 	}
 
 
 	/***
 	 * GRAVITY
 	 */
-	void Gravity(tsys *sys) {
+	void Gravity(tsys *sys, tinf *inf) {
 		
+		// counters
+		int i,l;
 		// the force, and his ortogonal components
 		long double dist, distx, disty, distz;
 		//the force
 		long double f;
-		//counters
-		int i,l;
 		
 		for(i=0; i < sys->nactive; i++) {
-			for (l=i+1; l < sys->nactive; l++) {	
+			for (l=i+1; l < sys->nactive; l++) {
 				// calculate the axis' distance
 				distx = sys->o[i].x - sys->o[l].x;
 				disty = sys->o[i].y - sys->o[l].y;
@@ -92,7 +127,7 @@
 				dist = Pitagora(distx, disty, distz);
 				// if dist = 0, is bad. so
 				if(dist == 0)
-				dist = 0.0000000001;
+					dist = 0.0000000001;
 				// the force and his ortogonal components
 				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
@@ -109,8 +144,10 @@
 				sys->o[l].velz += ((f * distz/dist) / sys->o[l].mass) * sys->precision;
 			}
 		}
+		
 		return;
 	}
+	
 
 	/***
 	 * Impacts between object

@@ -182,9 +182,15 @@
 				strcat(comment, IRREGULARITY);
 				strcat(comment, ": color out of range");
 			}
+			// irregularity: TYPE
+			if (obj->type == typeSearchName(inf, Stype, "Chose a type")) {
+				strcat(comment, "\n");
+				strcat(comment, IRREGULARITY);
+				strcat(comment, ": Chose a type!");
+			}
 			// EXIT
 			if(input == 10) {
-				if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0)))
+				if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0) || (obj->type == typeSearchName(inf, Stype, "Chose a type")) ) )
 					break;
 			}
 		}

@@ -41,7 +41,7 @@
 		do{
 			fscanf(stream, "\n");
 			ScanFString (buffer, stream);				// read a line
-			if (strcmp(buffer, "END OF FILE") == 0)		// if the file is finished exit
+			if (strcmp(buffer, "EOF") == 0)				// if the file is finished exit
 				break;
 			else if (strncmp (buffer, "NAME:", 5) == 0)	// if is a new object memorize that there is a new object
 				Stype.number++;

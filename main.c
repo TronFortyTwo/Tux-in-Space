@@ -36,7 +36,7 @@
 		tinf inf;
 		tStype *Stype;
 		
-		// The type.typ file
+		// file pointers
 		FILE *Ftype;
 		
 		//an input variable
@@ -50,12 +50,13 @@
 		//print that is loading
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
-		// the vmode is setted 0 (onlyOPS)
+		// the vmode is setted 0 (OPS)
 		inf.vmode = 0;
 		// set num precision
 		inf.numprecision = 6;
-		// set the debug to on
+		// set the debug to on and set the stderr destination file
 		inf.debug = 1;
+		
 		
 		DebugPrint(&inf, "main");
 	

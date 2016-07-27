@@ -192,7 +192,7 @@ PARENT: Planet
 NAME: White dwarf
 PARENT: Compact star
 
-END OF FILE
+EOF
 
 NOTES:
 - EVERY type must have a name and a parent

@@ -200,7 +200,7 @@
 			else {
 				PrintLine(inf, " ", columndone+TWOFRAMELUN);
 				bufpos++;
-				// if there isn't space for more line
+				// if there is space for more line
 				if(linedone < inf->height-5) {
 					linedone++;
 					printf("%s\n%s", FRAMER, FRAME);
@@ -217,6 +217,8 @@
 	printf("%s\n", FRAMER);
 	PrintLine(inf, FRAMESTART, 0);
 	printf("\n%s: ", FRAME);
+	
+	fflush(stdout);
 	
 	// finish the function
 	free(buf);

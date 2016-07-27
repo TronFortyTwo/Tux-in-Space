@@ -75,7 +75,7 @@
 		}
 		while(1);
 
-		//delete the system
+		// delete the systemand exit
 		free(sys->o);
 		free(sys);
 
