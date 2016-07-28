@@ -133,7 +133,6 @@
 			}
 			while(1);
 		}
-		
 		PrintStype(inf, &Stype);
 		return &Stype;
 	}

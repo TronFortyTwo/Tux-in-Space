@@ -206,7 +206,6 @@
 		
 		FILE *ofile;				// (the) o(bject) file
 		char buffer [NAMELUN + 15];
-		ttype *type;				// temporany pointer
 		
 		strcpy(buffer, "Objects/");
 		strcat(buffer, name);
@@ -217,18 +216,7 @@
 			return FILE_ERR_SIG;
 		
 		// Read type, color, radius and mass
-		ScanFString(buffer, ofile);
-		type = typeSearchName(inf, Stype, buffer);
-		if (type != NULL)
-			obj->type = type;
-		else
-			return CORRUPTED_SIG;
-		
-		fscanf(ofile, "%d", &obj->color.red);
-		fscanf(ofile, "%d", &obj->color.green);
-		fscanf(ofile, "%d", &obj->color.blue);
-		fscanf(ofile, "%Lf", &obj->radius);
-		fscanf(ofile, "%Lf", &obj->mass);
+		ReadObject(inf, ofile, obj, Stype);
 		
 		//close the file and exit
 		fclose(ofile);
@@ -265,7 +253,7 @@
 	
 		// Write the object
 		dest = fopen(path, "w");
-		fprintf(dest, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->color.red, obj->color.green, obj->color.blue,  obj->radius ,obj->mass);
+		WriteObject(dest, obj);
 		fclose(dest);
 	
 		return;	
@@ -419,9 +407,8 @@
 		fprintf (dest, "%.128Lf\n%d\n%.128Lf\n",  sys->precision, sys->nactive, sys->G);
 		fprintf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
 		// write the system's object's datas
-		for(i=0; i!=sys->nactive; i++) {
-			fprintf(dest, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", sys->o[i].name, sys->o[i].type->name, sys->o[i].color.red, sys->o[i].color.green, sys->o[i].color.blue, sys->o[i].radius ,sys->o[i].mass ,sys->o[i].x ,sys->o[i].y ,sys->o[i].z ,sys->o[i].velx ,sys->o[i].vely ,sys->o[i].velz);
-		}
+		for(i=0; i!=sys->nactive; i++)
+			WriteObjectComplete(dest, &sys->o[i]);
 		fclose(dest);
 	
 		OPS(inf, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL);
@@ -433,8 +420,7 @@
 	 * Load a system from a file
 	 * create a new system and return his pointer
 	 */
-	tsys *LoadSystem(tinf *inf, tStype *Stype){
-	
+	tsys *LoadSystem(tinf *inf, tStype *Stype) {
 		DebugPrint(inf, "loadsystem");
 	
 		char path[NAMELUN+12];	// the file of the system
@@ -484,15 +470,13 @@
 		while(1);
 		// fscanf for objects datas
 		for(i=0; i!=sys->nactive; i++) {
-			ScanFString(sys->o[i].name, dest);
-			ScanFString(path, dest);
-			sys->o[i].type = typeSearchName(inf, Stype, path);
-			if(sys->o[i].type == NULL)
+			if(ReadObjectComplete(inf, dest, &sys->o[i], Stype) == CORRUPTED_SIG) {
 				DebugPrint(inf, "(!) the system to load seem corrupted!");
-			DebugPrint(inf, sys->o[i].type->name);
-			fscanf(dest, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &sys->o[i].color.red, &sys->o[i].color.green, &sys->o[i].color.blue, &sys->o[i].radius, &sys->o[i].mass, &sys->o[i].x, &sys->o[i].y, &sys->o[i].z, &sys->o[i].velx, &sys->o[i].vely, &sys->o[i].velz);
-			
+				DebugPrint(inf, sys->o[i].type->name);
+			}
 		}
+		
+		fclose(dest);
 		
 		sys->Stype = Stype;
 		
@@ -514,3 +498,38 @@
 		return NULL;
 	}
 	
+	/***
+	 * OBJECT I/O       (READ/WRITE)
+	 * WriteObject write in the stream given the object.
+	 * WriteObjectComplete write in the stream given the object whit coordinates and velocity
+	 * ReadObject read in the stream given the object.
+	 * Read ObjectComplete read in the stream given the object whit coordinates and velocity
+	 */
+	void WriteObject (FILE *stream, tobj *obj) {
+		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->color.red, obj->color.green, obj->color.blue, obj->radius, obj->mass);
+		return;
+	}
+	void WriteObjectComplete (FILE *stream, tobj *obj) {
+		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", obj->name, obj->type->name, obj->color.red, obj->color.green,obj->color.blue, obj->radius, obj->mass, obj->x, obj->y, obj->z, obj->velx, obj->vely, obj->velz);
+		return;
+	}
+	int ReadObject (tinf *inf, FILE *stream, tobj *obj, tStype *Stype) {
+		char type[NAMELUN];
+		ScanFString(obj->name, stream);
+		ScanFString(type, stream);
+		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass);
+		obj->type = typeSearchName(inf, Stype, type);
+		if (obj->type == NULL)
+			return CORRUPTED_SIG;
+		return GOODSIGNAL;
+	}
+	int ReadObjectComplete (tinf *inf, FILE *stream, tobj *obj, tStype *Stype) {
+		char type[NAMELUN];
+		ScanFString(obj->name, stream);
+		ScanFString(type, stream);
+		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass, &obj->x, &obj->y, &obj->z, &obj->velx, &obj->vely, &obj->velz);
+		obj->type = typeSearchName(inf, Stype, type);
+		if (obj->type == NULL)
+			return CORRUPTED_SIG;
+		return GOODSIGNAL;
+	}

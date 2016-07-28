@@ -211,6 +211,11 @@
 	char *typeDescriptionFromName (tinf *inf, tStype *, char *);
 	ttype *typeSearchName (tinf *, tStype *, char *);
 	char *typeParentFromName (tinf *inf, tStype *, char *);
+	//I/O object
+	void WriteObject (FILE *stream, tobj *obj);
+	void WriteObjectComplete (FILE *stream, tobj *obj);
+	int ReadObject (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
+	int ReadObjectComplete (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
  
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "debug.c"
