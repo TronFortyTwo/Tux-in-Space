@@ -27,15 +27,15 @@
 		
 		// Retruning value from the function
 		int staterec;
-		//the pointer to a system
+		// he pointer to a system
 		tsys *sys;
-		//a time var
+		// a time var (simulation time)
 		ttime stime;
 		
 		//////////////////////////////////////////
 		//MENU AND SYSTEM INITIALIZATION
 		
-		do {
+		while(1) {
 			// Call the mean menù, it tell to shell what to do.
 			staterec = Menu(inf, Stype);
 			// If the menù answered 0 the program initialize the system as new
@@ -48,33 +48,36 @@
 			if (sys != NULL)
 				break;
 		}
-		while(1);
+		
 		//update this
 		stime = sys->stime;
 	
 		////////////////////////////////
 		// SIMULATION LOOP
-	
-		// The simulation loop (infinite)
-		do {
+		//
+		
+		while(1) {
 			// call the output system accordingly to vmode
-			if (inf -> vmode == 0) {
-				OPSo (sys, inf);
-			}
-			if (inf -> vmode == 1) {
-				AIB_ASCII_renderizer (sys, inf);
+			switch (inf->vmode) {
+				case 0: 
+						OPSo (sys, inf);
+						break;			
+				case 1:
+						AIB_ASCII_renderizer (sys, inf);
+						break;
+				default:
+						OPSo (sys, inf);
 			}
 			// call the instruction parser
 			stime = Parser(sys, inf);
 			//check if the user want to exit
-			if(stime.year == QUITSIGNAL)
+			if (stime.year == QUITSIGNAL)
 				break;
 			// call the phisic motor how many times as Parser asks
-			Pmotor(sys, inf, stime);
+			Pmotor (sys, inf, stime);
 		}
-		while(1);
 
-		// delete the systemand exit
+		// delete the system and exit
 		free(sys->o);
 		free(sys);
 

@@ -55,11 +55,9 @@
 		// set num precision
 		inf.numprecision = 6;
 		// set the debug to on and set the stderr destination file
-		inf.debug = 1;
+		inf.debug = ON;
 		
 		
-		DebugPrint(&inf, "main");
-	
 		// Read the types from a file
 		Ftype = fopen("type.typ", "r");
 		if(Ftype != NULL) {

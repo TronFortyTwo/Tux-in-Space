@@ -47,7 +47,7 @@
  */
 	void DebugPrint(tinf *inf, char *txt) {
 		
-		if(inf->debug == 0)
+		if(inf->debug == OFF)
 			return;
 		
 		// for now the debug support is a file

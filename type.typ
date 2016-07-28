@@ -154,10 +154,6 @@ PARENT: Small body
 NAME: Pulsar
 PARENT: Neutron star
 
-NAME: Rogue planet
-DESCRIPTION: A rogue planet is a planet that orbit the galaxy directly, whitout take part of any solar system
-PARENT: Planet
-
 NAME: Small body
 PARENT: Celestial object
 
@@ -174,6 +170,7 @@ DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned
 PARENT: Spacecraft
 
 NAME: Star
+DESCRIPTION: A star is a celestial body that have termonuclear reaction inside it, for that shine of its own light
 PARENT: Celestial object
 
 NAME: Sub-brown dwarf

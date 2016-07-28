@@ -37,9 +37,10 @@
 
 	#define PI (245850922/78256779)
 	
-	// The maximum number of thread
-	#define MAXTHREAD 1024
-	
+	// flag values
+	#define ON 1
+	#define OFF 0
+		
 	// The three axis must have different codes
 	#define X_AXIS 0
 	#define Y_AXIS 1
@@ -149,7 +150,7 @@
 	typedef struct object tobj;
 	
 	//in this structure is conteined a moment
-	struct time {
+	struct strtime {
 		int year;
 		int day;
 		int hour;
@@ -157,7 +158,7 @@
 		int sec;
 		int millisec;
 	};
-	typedef struct time ttime;
+	typedef struct strtime ttime;
 	
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	struct system {
@@ -171,21 +172,6 @@
 		tStype *Stype;			// The pointer at the structure that coontein all the type
 	};
 	typedef struct system tsys;
-	
-	// In pmotor, is the parametrer function that the thread takes
-	struct thread_arg_struct_simple{
-		tsys *sys;
-		int pos;
-	};
-	typedef struct thread_arg_struct_simple targ; 
-	struct thread_arg_struct_expanded{
-		tsys *sys;
-		int i;
-		int l;
-	};
-	typedef struct thread_arg_struct_expanded targe; 
-
-
 	
 	
 	// functions prototypes

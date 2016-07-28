@@ -31,7 +31,7 @@
 		DebugPrint(inf, "parser");
 		// what is scanned
 		char input[COMMANDLENGHT+1];
-		//the time we want
+		// the time we want (simulation)
 		ttime t = sys->stime;
 		
 		// Now for every possible command call the correct command's function or simply do it if is short.
@@ -234,9 +234,8 @@
 		DebugPrint(inf, "wait");
 		
 		ttime t;
-		void *var = precision;
 		
-		OPS(inf,"WAIT\n\nInsert the information about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", &var);
+		OPS(inf,"WAIT\n\nInsert the information about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
 		scanf("%d", &t.year);
 		scanf("%d", &t.day);
 		scanf("%d", &t.hour);
@@ -260,9 +259,8 @@
 		DebugPrint(inf, "jump");
 		
 		ttime t;
-		void *var = precision;
 		
-		OPS(inf, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds" , &var);
+		OPS(inf, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds" , (void **)&precision);
 		scanf("%d", &t.year);
 		scanf("%d", &t.day);
 		scanf("%d", &t.hour);

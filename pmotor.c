@@ -22,7 +22,7 @@
  * Now the side effect that this function generated on struct obj are caused by:
  *		- Gravity force	
  * 		- Inertia of mass 
- *		- impacts beetween them (WORK IN PROGRESS)
+ *		- impacts beetween them
  */
  
 	///prototypes of the phisic related functions
@@ -50,7 +50,6 @@
 			sys->stime.millisec += sys->precision * 1000;
 			UpdateTime(&sys->stime);
 		}
-		
 		return;
 	}
 	
@@ -67,22 +66,21 @@
 			sys->o[i].y += sys->o[i].vely * sys->precision;
 			sys->o[i].z += sys->o[i].velz * sys->precision;
 		}
-		
 		return;
 	}
 
 
 	/***
 	 * GRAVITY
+	 * 
+	 * WARNING: this function is heavy optimized!
 	 */
 	void Gravity(tsys *sys, tinf *inf) {
 		
 		// counters
 		int i,l;
-		// the force, and his ortogonal components (the dist variable is also used as temporany variable)
-		long double dist, distx, disty, distz;
-		//the force
-		long double f;
+		// the dist, and his ortogonal components (the dist variable is also used as temporany variable)
+		long double dist, distx, disty, distz, f, temp;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=i+1; l < sys->nactive; l++) {
@@ -95,20 +93,20 @@
 				// if dist = 0, is bad. so
 				if(dist == 0)
 					dist = 0.0000000001;
-				// the force
-				f  = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
+				// the force is
+				f = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
 				// the aceleration for i (F = m * a -> a = F / m)
 				// update the velocity of i and l(V += a * t)
-				dist = f * distx * sys->precision / dist;
-				sys->o[i].velx -= dist / sys->o[i].mass;
-				sys->o[l].velx += dist / sys->o[l].mass;
-				dist *= disty / distx;
-				sys->o[i].vely -= dist / sys->o[i].mass;
-				sys->o[l].vely += dist / sys->o[l].mass;
-				dist *= distz / disty;
-				sys->o[i].velz -= dist / sys->o[i].mass;
-				sys->o[l].velz += dist / sys->o[l].mass;
+				temp = f * distx * sys->precision / dist;
+				sys->o[i].velx -= temp / sys->o[i].mass;
+				sys->o[l].velx += temp / sys->o[l].mass;
+				temp = f * disty * sys->precision / dist;
+				sys->o[i].vely -= temp / sys->o[i].mass;
+				sys->o[l].vely += temp / sys->o[l].mass;
+				temp = f * distz * sys->precision / dist;
+				sys->o[i].velz -= temp / sys->o[i].mass;
+				sys->o[l].velz += temp / sys->o[l].mass;
 			}
 		}
 		
