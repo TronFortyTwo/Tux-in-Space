@@ -6,6 +6,7 @@ Now have:
 - An extended gerarchic collection of various object types whit different behavior
 - Phisic engine that simulate the gravity force and the impacts between the objects
 - Space Monsters whit IA
+
 for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
