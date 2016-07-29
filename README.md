@@ -5,8 +5,7 @@ This program is a simulator game. The program simulates the moving, under the ph
 Now have:
 - An extended gerarchic collection of various object types whit different behavior
 - Phisic engine that simulate the gravity force and the impacts between the objects
-- Space Monster whit IA
-
+- Space Monsters whit IA
 for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
