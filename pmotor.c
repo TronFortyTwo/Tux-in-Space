@@ -25,20 +25,15 @@
  *		- impacts beetween them
  */
  
-	///prototypes of the phisic related functions
-	void Gravity(tsys *, tinf *);
-	void Inertia(tsys *, tinf *);
-	void Impacts(tsys *, tinf *);
-	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
-	long double ComputeVolume (long double, long double);
-	
-
 	void Pmotor (tsys *sys, tinf *inf, ttime dest) {
 		
 		while (GetBiggerStime (&dest, &sys->stime) == 0) {
 		
 			// GRAVITY
 			Gravity(sys, inf);
+		
+			// MONSTER IA
+			MonsterIA(sys, inf);
 		
 			// IMPACTS
 			Impacts(sys, inf);
@@ -69,11 +64,79 @@
 		return;
 	}
 
+	/***
+	 * MonsterIA
+	 * The monster search for human buildt things and destroy them
+	 * 
+	 * 		THERE IS MUCH WORK TO DO HERE TO MAKE MONSTERS SMARTER
+	 */
+	void MonsterIA(tsys *sys, tinf *inf) {
+		
+		// counter
+		int i;
+		
+		// Search the monster
+		for(i=0; i!=sys->nactive; i++){
+			if((strcmp(sys->o[i].type->parent, "Space Monster") == 0) || (strcmp(sys->o[i].type->name, "Space Monster") == 0)) {
+				MonsterIA_single(sys, inf, &sys->o[i]);
+			}
+		}
+		
+		return;
+	}
+	
+	void MonsterIA_single(tsys *sys, tinf *inf, tobj *mon) {
+		
+		// counter
+		int i;
+		// the list
+		tobj **list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
+		while (list == NULL) {
+			OPSML(inf, "MonsterIA");
+			list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
+		}
+		// the number of things to destroy
+		int num = 0;
+		// the closest object to hunt
+		tobj *closest;
+		
+		//if there is only him, exit
+		if(sys->nactive == 1)
+			return;
+		
+		// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
+		// search for monsters
+		for(i=0; i!=sys->nactive; i++) {
+			if(sys->o[i].type->hunted == ON) {
+				list[num] = &sys->o[i];
+				num++;
+			}
+		}
+		// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
+		closest = list[0];
+		for(i=1; i!=num; i++){
+			if( Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z) > Pitagora(mon->x-list[i]->x, mon->y-list[i]->y, mon->z-list[i]->z) )
+				closest = list[i];
+		}
+		
+		
+		// PART TWO, FOLLOW THE OBJECT
+		// move the object in a line
+		
+		// velx : distance x = vel : distance
+		mon->velx -= MONSTER_ACCELERATION * (mon->x - closest->x) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		mon->vely -= MONSTER_ACCELERATION * (mon->y - closest->y) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		mon->velz -= MONSTER_ACCELERATION * (mon->z - closest->z) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		
+		//exit
+		free(list);
+		return; 
+	}
 
 	/***
 	 * GRAVITY
 	 * 
-	 * WARNING: this function is heavy optimized!
+	 * WARNING: this function is heavy optimized! readability compromised! Refer to the comment
 	 */
 	void Gravity(tsys *sys, tinf *inf) {
 		
@@ -259,7 +322,7 @@
 	 * 	r^3 = V * 3 / (4 * PI)
 	 */
 	long double ComputeVolume (long double r1, long double r2) {
-		return pow((r1 * r1 * r1) + (r2 * r2 * r2), 1.0/3.0);
+		return pow(r1 * r1 * r1 + r2 * r2 * r2, 1.0/3.0);
 	}
 	 
 

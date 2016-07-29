@@ -8,10 +8,12 @@ RED_MAX: 255
 RED_MIN: 0
 GREEN_MAX: 255
 GREEN_MIN: 0
+HUNTED: N
 PARENT: System
 
 NAME: Artificial object
 DESCRIPTION: The product of an intentional human manufacture, often buildt whit metals
+HUNTED: Y
 PARENT: NULL
 
 NAME: Asteroid
@@ -163,10 +165,12 @@ PARENT: NULL
 
 NAME: Spacecraft
 DESCRIPTION: Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
+HUNTED: Y
 PARENT: Artificial object
 
 NAME: Spaceplane
 DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned flight. For example the Space Shuttle is a spaceplane
+HUNTED: Y
 PARENT: Spacecraft
 
 NAME: Star

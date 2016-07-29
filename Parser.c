@@ -157,6 +157,7 @@
 	 */
 	void DeleteObject(tinf *inf, tsys *sys) {
 		DebugPrint(inf, "deleteobject");
+		
 		char name[NAMELUN];	//the name of the object
 		tobj *obj;			//the pointer to the object
 		

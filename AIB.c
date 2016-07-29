@@ -22,10 +22,7 @@
  * The aim for now is to create a function parallel to OPSo but whit a GUI
  * 
  */
-	//this are the code that refer to a template (see template.which)
-	#define TEMPLATE_IRREGULAR 0
-	#define TEMPLATE_POINT 1
-	#define TEMPLATE_CIRCLE 2
+	
 	
 	//this structure contein a circle
 	struct Circle {

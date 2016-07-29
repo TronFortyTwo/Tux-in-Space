@@ -91,6 +91,14 @@
 	//constant used by the Impacts function (Pmotor)
 	#define BIGGER_TOLERANCE 1.3
 	#define COLOR_PREDOMINANCE 1.35
+	
+	//this are the code that refer to a template (AIB)(see template.which)
+	#define TEMPLATE_IRREGULAR 0
+	#define TEMPLATE_POINT 1
+	#define TEMPLATE_CIRCLE 2
+	
+	// The acceleration of a monster (Km/s)
+	#define MONSTER_ACCELERATION 0.0054
 
 	// flag is a value that can be only 0 or 1
 	typedef char flag;
@@ -111,7 +119,8 @@
 		double mass_min;		// Mass range
 		double mass_max;
 		tcolor color_max;		// Color range
-		tcolor color_min;		
+		tcolor color_min;
+		flag hunted;			// if are hunted by space monster		
 	};
 	typedef struct sStype ttype;
 	
@@ -176,31 +185,17 @@
 	typedef struct system tsys;
 	
 	
-	// functions prototypes
-	int LoadObject(tinf *, tobj *, tStype *, char *);
-	void DistanceCommand(tsys *, tinf *);
+	// AIB and graphic
 	void AIB_ASCII_renderizer (tsys *, tinf *);
+	// System functions
+	int	LoadObject(tinf *, tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
-	void DeleteObject(tinf *, tsys *);
-	ttime Quit (tsys *, tinf *, ttime *);
 	tobj *SearchObject(tsys *, char *);
-	void Info(tsys *, tinf *);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *);
-	void OPS(tinf *, char *, void **);
-	void OPSE(tinf *, char *, void **);
-	void OPSML(tinf *, char *);
-	ttime Jump(ttime *, tinf *, long double *);
-	ttime Wait(ttime *, tinf *, long double *);
 	int Menu(tinf *, tStype *);
-	int OPSo (tsys *, tinf *);
-	ttime Parser(tsys *, tinf *);
-	void Reask(tinf *, char *);
-	void SaveSys(tsys *, tinf *);
-	void Create(tsys *, tinf *);
 	ttype *TypeBrowser(tinf *, tStype *, char *);
-	void Pmotor (tsys *, tinf *, ttime dest);
 	int Shell (tinf *, tStype *);
 	void SafeIScan(tinf *, int *);
 	void PrintLine (tinf *, char *, int);
@@ -213,11 +208,36 @@
 	char *typeDescriptionFromName (tinf *inf, tStype *, char *);
 	ttype *typeSearchName (tinf *, tStype *, char *);
 	char *typeParentFromName (tinf *inf, tStype *, char *);
-	//I/O object
+	long double ComputeVolume (long double, long double);
+	// OPS and derivates
+	void OPS(tinf *, char *, void **);
+	void OPSE(tinf *, char *, void **);
+	void OPSML(tinf *, char *);
+	int OPSo (tsys *, tinf *);
+	// Parser
+	ttime Parser(tsys *, tinf *);
+	void Reask(tinf *, char *);
+	void SaveSys(tsys *, tinf *);
+	void Create(tsys *, tinf *);
+	ttime Jump(ttime *, tinf *, long double *);
+	ttime Wait(ttime *, tinf *, long double *);
+	void DeleteObject(tinf *, tsys *);
+	ttime Quit (tsys *, tinf *, ttime *);
+	void DistanceCommand(tsys *, tinf *);
+	void Info(tsys *, tinf *);
+	// I/O object
 	void WriteObject (FILE *stream, tobj *obj);
 	void WriteObjectComplete (FILE *stream, tobj *obj);
 	int ReadObject (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
 	int ReadObjectComplete (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
+	// Pmotor
+	void Pmotor (tsys *, tinf *, ttime dest);
+	void Gravity(tsys *, tinf *);
+	void Inertia(tsys *, tinf *);
+	void Impacts(tsys *, tinf *);
+	void MonsterIA(tsys *, tinf *);
+	void MonsterIA_single(tsys *, tinf *, tobj *);
+	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
  
 // CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
 	#include "debug.c"

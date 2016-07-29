@@ -24,6 +24,7 @@
 	 * The function InitObject set the type structure reading it from a file and return his address
 	 */
 	tStype *Inittype (FILE *stream, tinf *inf) {
+		DebugPrint(inf, "Inittype");
 		
 		// The type's mean structure (static because is passed to other functions)
 		static tStype Stype;
@@ -34,7 +35,6 @@
 		//counters
 		int i;
 	
-		DebugPrint(inf, "Inittype");
 	
 		// count how many types there are in the file (-1 because there is the default type)
 		Stype.number = -1;
@@ -81,7 +81,13 @@
 		ScanFString(buffer, stream);							//green
 		defaultype.color_max.green = strtod(&buffer[11], NULL);		
 		ScanFString(buffer, stream);								
-		defaultype.color_min.green = strtod(&buffer[11], NULL);		
+		defaultype.color_min.green = strtod(&buffer[11], NULL);	
+		//haunted
+		ScanFString(buffer, stream);
+		if(buffer[8] == 'Y')
+			defaultype.hunted = ON;
+		else if(buffer[8] == 'N')
+			defaultype.hunted = OFF;
 		//parent
 		ScanFString(buffer, stream);
 		strcpy(defaultype.parent, &buffer[8]);
@@ -122,6 +128,12 @@
 				}
 				else if(strncmp(buffer, "GREEN_MIN: ", 11) == 0) {			//the minimum green
 					Stype.type[i].color_min.green = strtod(&buffer[11], NULL);
+				}
+				else if(strncmp(buffer, "HUNTED: ", 8) == 0) {				//if is hunted
+					if(buffer[8] == 'Y')
+						Stype.type[i].hunted = ON;
+					else if(buffer[8] == 'N')
+						Stype.type[i].hunted = OFF;
 				}
 				else if(strncmp(buffer, "PARENT: ", 8) == 0) {				//the parent
 					strcpy(Stype.type[i].parent, &buffer[8]);
