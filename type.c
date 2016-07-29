@@ -265,7 +265,7 @@
 				strcat(dbuf, " object");
 			//add the description button
 			maxnum++;
-			snprintf(number, 4, "%d", maxnum);
+			snprintf(number, 3, "%d", maxnum);
 			strcat(dbuf, "\n\n");
 			strcat(dbuf, number);
 			strcat(dbuf, ") description of an object\n");

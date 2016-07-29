@@ -453,21 +453,18 @@
 		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 		// alloc memory
 		sys->nalloc = 0;
-		do {
-			if(sys->nalloc < sys->nactive)
-				sys->nalloc += OBJBUFSIZE;
-			else
+		while(1) {
+			if(sys->nalloc >= sys->nactive)
 				break;
+			sys->nalloc += OBJBUFSIZE;
 		}
-		while(1);
 		
-		do{
+		while(1) {
 			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 			if (sys->o != NULL)
 				break;
 			OPSML(inf, "LoadSystem");
 		}
-		while(1);
 		// fscanf for objects datas
 		for(i=0; i!=sys->nactive; i++) {
 			if(ReadObjectComplete(inf, dest, &sys->o[i], Stype) == CORRUPTED_SIG) {

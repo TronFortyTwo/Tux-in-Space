@@ -30,7 +30,7 @@
 		void *var;
 		
 		// The main menù is built in an infinite loop
-		for(;;) {
+		while(1) {
 		
 			//Principal menù, first screen	
 			OPS(inf, "&t5CSPACE: The space's simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) Information\n\n5) Quit", NULL);
@@ -38,11 +38,11 @@
 			
 			// If "new simulation" tell the Shell 0; (uninitialized obj)
 			if (i == 1)
-				return 0;
+				return NEW_SIG;
 				
 			// if "Load system" tell the Shell 1;
 			else if (i == 2)
-				return 1;
+				return LOAD_SIG;
 				
 			// If is setting can be changed value of some variabiles
 			else if (i == 3) {

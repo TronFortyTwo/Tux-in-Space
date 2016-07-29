@@ -68,11 +68,11 @@
 			// A line of '-'
 			strcat (buffer, "%f-");
 		}
-		//if there isn't any object
+		// if there isn't any object
 		if(sys->nactive == 0)
 			strcat(buffer, "\n&t1The system is empty. Use the 'create' command to create a new object");
 		
-		//tell to Rmotor what was done
+		// Print
 		OPS(inf, buffer, var);
 		
 		// free the RAM and exit

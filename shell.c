@@ -25,8 +25,6 @@
 	int Shell (tinf *inf, tStype *Stype) {
 		DebugPrint(inf, "shell");
 		
-		// Retruning value from the function
-		int staterec;
 		// he pointer to a system
 		tsys *sys;
 		// a time var (simulation time)
@@ -37,14 +35,16 @@
 		
 		while(1) {
 			// Call the mean menù, it tell to shell what to do.
-			staterec = Menu(inf, Stype);
-			// If the menù answered 0 the program initialize the system as new
-			if (staterec == 0)
-				sys = InitSystem(inf, Stype);
-			else if (staterec == 1)
-				sys = LoadSystem(inf, Stype);
-			else if (staterec == QUITSIGNAL)		//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
-				return QUITSIGNAL;
+			switch (Menu(inf, Stype)) {
+				case NEW_SIG:
+							sys = InitSystem(inf, Stype);
+							break;
+				case LOAD_SIG:
+							sys = LoadSystem(inf, Stype);
+							break;
+				case QUITSIGNAL:
+							return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
+			}
 			if (sys != NULL)
 				break;
 		}

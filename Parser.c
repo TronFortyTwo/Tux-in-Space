@@ -75,7 +75,7 @@
 		// wrong command
 		else {
 			Reask(inf, input);
-			Parser(sys, inf);
+			scanf("%s", input);
 		}
 		return t;
 	}
@@ -86,7 +86,7 @@
 	void Reask(tinf *inf, char *command){
 		DebugPrint(inf, "reask");
 		void *var = command;
-		OPSE(inf, "Sorry. But the command %s that you wrote is unknow. Write another command:", &var);
+		OPSE(inf, "Sorry. But the command %s that you wrote is unknow. Press something to continue:", &var);
 		return;
 	}
 	

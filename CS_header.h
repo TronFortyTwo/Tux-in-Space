@@ -58,7 +58,9 @@
 	// Advanced returned signals
 	#define FILE_ERR_SIG 3
 	#define CORRUPTED_SIG 4
-	#define QUITSIGNAL -1			// The value that the variable ttime.year assumes if the user want to quit
+	#define NEW_SIG 5
+	#define LOAD_SIG 6
+	#define QUITSIGNAL 7			// The value that the variable ttime.year assumes if the user want to quit
 	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
