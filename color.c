@@ -19,10 +19,6 @@
  *
  * In this file there are things correlated whit colors
  */
- ///prototypes
-	tcolor Color_black();
-	tcolor ScanColor(tinf *, tcolor, tcolor);
-	int ColorRangeCheck(tcolor, tcolor, tcolor);
 	
 /***
  * The Color_black return the black color

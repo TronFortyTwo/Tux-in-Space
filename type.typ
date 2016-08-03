@@ -9,6 +9,8 @@ RED_MIN: 0
 GREEN_MAX: 255
 GREEN_MIN: 0
 HUNTED: N
+HUNTER: N
+PRODUCT: Asteroid
 PARENT: System
 
 NAME: Artificial object
@@ -47,7 +49,7 @@ NAME: Chthonian planet
 DESCRIPTION: A chtonian planet is a planet generated from the hydrodinamic escape of a Gas Giant atmosphere. The remaining metal and rocky core form this planet
 PARENT: Planet
 
-NAME: Chose a type
+NAME: Choose a type
 DESCRIPTION: for your new object
 PARENT: Whitout parent
 
@@ -67,6 +69,7 @@ PARENT: Spacecraft
 
 NAME: Deep Space Kraken
 DESCRIPTION: Terrifying enormous creature that destroy anything what encouter. No one survived his attacks to confirm his existent
+HUNTER: Y
 PARENT: Space Monster
 
 NAME: Dwarf planet
@@ -111,6 +114,7 @@ PARENT: Terrestrial planet
 
 NAME: Leviatan
 DESCRIPTION: Enormous dragon of the space, the information about him are few. Seem that his diet is composed by the helium of the gas giant planets
+HUNTER: Y
 PARENT: Space Monster
 
 NAME: Magnetar
@@ -161,6 +165,7 @@ PARENT: Celestial object
 
 NAME: Space Monster
 DESCRIPTION: As in the old times big and unknow creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
+HUNTER: Y
 PARENT: NULL
 
 NAME: Spacecraft

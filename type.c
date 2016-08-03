@@ -28,48 +28,45 @@
 		
 		// The type's mean structure (static because is passed to other functions)
 		static tStype Stype;
-		//the default type
+		// the default type
 		ttype defaultype;
-		//a temp buffer
+		// a temp buffer
 		char buffer[DESCRIPTIONSIZE + 16];
-		//counters
+		// counters
 		int i;
-	
 	
 		// count how many types there are in the file (-1 because there is the default type)
 		Stype.number = -1;
-		do{
+		while(1) {
 			fscanf(stream, "\n");
 			ScanFString (buffer, stream);				// read a line
-			if (strcmp(buffer, "EOF") == 0)				// if the file is finished exit
+			if (!strcmp(buffer, "EOF"))					// if the file is finished exit
 				break;
-			else if (strncmp (buffer, "NAME:", 5) == 0)	// if is a new object memorize that there is a new object
+			else if (!strncmp (buffer, "NAME:", 5))		// if is a new object memorize that there is a new object
 				Stype.number++;
 		}
-		while(1);
 		
-		rewind(stream);
-		
-		//alloc enought spaces for all the ttype structure
+		// alloc enought spaces for all the ttype structure
 		Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
-		for(; Stype.type == NULL;) {
+		while(Stype.type == NULL) {
 			OPSML(inf, "Inittype");
 			Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 		}
 		
-		//scan the DEFAULT TYPE
-		//name
+		// scan the DEFAULT TYPE
+		rewind(stream);
+		// name
 		ScanFString(buffer, stream);
 		strcpy(defaultype.name, &buffer[6]);
-		//description
+		// description
 		ScanFString(buffer, stream);
 		strcpy(defaultype.description, &buffer[13]);
-		//the mass range
+		// the mass range
 		ScanFString(buffer, stream);
 		defaultype.mass_max = strtoll(&buffer[10], NULL, 0);
 		ScanFString(buffer, stream);
 		defaultype.mass_min = strtoll(&buffer[10], NULL, 0);
-		//the color range
+		// the color range
 		ScanFString(buffer, stream);							// blue
 		defaultype.color_max.blue = strtod(&buffer[10], NULL);
 		ScanFString(buffer, stream);
@@ -82,13 +79,22 @@
 		defaultype.color_max.green = strtod(&buffer[11], NULL);		
 		ScanFString(buffer, stream);								
 		defaultype.color_min.green = strtod(&buffer[11], NULL);	
-		//haunted
+		// hunted
 		ScanFString(buffer, stream);
 		if(buffer[8] == 'Y')
 			defaultype.hunted = ON;
 		else if(buffer[8] == 'N')
 			defaultype.hunted = OFF;
-		//parent
+		// hunter
+		ScanFString(buffer, stream);
+		if(buffer[8] == 'Y')
+			defaultype.hunter = ON;
+		else if(buffer[8] == 'N')
+			defaultype.hunter = OFF;
+		// product (defaultype has only one product)
+		ScanFString(buffer, stream);
+		strcpy(defaultype.product, &buffer[9]);
+		// parent
 		ScanFString(buffer, stream);
 		strcpy(defaultype.parent, &buffer[8]);
 		fscanf(stream, "\n");
@@ -96,11 +102,11 @@
 		//scan the other types
 		ScanFString(buffer, stream);
 		for(i=0; i != Stype.number; i++) {
-			//assign at the type the default values
+			// assign at the type the default values
 			Stype.type[i] = defaultype;
-			//scan customized values
+			// scan customized values
 			strcpy(Stype.type[i].name, &buffer[6]);	//the name
-			do {
+			while(1) {
 				ScanFString(buffer, stream);
 				if(strncmp(buffer, "DESCRIPTION: ", 13) == 0)				//the description
 					strcpy(Stype.type[i].description, &buffer[13]);
@@ -135,16 +141,26 @@
 					else if(buffer[8] == 'N')
 						Stype.type[i].hunted = OFF;
 				}
+				else if(strncmp(buffer, "HUNTER: ", 8) == 0) {				//if hunts
+					if(buffer[8] == 'Y')
+						Stype.type[i].hunter = ON;
+					else if(buffer[8] == 'N')
+						Stype.type[i].hunter = OFF;
+				}
+				else if(strncmp(buffer, "PRODUCT: ", 9) == 0) {
+					strcpy(Stype.type[i].product, &buffer[9]);
+				}
 				else if(strncmp(buffer, "PARENT: ", 8) == 0) {				//the parent
 					strcpy(Stype.type[i].parent, &buffer[8]);
 					fscanf(stream, "\n");
 				}
-				else{
+				else
 					break;
-				}
 			}
-			while(1);
 		}
+		// type product
+		
+		//finalization
 		PrintStype(inf, &Stype);
 		return &Stype;
 	}
@@ -159,7 +175,7 @@
 		int i;
 		//the loop that search the type whit the true name
 		for(i=0; i!=Stype->number; i++) {
-			//if the two name are equal
+			//if the two name are the same
 			if (0 == strcmp(Stype->type[i].name, name))
 				 return &Stype->type[i];
 		};
@@ -389,7 +405,7 @@
 				continue;
 			}
 			//if is the back button return to the start
-			if (input == maxnum){
+			if (input == maxnum) {
 				strcpy (commonparent, "NULL");
 				continue;
 			}

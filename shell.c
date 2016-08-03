@@ -59,11 +59,8 @@
 		while(1) {
 			// call the output system accordingly to vmode
 			switch (inf->vmode) {
-				case 0: 
+				case V_OPS: 
 						OPSo (sys, inf);
-						break;			
-				case 1:
-						AIB_ASCII_renderizer (sys, inf);
 						break;
 				default:
 						OPSo (sys, inf);

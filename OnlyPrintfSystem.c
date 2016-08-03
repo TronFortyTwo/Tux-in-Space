@@ -43,10 +43,10 @@
 	// the number of character of phrase elaborated
 	int chardone;
 	// the number of space to leave blank at the start of every line (max one digit)
-	int theet = 0;
+	BYTE theet = 0;
 	// one if the buf is finished
-	flag bufend = 0;
-	// the position in the int and long double arrays
+	BYTE bufend = 0;
+	// the position in the var array
 	int pos=0;
 	// the buffer to print, his size and position
 	int size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
@@ -263,7 +263,3 @@
 		
 		return;
 	}
-
-
-
-

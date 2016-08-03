@@ -77,9 +77,8 @@
 		
 		// Search the monster
 		for(i=0; i!=sys->nactive; i++){
-			if((strcmp(sys->o[i].type->parent, "Space Monster") == 0) || (strcmp(sys->o[i].type->name, "Space Monster") == 0)) {
+			if(sys->o[i].type->hunter == ON)
 				MonsterIA_single(sys, inf, &sys->o[i]);
-			}
 		}
 		
 		return;
@@ -136,7 +135,7 @@
 	/***
 	 * GRAVITY
 	 * 
-	 * WARNING: this function is heavy optimized! readability compromised! Refer to the comment
+	 * WARNING: this function is heavy optimized! readability compromised! Refer to the comments
 	 */
 	void Gravity(tsys *sys, tinf *inf) {
 		
@@ -156,7 +155,7 @@
 				// if dist = 0, is bad. so
 				if(dist == 0)
 					dist = 0.0000000001;
-				// the force is
+				// the force is f = G * m1 * m2 / dist^2
 				f = sys->G * sys->o[i].mass * sys->o[l].mass / (dist * dist);
 				// fx : f = distx : dist
 				// the aceleration for i (F = m * a -> a = F / m)
@@ -231,6 +230,18 @@
 		// If some objects are merged, restart to recheck for impact from start
 		if (nactivebefore != sys->nactive)
 			Impacts(sys, inf);
+		
+		return;
+	}
+
+	/***
+	 * This function simulate a hit when a monster eats a hunted object
+	 * 
+	 * sys->o[er] is the object huntER
+	 * sys->o[ed] is the object huntED
+	 */
+	void MonsterEat(tinf *inf, tsys *sys, int er, int ed) {
+		
 		
 		return;
 	}
@@ -353,11 +364,11 @@
 			stime->hour++;
 			stime->min -= 60;
 		}
-		while( stime->hour>=24 ){
+		while( stime->hour>=24 ) {
 			stime->day++;
 			stime->hour -= 24;
 		}
-		while( stime->day >= 365 ){
+		while( stime->day >= 365 ) {
 			stime->year++;
 			stime->day -= 365;
 		}

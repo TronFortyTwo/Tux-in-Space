@@ -105,37 +105,37 @@
 			else if(input == 4) {
 				var[0] = & obj->type->mass_min;
 				if (obj->type->mass_max == -1)
-					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values start from %l", var);
+					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values start from %l", var);
 				else{
 					var[1] = & obj->type->mass_max;
-					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object:\n&tdThe mass's legal values are between %l and %l", var);
+					OPS (inf, "CREATE A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
 				}
 				scanf("%Lf", & obj->mass);
 				strcpy(comment, "\nNew mass assigned succefully!");
 			}
 			// Radius
 			else if(input == 5) {
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the radius of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the radius of the new object: (Km)", var);
 				scanf("%Lf", &obj->radius);
 				strcpy(comment, "\nNew radius assigned succefully!");
 			}
 			// Coordiates
 			else if(input == 6) {
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the x axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", var);
 				scanf("%Lf", &obj->x);
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the y axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", var);
 				scanf("%Lf", &obj->y);
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the z axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", var);
 				scanf("%Lf", &obj->z);
 				strcpy(comment, "\nNew coordinates assigned succefully!");
 			}
 			// Velocity
 			else if(input == 7) {
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the x axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
 				scanf("%Lf", &obj->velx);
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the y axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
 				scanf("%Lf", &obj->vely);
-				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the z axis of the new object:", var);
+				OPS (inf, "CREATE A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
 				scanf("%Lf", &obj->velz);
 				strcpy(comment, "\nNew velocity assigned succefully!");
 			}
@@ -183,14 +183,14 @@
 				strcat(comment, ": color out of range");
 			}
 			// irregularity: TYPE
-			if (obj->type == typeSearchName(inf, Stype, "Chose a type")) {
+			if (obj->type == typeSearchName(inf, Stype, "Choose a type")) {
 				strcat(comment, "\n");
 				strcat(comment, IRREGULARITY);
-				strcat(comment, ": Chose a type!");
+				strcat(comment, ": Choose a type!");
 			}
 			// EXIT
 			if(input == 10) {
-				if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0) || (obj->type == typeSearchName(inf, Stype, "Chose a type")) ) )
+				if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0) || (obj->type == typeSearchName(inf, Stype, "Choose a type")) ) )
 					break;
 			}
 		}
@@ -315,7 +315,6 @@
 		
 		tobj *newo;		//(new o)bject buffer
 		int c;			//(c)ounter
-		
 		// create a new buffer whit less objects
 		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE));
 		while (newo == NULL) {
@@ -337,7 +336,6 @@
 		// if the buffer is empty, set the pointer to NULL
 		if(sys->nalloc == 0)
 			sys->o = NULL;
-		
 		//exit
 		free(newo);
 		return;
@@ -358,7 +356,6 @@
 			OPSML(inf, "ExtendObjBuf");
 			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 		}
-		
 		// copy what is stored in the old buffer in the new buffer
 		for (c=0; c != sys->nalloc; c++)
 			newo[c] = sys->o[c];
@@ -376,7 +373,6 @@
 	 * Save a system in the directory Systems/
 	 */
 	void SaveSys(tsys *sys, tinf *inf){
-		
 		DebugPrint(inf, "savesys");
 		
 		//the path where the system must be saved, an input variable and the destination file pointer
@@ -432,7 +428,6 @@
 			OPSML(inf, "InitSystem");
 			sys = (tsys *) malloc (sizeof(tsys));
 		}
-		
 		// ask which system
 		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
 		scanf("%s", sys->name);
@@ -453,17 +448,12 @@
 		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 		// alloc memory
 		sys->nalloc = 0;
-		while(1) {
-			if(sys->nalloc >= sys->nactive)
-				break;
+		while(sys->nalloc < sys->nactive)
 			sys->nalloc += OBJBUFSIZE;
-		}
 		
-		while(1) {
-			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
-			if (sys->o != NULL)
-				break;
+		while(sys->o == NULL) {
 			OPSML(inf, "LoadSystem");
+			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 		}
 		// fscanf for objects datas
 		for(i=0; i!=sys->nactive; i++) {
@@ -472,11 +462,8 @@
 				DebugPrint(inf, sys->o[i].type->name);
 			}
 		}
-		
 		fclose(dest);
-		
 		sys->Stype = Stype;
-		
 		return sys;
 	}
 	
@@ -485,13 +472,10 @@
 	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
 	 */
 	tobj *SearchObject(tsys *sys, char *name) {
-		
 		int i;
-		
 		for (i=0; i != sys->nactive; i++)
 			if(strcmp(sys->o[i].name, name) == 0)
 				return &sys->o[i];
-		
 		return NULL;
 	}
 	

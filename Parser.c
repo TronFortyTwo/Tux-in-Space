@@ -27,8 +27,8 @@
  * of the parser
  */
 	ttime Parser(tsys *sys, tinf *inf) {
-		
 		DebugPrint(inf, "parser");
+		
 		// what is scanned
 		char input[COMMANDLENGHT+1];
 		// the time we want (simulation)
@@ -38,39 +38,39 @@
 		// when you write a new command, you must add the corrispondent if and add it
 		scanf("%s", input);
 		// continue
-		if (strcmp("step", input) == 0) {
+		if ((!strcmp("step", input)) || (!strcmp("s", input))) {
 			t.millisec = t.millisec + (1000 * sys->precision);
 			UpdateTime(&t);
 		}
 		// the help
-		else if (strcmp("help", input) == 0) {
-			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step\n-create\n-jump\n-wait\n-info\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+		else if (!strcmp("help", input)) {
+			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump\n-wait (w)\n-info\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
 			scanf("%s", input);
 		}
 		// jump
-		else if (strcmp("jump", input) == 0)
+		else if ((!strcmp("jump", input)) || (!strcmp("j", input)))
 			t = Jump(&sys->stime, inf, &sys->precision);
 			
 		// info
-		else if (strcmp("info", input) == 0)
+		else if (!strcmp("info", input))
 			Info(sys, inf);
 		// wait
-		else if (strcmp("wait", input) == 0)
+		else if ((!strcmp("wait", input)) || (!strcmp("w", input)))
 			t = Wait(&sys->stime, inf, &sys->precision);
 		// create
-		else if (strcmp("create", input) == 0)
+		else if (!(strcmp("create", input)) || (!strcmp("c", input)))
 			Create(sys, inf);
 		// quit / exit
-		else if ((strcmp("quit", input) == 0) || (strcmp("exit", input) == 0))
+		else if (!(strcmp("quit", input)) || (!strcmp("exit", input)))
 			t = Quit(sys, inf, &sys->stime);
 		// save
-		else if (strcmp("save", input) == 0)
+		else if (!strcmp("save", input))
 			SaveSys(sys, inf);
 		//distance
-		else if (strcmp("distance", input) == 0)
+		else if (!strcmp("distance", input))
 			DistanceCommand(sys, inf);
 		// delete an object
-		else if ((strcmp("delete", input) == 0) || (strcmp("remove", input) == 0))
+		else if (!(strcmp("delete", input)) || (!strcmp("remove", input)))
 			DeleteObject(inf, sys);
 		// wrong command
 		else {
@@ -158,7 +158,7 @@
 	void DeleteObject(tinf *inf, tsys *sys) {
 		DebugPrint(inf, "deleteobject");
 		
-		char name[NAMELUN];	//the name of the object
+		TNAME name;			//the name of the object
 		tobj *obj;			//the pointer to the object
 		
 		//ask the user for the name
@@ -193,7 +193,7 @@
 		
 		tobj *obj;
 		void *var[13];
-		char input[NAMELUN];
+		TNAME input;
 
 		var[0] = sys->name;
 		var[1] = &sys->nactive;
@@ -278,7 +278,6 @@
 	 */
 	
 	void Create(tsys *sys, tinf *inf) {
-		DebugPrint(inf, "create");
 		// if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc)
 			ExtendObjBuf(sys, inf);
