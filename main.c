@@ -81,17 +81,15 @@
 		int i, l, f, p=0;					// counters and flag
 		char *prod[Stype->number];
 		
-		//free name
-		for(i=0; i!=Stype->number; i++)
-			free(Stype->type[i].name);
-		
-		//free product
-		for(i=0; i!=Stype->number; i++)
-			prod[i] = NULL;
 			
 		for(i=0; i!=Stype->number; i++) {
+			// free name
+			free(Stype->type[i].name);
+			
+			// free Stype.type.product
+			prod[i] = NULL;
 			f = 0;
-			//search if in prod[] there is already this address
+			// search if in prod[] there is already this address
 			for(l=0; l!=Stype->number; l++)
 				if(prod[l] == Stype->type[i].product)
 					f = 1;

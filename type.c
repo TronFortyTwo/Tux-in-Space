@@ -31,7 +31,7 @@
 		// the default type
 		ttype defaultype;
 		// a temp buffer
-		char buffer[DESCRIPTIONSIZE + 16];
+		char buffer[DESCRIPTIONSIZE + 13];
 		// counters
 		int i;
 	

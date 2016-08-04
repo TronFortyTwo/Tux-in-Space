@@ -450,7 +450,7 @@
 		sys->nalloc = 0;
 		while(sys->nalloc < sys->nactive)
 			sys->nalloc += OBJBUFSIZE;
-		
+		sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 		while(sys->o == NULL) {
 			OPSML(inf, "LoadSystem");
 			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));

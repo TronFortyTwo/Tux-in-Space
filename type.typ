@@ -25,6 +25,7 @@ PRODUCT: Meteroid
 PARENT: Minor planet
 
 NAME: Binary asteroids
+PRODUCT: Meteroid
 PARENT: Asteroid
 
 NAME: Black hole
@@ -56,6 +57,7 @@ DESCRIPTION: for your new object
 PARENT: Whitout parent
 
 NAME: Comet
+PRODUCT: Meteroid
 PARENT: Small body
 
 NAME: Compact star
@@ -116,7 +118,7 @@ DESCRIPTION: A lava planet is a type of terrestrial planet whit the surface comp
 PARENT: Terrestrial planet
 
 NAME: Leviatan
-DESCRIPTION: Enormous dragon of the space, the information about him are few. Seem that his diet is composed by the helium of the gas giant planets
+DESCRIPTION: Enormous dragon of the space, the information about him are few.
 HUNTER: Y
 PARENT: Space Monster
 
@@ -126,12 +128,15 @@ PARENT: Neutron star
 
 NAME: Mega Earth
 DESCRIPTION: A Mega Earth is a terrestrial planet ten or more times more massive than Earth, even more massive than super-Earths that are five to ten times more massive than Earth 
-MASS_MIN: 29800000000000000000000
-MASS_MAX: 60000000000000000000000
+MASS_MIN: 298e20
+MASS_MAX: 600e20
 PARENT: Terrestrial planet
 
 NAME: Meteroid
+DESCRIPTION: A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores.
 PRODUCT: Micrometeroid
+MASS_MAX: 10e4
+MASS_MIN: 10e-12
 PARENT: Small body
 
 NAME: Micrometeroid
@@ -159,6 +164,7 @@ DESCRIPTION: A planet is a celestial body that is rounded by its own gravity bec
 PARENT: Celestial object
 
 NAME: Planetesimal
+PRODUCT: Meteroid
 PARENT: Small body
 
 NAME: Pulsar
