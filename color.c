@@ -35,7 +35,6 @@
  * The ScanColor function get a color and return it
  */
 	tcolor ScanColor(tinf *inf, tcolor range_min, tcolor range_max) {
-		
 		DebugPrint(inf, "scancolor");
 		
 		tcolor color;	//our color

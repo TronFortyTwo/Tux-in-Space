@@ -16,10 +16,12 @@ PARENT: System
 NAME: Artificial object
 DESCRIPTION: The product of an intentional human manufacture, often buildt whit metals
 HUNTED: Y
+PRODUCT: Debris
 PARENT: NULL
 
 NAME: Asteroid
 DESCRIPTION: An asteroid is a minor planet that have a composition very similar to a terrestrial planet. Asteroid composed meanly by ice are called comets, some asteroids are comets that have lose the ice
+PRODUCT: Meteroid
 PARENT: Minor planet
 
 NAME: Binary asteroids
@@ -65,6 +67,7 @@ PARENT: Small body
 
 NAME: Debris
 DESCRIPTION: Debrises are spacecraft remaining, stages used and discarded that often travel in the spaces freely and sometimes falls onto some planet surface
+PRODUCT: Debris
 PARENT: Spacecraft
 
 NAME: Deep Space Kraken
@@ -128,6 +131,7 @@ MASS_MAX: 60000000000000000000000
 PARENT: Terrestrial planet
 
 NAME: Meteroid
+PRODUCT: Micrometeroid
 PARENT: Small body
 
 NAME: Micrometeroid
@@ -171,11 +175,13 @@ PARENT: NULL
 NAME: Spacecraft
 DESCRIPTION: Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
 HUNTED: Y
+PRODUCT: Debris
 PARENT: Artificial object
 
 NAME: Spaceplane
 DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned flight. For example the Space Shuttle is a spaceplane
 HUNTED: Y
+PRODUCT: Debris
 PARENT: Spacecraft
 
 NAME: Star

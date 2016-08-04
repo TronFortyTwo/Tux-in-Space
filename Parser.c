@@ -237,7 +237,7 @@
 		ttime t;
 		
 		OPS(inf,"WAIT\n\nInsert the information about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
-		scanf("%d", &t.year);
+		scanf("%ld", &t.year);
 		scanf("%d", &t.day);
 		scanf("%d", &t.hour);
 		scanf("%d", &t.min);
@@ -262,7 +262,7 @@
 		ttime t;
 		
 		OPS(inf, "JUMP\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe jump will be made whit an error of max %l seconds" , (void **)&precision);
-		scanf("%d", &t.year);
+		scanf("%ld", &t.year);
 		scanf("%d", &t.day);
 		scanf("%d", &t.hour);
 		scanf("%d", &t.min);

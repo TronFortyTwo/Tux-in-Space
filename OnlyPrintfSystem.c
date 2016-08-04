@@ -37,9 +37,9 @@
 	//loop counter
 	int i;
 	// counter for lines
-	int linedone;
+	WORD linedone;
 	// counter for columns
-	int columndone;
+	WORD columndone;
 	// the number of character of phrase elaborated
 	int chardone;
 	// the number of space to leave blank at the start of every line (max one digit)
@@ -47,9 +47,9 @@
 	// one if the buf is finished
 	BYTE bufend = 0;
 	// the position in the var array
-	int pos=0;
+	int pos = 0;
 	// the buffer to print, his size and position
-	int size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
+	DWORD size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
 	char *buf = (char *) malloc (sizeof(char[size]));
 	while (buf == NULL) {
 		OPSML(inf, "OPS");

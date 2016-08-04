@@ -57,6 +57,7 @@
 		rewind(stream);
 		// name
 		ScanFString(buffer, stream);
+		defaultype.name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
 		strcpy(defaultype.name, &buffer[6]);
 		// description
 		ScanFString(buffer, stream);
@@ -93,6 +94,11 @@
 			defaultype.hunter = OFF;
 		// product (defaultype has only one product)
 		ScanFString(buffer, stream);
+		defaultype.product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
+		while(defaultype.product == NULL){
+			OPSML(inf, "initype");
+			defaultype.product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
+		}
 		strcpy(defaultype.product, &buffer[9]);
 		// parent
 		ScanFString(buffer, stream);
@@ -105,52 +111,62 @@
 			// assign at the type the default values
 			Stype.type[i] = defaultype;
 			// scan customized values
+			Stype.type[i].name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
+			while(Stype.type[i].name == NULL) {
+				OPSML(inf, "inittype");
+				Stype.type[i].name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
+			}
 			strcpy(Stype.type[i].name, &buffer[6]);	//the name
 			while(1) {
 				ScanFString(buffer, stream);
-				if(strncmp(buffer, "DESCRIPTION: ", 13) == 0)				//the description
+				if(!strncmp(buffer, "DESCRIPTION: ", 13))					//the description
 					strcpy(Stype.type[i].description, &buffer[13]);
 					
-				else if(strncmp(buffer, "MASS_MAX: ", 10) == 0) {			//the maximum mass
+				else if(!strncmp(buffer, "MASS_MAX: ", 10)) {				//the maximum mass
 					Stype.type[i].mass_max = strtod(&buffer[10], NULL);
 				}
-				else if(strncmp(buffer, "MASS_MIN: ", 10) == 0) {			//the minimum mass
+				else if(!strncmp(buffer, "MASS_MIN: ", 10)) {				//the minimum mass
 					Stype.type[i].mass_min = strtod(&buffer[10], NULL);
 				}
-				else if(strncmp(buffer, "BLUE_MIN: ", 10) == 0) {			//the minimum blue
+				else if(!strncmp(buffer, "BLUE_MIN: ", 10)) {				//the minimum blue
 					Stype.type[i].color_min.blue = strtod(&buffer[10], NULL);
 				}
-				else if(strncmp(buffer, "BLUE_MAX: ", 10) == 0) {			//the maximum blue
+				else if(!strncmp(buffer, "BLUE_MAX: ", 10)) {				//the maximum blue
 					Stype.type[i].color_max.blue = strtod(&buffer[10], NULL);
 				}
-				else if(strncmp(buffer, "RED_MIN: ", 9) == 0) {				//the minimum red
+				else if(!strncmp(buffer, "RED_MIN: ", 9)) {					//the minimum red
 					Stype.type[i].color_min.red = strtod(&buffer[9], NULL);
 				}
-				else if(strncmp(buffer, "RED_MAX: ", 9) == 0) {				//the minimum red
+				else if(!strncmp(buffer, "RED_MAX: ", 9)) {					//the minimum red
 					Stype.type[i].color_max.red = strtod(&buffer[9], NULL);
 				}
-				else if(strncmp(buffer, "GREEN_MAX: ", 11) == 0) {			//the maximum green
+				else if(!strncmp(buffer, "GREEN_MAX: ", 11)) {				//the maximum green
 					Stype.type[i].color_max.green = strtod(&buffer[11], NULL);
 				}
-				else if(strncmp(buffer, "GREEN_MIN: ", 11) == 0) {			//the minimum green
+				else if(!strncmp(buffer, "GREEN_MIN: ", 11)) {				//the minimum green
 					Stype.type[i].color_min.green = strtod(&buffer[11], NULL);
 				}
-				else if(strncmp(buffer, "HUNTED: ", 8) == 0) {				//if is hunted
+				else if(!strncmp(buffer, "HUNTED: ", 8)) {					//if is hunted
 					if(buffer[8] == 'Y')
 						Stype.type[i].hunted = ON;
 					else if(buffer[8] == 'N')
 						Stype.type[i].hunted = OFF;
 				}
-				else if(strncmp(buffer, "HUNTER: ", 8) == 0) {				//if hunts
+				else if(!strncmp(buffer, "HUNTER: ", 8)) {					//if hunts
 					if(buffer[8] == 'Y')
 						Stype.type[i].hunter = ON;
 					else if(buffer[8] == 'N')
 						Stype.type[i].hunter = OFF;
 				}
-				else if(strncmp(buffer, "PRODUCT: ", 9) == 0) {
+				else if(!strncmp(buffer, "PRODUCT: ", 9)) {					//the product
+					Stype.type[i].product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
+					while(Stype.type[i].product == NULL){
+						OPSML(inf, "initype");
+						Stype.type[i].product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
+					}
 					strcpy(Stype.type[i].product, &buffer[9]);
 				}
-				else if(strncmp(buffer, "PARENT: ", 8) == 0) {				//the parent
+				else if(!strncmp(buffer, "PARENT: ", 8)) {					//the parent
 					strcpy(Stype.type[i].parent, &buffer[8]);
 					fscanf(stream, "\n");
 				}
@@ -158,10 +174,11 @@
 					break;
 			}
 		}
-		// type product
 		
 		//finalization
 		PrintStype(inf, &Stype);
+		free(defaultype.name);
+		free(defaultype.product);
 		return &Stype;
 	}
 	

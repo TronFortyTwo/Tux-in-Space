@@ -30,9 +30,7 @@
 	#include <math.h>
 	#include <time.h>
 	#include <limits.h>
-	// POSIX for multhithread
-	#include <pthread.h>
- 
+	#include <stdint.h>
 
 
 	#define PI (245850922/78256779)
@@ -104,7 +102,10 @@
 	#define V_OPS 0
 
 	// BYTE is a value that occupies one byte max
-	typedef unsigned char BYTE;
+	typedef 	int8_t		BYTE;	// max +/- 128
+	typedef 	int16_t 	WORD;	// max +/- 32768
+	typedef		int32_t		DWORD;
+	typedef		int64_t		QWORD;
 	
 	// the array that contein a name of a type-system-object
 	typedef char TNAME[NAMELUN];
@@ -118,7 +119,7 @@
 	
 	// The structure that represent a type of a object
 	typedef struct sStype {
-		TNAME name;
+		char *name;
 		char description[DESCRIPTIONSIZE];
 		TNAME parent;
 		double mass_min;			// Mass range
@@ -127,21 +128,21 @@
 		tcolor color_min;
 		BYTE hunted;				// if are hunted by space monster (ON/OFF)
 		BYTE hunter;				// if hunts (ON/OFF)
-		TNAME product;				// if an object is destroyed, this is what can remains from it (type name)
+		char *product;				// if an object is destroyed, this is what can remains from it (type name)
 	} ttype;
 	
 	// The structure whit all the types
 	typedef struct TypesStruct {
-		int number;
+		WORD number;
 		ttype *type;			// This is a pointer to the first member of the arrays that conteins all the types
 	} tStype;
 
 	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	typedef struct info {
-		int vmode;					// Visual mode
+		BYTE vmode;					// Visual mode
 		int width;					// The number of columns that the program use
 		int height;					// The number of lines that the program use
-		int numprecision;			// Number of character used for printing the deciamal of a long double
+		BYTE numprecision;			// Number of character used for printing the deciamal of a long double
 		BYTE debug;
 	} tinf;
 
@@ -163,7 +164,7 @@
 	
 	//in this structure is conteined a moment
 	typedef struct strtime {
-		int year;
+		QWORD year;
 		int day;
 		int hour;
 		int min;
@@ -173,11 +174,11 @@
 	
 	// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 	typedef struct system {
-		char name [NAMELUN];
-		long double precision;	// Precision of the simulation (in second). [Pmotor needs it]
+		TNAME name;
+		long double precision;	// Precision of the simulation (in second)
 		ttime stime;			// the time of the simulation
-		int nactive;			// number of objects active
-		int nalloc;				// number of objects allocated
+		QWORD nactive;			// number of objects active
+		QWORD nalloc;				// number of objects allocated
 		tobj *o;				// the pointer to the dinamic allocated array of objects
 		long double G;
 		tStype *Stype;			// The pointer at the structure that coontein all the type

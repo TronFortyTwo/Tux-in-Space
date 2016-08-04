@@ -78,6 +78,30 @@
 		// EXITING THE PROGRAM
 		
 		// free the memory
+		int i, l, f, p=0;					// counters and flag
+		char *prod[Stype->number];
+		
+		//free name
+		for(i=0; i!=Stype->number; i++)
+			free(Stype->type[i].name);
+		
+		//free product
+		for(i=0; i!=Stype->number; i++)
+			prod[i] = NULL;
+			
+		for(i=0; i!=Stype->number; i++) {
+			f = 0;
+			//search if in prod[] there is already this address
+			for(l=0; l!=Stype->number; l++)
+				if(prod[l] == Stype->type[i].product)
+					f = 1;
+			if(f == 0){
+				prod[p] = Stype->type[i].product;
+				free(Stype->type[i].product);
+				p++;
+			}
+		}
+		
 		free(Stype->type);
 		
 		// goodbye message

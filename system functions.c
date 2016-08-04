@@ -400,8 +400,8 @@
 		// Write the object
 		dest = fopen (path, "w");
 		// Write information about the system
-		fprintf (dest, "%.128Lf\n%d\n%.128Lf\n",  sys->precision, sys->nactive, sys->G);
-		fprintf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
+		fprintf (dest, "%.128Lf\n%ld\n%.128Lf\n",  sys->precision, sys->nactive, sys->G);
+		fprintf (dest, "%ld\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
 		// write the system's object's datas
 		for(i=0; i!=sys->nactive; i++)
 			WriteObjectComplete(dest, &sys->o[i]);
@@ -444,8 +444,8 @@
 			return NULL;
 		}
 		// scanf system's informations
-		fscanf (dest, "%Lf\n%d\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
-		fscanf (dest, "%d\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
+		fscanf (dest, "%Lf\n%ld\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
+		fscanf (dest, "%ld\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 		// alloc memory
 		sys->nalloc = 0;
 		while(sys->nalloc < sys->nactive)

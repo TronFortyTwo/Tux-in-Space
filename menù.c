@@ -54,9 +54,11 @@
 				SafeIScan(inf, &inf->height);
 				var = &inf->numprecision;
 				OPS (inf, "New number of number's decimal printed (now %i):", &var);
-				SafeIScan(inf, &inf->numprecision);
+				SafeIScan(inf, &i);
+				inf->numprecision = i;
 				OPS (inf, "Output mode:\n\n1)Only OnlyPrintfSystem based\n&tdThis option allow only textual output whitout any image but is fast and nice\n\n&t02)ASCII AIB renderizer (WORK IN PROGRESS)\n&tdThe Abstract Image Builder option allow images and a GUI but using a terminal interface. For now is unusable", NULL);
-				SafeIScan(inf, &inf->vmode);
+				SafeIScan(inf, &i);
+				inf->vmode = i;
 				inf->vmode--;
 			}
 			// if information printf the license
