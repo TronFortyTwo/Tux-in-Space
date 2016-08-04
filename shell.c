@@ -31,7 +31,7 @@
 		ttime stime;
 		
 		//////////////////////////////////////////
-		//MENU AND SYSTEM INITIALIZATION
+		// MENU AND SYSTEM INITIALIZATION
 		
 		while(1) {
 			// Call the mean menù, it tell to shell what to do.

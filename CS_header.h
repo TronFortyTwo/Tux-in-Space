@@ -142,7 +142,7 @@
 		BYTE vmode;					// Visual mode
 		int width;					// The number of columns that the program use
 		int height;					// The number of lines that the program use
-		BYTE numprecision;			// Number of character used for printing the deciamal of a long double
+		int numprecision;			// Number of character used for printing the deciamal of a long double
 		BYTE debug;
 	} tinf;
 
@@ -185,6 +185,7 @@
 	} tsys;
 	
 	// System functions
+	void Setting(tinf *inf);
 	int	LoadObject(tinf *, tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);

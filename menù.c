@@ -22,12 +22,10 @@
  * 
  */
 	int Menu(tinf *inf, tStype *Stype) {
-		
 		DebugPrint(inf, "menu");
 		
 		// A variable that save the scanf of an input
 		int i;
-		void *var;
 		
 		// The main menù is built in an infinite loop
 		while(1) {
@@ -44,23 +42,9 @@
 			else if (i == 2)
 				return LOAD_SIG;
 				
-			// If is setting can be changed value of some variabiles
-			else if (i == 3) {
-				var = &inf->width;
-				OPS (inf,"New number of columns (now %i):", &var);
-				SafeIScan(inf, &inf->width);
-				var = &inf->height;
-				OPS (inf, "New number of lines (now %i):", &var);
-				SafeIScan(inf, &inf->height);
-				var = &inf->numprecision;
-				OPS (inf, "New number of number's decimal printed (now %i):", &var);
-				SafeIScan(inf, &i);
-				inf->numprecision = i;
-				OPS (inf, "Output mode:\n\n1)Only OnlyPrintfSystem based\n&tdThis option allow only textual output whitout any image but is fast and nice\n\n&t02)ASCII AIB renderizer (WORK IN PROGRESS)\n&tdThe Abstract Image Builder option allow images and a GUI but using a terminal interface. For now is unusable", NULL);
-				SafeIScan(inf, &i);
-				inf->vmode = i;
-				inf->vmode--;
-			}
+			// If is setting can be changed value inf
+			else if (i == 3)
+				Setting(inf);
 			// if information printf the license
 			else if(i == 4){
 				OPS (inf, "Code hosted on GitHub: TronFourtyTwo/CSpace\n\nLICENSE: GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016  emanuele.sorce@hotmail.com\n\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 for more details.\n\nYou should have received a copy of the GNU General Public License version 3 along with this program; if not, write to the Free Software Foundation, Inc.\n\nPress a number to conitinue", NULL);
@@ -72,3 +56,39 @@
 		
 		return 0;
 	}
+	
+	/***
+	 * Setting. here can be changed some value of tinf inf
+	 */
+	void Setting(tinf *inf) {
+		
+		int i;
+		int quit = OFF;
+		void *var;
+		
+		while(quit == OFF) {
+			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n\n4) Done", NULL);
+			SafeIScan(inf, &i);
+			if(i == 1) {
+				var = &inf->width;
+				OPS(inf, "SETTING\n\nInsert the new number of columns:\n&tdnow %i", &var);
+				SafeIScan(inf, &inf->width);
+			}
+			else if(i == 2){
+				var = &inf->height;
+				OPS(inf, "SETTING\n\nInsert the new number of lines:\n&tdnow %i", &var);
+				SafeIScan(inf, &inf->height);
+			}
+			else if(i == 3){
+				var = &inf->numprecision;
+				OPS(inf, "SETTING\n\nInsert the new number decimal printed:\n&tdnow %i", &var);
+				SafeIScan(inf, &i);
+				inf->numprecision = i;
+			}
+			else if(i == 4)
+				quit = ON;
+		}
+		return;
+	}
+	
+	

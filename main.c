@@ -78,9 +78,9 @@
 		// EXITING THE PROGRAM
 		
 		// free the memory
-		int i, l, f, p=0;					// counters and flag
-		char *prod[Stype->number];
-		
+		WORD i, l, p=0;						// counters
+		BYTE f;								// flag
+		char *prod[Stype->number];			// the addresses of the string alredy free
 			
 		for(i=0; i!=Stype->number; i++) {
 			// free name
@@ -99,7 +99,6 @@
 				p++;
 			}
 		}
-		
 		free(Stype->type);
 		
 		// goodbye message

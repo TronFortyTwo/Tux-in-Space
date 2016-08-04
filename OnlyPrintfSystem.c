@@ -41,13 +41,13 @@
 	// counter for columns
 	WORD columndone;
 	// the number of character of phrase elaborated
-	int chardone;
+	QWORD chardone;
 	// the number of space to leave blank at the start of every line (max one digit)
 	BYTE theet = 0;
 	// one if the buf is finished
 	BYTE bufend = 0;
 	// the position in the var array
-	int pos = 0;
+	QWORD pos = 0;
 	// the buffer to print, his size and position
 	DWORD size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
 	char *buf = (char *) malloc (sizeof(char[size]));
@@ -55,7 +55,7 @@
 		OPSML(inf, "OPS");
 		buf = (char *) malloc (sizeof(char[size]));
 	}
-	int bufpos = 0;
+	DWORD bufpos = 0;
 	
 	
 	//OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
@@ -72,7 +72,7 @@
 			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
-				bufpos += sprintf(&buf[bufpos], "%Lf", *((long double *)var[pos]) );
+				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf->numprecision, *((long double *)var[pos]) );
 				pos++;
 				chardone++;
 			}
@@ -149,7 +149,7 @@
 				//if is a (t)heet directive
 				else if(buf[bufpos] == 't') {
 					bufpos++;
-					// scan the new number (max one digit)
+					// scan the new number
 					if (buf[bufpos] == '0') theet=0;
 					else if (buf[bufpos] == '1') theet=1;
 					else if (buf[bufpos] == '2') theet=2;
