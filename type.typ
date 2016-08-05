@@ -35,6 +35,9 @@ GREEN_MAX: 0
 PARENT: Compact star
 
 NAME: Brown Dwarf
+DESCRIPTION: A brown dwarf is a particular type of celestial object that are more massive than planets, but they don't have nuclear fusion in their core
+MASS_MIN: 2.467647e25
+MASS_MAX: 1.528552e26
 PARENT: Celestial object
 
 NAME: Carbon Planet
@@ -85,6 +88,7 @@ DESCRIPTION: An Earth analog is a terrestrial planet whit characteristich much s
 PARENT: Terrestrial planet
 
 NAME: Gas giant
+MASS_MAX: 2.467647e25
 PARENT: Giant planet
 
 NAME: Generic object
@@ -92,19 +96,12 @@ DESCRIPTION: We don't know the nature of a Generic object, so we call it generic
 PARENT: System
 
 NAME: Giant planet
+MASS_MAX: 2.467647e25
 PARENT: Planet
 
 NAME: Helium planet
 DESCRIPTION: An helium planet is a planet whit an atmosphere composly mainly by helium
 PARENT: Planet
-
-NAME: Hot Jupiter
-DESCRIPTION: A Hot Neptune is a giant gas planet that is very similar to Neptune but is much hotter that it
-PARENT: Gas giant
-
-NAME: Hot Neptune
-DESCRIPTION: A Hot Neptune is a giant gas planet that is very similar to Neptune but is much hotter that it
-PARENT: Gas giant
 
 NAME: Ice giant
 PARENT: Giant planet
@@ -143,6 +140,7 @@ NAME: Micrometeroid
 PARENT: Meteroid
 
 NAME: Mini-Neptune
+MASS_MAX: 1e23
 PARENT: Planet
 
 NAME: Minor planet
@@ -191,7 +189,9 @@ PRODUCT: Debris
 PARENT: Spacecraft
 
 NAME: Star
-DESCRIPTION: A star is a celestial body that have termonuclear reaction inside it, for that shine of its own light
+DESCRIPTION: A star is a celestial body that have termonuclear reaction inside it, for that shine of its own light. Stars have a mass between 0.08 and 200 Sun Masses. Lighter objects are called brown dwarfs, and they don't produce energy via nuclear fusion
+MASS_MIN: 9241818
+MASS_MAX: 3.97784e29
 PARENT: Celestial object
 
 NAME: Sub-brown dwarf
@@ -199,8 +199,8 @@ PARENT: Brown dwarf
 
 NAME: Super Earth
 DESCRIPTION: A super Earth is a terrestrial planet massive two to five Earth masses, more massive terrestrial planet are called Mega Earth
-MASS_MIN: 11000000000000000000000		
-MASS_MAX: 29863000000000000000000
+MASS_MIN: 11e21		
+MASS_MAX: 29.863e21
 PARENT: Terrestrial planet
 
 NAME: Terrestrial planet

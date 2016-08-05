@@ -33,7 +33,7 @@
 			Gravity(sys, inf);
 		
 			// MONSTER IA
-			MonsterIA(sys, inf);
+			HunterIA(sys, inf);
 		
 			// IMPACTS
 			Impacts(sys, inf);
@@ -65,12 +65,12 @@
 	}
 
 	/***
-	 * MonsterIA
+	 * HunterIA
 	 * The monster search for human buildt things and destroy them
 	 * 
 	 * 		THERE IS MUCH WORK TO DO HERE TO MAKE MONSTERS SMARTER
 	 */
-	void MonsterIA(tsys *sys, tinf *inf) {
+	void HunterIA(tsys *sys, tinf *inf) {
 		
 		// counter
 		int i;
@@ -78,26 +78,28 @@
 		// Search the monster
 		for(i=0; i!=sys->nactive; i++){
 			if(sys->o[i].type->hunter == ON)
-				MonsterIA_single(sys, inf, &sys->o[i]);
+				HunterIA_single(sys, inf, &sys->o[i]);
 		}
 		
 		return;
 	}
 	
-	void MonsterIA_single(tsys *sys, tinf *inf, tobj *mon) {
+	void HunterIA_single(tsys *sys, tinf *inf, tobj *mon) {
 		
 		// counter
 		int i;
 		// the list
 		tobj **list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 		while (list == NULL) {
-			OPSML(inf, "MonsterIA");
+			OPSML(inf, "HunterIA");
 			list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 		}
 		// the number of things to destroy
 		int num = 0;
 		// the closest object to hunt
 		tobj *closest;
+		// A temp variable
+		long double temp;
 		
 		//if there is only him, exit
 		if(sys->nactive == 1)
@@ -113,19 +115,17 @@
 		}
 		// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 		closest = list[0];
-		for(i=1; i!=num; i++){
+		for(i=1; i!=num; i++)
 			if( Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z) > Pitagora(mon->x-list[i]->x, mon->y-list[i]->y, mon->z-list[i]->z) )
 				closest = list[i];
-		}
-		
 		
 		// PART TWO, FOLLOW THE OBJECT
-		// move the object in a line
-		
+		// move the hunter in the direction of the closest
 		// velx : distance x = vel : distance
-		mon->velx -= MONSTER_ACCELERATION * (mon->x - closest->x) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
-		mon->vely -= MONSTER_ACCELERATION * (mon->y - closest->y) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
-		mon->velz -= MONSTER_ACCELERATION * (mon->z - closest->z) * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		temp = MONSTER_ACCELERATION * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		mon->velx -= (mon->x - closest->x) * temp;
+		mon->vely -= (mon->y - closest->y) * temp;
+		mon->velz -= (mon->z - closest->z) * temp;
 		
 		//exit
 		free(list);

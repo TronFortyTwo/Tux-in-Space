@@ -64,28 +64,49 @@
 		
 		int i;
 		int quit = OFF;
-		void *var;
+		void *var[2];
 		
 		while(quit == OFF) {
-			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n\n4) Done", NULL);
+			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Turn on/off debug\n\n5) Done", NULL);
 			SafeIScan(inf, &i);
 			if(i == 1) {
-				var = &inf->width;
-				OPS(inf, "SETTING\n\nInsert the new number of columns:\n&tdnow %i", &var);
+				var[0] = &inf->width;
+				OPS(inf, "SETTING\n\nInsert the new number of columns:\n&tdnow %i", var);
 				SafeIScan(inf, &inf->width);
 			}
 			else if(i == 2){
-				var = &inf->height;
-				OPS(inf, "SETTING\n\nInsert the new number of lines:\n&tdnow %i", &var);
+				var[0] = &inf->height;
+				OPS(inf, "SETTING\n\nInsert the new number of lines:\n&tdnow %i", var);
 				SafeIScan(inf, &inf->height);
 			}
 			else if(i == 3){
-				var = &inf->numprecision;
-				OPS(inf, "SETTING\n\nInsert the new number decimal printed:\n&tdnow %i", &var);
+				var[0] = &inf->numprecision;
+				OPS(inf, "SETTING\n\nInsert the new number decimal printed:\n&tdnow %i", var);
 				SafeIScan(inf, &i);
 				inf->numprecision = i;
 			}
-			else if(i == 4)
+			else if(i == 4){
+				char debug[2][4];	// Can contein "ON" or "OFF". the first contein the thruth, the second not
+				if(inf->debug == ON){
+					strcpy(debug[0], "ON");
+					strcpy(debug[1], "OFF");
+				}
+				else if(inf->debug == OFF){
+					strcpy(debug[0], "OFF");
+					strcpy(debug[1], "ON");
+				}
+				var[0] = &debug[0];
+				var[1] = &debug[1];
+				OPS(inf, "SETTING\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file 'debug.dbg' debug information", var);
+				scanf("%s", debug[0]);
+				if(debug[0][0] == 'y') {
+					if(inf->debug == OFF)
+						inf->debug = ON;
+					if(inf->debug == ON)
+						inf->debug = OFF;
+				}
+			}
+			else if(i == 5)
 				quit = ON;
 		}
 		return;

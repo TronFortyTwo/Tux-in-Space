@@ -234,8 +234,8 @@
 	void Gravity(tsys *, tinf *);
 	void Inertia(tsys *, tinf *);
 	void Impacts(tsys *, tinf *);
-	void MonsterIA(tsys *, tinf *);
-	void MonsterIA_single(tsys *, tinf *, tobj *);
+	void HunterIA(tsys *, tinf *);
+	void HunterIA_single(tsys *, tinf *, tobj *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
 	// color
 	tcolor Color_black();

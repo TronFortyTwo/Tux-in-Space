@@ -514,3 +514,36 @@
 			return CORRUPTED_SIG;
 		return GOODSIGNAL;
 	}
+	
+	
+	/***
+	 * Free Stype is a function that free the allocated memory in the structures of type tStype
+	 */
+	void FreeStype(tStype *Stype){
+		
+		WORD i, l, p=0;						// counters
+		BYTE f;								// flag
+		char *prod[Stype->number];			// the addresses of the string alredy free
+			
+		for(i=0; i!=Stype->number; i++) {
+			// free name
+			free(Stype->type[i].name);
+			
+			// free Stype.type.product
+			prod[i] = NULL;
+			f = 0;
+			// search if in prod[] there is already this address
+			for(l=0; l!=Stype->number; l++)
+				if(prod[l] == Stype->type[i].product)
+					f = 1;
+			if(f == 0){
+				prod[p] = Stype->type[i].product;
+				free(Stype->type[i].product);
+				p++;
+			}
+		}
+		free(Stype->type);
+		
+		return;
+	}
+	

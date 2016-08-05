@@ -52,7 +52,7 @@
 		// set num precision
 		inf.numprecision = 6;
 		// set the debug to on and set the stderr destination file
-		inf.debug = ON;
+		inf.debug = OFF;
 		
 		InitDebug(&inf);
 		
@@ -78,28 +78,7 @@
 		// EXITING THE PROGRAM
 		
 		// free the memory
-		WORD i, l, p=0;						// counters
-		BYTE f;								// flag
-		char *prod[Stype->number];			// the addresses of the string alredy free
-			
-		for(i=0; i!=Stype->number; i++) {
-			// free name
-			free(Stype->type[i].name);
-			
-			// free Stype.type.product
-			prod[i] = NULL;
-			f = 0;
-			// search if in prod[] there is already this address
-			for(l=0; l!=Stype->number; l++)
-				if(prod[l] == Stype->type[i].product)
-					f = 1;
-			if(f == 0){
-				prod[p] = Stype->type[i].product;
-				free(Stype->type[i].product);
-				p++;
-			}
-		}
-		free(Stype->type);
+		FreeStype(Stype);
 		
 		// goodbye message
 		OPS (&inf, "CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);
