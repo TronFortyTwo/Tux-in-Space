@@ -467,18 +467,6 @@
 		return sys;
 	}
 	
-	
-	/***
-	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
-	 */
-	tobj *SearchObject(tsys *sys, char *name) {
-		int i;
-		for (i=0; i != sys->nactive; i++)
-			if(strcmp(sys->o[i].name, name) == 0)
-				return &sys->o[i];
-		return NULL;
-	}
-	
 	/***
 	 * OBJECT I/O       (READ/WRITE)
 	 * WriteObject write in the stream given the object.
@@ -547,3 +535,46 @@
 		return;
 	}
 	
+	/***
+	 * SaveConfig save in a file the config of tinf inf
+	 */
+	void SaveConfig(tinf *inf){
+		
+		FILE *cf = fopen(CONFIGURATION_FILE, "w");
+		
+		fprintf(cf, "%d\n", inf->height);
+		fprintf(cf, "%d\n", inf->width);
+		fprintf(cf, "%d\n", inf->debug);
+		fprintf(cf, "%d\n", inf->numprecision);
+		fprintf(cf, "%d\n", inf->vmode);
+		
+		fclose(cf);
+		return;
+	}
+	
+	/***
+	 * InitConfig is a function that load from the config file 
+	 */
+	void InitConfig(tinf *inf) {
+		
+		FILE *cf = fopen(CONFIGURATION_FILE, "r");
+		// If there is a file
+		if(cf != NULL) {
+			fscanf(cf, "%d", &inf->height);
+			fscanf(cf, "%d", &inf->width);
+			fscanf(cf, "%d", &inf->debug);
+			fscanf(cf, "%d", &inf->numprecision);
+			fscanf(cf, "%d", &inf->vmode);
+			fclose(cf);
+		}
+		// if not, load defaults
+		else {
+			inf->height = 41;
+			inf->width = 90;
+			inf->debug = OFF;
+			inf->numprecision = 6;
+			inf->vmode = V_OPS;
+		}
+		return; 
+	}
+	 

@@ -383,31 +383,41 @@
 	 * NOTE:
 	 * the times must is written correctlty (for example not 1024 hour and 71 minutes)
 	 */
-		int GetBiggerStime(ttime *o, ttime *t) {
-			if(o->year > t->year)
-				return 0;
-			if (o->year < t->year)
-				return 1;
-			if(o->day > t->day)
-				return 0;
-			if (o->day < t->day)
-				return 1;
-			if(o->hour > t->hour)
-				return 0;
-			if (o->hour < t->hour)
-				return 1;
-			if(o->min > t->min)
-				return 0;
-			if (o->min < t->min)
-				return 1;
-			if(o->sec > t->sec)
-				return 0;
-			if (o->sec < t->sec)
-				return 1;
-			if(o->millisec > t->millisec)
-				return 0;
-			if (o->millisec < t->millisec)
-				return 1;
-			return 2;
-		}
-	
+	int GetBiggerStime(ttime *o, ttime *t) {
+		if(o->year > t->year)
+			return 0;
+		if (o->year < t->year)
+			return 1;
+		if(o->day > t->day)
+			return 0;
+		if (o->day < t->day)
+			return 1;
+		if(o->hour > t->hour)
+			return 0;
+		if (o->hour < t->hour)
+			return 1;
+		if(o->min > t->min)
+			return 0;
+		if (o->min < t->min)
+			return 1;
+		if(o->sec > t->sec)
+			return 0;
+		if (o->sec < t->sec)
+			return 1;
+		if(o->millisec > t->millisec)
+			return 0;
+		if (o->millisec < t->millisec)
+			return 1;
+		return 2;
+	}
+		
+	/***
+	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
+	 */
+	tobj *SearchObject(tsys *sys, char *name) {
+		int i;
+		for (i=0; i != sys->nactive; i++)
+			if(strcmp(sys->o[i].name, name) == 0)
+				return &sys->o[i];
+		return NULL;
+	}

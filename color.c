@@ -19,18 +19,7 @@
  *
  * In this file there are things correlated whit colors
  */
-	
-/***
- * The Color_black return the black color
- */
-	tcolor Color_black(){
-		tcolor black;
-		black.red = 0;
-		black.green = 0;
-		black.blue = 0;
-		return black;
-	}
- 
+
 /***
  * The ScanColor function get a color and return it
  */

@@ -100,6 +100,11 @@
 
 	// The vmode BYTE values
 	#define V_OPS 0
+	
+	// The files
+	#define DEBUG_FILE "debug.dbg"				// Where are printed debug information
+	#define TYPE_DATABASE_FILE "type.typ"		// Where read type information
+	#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration information
 
 	// BYTE is a value that occupies one byte max
 	typedef 	int8_t		BYTE;	// max +/- 128
@@ -139,11 +144,11 @@
 
 	// The structure infostruct is a structure that contein information about the options and other tecnical things 
 	typedef struct info {
-		BYTE vmode;					// Visual mode
+		int vmode;					// Visual mode
 		int width;					// The number of columns that the program use
 		int height;					// The number of lines that the program use
 		int numprecision;			// Number of character used for printing the deciamal of a long double
-		BYTE debug;
+		int debug;
 	} tinf;
 
 	// definition of the type of the object's structures
@@ -238,7 +243,6 @@
 	void HunterIA_single(tsys *, tinf *, tobj *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
 	// color
-	tcolor Color_black();
 	tcolor ScanColor(tinf *, tcolor, tcolor);
 	int ColorRangeCheck(tcolor, tcolor, tcolor);
  

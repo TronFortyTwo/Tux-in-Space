@@ -109,6 +109,9 @@
 			else if(i == 5)
 				quit = ON;
 		}
+		
+		// Save and exit
+		SaveConfig(inf);
 		return;
 	}
 	

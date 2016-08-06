@@ -44,7 +44,7 @@
 		}
 		// the help
 		else if (!strcmp("help", input)) {
-			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump\n-wait (w)\n-info\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump\n-wait (w)\n-info\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
 			scanf("%s", input);
 		}
 		// jump
@@ -72,6 +72,10 @@
 		// delete an object
 		else if (!(strcmp("delete", input)) || (!strcmp("remove", input)))
 			DeleteObject(inf, sys);
+		// settings
+		else if (!(strcmp("settings", input)) || (!strcmp("configuration", input))){
+			Setting(inf);
+		}
 		// wrong command
 		else {
 			Reask(inf, input);

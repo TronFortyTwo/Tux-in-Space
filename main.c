@@ -39,32 +39,27 @@
 		// file pointers
 		FILE *Ftype;
 		
-		// default things for struct inf are setted.
-		// height and width are respectively the number of height and width that the program can use for printing (The minimum recommended configuration is: height 40 and width 60)
-		inf.height = 41;
-		inf.width = 100;
+		InitConfig(&inf);
 		
-		//print loading...
+		//print loading and license banner
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
 		// the vmode is setted 0 (OPS)
 		inf.vmode = V_OPS;
 		// set num precision
 		inf.numprecision = 6;
-		// set the debug to on and set the stderr destination file
-		inf.debug = OFF;
 		
 		InitDebug(&inf);
 		
 		// Read the types from a file
-		Ftype = fopen("type.typ", "r");
+		Ftype = fopen(TYPE_DATABASE_FILE, "r");
 		if(Ftype != NULL) {
 			Stype = Inittype(Ftype, &inf);
 			fclose(Ftype);
 		}
 		else {
-			char input[2];		//input variable
-			OPSE(&inf, "Can't open the file type.typ that conteins the type definitions\nPress a button to exit the program", NULL);
+			char input[2];		// input variable
+			OPSE(&inf, "Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
 			scanf("%s", input);
 			return 0;
 		}
