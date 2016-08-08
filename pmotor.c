@@ -116,7 +116,7 @@
 		// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 		closest = list[0];
 		for(i=1; i!=num; i++)
-			if( Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z) > Pitagora(mon->x-list[i]->x, mon->y-list[i]->y, mon->z-list[i]->z) )
+			if( Distance(mon, closest) > Distance(mon, list[i]) )
 				closest = list[i];
 		
 		// PART TWO, FOLLOW THE OBJECT
@@ -190,10 +190,11 @@
 		
 		// counters for loops
 		int i, l;
+		int fi, la;		// first, last
 		// the distance
 		long double dist;
-		// sys->nactive at the start of the function
-		int nactivebefore = sys->nactive;
+		// if is been computed some impact
+		BYTE impacts = NO;
 		
 		for(i=0; i < sys->nactive; i++) {
 			for (l=0; l < sys->nactive; l++) {
@@ -201,25 +202,44 @@
 				if(l == i)
 					continue;
 				// calculate the distance whit pitagora
-				dist = Pitagora (sys->o[i].x - sys->o[l].x, sys->o[i].y - sys->o[l].y, sys->o[i].z - sys->o[l].z);
+				dist = Distance(&sys->o[i], &sys->o[l]);
 				// if doesn't hit continue
 				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
-				
+				impacts = YES;
 				// For now there are only not elastic impacts.
 				// write the new object in the first of the two position
 				// then move the last object in the last of the two position
-				if (i < l) {
-					sys->o[i] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
-					sys->o[l] = sys->o[sys->nactive-1];
+				// set the first and the last
+				if (i < l){
+					fi = i;
+					la = l;
 				}
 				else {
-					sys->o[l] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
-					sys->o[i] = sys->o[sys->nactive-1];
+					fi = l;
+					la = i;
+				}
+				// Call the appropriate impact simulator
+				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
+				/* THIS PART ISN'T YET ENOUGHT STABLE
+				if((sys->o[i].type->hunter==ON) && (sys->o[l].type->hunted==ON)) {
+					// here i is the hunter, l the hunted
+					Hunting_Impact(inf, sys, i, l);
+				}
+				else if((sys->o[i].type->hunted==ON) && (sys->o[l].type->hunter==ON)){
+					// here l is the hunter, i the hunted
+					Hunting_Impact(inf, sys, l, i);
+				}
+				*/
+				// regular impact whit merging
+				//else
+				{
+					sys->o[fi] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+					sys->o[la] = sys->o[sys->nactive-1];
+					sys->nactive--;
 				}
 
-				// update counter and if necessary resize the buffer
-				sys->nactive--;
+				// if necessary resize the object buffer
 				if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 					ReduceObjBuf(sys, inf);
 				
@@ -227,20 +247,79 @@
 			}
 		}
 		
-		// If some objects are merged, restart to recheck for impact from start
-		if (nactivebefore != sys->nactive)
+		// If some impacts happened, restart to recheck for impact from start
+		if (impacts == YES)
 			Impacts(sys, inf);
 		
 		return;
 	}
 
 	/***
-	 * This function simulate a hit when a monster eats a hunted object
+	 * This function simulate when an hunter 'eats' a hunted object
 	 * 
 	 * sys->o[er] is the object huntER
 	 * sys->o[ed] is the object huntED
 	 */
-	void MonsterEat(tinf *inf, tsys *sys, int er, int ed) {
+	void Hunting_Impact(tinf *inf, tsys *sys, int er, int ed) {
+		
+		// a random number that is the (p)ercentage that the hunter doesn't eats of the hunted
+		BYTE p;
+		// a variable that store the volume of an object
+		double volum;
+		// a force variable
+		long double f;
+		
+		// set p (over 10)
+		do {
+			srand(time(NULL));
+			p = rand();
+			p++;
+		}
+		while(p < 10);
+		
+		// the hunted one is reduced to his product
+		sys->o[ed].type = typeSearchName(inf, sys->Stype, sys->o[ed].type->product);
+		
+		// move a percentage p of ed mass in er
+		sys->o[er].mass += sys->o[ed].mass * (100-p) / 100;
+		sys->o[ed].mass *= p / 100;
+		
+		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
+		// the hunter
+		volum = 4/3 * PI * sys->o[er].radius * sys->o[er].radius * sys->o[er].radius;
+		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius)*(100-p)/ 100;	//volum += volum_of_hunted * 100-p / 100
+		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		// the hunted
+		volum = (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius);
+		volum *= p / 100;
+		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		
+		// move the hunted a bit away and give him some velocity from the hunter
+		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
+		// if x is the faster
+		if 	   ((sys->o[er].velx > sys->o[er].vely)&&(sys->o[er].velx > sys->o[er].velz)) {
+			// move the hunted away from the hunter enought to not touch it
+			sys->o[ed].x += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			// transimit half of the hunter fast on the hunted (f = m*a)
+			f = sys->o[er].velx * sys->o[er].mass /2;
+			sys->o[ed].velx = f / sys->o[ed].mass;
+		}
+		// if y is the faster
+		else if((sys->o[er].vely > sys->o[er].velx)&&(sys->o[er].vely > sys->o[er].velz)) {
+			// move the hunted away from the hunter enought to not touch it
+			sys->o[ed].y += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			// transimit half of the hunter fast on the hunted (f = m*a)
+			f = sys->o[er].vely * sys->o[er].mass /2;
+			sys->o[ed].vely = f / sys->o[ed].mass;
+		}
+		// if z is the faster
+		else {
+			// move the hunted away from the hunter enought to not touch it
+			sys->o[ed].z += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			// transimit half of the hunter fast on the hunted	(f = m*a)
+			f = sys->o[er].velz * sys->o[er].mass /2;
+			sys->o[ed].velz = f / sys->o[ed].mass;
+		}
 		
 		
 		return;
@@ -254,29 +333,11 @@
 		// the new object
 		tobj newobj;
 		// the two objects
-		tobj *bigger;
-		tobj *smaller;
+		tobj *bigger;			// the bigger is the object that, relatively, is being hit by the smaller
+		tobj *smaller;			// the smaller is the object that fuse whit the bigger and lose personality
 		
-		// an object is bigger if has mass AND radius much bigger, else make the bigger a random one, but whit advantages (see below at the else)
-		if ((oi->mass > ol->mass*BIGGER_TOLERANCE) && (oi->radius > ol->radius*BIGGER_TOLERANCE))
-			bigger = oi;
-		else if ((ol->mass > oi->mass*BIGGER_TOLERANCE) && (ol->radius > oi->radius*BIGGER_TOLERANCE))
-			bigger = ol;
-		else {
-			srand(time(NULL));
-			if 		( (rand()/RAND_MAX) > (oi->mass/(ol->mass+oi->mass)) )
-				bigger = ol;
-			else if ( (rand()/RAND_MAX) < (oi->mass/(ol->mass+oi->mass)) )
-				bigger = oi;
-			else {
-				srand(time(NULL));
-				if(rand() > 49)
-					bigger = oi;
-				else
-					bigger = ol;
-			}
-		}
-		//set the smaller
+		// set the bigger and the smaller
+		ComputeBigger(oi, ol, &bigger);
 		if(oi == bigger)
 			smaller = ol;
 		else
@@ -312,9 +373,9 @@
 		newobj.velx = ((oi->velx * oi->mass) + (ol->velx * ol->mass)) / (ol->mass + oi->mass);
 		newobj.vely = ((oi->vely * oi->mass) + (ol->vely * ol->mass)) / (ol->mass + oi->mass);
 		newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
-		// to calculate the radius we calculate the volum of the two object, we sum the two and we get the radius of the new volume  V = (4/3) r3 * PI ||| r3 = V * 3/(4*PI)
-		newobj.radius = ComputeVolume(oi->radius, ol->radius);
-
+		// to calculate the radius we calculate the volum of the two object,
+		newobj.radius = RadiusestoVolume(oi->radius, ol->radius);
+		
 		return newobj;
 	}
 
@@ -323,6 +384,40 @@
   //////////////////////////////////////////////////////////////////////////////////
 // THESE ARE MATHEMATICAL AND SYSTEM MANAGER FUNCTION THAT HELP GENERICALLY			//
   //////////////////////////////////////////////////////////////////////////////////
+	
+	/***
+	 * This function compute the distance between the core of two objects
+	 */
+	long double Distance(tobj *i, tobj *l){
+		return Pitagora(i->x - l->x, i->y - l->y, i->z - l->z);
+	}
+
+	/***
+	 * This function decides which of the two objects given is the bigger
+	 * i and l are the two objects,
+	 * b the variable address to set = at the bigger
+	 */
+	void ComputeBigger(tobj *i, tobj *l, tobj **b){
+		
+		tobj *bigger;	//the bigger
+		
+		// an object is bigger if has mass much bigger, else make the bigger a random one, but whit advantages (see below at the else)
+		if (i->mass > l->mass*BIGGER_TOLERANCE)
+			bigger = i;
+		else if (l->mass > i->mass*BIGGER_TOLERANCE)
+			bigger = l;
+		// if no one of the two have the requisites, pick one randomly, but considering the mass
+		else {
+			srand(time(NULL));
+			if 		( (rand()/RAND_MAX) > (i->mass/(l->mass+i->mass)) )
+				bigger = l;
+			else
+				bigger = i;
+		}
+		//set the bigger and exit
+		*b = bigger;
+		return; 
+	}
 
 	/***
 	 * This function compute the radius of a sphere from the radius of two sphere of equal mass if summed
@@ -332,7 +427,7 @@
 	 * 		v
 	 * 	r^3 = V * 3 / (4 * PI)
 	 */
-	long double ComputeVolume (long double r1, long double r2) {
+	long double RadiusestoVolume (long double r1, long double r2) {
 		return pow(r1 * r1 * r1 + r2 * r2 * r2, 1.0/3.0);
 	}
 	 

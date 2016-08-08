@@ -38,6 +38,8 @@
 	// BYTE values
 	#define ON 1
 	#define OFF 0
+	#define NO OFF
+	#define YES ON
 		
 	// The three axis must have different codes
 	#define X_AXIS 0
@@ -156,7 +158,7 @@
 	typedef struct object {
 		TNAME name;				// the name of the object (es.: Earth, My_Planet, Moon)
 		ttype *type;			// the type of object.
-		long double	radius;		// the object for now are sphere, so this is the ray
+		long double	radius;		// the object for now are sphere
 		long double mass;		// the mass
 		long double x;   		// the coordinate x
 		long double y;			// the coordinate y
@@ -183,7 +185,7 @@
 		long double precision;	// Precision of the simulation (in second)
 		ttime stime;			// the time of the simulation
 		QWORD nactive;			// number of objects active
-		QWORD nalloc;				// number of objects allocated
+		QWORD nalloc;			// number of objects allocated
 		tobj *o;				// the pointer to the dinamic allocated array of objects
 		long double G;
 		tStype *Stype;			// The pointer at the structure that coontein all the type
@@ -195,6 +197,7 @@
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
 	tobj *SearchObject(tsys *, char *);
+	void ComputeBigger(tobj *o, tobj *u, tobj **b);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *);
 	int Menu(tinf *, tStype *);
@@ -211,15 +214,13 @@
 	char *typeDescriptionFromName (tinf *inf, tStype *, char *);
 	ttype *typeSearchName (tinf *, tStype *, char *);
 	char *typeParentFromName (tinf *inf, tStype *, char *);
-	long double ComputeVolume (long double, long double);
+	long double RadiusestoVolume (long double, long double);
 	// OPS and derivates
 	void OPS(tinf *, char *, void **);
 	void OPSE(tinf *, char *, void **);
 	void OPSML(tinf *, char *);
 	int OPSo (tsys *, tinf *);
-	void OPSR(tinf *inf, char *phrase);
 	// Parser
-	ttime Parser(tsys *, tinf *);
 	void Reask(tinf *, char *);
 	void SaveSys(tsys *, tinf *);
 	void Create(tsys *, tinf *);
@@ -242,16 +243,18 @@
 	void HunterIA(tsys *, tinf *);
 	void HunterIA_single(tsys *, tinf *, tobj *);
 	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
+	void Hunting_Impact(tinf *, tsys *, int, int);
+	long double Distance(tobj *i, tobj *l);
 	// color
 	tcolor ScanColor(tinf *, tcolor, tcolor);
 	int ColorRangeCheck(tcolor, tcolor, tcolor);
  
-// CSpace's functions sorted by dependance (so DON'T MODIFY the order if you don't want to fight dozen of gcc's error)
+// CSpace's functions sorted by dependance
 	#include "debug.c"
 	#include "color.c"
+	#include "system functions.c"
 	#include "string functions.c"
 	#include "type.c"
-	#include "system functions.c"
 	#include "OnlyPrintfSystem.c"
 	#include "OPSo.c"
 	#include "menù.c"

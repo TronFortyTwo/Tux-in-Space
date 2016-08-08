@@ -43,7 +43,7 @@
 		
 		// Initialize the object whit blank attributes
 		strcpy(obj->name, "Chose a name for your new object");
-		obj->type = typeSearchName(inf, Stype, "Chose a type");
+		obj->type = typeSearchName(inf, Stype, "Choose a type");
 		obj->mass = 0;
 		obj->radius = 0;
 		obj->color.blue = 0;
@@ -228,7 +228,6 @@
  * The SaveObject function save a object in a file
  */
 	void SaveObject(tinf *inf, tobj *obj) {
-	
 		DebugPrint(inf, "SaveObject");
 	
 		//the path where the object must be saved, an input variable and the destination file pointer
@@ -263,7 +262,6 @@
  * InitSystem is a function that initialize a new system
  */
 	tsys *InitSystem (tinf *inf, tStype *Stype) {
-		
 		DebugPrint(inf, "Initsystem");
 		
 		// var to give to OPS and counter

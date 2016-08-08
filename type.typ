@@ -88,7 +88,7 @@ DESCRIPTION: An Earth analog is a terrestrial planet whit characteristich much s
 PARENT: Terrestrial planet
 
 NAME: Gas giant
-MASS_MAX: 2.467647e25
+MASS_MAX: 2.5e25
 PARENT: Giant planet
 
 NAME: Generic object
@@ -126,17 +126,18 @@ PARENT: Neutron star
 NAME: Mega Earth
 DESCRIPTION: A Mega Earth is a terrestrial planet ten or more times more massive than Earth, even more massive than super-Earths that are five to ten times more massive than Earth 
 MASS_MIN: 298e20
-MASS_MAX: 600e20
+MASS_MAX: 6e22
 PARENT: Terrestrial planet
 
 NAME: Meteroid
 DESCRIPTION: A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores.
 PRODUCT: Micrometeroid
-MASS_MAX: 10e4
-MASS_MIN: 10e-12
+MASS_MAX: 1e5
+MASS_MIN: 1e-11
 PARENT: Small body
 
 NAME: Micrometeroid
+PRODUCT: Micrometeroid
 PARENT: Meteroid
 
 NAME: Mini-Neptune

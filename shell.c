@@ -37,34 +37,27 @@
 			// Call the mean menù, it tell to shell what to do.
 			switch (Menu(inf, Stype)) {
 				case NEW_SIG:
-							sys = InitSystem(inf, Stype);
-							break;
+					sys = InitSystem(inf, Stype);
+					break;
 				case LOAD_SIG:
-							sys = LoadSystem(inf, Stype);
-							break;
+					sys = LoadSystem(inf, Stype);
+					break;
 				case QUITSIGNAL:
-							return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
+					return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
 			}
 			if (sys != NULL)
 				break;
 		}
 		
-		//update this
-		stime = sys->stime;
-	
+		
 		////////////////////////////////
 		// SIMULATION LOOP
 		//
 		
+		stime = sys->stime;
 		while(1) {
-			// call the output system accordingly to vmode
-			switch (inf->vmode) {
-				case V_OPS: 
-						OPSo (sys, inf);
-						break;
-				default:
-						OPSo (sys, inf);
-			}
+			// call the output system accordingly to vmode(for now can be only OPSo)
+			OPSo (sys, inf);
 			// call the instruction parser
 			stime = Parser(sys, inf);
 			//check if the user want to exit

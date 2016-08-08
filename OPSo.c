@@ -47,8 +47,8 @@
 		pos = 6;
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
-			// Tell the name, type and mass, the x, the y and the z
-			strcat(buffer, "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n");
+			// Tell the name, type and mass, the x, the y and the z. conclude whit a line of '-'
+			strcat(buffer, "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n%f-");
 			var[pos] = sys->o[i].name;
 			pos++;
 			var[pos] = sys->o[i].type->name;
@@ -65,8 +65,6 @@
 			pos++;
 			var[pos] = &sys->o[i].velz;
 			pos++;
-			// A line of '-'
-			strcat (buffer, "%f-");
 		}
 		// if there isn't any object
 		if(sys->nactive == 0)

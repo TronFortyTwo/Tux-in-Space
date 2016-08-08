@@ -99,10 +99,10 @@
 				var[1] = &debug[1];
 				OPS(inf, "SETTING\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file 'debug.dbg' debug information", var);
 				scanf("%s", debug[0]);
-				if(debug[0][0] == 'y') {
+				if((debug[0][0] == 'y') || (debug[0][0] == 'Y')) {
 					if(inf->debug == OFF)
 						inf->debug = ON;
-					if(inf->debug == ON)
+					else if(inf->debug == ON)
 						inf->debug = OFF;
 				}
 			}

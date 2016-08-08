@@ -19,7 +19,6 @@
  *
  * This is the instruction's parser. elaborate the input and do what these sentences in this strange human language would say.
  * 
- * 
  */
 
 /**
@@ -42,9 +41,9 @@
 			t.millisec = t.millisec + (1000 * sys->precision);
 			UpdateTime(&t);
 		}
-		// the help
-		else if (!strcmp("help", input)) {
-			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump\n-wait (w)\n-info\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+		// help
+		else if ((!strcmp("help", input)) || (!strcmp("h", input))) {
+			OPS(inf, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-info\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
 			scanf("%s", input);
 		}
 		// jump
@@ -195,18 +194,20 @@
 	void Info(tsys *sys, tinf *inf) {
 		DebugPrint(inf, "info");
 		
-		tobj *obj;
-		void *var[13];
+		tobj *obj;			// The object to describe
+		void *var[13];		// The variables to give to OPS
 		TNAME input;
 
 		var[0] = sys->name;
 		var[1] = &sys->nactive;
+		// Generic information about the system
 		OPS(inf, "INFO\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object information", var);
 		scanf("%s", input);
 		if(strcmp(input, "n") == 0){
 			OPS(inf, "Insert a new command", NULL);
 			return;
 		}
+		// Informations about a precise object
 		obj = SearchObject(sys, input);
 		if(obj == NULL){
 			OPS(inf, "INFO\n\nno object whit this name is been found. press a button to continue", NULL);
@@ -292,17 +293,3 @@
 
 		return;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
