@@ -39,6 +39,8 @@
 		// file pointers
 		FILE *Ftype;
 		
+		// initialize the program directories
+		InitDir();
 		// Initialize tinf inf from a file
 		InitConfig(&inf);
 		

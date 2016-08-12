@@ -288,7 +288,7 @@
 			ExtendObjBuf(sys, inf);
 	
 		// initialize the new object
-		InitObject(inf, &sys->o[sys->nactive], sys->Stype, 0);
+		InitObject(inf, &sys->o[sys->nactive], sys->Stype);
 		sys->nactive++;
 
 		return;

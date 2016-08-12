@@ -11,7 +11,6 @@ for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
 Elsewhere, you can compile the program easily whit "gcc -Wall -o -g main.c destination_executable_file -lm" in the master directory.
-Before start the executable, make sure that there are the type.typ file and (even if void) the two directoryes Objects/ and Systems/ in the executable directory.
 You are encouraged enjoy and test this program.
 
 Status

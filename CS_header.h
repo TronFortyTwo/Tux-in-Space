@@ -31,6 +31,10 @@
 	#include <time.h>
 	#include <limits.h>
 	#include <stdint.h>
+	// Other libraries
+	#include <sys/types.h>
+	#include <sys/stat.h>
+	#include <unistd.h>
 
 
 	#define PI (245850922/78256779)
@@ -107,6 +111,8 @@
 	#define DEBUG_FILE "debug.dbg"				// Where are printed debug information
 	#define TYPE_DATABASE_FILE "type.typ"		// Where read type information
 	#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration information
+	#define OBJECT_PATH "Objects/"				// Where save/load systems
+	#define SYSTEM_PATH "Systems/"				// Where save/load objects
 
 	// BYTE is a value that occupies one byte max
 	typedef 	int8_t		BYTE;	// max +/- 128
@@ -192,12 +198,13 @@
 	} tsys;
 	
 	// System functions
+	void InitDir();
 	void Setting(tinf *inf);
 	int	LoadObject(tinf *, tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
 	tobj *SearchObject(tsys *, char *);
-	void ComputeBigger(tobj *o, tobj *u, tobj **b);
+	void ComputeBigger(tobj *, tobj *, tobj **);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *);
 	int Menu(tinf *, tStype *);
@@ -207,13 +214,13 @@
 	void PrintLine (tinf *, char *, int);
 	void ScanFString(char *, FILE *);	
 	void SaveObject(tinf *, tobj *);
-	void InitObject (tinf *, tobj *, tStype *, int);
+	void InitObject (tinf *, tobj *, tStype *);
 	tsys *InitSystem (tinf *, tStype *);
 	void ReduceObjBuf(tsys *, tinf *);
 	tStype *Inittype (FILE *, tinf *);
-	char *typeDescriptionFromName (tinf *inf, tStype *, char *);
+	char *typeDescriptionFromName (tinf *, tStype *, char *);
 	ttype *typeSearchName (tinf *, tStype *, char *);
-	char *typeParentFromName (tinf *inf, tStype *, char *);
+	char *typeParentFromName (tinf *, tStype *, char *);
 	long double RadiusestoVolume (long double, long double);
 	// OPS and derivates
 	void OPS(tinf *, char *, void **);
@@ -252,7 +259,8 @@
 // CSpace's functions sorted by dependance
 	#include "debug.c"
 	#include "color.c"
-	#include "system functions.c"
+	#include "core functions.c"
+	#include "interface functions.c"
 	#include "string functions.c"
 	#include "type.c"
 	#include "OnlyPrintfSystem.c"
