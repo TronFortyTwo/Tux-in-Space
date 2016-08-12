@@ -113,7 +113,14 @@
 	#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration information
 	#define OBJECT_PATH "Objects/"				// Where save/load systems
 	#define SYSTEM_PATH "Systems/"				// Where save/load objects
-
+	
+	// Default values for the inf structure
+	#define DEFAULT_HEIGHT 41
+	#define DEFAULT_WIDTH 90
+	#define DEFAULT_DEBUG OFF
+	#define DEFAULT_NUMPRECISION 6
+	#define DEFAULT_V_MODE V_OPS
+	
 	// BYTE is a value that occupies one byte max
 	typedef 	int8_t		BYTE;	// max +/- 128
 	typedef 	int16_t 	WORD;	// max +/- 32768

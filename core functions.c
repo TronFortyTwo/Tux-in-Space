@@ -292,11 +292,11 @@
 		}
 		// if not, load defaults
 		else {
-			inf->height = 41;
-			inf->width = 90;
-			inf->debug = OFF;
-			inf->numprecision = 6;
-			inf->vmode = V_OPS;
+			inf->height = DEFAULT_HEIGHT;
+			inf->width = DEFAULT_WIDTH;
+			inf->debug = DEFAULT_DEBUG;
+			inf->numprecision = DEFAULT_NUMPRECISION;
+			inf->vmode = DEFAULT_V_MODE;
 		}
 		return; 
 	}
