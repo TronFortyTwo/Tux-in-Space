@@ -63,24 +63,22 @@
 		
 		// dinamic printing! (character that mean other character, here translated)
 		if(phrase[chardone] == '%') {
+			// advance to the next character
 			chardone++;
 			// an int value to print
 			if(phrase[chardone] == 'i') {
 				bufpos += sprintf(&buf[bufpos], "%d", *((int *)var[pos]) );
 				pos++;
-				chardone++;
 			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
 				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf->numprecision, *((long double *)var[pos]) );
 				pos++;
-				chardone++;
 			}
 			// a string to print
 			else if(phrase[chardone] == 's') {
 				bufpos += sprintf(&buf[bufpos], "%s", (char *) var[pos]);
 				pos++;
-				chardone++;
 			}
 			// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 			else if(phrase[chardone] == 'f') {
@@ -89,14 +87,14 @@
 					buf[bufpos] = phrase[chardone];
 					bufpos++;
 				}
-				chardone++;
 			}
 			// the '%' character (%%)
 			else if(phrase[chardone] == '%' ){
-				chardone++;
 				buf[bufpos] = '%';
 				bufpos++;
 			}
+			// advance to the next character
+			chardone++;
 		}
 		// the bip character
 		else if(phrase[chardone] == '\a') {
@@ -183,7 +181,7 @@
 			// if the buffer is finished print only spaces
 			if (bufend == 1)
 				printf(" ");
-			// print the number of spaces conteined in theet if at the start of the line
+			// print a space if we are behind the theet
 			else if (columndone < theet)
 				printf(" ");
 			// a space in the first column is ignored
@@ -198,12 +196,13 @@
 			}
 			// a '\n' character
 			else {
+				// print the remaining space whit spaces
 				PrintLine(inf, " ", columndone+TWOFRAMELUN);
 				bufpos++;
-				// if there is space for more line
+				// if there is space for more line print the new line
 				if(linedone < inf->height-5) {
-					linedone++;
 					printf("%s\n%s", FRAMER, FRAME);
+					linedone++;
 					columndone = -1;
 				}
 			}
@@ -217,8 +216,6 @@
 	printf("%s\n", FRAMER);
 	PrintLine(inf, FRAMESTART, 0);
 	printf("\n%s: ", FRAME);
-	
-	fflush(stdout);
 	
 	// finish the function
 	free(buf);
@@ -252,11 +249,11 @@
 	}
 
 /***
- * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack and manage the situation
+ * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack to signal the problem
  */	
 	void OPSML(tinf *inf, char *data) {
 		char i[2];	//(i)nput
-		printf ("\n\n\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		printf ("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
 		DebugPrint(inf, "opsml: the program has problem whit memory allocation while:");
 		DebugPrint(inf, data);
 		scanf("%s", i);

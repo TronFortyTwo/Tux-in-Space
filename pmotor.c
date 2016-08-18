@@ -221,7 +221,7 @@
 				}
 				// Call the appropriate impact simulator
 				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
-				/* THIS PART ISN'T YET ENOUGHT STABLE
+				/* THIS PART ISN'T YET ENOUGHT STABLE!
 				if((sys->o[i].type->hunter==ON) && (sys->o[l].type->hunted==ON)) {
 					// here i is the hunter, l the hunted
 					Hunting_Impact(inf, sys, i, l);
@@ -262,7 +262,7 @@
 	 */
 	void Hunting_Impact(tinf *inf, tsys *sys, int er, int ed) {
 		
-		// a random number that is the (p)ercentage that the hunter doesn't eats of the hunted
+		// a random number that is the (p)ercentage that the hunter eats of the hunted
 		BYTE p;
 		// a variable that store the volume of an object
 		double volum;
@@ -281,7 +281,7 @@
 		sys->o[ed].type = typeSearchName(inf, sys->Stype, sys->o[ed].type->product);
 		
 		// move a percentage p of ed mass in er
-		sys->o[er].mass += sys->o[ed].mass * (100-p) / 100;
+		sys->o[er].mass += sys->o[ed].mass * p / 100;
 		sys->o[ed].mass *= p / 100;
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3

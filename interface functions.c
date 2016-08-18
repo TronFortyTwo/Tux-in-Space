@@ -261,7 +261,7 @@
 		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
 		scanf("%s", sys->name);
 		// write the path
-		strcpy (path, "Systems/");
+		strcpy (path, SYSTEM_PATH);
 		strcat (path, sys->name);
 		strcat (path, ".sys");
 		// open the file

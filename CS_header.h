@@ -31,15 +31,15 @@
 	#include <time.h>
 	#include <limits.h>
 	#include <stdint.h>
-	// Other libraries
+	// Other libraries for linux
 	#include <sys/types.h>
 	#include <sys/stat.h>
 	#include <unistd.h>
+	// OpenGL library
 
-
-	#define PI (245850922/78256779)
+	#define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211
 	
-	// BYTE values
+	// values
 	#define ON 1
 	#define OFF 0
 	#define NO OFF
@@ -101,14 +101,16 @@
 	#define TEMPLATE_POINT 1
 	#define TEMPLATE_CIRCLE 2
 	
-	// The acceleration of a monster (Km/s)
-	#define MONSTER_ACCELERATION 0.00403
+	// The acceleration of a hunter (Km/s)
+	#define MONSTER_ACCELERATION 0.00313
 
-	// The vmode BYTE values
+	// The video mode
 	#define V_OPS 0
+	#define V_FREEGLUT 1
 	
 	// The files
 	#define DEBUG_FILE "debug.dbg"				// Where are printed debug information
+	#define DEBUG_FILE_LENGHT 10				// The size of DEBUG_FILE
 	#define TYPE_DATABASE_FILE "type.typ"		// Where read type information
 	#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration information
 	#define OBJECT_PATH "Objects/"				// Where save/load systems
@@ -276,3 +278,4 @@
 	#include "pmotor.c"
 	#include "Parser.c"
 	#include "shell.c"
+	#include "OpenGL UI.c"

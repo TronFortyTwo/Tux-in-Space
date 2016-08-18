@@ -152,19 +152,19 @@
 	void SaveSys(tsys *sys, tinf *inf){
 		DebugPrint(inf, "savesys");
 		
-		//the path where the system must be saved, an input variable and the destination file pointer
+		// the path where the system must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+13];
 		char input[2];
 		FILE *dest;
 		// counter
 		int i;
 		
-		//Write the path
+		// Write the path
 		strcpy(path, SYSTEM_PATH);
 		strcat(path, sys->name);
 		strcat(path, ".sys");
 		
-		//control that the file isn't alredy existent
+		// control that the file isn't alredy existent
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);

@@ -64,7 +64,7 @@
 		
 		int i;
 		int quit = OFF;
-		void *var[2];
+		void *var[3];
 		
 		while(quit == OFF) {
 			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Turn on/off debug\n\n5) Done", NULL);
@@ -85,8 +85,10 @@
 				SafeIScan(inf, &i);
 				inf->numprecision = i;
 			}
-			else if(i == 4){
-				char debug[2][4];	// Can contein "ON" or "OFF". the first contein the thruth, the second not
+			else if(i == 4) {
+				char debug[2][4];						// Can contein "ON" or "OFF". the first contein the thruth, the second not
+				char debugfile[DEBUG_FILE_LENGHT];		// Contein the debug file name
+				strcpy(debugfile, DEBUG_FILE);
 				if(inf->debug == ON){
 					strcpy(debug[0], "ON");
 					strcpy(debug[1], "OFF");
@@ -97,7 +99,8 @@
 				}
 				var[0] = &debug[0];
 				var[1] = &debug[1];
-				OPS(inf, "SETTING\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file 'debug.dbg' debug information", var);
+				var[2] = &debugfile;
+				OPS(inf, "SETTING\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file '%s' debug information", var);
 				scanf("%s", debug[0]);
 				if((debug[0][0] == 'y') || (debug[0][0] == 'Y')) {
 					if(inf->debug == OFF)
@@ -109,7 +112,6 @@
 			else if(i == 5)
 				quit = ON;
 		}
-		
 		// Save and exit
 		SaveConfig(inf);
 		return;

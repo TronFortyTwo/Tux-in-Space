@@ -28,7 +28,7 @@
 
 	// Funzione principale
 
-	int main (int argc, char *argv[]) {
+	int main (int argc, char **argv) {
 		
 		// INITIALIZATION OF THE PROGRAM
 		
@@ -47,9 +47,10 @@
 		// print loading and license banner
 		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
+		// Initialize debug
 		InitDebug(&inf);
 		
-		// Read the types from a file
+		// Initialize Stype structure. (Read the types from a file)
 		Ftype = fopen(TYPE_DATABASE_FILE, "r");
 		if(Ftype != NULL) {
 			Stype = Inittype(Ftype, &inf);
@@ -61,7 +62,6 @@
 			scanf("%s", input);
 			return 0;
 		}
-
 
 		// RUNNING THE PROGRAM
 		while 
