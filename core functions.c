@@ -338,3 +338,14 @@
 		
 		return GOODSIGNAL;
 	}
+	
+	/***
+	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
+	 */
+	tobj *SearchObject(tsys *sys, char *name) {
+		int i;
+		for (i=0; i != sys->nactive; i++)
+			if(strcmp(sys->o[i].name, name) == 0)
+				return &sys->o[i];
+		return NULL;
+	}

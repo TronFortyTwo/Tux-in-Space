@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- *This is the motor that emules the phisic law
+ * This is the engine that emules the phisic law
  * 
  * Now the side effect that this function generated on objects are caused by:
  *		- Gravity force
@@ -52,7 +52,6 @@
 	
 	/***
 	 * INERTIA
-	 * the thread manager and the thread function
 	 */
 	void Inertia(tsys *sys, tinf *inf) {
 		
@@ -89,7 +88,7 @@
 		
 		// counter
 		int i;
-		// the list
+		// an object pointer array
 		tobj **list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 		while (list == NULL) {
 			OPSML(inf, "HunterIA");
@@ -107,7 +106,7 @@
 			return;
 		
 		// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
-		// search for monsters
+		// search for huntable objects
 		for(i=0; i!=sys->nactive; i++) {
 			if(sys->o[i].type->hunted == ON) {
 				list[num] = &sys->o[i];
@@ -123,7 +122,7 @@
 		// PART TWO, FOLLOW THE OBJECT
 		// move the hunter in the direction of the closest
 		// velx : distance x = vel : distance
-		temp = HUNTER_ACCELERATION * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		temp = HUNTER_ACCELERATION * sys->precision / Distance(mon, closest);
 		mon->velx -= (mon->x - closest->x) * temp;
 		mon->vely -= (mon->y - closest->y) * temp;
 		mon->velz -= (mon->z - closest->z) * temp;
@@ -142,7 +141,7 @@
 		
 		// counters
 		int i,l;
-		// the dist, and his ortogonal components (the dist variable is also used as temporany variable)
+		// the dist, and his ortogonal components, the force and a temporany variable
 		long double dist, distx, disty, distz, f, temp;
 		
 		for(i=0; i < sys->nactive; i++) {
@@ -185,7 +184,7 @@
 	 * 	- hit that take time
 	 * 	- partial hit
 	 * 	- creation of moon, asteroids and other objects from hits
-	 * 	- special hit mechanics depending on the types of the objects
+	 * 	- special hit mechanics depending on the types of the objects (WIP)
 	 */
 	void Impacts(tsys *sys, tinf *inf) {
 		
@@ -512,15 +511,4 @@
 		if (o->millisec < t->millisec)
 			return 1;
 		return 2;
-	}
-		
-	/***
-	 * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
-	 */
-	tobj *SearchObject(tsys *sys, char *name) {
-		int i;
-		for (i=0; i != sys->nactive; i++)
-			if(strcmp(sys->o[i].name, name) == 0)
-				return &sys->o[i];
-		return NULL;
 	}
