@@ -24,11 +24,11 @@
 	int Menu(tinf *inf, tStype *Stype) {
 		DebugPrint(inf, "menu");
 		
-		// A variable that save the scanf of an input
+		// input variable
 		int i;
 		
 		// The main menù is built in an infinite loop
-		while(1) {
+		while (1) {
 		
 			//Principal menù, first screen	
 			OPS(inf, "&t5CSPACE: The space's simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) Information\n\n5) Quit", NULL);
@@ -53,8 +53,7 @@
 			else if(i == 5)
 				return QUITSIGNAL;
 		}
-		
-		return 0;
+		return BADSIGNAL;
 	}
 	
 	/***
@@ -63,28 +62,32 @@
 	void Setting(tinf *inf) {
 		
 		int i;
-		int quit = OFF;
+		BYTE quit = OFF;
 		void *var[3];
 		
 		while(quit == OFF) {
-			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Turn on/off debug\n\n5) Done", NULL);
+			OPS (inf, "SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Turn on/off debug\n\n5) Done\n6) Restore defaults", NULL);
 			SafeIScan(inf, &i);
+			// WIDTH
 			if(i == 1) {
 				var[0] = &inf->width;
 				OPS(inf, "SETTING\n\nInsert the new number of columns:\n&tdnow %i", var);
 				SafeIScan(inf, &inf->width);
 			}
+			// HEIGHT
 			else if(i == 2){
 				var[0] = &inf->height;
 				OPS(inf, "SETTING\n\nInsert the new number of lines:\n&tdnow %i", var);
 				SafeIScan(inf, &inf->height);
 			}
+			// NUMBER PRECISION
 			else if(i == 3){
 				var[0] = &inf->numprecision;
 				OPS(inf, "SETTING\n\nInsert the new number decimal printed:\n&tdnow %i", var);
 				SafeIScan(inf, &i);
 				inf->numprecision = i;
 			}
+			// TURN ON / OFF DEBUG
 			else if(i == 4) {
 				char debug[2][4];						// Can contein "ON" or "OFF". the first contein the thruth, the second not
 				char debugfile[DEBUG_FILE_LENGHT];		// Contein the debug file name
@@ -109,8 +112,18 @@
 						inf->debug = OFF;
 				}
 			}
+			// DONE
 			else if(i == 5)
 				quit = ON;
+			// RESTORE DEFAULTS
+			else if(i == 6){
+				char input[2];
+				OPS(inf, "SETTING\n\nAre you sure you want to restore the settings to the default ones? [y/N]", NULL);
+				scanf("%s", input);
+				if ((input[0] == 'n') || (input[0] == 'N'))
+					continue;
+				SetDefaultConfig(inf);
+			}
 		}
 		// Save and exit
 		SaveConfig(inf);

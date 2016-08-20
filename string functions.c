@@ -16,8 +16,8 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-
  *
+ * 
  * Here we have function that help whit using the strings and whit input-output
  * 
  */
@@ -36,7 +36,7 @@
  *	*/
 	void PrintLine (tinf *inf, char *character, int num) {
 		int p;	//(p)rinted
-		for ( p=0; p!=inf->width-num; p++) {
+		for ( p=inf->width-num; p!=0; p--) {
 			printf("%c", *character);
 			}
 

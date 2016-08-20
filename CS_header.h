@@ -40,6 +40,9 @@
 	#define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211
 	
 	// values
+	// NOTE:
+	// Is important the YES = ON
+	// Are different names for logic, but the value must be the same!
 	#define ON 1
 	#define OFF 0
 	#define NO OFF
@@ -102,7 +105,7 @@
 	#define TEMPLATE_CIRCLE 2
 	
 	// The acceleration of a hunter (Km/s)
-	#define MONSTER_ACCELERATION 0.00313
+	#define HUNTER_ACCELERATION 0.002
 
 	// The video mode
 	#define V_OPS 0
@@ -117,8 +120,8 @@
 	#define SYSTEM_PATH "Systems/"				// Where save/load objects
 	
 	// Default values for the inf structure
-	#define DEFAULT_HEIGHT 41
-	#define DEFAULT_WIDTH 90
+	#define DEFAULT_HEIGHT 42
+	#define DEFAULT_WIDTH 88
 	#define DEFAULT_DEBUG OFF
 	#define DEFAULT_NUMPRECISION 6
 	#define DEFAULT_V_MODE V_OPS
@@ -207,8 +210,9 @@
 	} tsys;
 	
 	// System functions
-	void InitDir();
-	void Setting(tinf *inf);
+	BYTE InitDir();
+	void SetDefaultConfig(tinf *);
+	void Setting(tinf *);
 	int	LoadObject(tinf *, tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
@@ -247,10 +251,10 @@
 	void DistanceCommand(tsys *, tinf *);
 	void Info(tsys *, tinf *);
 	// I/O object
-	void WriteObject (FILE *stream, tobj *obj);
-	void WriteObjectComplete (FILE *stream, tobj *obj);
-	int ReadObject (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
-	int ReadObjectComplete (tinf *inf, FILE *stream, tobj *obj, tStype *Stype);
+	void WriteObject (FILE *, tobj *);
+	void WriteObjectComplete (FILE *, tobj *);
+	int ReadObject (tinf *, FILE *, tobj *, tStype *);
+	int ReadObjectComplete (tinf *, FILE *, tobj *, tStype *);
 	// Pmotor
 	void Pmotor (tsys *, tinf *, ttime dest);
 	void Gravity(tsys *, tinf *);

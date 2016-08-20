@@ -80,6 +80,9 @@
 			Reask(inf, input);
 			scanf("%s", input);
 		}
+		// Print a loading message
+		OPS(inf, "Loading...", NULL);
+		 
 		return t;
 	}
 	
@@ -283,6 +286,8 @@
 	 */
 	
 	void Create(tsys *sys, tinf *inf) {
+		DebugPrint(inf, "Create");
+		
 		// if there isn't any space for a new object resize the object buffer
 		if (sys->nactive == sys->nalloc)
 			ExtendObjBuf(sys, inf);

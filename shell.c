@@ -56,14 +56,14 @@
 		
 		stime = sys->stime;
 		while(1) {
-			// call the output system accordingly to vmode(for now can be only OPSo)
+			// call the output system accordingly to inf->vmode (for now can be only OPSo, OpenGL interface implementation is WIP)
 			OPSo (sys, inf);
-			// call the instruction parser
+			// call the instruction parser and ask him for destination time
 			stime = Parser(sys, inf);
-			//check if the user want to exit
+			// check if the user want to exit
 			if (stime.year == QUITSIGNAL)
 				break;
-			// call the phisic motor how many times as Parser asks
+			// call the phisic motor
 			Pmotor (sys, inf, stime);
 		}
 

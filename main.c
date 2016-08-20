@@ -28,7 +28,7 @@
 
 	// Funzione principale
 
-	int main (int argc, char **argv) {
+	int main (int argc, char *argv[]) {
 		
 		// INITIALIZATION OF THE PROGRAM
 		
@@ -40,7 +40,12 @@
 		FILE *Ftype;
 		
 		// initialize the program directories
-		InitDir();
+		if(InitDir() != GOODSIGNAL){
+			char input[2];		// input variable
+			printf("CSpace:\n\nError: can't create program directories!\nPress something to exit");
+			scanf("%s", input);
+			return EXIT_FAILURE;
+		}
 		// Initialize tinf inf from a file
 		InitConfig(&inf);
 		
@@ -60,10 +65,10 @@
 			char input[2];		// input variable
 			OPSE(&inf, "Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
 			scanf("%s", input);
-			return 0;
+			return EXIT_FAILURE;
 		}
 
-		// RUNNING THE PROGRAM
+		// RUNNING
 		while 
 			(Shell (&inf, Stype) != QUITSIGNAL);
 		
@@ -76,5 +81,5 @@
 		// goodbye message
 		OPS (&inf, "CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);
 		
-		return 0;
+		return EXIT_SUCCESS;
 	}

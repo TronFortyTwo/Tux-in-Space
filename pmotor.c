@@ -19,20 +19,22 @@
  *
  *This is the motor that emules the phisic law
  * 
- * Now the side effect that this function generated on struct obj are caused by:
- *		- Gravity force	
- * 		- Inertia of mass 
+ * Now the side effect that this function generated on objects are caused by:
+ *		- Gravity force
+ * 		- Inertia of mass
  *		- impacts beetween them
+ * 		- 'Intelligence' of the hunters
  */
  
 	void Pmotor (tsys *sys, tinf *inf, ttime dest) {
+		DebugPrint(inf, "pmotor");
 		
 		while (GetBiggerStime (&dest, &sys->stime) == 0) {
 		
 			// GRAVITY
 			Gravity(sys, inf);
 		
-			// MONSTER IA
+			// HUNTER IA
 			HunterIA(sys, inf);
 		
 			// IMPACTS
@@ -76,10 +78,9 @@
 		int i;
 		
 		// Search the monster
-		for(i=0; i!=sys->nactive; i++){
+		for(i=0; i!=sys->nactive; i++)
 			if(sys->o[i].type->hunter == ON)
 				HunterIA_single(sys, inf, &sys->o[i]);
-		}
 		
 		return;
 	}
@@ -122,7 +123,7 @@
 		// PART TWO, FOLLOW THE OBJECT
 		// move the hunter in the direction of the closest
 		// velx : distance x = vel : distance
-		temp = MONSTER_ACCELERATION * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
+		temp = HUNTER_ACCELERATION * sys->precision / Pitagora(mon->x-closest->x, mon->y-closest->y, mon->z-closest->z);
 		mon->velx -= (mon->x - closest->x) * temp;
 		mon->vely -= (mon->y - closest->y) * temp;
 		mon->velz -= (mon->z - closest->z) * temp;
@@ -190,7 +191,6 @@
 		
 		// counters for loops
 		int i, l;
-		int fi, la;		// first, last
 		// the distance
 		long double dist;
 		// if is been computed some impact
@@ -207,46 +207,36 @@
 				if (sys->o[i].radius + sys->o[l].radius < dist)
 					continue;
 				impacts = YES;
-				// For now there are only not elastic impacts.
-				// write the new object in the first of the two position
-				// then move the last object in the last of the two position
-				// set the first and the last
-				if (i < l){
-					fi = i;
-					la = l;
-				}
-				else {
-					fi = l;
-					la = i;
-				}
+				
 				// Call the appropriate impact simulator
 				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
-				/* THIS PART ISN'T YET ENOUGHT STABLE!
-				if((sys->o[i].type->hunter==ON) && (sys->o[l].type->hunted==ON)) {
-					// here i is the hunter, l the hunted
-					Hunting_Impact(inf, sys, i, l);
-				}
-				else if((sys->o[i].type->hunted==ON) && (sys->o[l].type->hunter==ON)){
-					// here l is the hunter, i the hunted
-					Hunting_Impact(inf, sys, l, i);
-				}
+				/** THIS PART ISN'T STABLE YET! DECOMMENT IT ONLY FOR DEBUGGING PURPOSE
+						if((sys->o[i].type->hunter == YES) && (sys->o[l].type->hunted == YES))
+							Hunting_Impact(inf, sys, i, l);
+						else if((sys->o[i].type->hunted == YES) && (sys->o[l].type->hunter == YES))
+							Hunting_Impact(inf, sys, l, i);
+						else
 				*/
 				// regular impact whit merging
-				//else
 				{
-					sys->o[fi] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
-					sys->o[la] = sys->o[sys->nactive-1];
+					// write the new object in the first of the two position
+					// then move the last object in the last of the two position
+					// set the first and the last
+					if (i < l) {
+						sys->o[i] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+						sys->o[l] = sys->o[sys->nactive-1];
+					}
+					else {
+						sys->o[l] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+						sys->o[i] = sys->o[sys->nactive-1];
+					}
 					sys->nactive--;
+					// if necessary resize the object buffer
+					if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
+						ReduceObjBuf(sys, inf);
 				}
-
-				// if necessary resize the object buffer
-				if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
-					ReduceObjBuf(sys, inf);
-				
-				return;
 			}
 		}
-		
 		// If some impacts happened, restart to recheck for impact from start
 		if (impacts == YES)
 			Impacts(sys, inf);
@@ -268,51 +258,70 @@
 		double volum;
 		// a force variable
 		long double f;
+		// indicate in which direction the hunter is faster
+		WORD faster;
 		
-		// set p (over 10)
+		// set p (under 90)
 		do {
 			srand(time(NULL));
 			p = rand();
 			p++;
 		}
-		while(p < 10);
+		while(p > 90);
 		
 		// the hunted one is reduced to his product
 		sys->o[ed].type = typeSearchName(inf, sys->Stype, sys->o[ed].type->product);
 		
 		// move a percentage p of ed mass in er
 		sys->o[er].mass += sys->o[ed].mass * p / 100;
-		sys->o[ed].mass *= p / 100;
+		sys->o[ed].mass *= (100-p) / 100;
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
-		// the hunter
+		// the hunter volume before
 		volum = 4/3 * PI * sys->o[er].radius * sys->o[er].radius * sys->o[er].radius;
-		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius)*(100-p)/ 100;	//volum += volum_of_hunted * 100-p / 100
-		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
-		// the hunted
+		// the hunter volume after
+		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius) * p / 100;	// volum += volum_eated
+		// the hunter radius compute from the new volume
+		sys->o[er].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		
+		// the hunted volume before
 		volum = (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius);
-		volum *= p / 100;
+		// reduce the hunted volume
+		volum *= (100-p) / 100;
 		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
 		// move the hunted a bit away and give him some velocity from the hunter
 		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
-		// if x is the faster
-		if 	   ((sys->o[er].velx > sys->o[er].vely)&&(sys->o[er].velx > sys->o[er].velz)) {
+		if (sys->o[er].velx > sys->o[er].vely) {
+			if(sys->o[er].velx > sys->o[er].velz)
+				faster = X_AXIS;
+			else
+				faster = Z_AXIS;
+		}
+		else {
+			if(sys->o[er].vely > sys->o[er].velz)
+				faster = Y_AXIS;
+			else
+				faster = Z_AXIS;
+		}
+		// if x is the fastest
+		if(faster == X_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
 			sys->o[ed].x += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
 			// transimit half of the hunter fast on the hunted (f = m*a)
 			f = sys->o[er].velx * sys->o[er].mass /2;
 			sys->o[ed].velx = f / sys->o[ed].mass;
+			
 		}
-		// if y is the faster
-		else if((sys->o[er].vely > sys->o[er].velx)&&(sys->o[er].vely > sys->o[er].velz)) {
+		// if y is the fastest
+		else if(faster == Y_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
 			sys->o[ed].y += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
 			// transimit half of the hunter fast on the hunted (f = m*a)
 			f = sys->o[er].vely * sys->o[er].mass /2;
 			sys->o[ed].vely = f / sys->o[ed].mass;
 		}
-		// if z is the faster
+		// if z is the fastest
 		else {
 			// move the hunted away from the hunter enought to not touch it
 			sys->o[ed].z += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
@@ -320,7 +329,6 @@
 			f = sys->o[er].velz * sys->o[er].mass /2;
 			sys->o[ed].velz = f / sys->o[ed].mass;
 		}
-		
 		
 		return;
 	}

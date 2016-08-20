@@ -277,17 +277,17 @@
 		fscanf (dest, "%ld\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 		// alloc memory
 		sys->nalloc = 0;
-		while(sys->nalloc < sys->nactive)
+		while (sys->nalloc < sys->nactive)
 			sys->nalloc += OBJBUFSIZE;
 		sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
-		while(sys->o == NULL) {
+		while (sys->o == NULL) {
 			OPSML(inf, "LoadSystem");
 			sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 		}
 		// fscanf for objects datas
 		for(i=0; i!=sys->nactive; i++) {
 			if(ReadObjectComplete(inf, dest, &sys->o[i], Stype) == CORRUPTED_SIG) {
-				DebugPrint(inf, "(!) the system to load seem corrupted!");
+				DebugPrint(inf, "(!) the system to load seem corrupted or outdated!");
 				DebugPrint(inf, sys->o[i].type->name);
 			}
 		}

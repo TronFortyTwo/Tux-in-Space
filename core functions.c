@@ -291,33 +291,50 @@
 			fclose(cf);
 		}
 		// if not, load defaults
-		else {
-			inf->height = DEFAULT_HEIGHT;
-			inf->width = DEFAULT_WIDTH;
-			inf->debug = DEFAULT_DEBUG;
-			inf->numprecision = DEFAULT_NUMPRECISION;
-			inf->vmode = DEFAULT_V_MODE;
-		}
+		else 
+			SetDefaultConfig(inf);
+		
 		return; 
 	}
-	 
+	
+/***
+ * This function reset the settings to the default values
+ */
+	void SetDefaultConfig(tinf *inf){
+		
+		inf->height = DEFAULT_HEIGHT;
+		inf->width = DEFAULT_WIDTH;
+		inf->debug = DEFAULT_DEBUG;
+		inf->numprecision = DEFAULT_NUMPRECISION;
+		inf->vmode = DEFAULT_V_MODE;
+
+		return;
+	}
+ 
+	
 /***
  * This function create the directories Where objects and systems are saved
  * 
  * NOTE:
  * This function isn't portable! This implementation is for linux
  */
-	void InitDir(){
+	BYTE InitDir() {
 		// The state of the directories
 		struct stat st = {0};
 		// Check for the object directory and create it if not present
-		if (stat(OBJECT_PATH, &st) == -1) {
+		if (stat(OBJECT_PATH, &st) == -1)
 			mkdir(OBJECT_PATH, 0700);
-		}
-		// Check for the system directory and create it if not present
-		if (stat(SYSTEM_PATH, &st) == -1) {
-			mkdir(SYSTEM_PATH, 0700);
-		}
 		
-		return;
+		// Check for the system directory and create it if not present
+		if (stat(SYSTEM_PATH, &st) == -1) 
+			mkdir(SYSTEM_PATH, 0700);
+		
+		// Check that the directories has been created succefully
+		if (stat(SYSTEM_PATH, &st) == -1)
+			return FILE_ERR_SIG;
+			
+		if (stat(OBJECT_PATH, &st) == -1)
+			return FILE_ERR_SIG;
+		
+		return GOODSIGNAL;
 	}
