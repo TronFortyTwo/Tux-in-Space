@@ -23,6 +23,33 @@
  */
 
 /***
+ * This function scan a string WHIT space
+ */
+	void ScanString(char *dest) {
+		
+		char string[1024];
+		char c;
+		unsigned int pos;
+		
+		fflush(stdin);
+		
+		// as long as I read characters that aren't \n I read characters
+		scanf(" %c", string);
+		for(pos = 1;; pos++) {
+			c = getchar();
+			if(c == '\n')
+				break;
+			string[pos] = c;
+		}
+		string[pos] = 0;
+		
+		// move the string in the new location
+		strcpy(dest, string);
+		
+		return;
+	}
+
+/***
  * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 
  * */
@@ -32,13 +59,13 @@
 	}
 
 /*** PrintLine is a function that printf a line of characters
- * 	can be setted a number num of character that don't be printed
+ * 	can be setted a number num of characters that must not printed
  *	*/
 	void PrintLine (tinf *inf, char *character, int num) {
 		int p;	//(p)rinted
 		for ( p=inf->width-num; p!=0; p--) {
 			printf("%c", *character);
-			}
+		}
 
 		return;
 	}
@@ -60,7 +87,7 @@
 		long long int temp;
 	
 		//scanf the string
-		scanf("%s", input);
+		ScanString(input);
 		
 		//call the function
 		number = strtoll(input, NULL, 0);

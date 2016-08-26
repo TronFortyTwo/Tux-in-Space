@@ -69,7 +69,7 @@
 		}
 
 		// RUNNING
-		while 
+		while
 			(Shell (&inf, Stype) != QUITSIGNAL);
 		
 		

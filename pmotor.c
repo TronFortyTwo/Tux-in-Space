@@ -210,12 +210,13 @@
 				// Call the appropriate impact simulator
 				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
 				/** THIS PART ISN'T STABLE YET! DECOMMENT IT ONLY FOR DEBUGGING PURPOSE
+				 *
 						if((sys->o[i].type->hunter == YES) && (sys->o[l].type->hunted == YES))
 							Hunting_Impact(inf, sys, i, l);
 						else if((sys->o[i].type->hunted == YES) && (sys->o[l].type->hunter == YES))
 							Hunting_Impact(inf, sys, l, i);
 						else
-				*/
+				 */
 				// regular impact whit merging
 				{
 					// write the new object in the first of the two position
@@ -251,8 +252,8 @@
 	 */
 	void Hunting_Impact(tinf *inf, tsys *sys, int er, int ed) {
 		
-		// a random number that is the (p)ercentage that the hunter eats of the hunted
-		BYTE p;
+		// a random number that is the (p)ercentage that the hunter eats of the hunted /100
+		int p;
 		// a variable that store the volume of an object
 		double volum;
 		// a force variable
@@ -260,34 +261,45 @@
 		// indicate in which direction the hunter is faster
 		WORD faster;
 		
-		// set p (under 90)
-		do {
-			srand(time(NULL));
-			p = rand();
-			p++;
-		}
-		while(p > 90);
+		// set p (over 8)
+		srand(time(NULL));
+		do 
+			p = (rand() % 100) + 1;
+		while(p < 8);
+		p /= 100;
+		
+		DebugPrint(inf, "\nstart");
+		DebugObject(inf, &sys->o[er]);
+		DebugObject(inf, &sys->o[ed]);
 		
 		// the hunted one is reduced to his product
 		sys->o[ed].type = typeSearchName(inf, sys->Stype, sys->o[ed].type->product);
 		
 		// move a percentage p of ed mass in er
-		sys->o[er].mass += sys->o[ed].mass * p / 100;
-		sys->o[ed].mass *= (100-p) / 100;
+		sys->o[er].mass += sys->o[ed].mass * p;
+		sys->o[ed].mass -= sys->o[ed].mass * p;
+		
+		DebugPrint(inf, "\nafter mass and type");
+		DebugObject(inf, &sys->o[er]);
+		DebugObject(inf, &sys->o[ed]);
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 		// the hunter volume before
 		volum = 4/3 * PI * sys->o[er].radius * sys->o[er].radius * sys->o[er].radius;
 		// the hunter volume after
-		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius) * p / 100;	// volum += volum_eated
+		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius) * p;	// volum += volum_eated
 		// the hunter radius compute from the new volume
 		sys->o[er].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
 		// the hunted volume before
-		volum = (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius);
+		volum = 4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius;
 		// reduce the hunted volume
-		volum *= (100-p) / 100;
+		volum -= volum * p;
 		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		
+		DebugPrint(inf, "\nafter radius");
+		DebugObject(inf, &sys->o[er]);
+		DebugObject(inf, &sys->o[ed]);
 		
 		// move the hunted a bit away and give him some velocity from the hunter
 		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
@@ -328,6 +340,10 @@
 			f = sys->o[er].velz * sys->o[er].mass /2;
 			sys->o[ed].velz = f / sys->o[ed].mass;
 		}
+		
+		DebugPrint(inf, "\nend");
+		DebugObject(inf, &sys->o[er]);
+		DebugObject(inf, &sys->o[ed]);
 		
 		return;
 	}
@@ -440,7 +456,7 @@
 	 
 
 	/***
-	 * Pitagoras function calculate a diagonal distance from ortogonal component
+	 * Pitagora functions calculate a diagonal distance from ortogonal component
 	 */
 	long double Pitagora(long double a, long double b, long double c){
 		long double t = sqrtl (a*a + b*b);	//(t)emp

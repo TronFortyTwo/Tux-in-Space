@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * HERE we have functions that help whit the core system of the program 
+ * HERE we have functions that help whit the core system of the program
  * 
  */
  

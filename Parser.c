@@ -90,7 +90,6 @@
 	 * The Reask function. Reask the input
 	 */
 	void Reask(tinf *inf, char *command){
-		DebugPrint(inf, "reask");
 		void *var = command;
 		OPSE(inf, "Sorry. But the command %s that you wrote is unknow. Press something to continue:", &var);
 		return;
@@ -109,14 +108,14 @@
 		
 		//ask which two object
 		OPS(inf, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:", NULL);
-		scanf("%s", name);
+		ScanString(name);
 		o = SearchObject(sys, name);
 		if(o == NULL) {
 			OPSE(inf, "There isn't any object whit that name!\n\nInsert a new command", NULL);
 			return;
 		}
 		OPS(inf, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:", NULL);
-		scanf("%s", name);
+		ScanString(name);
 		u = SearchObject(sys, name);
 		if(u == NULL) {
 			OPSE(inf, "There isn't any object whit that name!\n\nInsert a new command", NULL);
@@ -169,7 +168,7 @@
 		
 		//ask the user for the name
 		OPS(inf, "Which object do you want do delete?\n\n&t1Press 'n' to quit", NULL);
-		scanf("%s", name);
+		ScanString(name);
 		if (strcmp(name, "n") == 0){
 			OPS(inf, "Insert a new command", NULL);
 			return;
@@ -205,7 +204,7 @@
 		var[1] = &sys->nactive;
 		// Generic information about the system
 		OPS(inf, "INFO\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object information", var);
-		scanf("%s", input);
+		ScanString(input);
 		if(strcmp(input, "n") == 0){
 			OPS(inf, "Insert a new command", NULL);
 			return;
@@ -213,7 +212,7 @@
 		// Informations about a precise object
 		obj = SearchObject(sys, input);
 		if(obj == NULL){
-			OPS(inf, "INFO\n\nno object whit this name is been found. press a button to continue", NULL);
+			OPSE(inf, "No object whit this name is been found. press a button to continue", NULL);
 			scanf("%s", input);
 			return;
 		}	

@@ -102,7 +102,7 @@
 			chardone++;
 		}
 		// a normal character
-		else if(phrase[chardone] != '\0') {
+		else if(phrase[chardone] != 0) {
 			buf[bufpos] = phrase[chardone];
 			chardone++;
 			bufpos++;

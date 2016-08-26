@@ -37,7 +37,8 @@
 	#include <unistd.h>
 	// OpenGL library
 
-	#define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211
+	// Pi
+	#define PI M_PI
 	
 	// values
 	// NOTE:
@@ -235,6 +236,7 @@
 	ttype *typeSearchName (tinf *, tStype *, char *);
 	char *typeParentFromName (tinf *, tStype *, char *);
 	long double RadiusestoVolume (long double, long double);
+	void ScanString(char *dest);
 	// OPS and derivates
 	void OPS(tinf *, char *, void **);
 	void OPSE(tinf *, char *, void **);

@@ -84,8 +84,8 @@
 			if(input == 1) {
 				temp = NAMELUN-1;
 				var[0] = &temp;
-				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character and can't contein spaces", var);
-				scanf("%s", obj->name);
+				OPS (inf, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character", var);
+				ScanString(obj->name);
 				strcpy(comment, "\nNew name assigned succefully!");
 			}
 			// Type
@@ -228,7 +228,7 @@
 		// Ask for the name of the new system
 		c = NAMELUN-1;
 		var = &c;
-		OPS (inf, "NEW SYSTEM INITIALIZATION\n\nname of the system:\n&tdIsn't allowed any spaces and can be of a maximum of %i characters", &var);
+		OPS (inf, "NEW SYSTEM INITIALIZATION\n\nname of the system:\n&tdThe name can be of a maximum of %i characters", &var);
 		scanf("%s", sys->name);
 		//ask for the precision
 		OPS (inf, "NEW SYSTEM INITIALIZATION\n\nprecision of the simulation:\n&tdIndicate how much the simulation is precise. A big value mean leess precision but lighter hardware use.\nrecommended values: < 2", NULL);
@@ -259,7 +259,7 @@
 		}
 		// ask which system
 		OPS(inf, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
-		scanf("%s", sys->name);
+		ScanString(sys->name);
 		// write the path
 		strcpy (path, SYSTEM_PATH);
 		strcat (path, sys->name);
