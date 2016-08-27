@@ -34,7 +34,7 @@
 		fflush(stdin);
 		
 		// as long as I read characters that aren't \n I read characters
-		scanf(" %c", string);
+		scanf("\n %c", string);
 		for(pos = 1;; pos++) {
 			c = getchar();
 			if(c == '\n')

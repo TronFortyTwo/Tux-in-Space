@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * In this file there are things correlated whit colors
+ * In this file there are things correlated whit colors (very few)
  */
 
 /***

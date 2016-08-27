@@ -227,14 +227,15 @@
  */
 	void OPSE(tinf *inf, char *message, void **var){
 		DebugPrint(inf, "opse");
+		
 		//size of message
-		int size;
+		WORD size;
 		size = strlen(message);
 		//the message to print
-		char *buffer = (char *) malloc (sizeof(char[10+size]));
+		char *buffer = (char *) malloc (sizeof(char[8+size]));
 		while(buffer == NULL){
 			OPSML(inf, "OPSE");
-			buffer = (char *) malloc (sizeof(char[10+size]));
+			buffer = (char *) malloc (sizeof(char[8+size]));
 		}
 		//a nice bip
 		printf("\a");
@@ -252,11 +253,11 @@
  * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack to signal the problem
  */	
 	void OPSML(tinf *inf, char *data) {
-		char i[2];	//(i)nput
-		printf ("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		
+		printf ("\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
 		DebugPrint(inf, "opsml: the program has problem whit memory allocation while:");
 		DebugPrint(inf, data);
-		scanf("%s", i);
+		getchar();
 		
 		return;
 	}

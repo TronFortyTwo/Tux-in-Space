@@ -16,11 +16,10 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-
  *
- * The purpose of this is to print the state of the objects using only the OPS (OnlyPrintfSystem).
+ * The purpose of this is to create a friendly UI using only the OPS (OnlyPrintfSystem).
  * 
- * printf an intestation whit the current time and other stuff, then reserve some space for information about the objects
+ * print an intestation whit the current time and other stuff, then reserve some space for information about the objects
  * 
  */
 
@@ -49,22 +48,14 @@
 		for (i=0; i!=sys->nactive; i++) {
 			// Tell the name, type and mass, the x, the y and the z. conclude whit a line of '-'
 			strcat(buffer, "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n%f-");
-			var[pos] = sys->o[i].name;
-			pos++;
-			var[pos] = sys->o[i].type->name;
-			pos++;
-			var[pos] = &sys->o[i].x;
-			pos++;
-			var[pos] = &sys->o[i].velx;
-			pos++;
-			var[pos] = &sys->o[i].y;
-			pos++;
-			var[pos] = &sys->o[i].vely;
-			pos++;
-			var[pos] = &sys->o[i].z;
-			pos++;
-			var[pos] = &sys->o[i].velz;
-			pos++;
+			var[pos++] = sys->o[i].name;
+			var[pos++] = sys->o[i].type->name;
+			var[pos++] = &sys->o[i].x;
+			var[pos++] = &sys->o[i].velx;
+			var[pos++] = &sys->o[i].y;
+			var[pos++] = &sys->o[i].vely;
+			var[pos++] = &sys->o[i].z;
+			var[pos++] = &sys->o[i].velz;
 		}
 		// if there isn't any object
 		if(sys->nactive == 0)

@@ -155,9 +155,9 @@
 				SaveObject(inf, obj);
 				strcpy(comment, "\nNew object saved succefully!");
 			}
-			// COMMAND UNRECOGNIZED
+			// EXIT. Always added this. In case of exit however this isn't printed
 			else if(input == 10)
-				strcpy(comment, "\nCannot exit! fix irregularity first");
+				strcpy(comment, "\nCannot exit! Fix irregularity first");
 			
 			// check for IRREGALARITY
 			// irregularity: MASS
@@ -268,7 +268,7 @@
 		dest = fopen(path, "r");
 		if (dest == NULL) {
 			OPSE(inf, "A system whit that name doesn't exist! Type something to continue and return to the menù", NULL);
-			scanf("%s", path);
+			getchar();
 			free(sys);
 			return NULL;
 		}

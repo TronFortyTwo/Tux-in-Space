@@ -26,7 +26,9 @@
 	// Include the header file
 	#include "CS_header.h"
 
-	// Funzione principale
+	//
+	//	MAIN FUNCTION
+	//
 
 	int main (int argc, char *argv[]) {
 		
@@ -40,10 +42,9 @@
 		FILE *Ftype;
 		
 		// initialize the program directories
-		if(InitDir() != GOODSIGNAL){
-			char input[2];		// input variable
+		if(InitDir() != GOODSIGNAL) {
 			printf("CSpace:\n\nError: can't create program directories!\nPress something to exit");
-			scanf("%s", input);
+			getchar();
 			return EXIT_FAILURE;
 		}
 		// Initialize tinf inf from a file
@@ -62,9 +63,8 @@
 			fclose(Ftype);
 		}
 		else {
-			char input[2];		// input variable
 			OPSE(&inf, "Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
-			scanf("%s", input);
+			getchar();
 			return EXIT_FAILURE;
 		}
 

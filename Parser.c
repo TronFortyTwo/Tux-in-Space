@@ -138,16 +138,16 @@
 		DebugPrint(inf, "quit");
 		
 		ttime t;	 	//this is the escape time
-		char input[2];		
+		char input;		
 		//ask for confirm to quit
 		OPS(inf, "CSPACE\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", NULL);
-		scanf("%s", input);
+		scanf(" %c", &input);
 		//if doesn't want to quit return now
-		if (input[0] == 'n')
+		if (input == 'n')
 			return *now;
-		if (input[0] == 's')
+		if (input == 's')
 			SaveSys(sys, inf);
-		else if (input[0] != 'y') {
+		else if (input != 'y') {
 			OPS(inf, "Unrecognized input! please insert y/n/s\n\ninsert a new command:", NULL);
 			return *now;
 		}
@@ -169,7 +169,7 @@
 		//ask the user for the name
 		OPS(inf, "Which object do you want do delete?\n\n&t1Press 'n' to quit", NULL);
 		ScanString(name);
-		if (strcmp(name, "n") == 0){
+		if (!strcmp(name, "n")) {
 			OPS(inf, "Insert a new command", NULL);
 			return;
 		}
@@ -213,7 +213,7 @@
 		obj = SearchObject(sys, input);
 		if(obj == NULL){
 			OPSE(inf, "No object whit this name is been found. press a button to continue", NULL);
-			scanf("%s", input);
+			getchar();
 			return;
 		}	
 		var[0] = obj->name;
