@@ -70,6 +70,11 @@
 				bufpos += sprintf(&buf[bufpos], "%d", *((int *)var[pos]) );
 				pos++;
 			}
+			// an unsigned int value to print
+			if(phrase[chardone] == 'u') {
+				bufpos += sprintf(&buf[bufpos], "%u", *((unsigned int *)var[pos]) );
+				pos++;
+			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
 				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf.numprecision, *((long double *)var[pos]) );

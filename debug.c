@@ -35,6 +35,9 @@
  */
 	void DebugInt(int n) {
 		
+		if(inf.debug == OFF)
+			return;
+		
 		char buffer[32];
 		snprintf(buffer, 32, "%d", n);
 		DebugPrint(buffer);
@@ -47,6 +50,10 @@
  * This function print in the debug file the attributes of an object
  */
 	void DebugObject(tobj *obj){
+		
+		if(inf.debug == OFF)
+			return;
+		
 		// a string
 		char buffer[DESCRIPTIONSIZE + 15];
 		
@@ -79,6 +86,9 @@
  * This function print the Stype structure
  */
 	void PrintStype(tStype *Stype) {
+	
+		if(inf.debug == OFF)
+			return;
 	
 		int i; //counters
 		char buffer[1024]; 

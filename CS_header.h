@@ -140,9 +140,9 @@
 
 	// the type that we use as color
 	typedef struct scolor{
-		int red;
-		int green;
-		int blue;
+		unsigned int red;
+		unsigned int green;
+		unsigned int blue;
 	} tcolor;
 	
 	// The structure that represent a type of a object
@@ -170,7 +170,7 @@
 		int vmode;					// Visual mode
 		int width;					// The number of columns that the program use
 		int height;					// The number of lines that the program use
-		int numprecision;			// Number of character used for printing the deciamal of a long double
+		unsigned int numprecision;	// Number of character used for printing the deciamal of a long double
 		int debug;
 	} tinf;
 
