@@ -24,20 +24,20 @@
  */
  
 ///Prototypes
-	void PrintStype(tinf *, tStype *);
-	void DebugPrint(tinf *, char *);
-	void InitDebug(tinf *);
-	void DebugObject(tinf *, tobj *);
-	void DebugInt(tinf *, int);
+	void PrintStype(tStype *);
+	void DebugPrint(char *);
+	void InitDebug();
+	void DebugObject(tobj *);
+	void DebugInt(int);
 
 /***
  * This function print an int in the debug file
  */
-	void DebugInt(tinf *inf, int n) {
+	void DebugInt(int n) {
 		
 		char buffer[32];
 		snprintf(buffer, 32, "%d", n);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		
 		return;
 	}
@@ -46,31 +46,31 @@
 /***
  * This function print in the debug file the attributes of an object
  */
-	void DebugObject(tinf *inf, tobj *obj){
+	void DebugObject(tobj *obj){
 		// a string
 		char buffer[DESCRIPTIONSIZE + 15];
 		
 		// the name
 		sprintf(buffer, "NAME: %s", obj->name);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// the mass
 		sprintf(buffer, "MASS: %Lf", obj->mass);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// the radius
 		sprintf(buffer, "RADIUS: %Lf", obj->radius);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// the color
 		sprintf(buffer, "COLOR: %i %i %i", obj->color.blue, obj->color.green, obj->color.red);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// type
 		sprintf(buffer, "TYPE: %s", obj->type->name);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// coordinates
 		sprintf(buffer, "COORDINATES: %Lf %Lf %Lf", obj->x, obj->y, obj->z);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		// velocity
 		sprintf(buffer, "VELOCITY: %Lf %Lf %Lf", obj->velx, obj->vely, obj->velz);
-		DebugPrint(inf, buffer);
+		DebugPrint(buffer);
 		
 		return;
 	}
@@ -78,47 +78,46 @@
 /***
  * This function print the Stype structure
  */
-	void PrintStype(tinf *inf, tStype *Stype) {
+	void PrintStype(tStype *Stype) {
 	
 		int i; //counters
 		char buffer[1024]; 
 		
-		DebugPrint(inf, "\n\nSTYPE PRINTING-------------------------\n");
+		DebugPrint("\n\nSTYPE PRINTING-------------------------\n");
 		
 		for (i=0; i!=Stype->number; i++) {
 			sprintf(buffer, "NAME:\t\t%p\t\t%s",Stype->type[i].name, Stype->type[i].name);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "DESCRPTION:\t\t%p\t\t%s",Stype->type[i].description, Stype->type[i].description);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "PARENT:\t\t%p\t\t%s", Stype->type[i].parent, Stype->type[i].parent);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "MASS MIN:\t\t%p\t\t%lf", &Stype->type[i].mass_min, Stype->type[i].mass_min);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "MASS MAX:\t\t%p\t\t%lf", &Stype->type[i].mass_max, Stype->type[i].mass_max);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "BLUE_RANGE:\t\t%i\t\t%i", Stype->type[i].color_min.blue, Stype->type[i].color_max.blue);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "RED_RANGE:\t\t%i\t\t%i", Stype->type[i].color_min.red, Stype->type[i].color_max.red);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "GREEN_RANGE:\t\t%i\t\t%i",  Stype->type[i].color_min.green, Stype->type[i].color_max.green);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "HUNTED:\t\t%p\t\t%c", &Stype->type[i].hunted, Stype->type[i].hunted);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "HUNTER:\t\t%p\t\t%c", &Stype->type[i].hunter, Stype->type[i].hunter);
-			DebugPrint(inf, buffer);
+			DebugPrint(buffer);
 			sprintf(buffer, "PRODUCT:\t\t%p\t\t%s", Stype->type[i].product, Stype->type[i].product);
-			DebugPrint(inf, buffer);
-			DebugPrint(inf, "\n");
+			DebugPrint(buffer);
+			DebugPrint("\n");
 		}
-	
 		return;
 	}
 
 /***
  *	Initialize the debug function
  */
-	void InitDebug(tinf* inf) {
-		if(inf->debug == OFF)
+	void InitDebug() {
+		if(inf.debug == OFF)
 			return;
 		fclose(fopen(DEBUG_FILE, "w"));
 		return;
@@ -129,9 +128,9 @@
 /***
  * This function write in the debug support (a file, stderr or something else) what is called to write
  */
-	void DebugPrint(tinf *inf, char *txt) {
+	void DebugPrint(char *txt) {
 		
-		if(inf->debug == OFF)
+		if(inf.debug == OFF)
 			return;
 		
 		// for now the debug support is a file

@@ -42,8 +42,7 @@
 	
 	// values
 	// NOTE:
-	// Is important the YES = ON
-	// Are different names for logic, but the value must be the same!
+	// Is important the YES = ON and OFF = NO
 	#define ON 1
 	#define OFF 0
 	#define NO OFF
@@ -127,13 +126,16 @@
 	#define DEFAULT_NUMPRECISION 6
 	#define DEFAULT_V_MODE V_OPS
 	
+	// A two-in-one function call whitout argurment (safe getchar)
+	#define sgetchar() (scanf(" "), getchar())
+	
 	// BYTE is a value that occupies one byte max
 	typedef 	int8_t		BYTE;	// max +/- 128
 	typedef 	int16_t 	WORD;	// max +/- 32768
 	typedef		int32_t		DWORD;
 	typedef		int64_t		QWORD;
 	
-	// the array that contein a name of a type-system-object
+	// the array that contein a name of a type/system/object
 	typedef char TNAME[NAMELUN];
 
 	// the type that we use as color
@@ -210,65 +212,72 @@
 		tStype *Stype;			// The pointer at the structure that coontein all the type
 	} tsys;
 	
+	
+	//
+	// THE INF STRUCTURE, THE ONLY GLOBAL VARIABLE
+	//
+	tinf inf;
+	
+	
 	// System functions
 	BYTE InitDir();
-	void SetDefaultConfig(tinf *);
-	void Setting(tinf *);
-	int	LoadObject(tinf *, tobj *, tStype *, char *);
+	void SetDefaultConfig();
+	void Setting();
+	int	LoadObject(tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
 	tobj *SearchObject(tsys *, char *);
 	void ComputeBigger(tobj *, tobj *, tobj **);
 	int GetBiggerStime(ttime *, ttime *);
 	void UpdateTime(ttime *);
-	int Menu(tinf *, tStype *);
-	ttype *TypeBrowser(tinf *, tStype *, char *);
-	int Shell (tinf *, tStype *);
-	void SafeIScan(tinf *, int *);
-	void PrintLine (tinf *, char *, int);
+	int Menu(tStype *);
+	ttype *TypeBrowser(tStype *, char *);
+	int Shell (tStype *);
+	void SafeIScan(int *);
+	void PrintLine (char *, int);
 	void ScanFString(char *, FILE *);	
-	void SaveObject(tinf *, tobj *);
-	void InitObject (tinf *, tobj *, tStype *);
-	tsys *InitSystem (tinf *, tStype *);
-	void ReduceObjBuf(tsys *, tinf *);
-	tStype *Inittype (FILE *, tinf *);
-	char *typeDescriptionFromName (tinf *, tStype *, char *);
-	ttype *typeSearchName (tinf *, tStype *, char *);
-	char *typeParentFromName (tinf *, tStype *, char *);
+	void SaveObject(tobj *);
+	void InitObject (tobj *, tStype *);
+	tsys *InitSystem (tStype *);
+	void ReduceObjBuf(tsys *);
+	tStype *Inittype (FILE *);
+	char *typeDescriptionFromName (tStype *, char *);
+	ttype *typeSearchName (tStype *, char *);
+	char *typeParentFromName (tStype *, char *);
 	long double RadiusestoVolume (long double, long double);
 	void ScanString(char *dest);
 	// OPS and derivates
-	void OPS(tinf *, char *, void **);
-	void OPSE(tinf *, char *, void **);
-	void OPSML(tinf *, char *);
-	int OPSo (tsys *, tinf *);
+	void OPS(char *, void **);
+	void OPSE(char *, void **);
+	void OPSML(char *);
+	int OPSo (tsys *);
 	// Parser
-	void Reask(tinf *, char *);
-	void SaveSys(tsys *, tinf *);
-	void Create(tsys *, tinf *);
-	ttime Jump(ttime *, tinf *, long double *);
-	ttime Wait(ttime *, tinf *, long double *);
-	void DeleteObject(tinf *, tsys *);
-	ttime Quit (tsys *, tinf *, ttime *);
-	void DistanceCommand(tsys *, tinf *);
-	void Info(tsys *, tinf *);
+	void Reask(char *);
+	void SaveSys(tsys *);
+	void Create(tsys *);
+	ttime Jump(ttime *, long double *);
+	ttime Wait(ttime *, long double *);
+	void DeleteObject(tsys *);
+	ttime Quit (tsys *, ttime *);
+	void DistanceCommand(tsys *);
+	void Info(tsys *);
 	// I/O object
 	void WriteObject (FILE *, tobj *);
 	void WriteObjectComplete (FILE *, tobj *);
-	int ReadObject (tinf *, FILE *, tobj *, tStype *);
-	int ReadObjectComplete (tinf *, FILE *, tobj *, tStype *);
+	int ReadObject (FILE *, tobj *, tStype *);
+	int ReadObjectComplete (FILE *, tobj *, tStype *);
 	// Pmotor
-	void Pmotor (tsys *, tinf *, ttime dest);
-	void Gravity(tsys *, tinf *);
-	void Inertia(tsys *, tinf *);
-	void Impacts(tsys *, tinf *);
-	void HunterIA(tsys *, tinf *);
-	void HunterIA_single(tsys *, tinf *, tobj *);
-	tobj MergeObject_Impact (tinf *, tobj *, tobj *);
-	void Hunting_Impact(tinf *, tsys *, int, int);
+	void Pmotor (tsys *, ttime dest);
+	void Gravity(tsys *);
+	void Inertia(tsys *);
+	void Impacts(tsys *);
+	void HunterIA(tsys *);
+	void HunterIA_single(tsys *, tobj *);
+	tobj MergeObject_Impact (tobj *, tobj *);
+	void Hunting_Impact(tsys *, int, int);
 	long double Distance(tobj *i, tobj *l);
 	// color
-	tcolor ScanColor(tinf *, tcolor, tcolor);
+	tcolor ScanColor(tcolor, tcolor);
 	int ColorRangeCheck(tcolor, tcolor, tcolor);
  
 // CSpace's functions sorted by dependance

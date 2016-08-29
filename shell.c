@@ -22,8 +22,8 @@
  * whit some others elaboration in the middle
  */
 	
-	int Shell (tinf *inf, tStype *Stype) {
-		DebugPrint(inf, "shell");
+	int Shell (tStype *Stype) {
+		DebugPrint("shell");
 		
 		// he pointer to a system
 		tsys *sys;
@@ -35,12 +35,12 @@
 		
 		while(1) {
 			// Call the mean menù, it tell to shell what to do.
-			switch (Menu(inf, Stype)) {
+			switch (Menu(Stype)) {
 				case NEW_SIG:
-					sys = InitSystem(inf, Stype);
+					sys = InitSystem(Stype);
 					break;
 				case LOAD_SIG:
-					sys = LoadSystem(inf, Stype);
+					sys = LoadSystem(Stype);
 					break;
 				case QUITSIGNAL:
 					return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
@@ -57,19 +57,19 @@
 		stime = sys->stime;
 		while(1) {
 			// call the output system accordingly to inf->vmode (for now can be only OPSo, OpenGL interface implementation is WIP)
-			OPSo (sys, inf);
+			OPSo (sys);
 			// call the instruction parser and ask him for destination time
-			stime = Parser(sys, inf);
+			stime = Parser(sys);
 			// check if the user want to exit
 			if (stime.year == QUITSIGNAL)
 				break;
 			// call the phisic motor
-			Pmotor (sys, inf, stime);
+			Pmotor (sys, stime);
 		}
 
 		// delete the system and exit
 		free(sys->o);
 		free(sys);
 
-		return 0;
+		return GOODSIGNAL;
 	}

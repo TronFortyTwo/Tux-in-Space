@@ -23,8 +23,8 @@
  * 
  */
 
-	int OPSo (tsys *sys, tinf *inf) {
-		DebugPrint(inf, "opso");
+	int OPSo (tsys *sys) {
+		DebugPrint("opso");
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
@@ -62,7 +62,7 @@
 			strcat(buffer, "\n&t1The system is empty. Use the 'create' command to create a new object");
 		
 		// Print
-		OPS(inf, buffer, var);
+		OPS(buffer, var);
 		
 		// free the RAM and exit
 		free(var);

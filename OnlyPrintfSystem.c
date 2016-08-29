@@ -31,8 +31,8 @@
  */
 
  /**Only Printf System */
-	void OPS(tinf *inf, char *phrase, void **var) {
-	DebugPrint(inf, "ops");
+	void OPS(char *phrase, void **var) {
+	DebugPrint("ops");
 	
 	//loop counter
 	int i;
@@ -49,10 +49,10 @@
 	// the position in the var array
 	QWORD pos = 0;
 	// the buffer to print, his size and position
-	DWORD size = (inf->width-TWOFRAMELUN) * (inf->height-5) +1;
+	DWORD size = (inf.width-TWOFRAMELUN) * (inf.height-5) +1;
 	char *buf = (char *) malloc (sizeof(char[size]));
 	while (buf == NULL) {
-		OPSML(inf, "OPS");
+		OPSML("OPS");
 		buf = (char *) malloc (sizeof(char[size]));
 	}
 	DWORD bufpos = 0;
@@ -72,7 +72,7 @@
 			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
-				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf->numprecision, *((long double *)var[pos]) );
+				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf.numprecision, *((long double *)var[pos]) );
 				pos++;
 			}
 			// a string to print
@@ -83,7 +83,7 @@
 			// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 			else if(phrase[chardone] == 'f') {
 				chardone++;
-				for(i=0; i!=inf->width-TWOFRAMELUN; i++) {
+				for(i=0; i!=inf.width-TWOFRAMELUN; i++) {
 					buf[bufpos] = phrase[chardone];
 					bufpos++;
 				}
@@ -121,16 +121,16 @@
 	bufpos=0;
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	//the first two line of the frame
-	PrintLine(inf, FRAMESTART, 0);
+	PrintLine(FRAMESTART, 0);
 	printf("\n%s", FRAME);
-	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
+	PrintLine(FRAMEEND, TWOFRAMELUN);
 	printf("%s\n", FRAMER);
 	//printf the buf
-	for(linedone=0; linedone < inf->height-5; linedone++) {
+	for(linedone=0; linedone < inf.height-5; linedone++) {
 		//the frame
 		printf("%s", FRAME);
 		//print the buf
-		for(columndone=0; columndone < inf->width-TWOFRAMELUN; columndone++) {
+		for(columndone=0; columndone < inf.width-TWOFRAMELUN; columndone++) {
 			
 			// PART ONE: check for directives. a directive started whit '&'
 			if (buf[bufpos] == '&') {
@@ -197,10 +197,10 @@
 			// a '\n' character
 			else {
 				// print the remaining space whit spaces
-				PrintLine(inf, " ", columndone+TWOFRAMELUN);
+				PrintLine(" ", columndone+TWOFRAMELUN);
 				bufpos++;
 				// if there is space for more line print the new line
-				if(linedone < inf->height-5) {
+				if(linedone < inf.height-5) {
 					printf("%s\n%s", FRAMER, FRAME);
 					linedone++;
 					columndone = -1;
@@ -212,9 +212,9 @@
 	}
 	//last lines
 	printf("%s", FRAME);
-	PrintLine(inf, FRAMEEND, TWOFRAMELUN);
+	PrintLine(FRAMEEND, TWOFRAMELUN);
 	printf("%s\n", FRAMER);
-	PrintLine(inf, FRAMESTART, 0);
+	PrintLine(FRAMESTART, 0);
 	printf("\n%s: ", FRAME);
 	
 	// finish the function
@@ -225,8 +225,8 @@
 /***
  * OPSE (OnlyPrintfSystemError) printf an error message whit the OPS
  */
-	void OPSE(tinf *inf, char *message, void **var){
-		DebugPrint(inf, "opse");
+	void OPSE(char *message, void **var){
+		DebugPrint("opse");
 		
 		//size of message
 		WORD size;
@@ -234,7 +234,7 @@
 		//the message to print
 		char *buffer = (char *) malloc (sizeof(char[8+size]));
 		while(buffer == NULL){
-			OPSML(inf, "OPSE");
+			OPSML("OPSE");
 			buffer = (char *) malloc (sizeof(char[8+size]));
 		}
 		//a nice bip
@@ -243,20 +243,20 @@
 		strcpy(buffer, "ERROR!\n\n");
 		strcat(buffer, message);
 		//printf the buffer
-		OPS(inf, buffer, var);
+		OPS(buffer, var);
 		//exit the function
 		free(buffer);
 		return;
 	}
 
 /***
- * OPSML (OnlyPrintfSystemMemoryLeack) is called when the memory leack to signal the problem
+ * OPSML (OnlyPrintfSystemMemorylack) is called when the memory lack to signal the problem
  */	
-	void OPSML(tinf *inf, char *data) {
+	void OPSML(char *data) {
 		
 		printf ("\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
-		DebugPrint(inf, "opsml: the program has problem whit memory allocation while:");
-		DebugPrint(inf, data);
+		DebugPrint("opsml: the program has problem whit memory allocation while:");
+		DebugPrint(data);
 		getchar();
 		
 		return;

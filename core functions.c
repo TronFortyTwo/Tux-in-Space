@@ -24,8 +24,8 @@
 /***
  * The load object function load from a file the information about a object
  */
-	int LoadObject(tinf *inf, tobj *obj, tStype *Stype, char *name) {
-		DebugPrint(inf, "loadobject");
+	int LoadObject(tobj *obj, tStype *Stype, char *name) {
+		DebugPrint("loadobject");
 		
 		FILE *ofile;				// (the) o(bject) file
 		char path [NAMELUN + 15];	// the path of the object
@@ -39,7 +39,7 @@
 			return FILE_ERR_SIG;
 		
 		// Read type, color, radius and mass
-		ReadObject(inf, ofile, obj, Stype);
+		ReadObject(ofile, obj, Stype);
 		
 		//close the file and exit
 		fclose(ofile);
@@ -50,8 +50,8 @@
 /***
  * The SaveObject function save a object in a file
  */
-	void SaveObject(tinf *inf, tobj *obj) {
-		DebugPrint(inf, "SaveObject");
+	void SaveObject(tobj *obj) {
+		DebugPrint("SaveObject");
 	
 		//the path where the object must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+16];
@@ -67,7 +67,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", NULL);
+			OPS("While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", NULL);
 			scanf("%s", input);
 			if(strcmp(input, "n") == 0)
 				return;
@@ -81,20 +81,30 @@
 		return;	
 	}
 
+/***
+ * This function return a "random" int in a range given
+ */
+	int RandomInt (int min, int max) {
+		
+		srand(time(NULL));
+		
+		return (rand() % (max - min)) + min;
+	}
+
 	
 /***
  * This function reduce the object buffer size
  */
 	 
-	void ReduceObjBuf(tsys *sys, tinf *inf) {
-		DebugPrint(inf, "reduceobjbuf");
+	void ReduceObjBuf(tsys *sys) {
+		DebugPrint("reduceobjbuf");
 		
 		tobj *newo;		//(new o)bject buffer
 		int c;			//(c)ounter
 		// create a new buffer whit less objects
 		newo = (tobj *) malloc (sizeof(tobj) * (sys->nalloc-OBJBUFSIZE));
 		while (newo == NULL) {
-			OPSML(inf, "ReduceObjBuf");
+			OPSML("ReduceObjBuf");
 			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 		}
 		// update counter
@@ -108,7 +118,7 @@
 		sys->o = newo;
 		// if can be reduced more, recall itself
 		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
-			ReduceObjBuf(sys, inf);
+			ReduceObjBuf(sys);
 		// if the buffer is empty, set the pointer to NULL
 		if(sys->nalloc == 0)
 			sys->o = NULL;
@@ -120,8 +130,8 @@
 /***
  * This function make the object buffer size bigger
  */
-	void ExtendObjBuf(tsys *sys, tinf *inf){
-		DebugPrint(inf, "extendobjbuf");
+	void ExtendObjBuf(tsys *sys){
+		DebugPrint("extendobjbuf");
 		
 		tobj *newo;		//(new o)bject buffer
 		int c;			//(c)ounter
@@ -129,7 +139,7 @@
 		// create a new buffer whit more objects
 		newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 		while (newo == NULL) {
-			OPSML(inf, "ExtendObjBuf");
+			OPSML("ExtendObjBuf");
 			newo = (tobj *) malloc (sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 		}
 		// copy what is stored in the old buffer in the new buffer
@@ -149,8 +159,8 @@
 /***
  * Save a system in the directory Systems/
  */
-	void SaveSys(tsys *sys, tinf *inf){
-		DebugPrint(inf, "savesys");
+	void SaveSys(tsys *sys){
+		DebugPrint("savesys");
 		
 		// the path where the system must be saved, an input variable and the destination file pointer
 		char path[NAMELUN+13];
@@ -168,7 +178,7 @@
 		dest = fopen(path, "r");
 		if(dest != NULL) {
 			fclose(dest);
-			OPS(inf, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", NULL);
+			OPS("While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", NULL);
 			scanf("%s", input);
 			if(strcmp(input, "n") == 0)
 				return;
@@ -184,7 +194,7 @@
 			WriteObjectComplete(dest, &sys->o[i]);
 		fclose(dest);
 	
-		OPS(inf, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL);
+		OPS("SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL);
 		scanf("%s", input);		
 	
 		return;
@@ -205,22 +215,22 @@
 		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", obj->name, obj->type->name, obj->color.red, obj->color.green,obj->color.blue, obj->radius, obj->mass, obj->x, obj->y, obj->z, obj->velx, obj->vely, obj->velz);
 		return;
 	}
-	int ReadObject (tinf *inf, FILE *stream, tobj *obj, tStype *Stype) {
+	int ReadObject (FILE *stream, tobj *obj, tStype *Stype) {
 		char type[NAMELUN];
 		ScanFString(obj->name, stream);
 		ScanFString(type, stream);
 		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass);
-		obj->type = typeSearchName(inf, Stype, type);
+		obj->type = typeSearchName(Stype, type);
 		if (obj->type == NULL)
 			return CORRUPTED_SIG;
 		return GOODSIGNAL;
 	}
-	int ReadObjectComplete (tinf *inf, FILE *stream, tobj *obj, tStype *Stype) {
+	int ReadObjectComplete (FILE *stream, tobj *obj, tStype *Stype) {
 		char type[NAMELUN];
 		ScanFString(obj->name, stream);
 		ScanFString(type, stream);
 		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass, &obj->x, &obj->y, &obj->z, &obj->velx, &obj->vely, &obj->velz);
-		obj->type = typeSearchName(inf, Stype, type);
+		obj->type = typeSearchName(Stype, type);
 		if (obj->type == NULL)
 			return CORRUPTED_SIG;
 		return GOODSIGNAL;
@@ -261,15 +271,15 @@
 /***
  * SaveConfig save in a file the config of tinf inf
  */
-	void SaveConfig(tinf *inf){
+	void SaveConfig(){
 		
 		FILE *cf = fopen(CONFIGURATION_FILE, "w");
 		
-		fprintf(cf, "%d\n", inf->height);
-		fprintf(cf, "%d\n", inf->width);
-		fprintf(cf, "%d\n", inf->debug);
-		fprintf(cf, "%d\n", inf->numprecision);
-		fprintf(cf, "%d\n", inf->vmode);
+		fprintf(cf, "%d\n", inf.height);
+		fprintf(cf, "%d\n", inf.width);
+		fprintf(cf, "%d\n", inf.debug);
+		fprintf(cf, "%d\n", inf.numprecision);
+		fprintf(cf, "%d\n", inf.vmode);
 		
 		fclose(cf);
 		return;
@@ -300,13 +310,13 @@
 /***
  * This function reset the settings to the default values
  */
-	void SetDefaultConfig(tinf *inf){
+	void SetDefaultConfig(){
 		
-		inf->height = DEFAULT_HEIGHT;
-		inf->width = DEFAULT_WIDTH;
-		inf->debug = DEFAULT_DEBUG;
-		inf->numprecision = DEFAULT_NUMPRECISION;
-		inf->vmode = DEFAULT_V_MODE;
+		inf.height = DEFAULT_HEIGHT;
+		inf.width = DEFAULT_WIDTH;
+		inf.debug = DEFAULT_DEBUG;
+		inf.numprecision = DEFAULT_NUMPRECISION;
+		inf.vmode = DEFAULT_V_MODE;
 
 		return;
 	}

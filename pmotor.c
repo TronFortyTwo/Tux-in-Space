@@ -26,22 +26,22 @@
  * 		- 'Intelligence' of the hunters
  */
  
-	void Pmotor (tsys *sys, tinf *inf, ttime dest) {
-		DebugPrint(inf, "pmotor");
+	void Pmotor (tsys *sys, ttime dest) {
+		DebugPrint("pmotor");
 		
 		while (GetBiggerStime (&dest, &sys->stime) == 0) {
 		
 			// GRAVITY
-			Gravity(sys, inf);
+			Gravity(sys);
 		
 			// HUNTER IA
-			HunterIA(sys, inf);
+			HunterIA(sys);
 		
 			// IMPACTS
-			Impacts(sys, inf);
+			Impacts(sys);
 		
 			// INERTIA
-			Inertia(sys, inf);
+			Inertia(sys);
 		
 			// TIME
 			sys->stime.millisec += sys->precision * 1000;
@@ -53,7 +53,7 @@
 	/***
 	 * INERTIA
 	 */
-	void Inertia(tsys *sys, tinf *inf) {
+	void Inertia(tsys *sys) {
 		
 		int i;
 		
@@ -71,7 +71,7 @@
 	 * 
 	 * 		THERE IS MUCH WORK TO DO HERE TO MAKE MONSTERS SMARTER
 	 */
-	void HunterIA(tsys *sys, tinf *inf) {
+	void HunterIA(tsys *sys) {
 		
 		// counter
 		int i;
@@ -79,19 +79,19 @@
 		// Search the monster
 		for(i=0; i!=sys->nactive; i++)
 			if(sys->o[i].type->hunter == ON)
-				HunterIA_single(sys, inf, &sys->o[i]);
+				HunterIA_single(sys, &sys->o[i]);
 		
 		return;
 	}
 	
-	void HunterIA_single(tsys *sys, tinf *inf, tobj *mon) {
+	void HunterIA_single(tsys *sys, tobj *mon) {
 		
 		// counter
 		int i;
 		// an object pointer array
 		tobj **list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 		while (list == NULL) {
-			OPSML(inf, "HunterIA");
+			OPSML("HunterIA");
 			list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 		}
 		// the number of things to destroy
@@ -102,9 +102,10 @@
 		long double temp;
 		
 		//if there is only him, exit
-		if(sys->nactive == 1)
+		if(sys->nactive == 1) {
+			free(list);
 			return;
-		
+		}
 		// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
 		// search for huntable objects
 		for(i=0; i!=sys->nactive; i++) {
@@ -112,6 +113,11 @@
 				list[num] = &sys->o[i];
 				num++;
 			}
+		}
+		// if there isn't any huntable object, return
+		if (!num) {
+			free(list);
+			return;
 		}
 		// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 		closest = list[0];
@@ -137,7 +143,7 @@
 	 * 
 	 * WARNING: this function is heavy optimized! readability compromised! Refer to the comments
 	 */
-	void Gravity(tsys *sys, tinf *inf) {
+	void Gravity(tsys *sys) {
 		
 		// counters
 		int i,l;
@@ -183,10 +189,10 @@
 	 * 	- elastics hits
 	 * 	- hit that take time
 	 * 	- partial hit
-	 * 	- creation of moon, asteroids and other objects from hits
+	 * 	- creation of moon, asteroids, debris and other objects from hits
 	 * 	- special hit mechanics depending on the types of the objects (WIP)
 	 */
-	void Impacts(tsys *sys, tinf *inf) {
+	void Impacts(tsys *sys) {
 		
 		// counters for loops
 		int i, l;
@@ -209,37 +215,35 @@
 				
 				// Call the appropriate impact simulator
 				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
-				/** THIS PART ISN'T STABLE YET! DECOMMENT IT ONLY FOR DEBUGGING PURPOSE
-				 *
-						if((sys->o[i].type->hunter == YES) && (sys->o[l].type->hunted == YES))
-							Hunting_Impact(inf, sys, i, l);
-						else if((sys->o[i].type->hunted == YES) && (sys->o[l].type->hunter == YES))
-							Hunting_Impact(inf, sys, l, i);
-						else
-				 */
+				
+				if((sys->o[i].type->hunter == YES) && (sys->o[l].type->hunted == YES))
+					Hunting_Impact(sys, i, l);
+				else if((sys->o[i].type->hunted == YES) && (sys->o[l].type->hunter == YES))
+					Hunting_Impact(sys, l, i);
+					
 				// regular impact whit merging
-				{
+				else {
 					// write the new object in the first of the two position
 					// then move the last object in the last of the two position
 					// set the first and the last
 					if (i < l) {
-						sys->o[i] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+						sys->o[i] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
 						sys->o[l] = sys->o[sys->nactive-1];
 					}
 					else {
-						sys->o[l] = MergeObject_Impact (inf, &sys->o[i], &sys->o[l]);
+						sys->o[l] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
 						sys->o[i] = sys->o[sys->nactive-1];
 					}
 					sys->nactive--;
 					// if necessary resize the object buffer
 					if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
-						ReduceObjBuf(sys, inf);
+						ReduceObjBuf(sys);
 				}
 			}
 		}
 		// If some impacts happened, restart to recheck for impact from start
 		if (impacts == YES)
-			Impacts(sys, inf);
+			Impacts(sys);
 		
 		return;
 	}
@@ -250,7 +254,7 @@
 	 * sys->o[er] is the object huntER
 	 * sys->o[ed] is the object huntED
 	 */
-	void Hunting_Impact(tinf *inf, tsys *sys, int er, int ed) {
+	void Hunting_Impact(tsys *sys, int er, int ed) {
 		
 		// a random number that is the (p)ercentage that the hunter eats of the hunted /100
 		int p;
@@ -261,27 +265,24 @@
 		// indicate in which direction the hunter is faster
 		WORD faster;
 		
-		// set p (over 8)
-		srand(time(NULL));
-		do 
-			p = (rand() % 100) + 1;
-		while(p < 8);
+		// set p (over 8, under 92)
+		p = RandomInt(8, 92);
 		p /= 100;
 		
-		DebugPrint(inf, "\nstart");
-		DebugObject(inf, &sys->o[er]);
-		DebugObject(inf, &sys->o[ed]);
+		DebugPrint("\nstart\n");
+		DebugObject(&sys->o[er]);
+		DebugObject(&sys->o[ed]);
 		
 		// the hunted one is reduced to his product
-		sys->o[ed].type = typeSearchName(inf, sys->Stype, sys->o[ed].type->product);
+		sys->o[ed].type = typeSearchName(sys->Stype, sys->o[ed].type->product);
 		
 		// move a percentage p of ed mass in er
 		sys->o[er].mass += sys->o[ed].mass * p;
 		sys->o[ed].mass -= sys->o[ed].mass * p;
 		
-		DebugPrint(inf, "\nafter mass and type");
-		DebugObject(inf, &sys->o[er]);
-		DebugObject(inf, &sys->o[ed]);
+		DebugPrint("\nafter mass and type\n");
+		DebugObject(&sys->o[er]);
+		DebugObject(&sys->o[ed]);
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 		// the hunter volume before
@@ -297,9 +298,9 @@
 		volum -= volum * p;
 		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
-		DebugPrint(inf, "\nafter radius");
-		DebugObject(inf, &sys->o[er]);
-		DebugObject(inf, &sys->o[ed]);
+		DebugPrint("\nafter radius\n");
+		DebugObject(&sys->o[er]);
+		DebugObject(&sys->o[ed]);
 		
 		// move the hunted a bit away and give him some velocity from the hunter
 		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
@@ -341,9 +342,9 @@
 			sys->o[ed].velz = f / sys->o[ed].mass;
 		}
 		
-		DebugPrint(inf, "\nend");
-		DebugObject(inf, &sys->o[er]);
-		DebugObject(inf, &sys->o[ed]);
+		DebugPrint("\nend\n");
+		DebugObject(&sys->o[er]);
+		DebugObject(&sys->o[ed]);
 		
 		return;
 	}
@@ -351,7 +352,7 @@
 	/***
 	 * This function create a new object from the impact of two objects given, as they are two liquid balls whit a coesion very very very high
 	 */
-	tobj MergeObject_Impact(tinf *inf, tobj *oi, tobj *ol) {
+	tobj MergeObject_Impact(tobj *oi, tobj *ol) {
 		
 		// the new object
 		tobj newobj;

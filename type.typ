@@ -115,7 +115,7 @@ DESCRIPTION: A lava planet is a type of terrestrial planet whit the surface comp
 PARENT: Terrestrial planet
 
 NAME: Leviatan
-DESCRIPTION: Enormous dragon of the space, the information about him are few.
+DESCRIPTION: Enormous dragon of the space, the information about him are few
 HUNTER: Y
 PARENT: Space Monster
 
@@ -130,7 +130,7 @@ MASS_MAX: 6e22
 PARENT: Terrestrial planet
 
 NAME: Meteroid
-DESCRIPTION: A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores.
+DESCRIPTION: A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores
 PRODUCT: Micrometeroid
 MASS_MAX: 1e5
 MASS_MIN: 1e-11
@@ -205,7 +205,7 @@ MASS_MAX: 29.863e21
 PARENT: Terrestrial planet
 
 NAME: Terrestrial planet
-DESCRIPTION: A terrestrial planet is a planet composed mainly by rock and metal.
+DESCRIPTION: A terrestrial planet is a planet composed mainly by rock and metal
 PARENT: Planet
 
 NAME: White dwarf

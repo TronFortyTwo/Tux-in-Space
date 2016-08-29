@@ -23,28 +23,13 @@
  */
 
 /***
- * This function scan a string WHIT space
+ * This function scan a string WHIT spaces
+ * NOT. this feature will came, maybe
+ * 
  */
-	void ScanString(char *dest) {
+	void ScanString(char *d) {
 		
-		char string[1024];
-		char c;
-		unsigned int pos;
-		
-		fflush(stdin);
-		
-		// as long as I read characters that aren't \n I read characters
-		scanf("\n %c", string);
-		for(pos = 1;; pos++) {
-			c = getchar();
-			if(c == '\n')
-				break;
-			string[pos] = c;
-		}
-		string[pos] = 0;
-		
-		// move the string in the new location
-		strcpy(dest, string);
+		scanf("%s", d);
 		
 		return;
 	}
@@ -61,9 +46,9 @@
 /*** PrintLine is a function that printf a line of characters
  * 	can be setted a number num of characters that must not printed
  *	*/
-	void PrintLine (tinf *inf, char *character, int num) {
+	void PrintLine (char *character, int num) {
 		int p;	//(p)rinted
-		for ( p=inf->width-num; p!=0; p--) {
+		for ( p=inf.width-num; p!=0; p--) {
 			printf("%c", *character);
 		}
 
@@ -74,8 +59,8 @@
  * SafeIScanf scan an int value more "safely" that the normal scanf() function
  * 
  * */
-	void SafeIScan(tinf *inf, int *dest) {
-		DebugPrint(inf, "safeiscan");
+	void SafeIScan(int *dest) {
+		DebugPrint("safeiscan");
 		
 		//this buffer remember all the input
 		char input[BUFFERINPUTSIZE];
@@ -101,7 +86,7 @@
 			var[0] = input;
 			var[1] = &temp;
 			var[2] = &temp;
-			OPSE (inf, "The number %s that you gave is too big or too small!\n\nPlease, type another number between %i and -%i", var);
+			OPSE ("The number %s that you gave is too big or too small!\n\nPlease, type another number between %i and -%i", var);
 			scanf("%s", input);
 			number = strtoll(input, NULL, 0);
 		}

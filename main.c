@@ -25,7 +25,7 @@
 
 	// Include the header file
 	#include "CS_header.h"
-
+	
 	//
 	//	MAIN FUNCTION
 	//
@@ -34,8 +34,7 @@
 		
 		// INITIALIZATION OF THE PROGRAM
 		
-		// Basic structures
-		tinf inf;
+		// The type structure
 		tStype *Stype;
 		
 		// file pointers
@@ -51,7 +50,7 @@
 		InitConfig(&inf);
 		
 		// print loading and license banner
-		OPS(&inf, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
+		OPS("LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
 		// Initialize debug
 		InitDebug(&inf);
@@ -59,18 +58,18 @@
 		// Initialize Stype structure. (Read the types from a file)
 		Ftype = fopen(TYPE_DATABASE_FILE, "r");
 		if(Ftype != NULL) {
-			Stype = Inittype(Ftype, &inf);
+			Stype = Inittype(Ftype);
 			fclose(Ftype);
 		}
 		else {
-			OPSE(&inf, "Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
+			OPSE("Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
 			getchar();
 			return EXIT_FAILURE;
 		}
 
 		// RUNNING
 		while
-			(Shell (&inf, Stype) != QUITSIGNAL);
+			(Shell (Stype) != QUITSIGNAL);
 		
 		
 		// EXITING THE PROGRAM
@@ -79,7 +78,7 @@
 		FreeStype(Stype);
 		
 		// goodbye message
-		OPS (&inf, "CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);
+		OPS ("CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);
 		
 		return EXIT_SUCCESS;
 	}

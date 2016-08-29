@@ -23,8 +23,8 @@
 	/***
 	 * The function InitObject set the type structure reading it from a file and return his address
 	 */
-	tStype *Inittype (FILE *stream, tinf *inf) {
-		DebugPrint(inf, "Inittype");
+	tStype *Inittype (FILE *stream) {
+		DebugPrint("Inittype");
 		
 		// The type's mean structure (static because is passed to other functions)
 		static tStype Stype;
@@ -49,7 +49,7 @@
 		// alloc enought spaces for all the ttype structure
 		Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 		while(Stype.type == NULL) {
-			OPSML(inf, "Inittype");
+			OPSML("Inittype");
 			Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 		}
 		
@@ -96,7 +96,7 @@
 		ScanFString(buffer, stream);
 		defaultype.product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
 		while(defaultype.product == NULL){
-			OPSML(inf, "initype");
+			OPSML("initype");
 			defaultype.product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
 		}
 		strcpy(defaultype.product, &buffer[9]);
@@ -113,7 +113,7 @@
 			// scan customized values
 			Stype.type[i].name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
 			while(Stype.type[i].name == NULL) {
-				OPSML(inf, "inittype");
+				OPSML("inittype");
 				Stype.type[i].name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
 			}
 			strcpy(Stype.type[i].name, &buffer[6]);	//the name
@@ -161,7 +161,7 @@
 				else if(!strncmp(buffer, "PRODUCT: ", 9)) {					//the product
 					Stype.type[i].product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
 					while(Stype.type[i].product == NULL){
-						OPSML(inf, "initype");
+						OPSML("initype");
 						Stype.type[i].product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
 					}
 					strcpy(Stype.type[i].product, &buffer[9]);
@@ -176,7 +176,7 @@
 		}
 		
 		//finalization
-		PrintStype(inf, &Stype);
+		PrintStype(&Stype);
 		free(defaultype.name);
 		free(defaultype.product);
 		return &Stype;
@@ -185,8 +185,8 @@
 	/***
 	 * Given a name, this function return the pointer to that type. If there isn't any type whit that name return NULL
 	 */
-	ttype *typeSearchName(tinf *inf, tStype *Stype, char *name) {
-		DebugPrint(inf, "typesearchname");
+	ttype *typeSearchName(tStype *Stype, char *name) {
+		DebugPrint("typesearchname");
 		
 		//counter
 		int i;
@@ -197,8 +197,8 @@
 				 return &Stype->type[i];
 		};
 		
-		DebugPrint(inf, "(!) No type whit the name (read below) has been found! This is a bug!");
-		DebugPrint(inf, name);
+		DebugPrint("(!) No type whit the name (read below) has been found! This is a bug!");
+		DebugPrint(name);
 		
 		return NULL;
 	}
@@ -208,13 +208,13 @@
 	/***
 	 * This function return the descripiton of the type name
 	 */ 
-	char *typeDescriptionFromName (tinf *inf, tStype *type, char *name) {
-		DebugPrint(inf, "typedescriptionfromname");
+	char *typeDescriptionFromName (tStype *type, char *name) {
+		DebugPrint("typedescriptionfromname");
 		
 		// pointer to the requested type
 		ttype *type_point;
 		//Search the type whit that name
-		type_point = typeSearchName (inf, type, name);
+		type_point = typeSearchName (type, name);
 		if(type_point!=NULL)
 			return type_point->description;
 		else
@@ -224,13 +224,13 @@
 	/***
 	 * This function return the parent of the type name
 	 */ 
-	char *typeParentFromName (tinf *inf, tStype *type, char *name) {
-		DebugPrint(inf, "typeparentfromname");
+	char *typeParentFromName (tStype *type, char *name) {
+		DebugPrint("typeparentfromname");
 	
 		// pointer to the requested type
 		ttype *type_point;
 		//Search the type whit that name
-		type_point = typeSearchName (inf, type, name);
+		type_point = typeSearchName (type, name);
 		if(type_point!=NULL)
 			return type_point->parent;
 		else
@@ -243,9 +243,9 @@
 	 * file is the source struct
 	 * title is an intestation to write as title
 	 */ 
-	ttype *TypeBrowser(tinf *inf, tStype *Stype, char *title) {
+	ttype *TypeBrowser(tStype *Stype, char *title) {
 		 
-		DebugPrint(inf, "typebrowser");
+		DebugPrint("typebrowser");
 		
 		//in the gerarchic tree of type, is the common parent that the types shown have
 		char commonparent[NAMELUN] = "NULL";
@@ -322,10 +322,10 @@
 			
 			
 			//print
-			OPS(inf, dbuf, NULL);
+			OPS(dbuf, NULL);
 			
 			// scan input
-			SafeIScan(inf, &input);
+			SafeIScan(&input);
 			
 			// make the numbers start from zero
 			input--;
@@ -356,14 +356,14 @@
 			if (input == maxnum-2) {
 				free(npoint);
 				if(strcmp(commonparent, "NULL") != 0)
-					return typeSearchName(inf, Stype, commonparent);
+					return typeSearchName(Stype, commonparent);
 				else
-					return typeSearchName(inf, Stype, "Generic object");
+					return typeSearchName(Stype, "Generic object");
 			}
 			//if is the description button
 			if (input == maxnum-1){
-				OPS(inf, "Of which type of object do you want an explaination? [type its number]", NULL);
-				SafeIScan(inf, &input2);
+				OPS("Of which type of object do you want an explaination? [type its number]", NULL);
+				SafeIScan(&input2);
 				input2--;
 				if (input2 < 0)
 					continue;
@@ -372,8 +372,8 @@
 				//if is the generic object type (that is a strange type) use this particular procedure
 				if(strcmp(commonparent, "NULL") == 0) {
 					if (maxnum-2 == input2) {
-						OPS(inf, "There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", NULL);
-						SafeIScan(inf, &input2);
+						OPS("There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", NULL);
+						SafeIScan(&input2);
 						continue;
 					}
 				}
@@ -417,8 +417,8 @@
 				var[varpos] = & Stype->type[npoint[input2]].color_max.blue;
 				//finalizing the description page
 				strcat(dbuf, "\n\nPress a number to continue");
-				OPS(inf, dbuf, var);
-				SafeIScan(inf, &input2);
+				OPS(dbuf, var);
+				SafeIScan(&input2);
 				continue;
 			}
 			//if is the back button return to the start
