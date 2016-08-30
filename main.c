@@ -42,18 +42,18 @@
 		
 		// initialize the program directories
 		if(InitDir() != GOODSIGNAL) {
-			printf("CSpace:\n\nError: can't create program directories!\nPress something to exit");
+			printf("\n\nCSpace:\n\nError: can't create program directories!\nPress something to exit");
 			getchar();
 			return EXIT_FAILURE;
 		}
 		// Initialize tinf inf from a file
-		InitConfig(&inf);
+		InitConfig();
 		
 		// print loading and license banner
 		OPS("LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", NULL);
 		
-		// Initialize debug
-		InitDebug(&inf);
+		// Initialize the debug
+		InitDebug();
 		
 		// Initialize Stype structure. (Read the types from a file)
 		Ftype = fopen(TYPE_DATABASE_FILE, "r");
@@ -63,9 +63,13 @@
 		}
 		else {
 			OPSE("Can't open the file that conteins the type definitions\nPress a button to exit the program", NULL);
-			getchar();
+			sgetchar();
 			return EXIT_FAILURE;
 		}
+
+		// initialize video if needed
+		if(inf.vmode == V_FREEGLUT)
+			InitGL(argc, argv);
 
 		// RUNNING
 		while
@@ -74,8 +78,8 @@
 		
 		// EXITING THE PROGRAM
 		
-		// free the memory
-		FreeStype(Stype);
+		if(inf.vmode == V_FREEGLUT)
+			CloseGL(argc, argv);
 		
 		// goodbye message
 		OPS ("CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);

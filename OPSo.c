@@ -28,7 +28,7 @@
 		
 		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
 		char buffer[BUFFERSIZE];
-		// the array to give to Rmotor whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
+		// the array to give to Rengine whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
 		void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
 		int pos;
 		// counters

@@ -101,7 +101,7 @@
 		// A temp variable
 		long double temp;
 		
-		//if there is only him, exit
+		// if there is only him, exit
 		if(sys->nactive == 1) {
 			free(list);
 			return;
@@ -115,7 +115,7 @@
 			}
 		}
 		// if there isn't any huntable object, return
-		if (!num) {
+		if (!num) {		// num == 0
 			free(list);
 			return;
 		}
@@ -267,6 +267,7 @@
 		
 		// set p (over 8, under 92)
 		p = RandomInt(8, 92);
+		DebugInt(p);
 		p /= 100;
 		
 		DebugPrint("\nstart\n");
@@ -278,6 +279,7 @@
 		
 		// move a percentage p of ed mass in er
 		sys->o[er].mass += sys->o[ed].mass * p;
+		printf("%Lf", sys->o[er].mass);
 		sys->o[ed].mass -= sys->o[ed].mass * p;
 		
 		DebugPrint("\nafter mass and type\n");

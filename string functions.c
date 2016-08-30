@@ -48,7 +48,7 @@
  *	*/
 	void PrintLine (char *character, int num) {
 		int p;	//(p)rinted
-		for ( p=inf.width-num; p!=0; p--) {
+		for ( p=inf.ops.width-num; p!=0; p--) {
 			printf("%c", *character);
 		}
 
@@ -59,7 +59,7 @@
  * SafeIScanf scan an int value more "safely" that the normal scanf() function
  * 
  * */
-	void SafeIScan(int *dest) {
+	void SafeIScan (int *dest) {
 		DebugPrint("safeiscan");
 		
 		//this buffer remember all the input
@@ -99,6 +99,48 @@
 	}
 
 
+/***
+ * SafeUScanf scan an unsigned int value more "safely" that the normal scanf() function
+ * 
+ * */
+	void SafeUScan (unsigned int *dest) {
+		DebugPrint("safeiscan");
+		
+		//this buffer remember all the input
+		char input[BUFFERINPUTSIZE];
+		//this is the int value saved in buffer
+		long long int number;
+		//int values that are given to OPS
+		void *var[3];
+		//temp variable
+		unsigned long long int temp;
+	
+		//scanf the string
+		ScanString(input);
+		
+		//call the function
+		number = strtoll(input, NULL, 0);
+		
+		// reask the number until the number can fit the int number
+		do {
+			if (number <=  INT_MAX)
+				if (number >= INT_MIN)
+					break;
+			temp = INT_MAX;
+			var[0] = input;
+			var[1] = &temp;
+			var[2] = &temp;
+			OPSE ("The number %s that you gave is too big or too small!\n\nPlease, type another number between %i and -%i", var);
+			scanf("%s", input);
+			number = strtoll(input, NULL, 0);
+		}
+		while (1);
+
+		//assign the value
+		*dest = number;
+
+		return;
+	}
 
 
 

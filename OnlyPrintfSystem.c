@@ -31,7 +31,7 @@
  */
 
  /**Only Printf System */
-	void OPS(char *phrase, void **var) {
+	void OPS(char *phrase, void *var[]) {
 	DebugPrint("ops");
 	
 	//loop counter
@@ -49,7 +49,7 @@
 	// the position in the var array
 	QWORD pos = 0;
 	// the buffer to print, his size and position
-	DWORD size = (inf.width-TWOFRAMELUN) * (inf.height-5) +1;
+	DWORD size = (inf.ops.width-TWOFRAMELUN) * (inf.ops.height-5) +1;
 	char *buf = (char *) malloc (sizeof(char[size]));
 	while (buf == NULL) {
 		OPSML("OPS");
@@ -77,7 +77,7 @@
 			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
-				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf.numprecision, *((long double *)var[pos]) );
+				bufpos += sprintf(&buf[bufpos], "%.*Lf", inf.ops.numprecision, *((long double *)var[pos]) );
 				pos++;
 			}
 			// a string to print
@@ -88,7 +88,7 @@
 			// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 			else if(phrase[chardone] == 'f') {
 				chardone++;
-				for(i=0; i!=inf.width-TWOFRAMELUN; i++) {
+				for(i=0; i!=inf.ops.width-TWOFRAMELUN; i++) {
 					buf[bufpos] = phrase[chardone];
 					bufpos++;
 				}
@@ -131,11 +131,11 @@
 	PrintLine(FRAMEEND, TWOFRAMELUN);
 	printf("%s\n", FRAMER);
 	//printf the buf
-	for(linedone=0; linedone < inf.height-5; linedone++) {
+	for(linedone=0; linedone < inf.ops.height-5; linedone++) {
 		//the frame
 		printf("%s", FRAME);
 		//print the buf
-		for(columndone=0; columndone < inf.width-TWOFRAMELUN; columndone++) {
+		for(columndone=0; columndone < inf.ops.width-TWOFRAMELUN; columndone++) {
 			
 			// PART ONE: check for directives. a directive started whit '&'
 			if (buf[bufpos] == '&') {
@@ -205,7 +205,7 @@
 				PrintLine(" ", columndone+TWOFRAMELUN);
 				bufpos++;
 				// if there is space for more line print the new line
-				if(linedone < inf.height-5) {
+				if(linedone < inf.ops.height-5) {
 					printf("%s\n%s", FRAMER, FRAME);
 					linedone++;
 					columndone = -1;
@@ -230,7 +230,7 @@
 /***
  * OPSE (OnlyPrintfSystemError) printf an error message whit the OPS
  */
-	void OPSE(char *message, void **var){
+	void OPSE(char *message, void *var[]){
 		DebugPrint("opse");
 		
 		//size of message

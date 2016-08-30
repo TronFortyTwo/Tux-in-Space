@@ -16,9 +16,7 @@
 #    along with this program; if not, write to the Free Software							#
 #    Foundation, Inc.																		#
 #############################################################################################
-*/
-
-/***
+ *
  * This is CSpace header file
  * 
  */
@@ -32,10 +30,10 @@
 	#include <limits.h>
 	#include <stdint.h>
 	// Other libraries for linux
-	#include <sys/types.h>
 	#include <sys/stat.h>
-	#include <unistd.h>
 	// OpenGL library
+	#include <GL/freeglut.h>
+
 
 	// Pi
 	#define PI M_PI
@@ -87,7 +85,7 @@
 	// When you alloc the object buffer, this is how many object you delete or create when you resize
 	#define OBJBUFSIZE 4
 	
-	// The frame that Rmotor uses and his size
+	// The frame that Rengine uses and his size
 	#define FRAME "# "
 	#define FRAMER " #"		// FRAME R(ight)
 	#define FRAMELUN 2		// FRAME LENGHT
@@ -120,11 +118,15 @@
 	#define SYSTEM_PATH "Systems/"				// Where save/load objects
 	
 	// Default values for the inf structure
-	#define DEFAULT_HEIGHT 42
-	#define DEFAULT_WIDTH 88
-	#define DEFAULT_DEBUG OFF
-	#define DEFAULT_NUMPRECISION 6
-	#define DEFAULT_V_MODE V_OPS
+	#define DEFAULT_OPS_HEIGHT 			42
+	#define DEFAULT_OPS_WIDTH 			88
+	#define DEFAULT_DEBUG 				OFF
+	#define DEFAULT_OPS_NUMPRECISION 	6
+	#define DEFAULT_V_MODE 				V_OPS
+	#define DEFAULT_GL_WINX				0
+	#define DEFAULT_GL_WINY				0
+	#define DEFAULT_GL_WINW				256
+	#define DEFAULT_GL_WINH				256
 	
 	// A two-in-one function call whitout argurment (safe getchar)
 	#define sgetchar() (scanf(" "), getchar())
@@ -165,13 +167,25 @@
 		ttype *type;			// This is a pointer to the first member of the arrays that conteins all the types
 	} tStype;
 
-	// The structure infostruct is a structure that contein information about the options and other tecnical things 
-	typedef struct info {
-		int vmode;					// Visual mode
-		int width;					// The number of columns that the program use
-		int height;					// The number of lines that the program use
+	/*
+	 * The structure info is a structure that contein information about the options and other tecnical things 
+	 */
+	typedef struct infoOps {
+		unsigned int width;					// The number of columns that the program use
+		unsigned int height;					// The number of lines that the program use
 		unsigned int numprecision;	// Number of character used for printing the deciamal of a long double
-		int debug;
+	} tinfops;
+	
+	typedef struct infoGl {
+		unsigned int winx, winy;			// the position (x, y) of the window in the screen
+		unsigned int winh, winw;			// the dimension (height, width) of the window
+	} tinfgl;
+	
+	typedef struct info {
+		int vmode;		// Visual mode
+		int debug;		// could be ON or OFF
+		tinfops ops;	// OPS settings
+		tinfgl gl;		// Window and OpenGL settings
 	} tinf;
 
 	// definition of the type of the object's structures
@@ -234,6 +248,7 @@
 	ttype *TypeBrowser(tStype *, char *);
 	int Shell (tStype *);
 	void SafeIScan(int *);
+	void SafeUScan (unsigned int *);
 	void PrintLine (char *, int);
 	void ScanFString(char *, FILE *);	
 	void SaveObject(tobj *);
@@ -247,8 +262,8 @@
 	long double RadiusestoVolume (long double, long double);
 	void ScanString(char *dest);
 	// OPS and derivates
-	void OPS(char *, void **);
-	void OPSE(char *, void **);
+	void OPS(char *, void *[]);
+	void OPSE(char *, void *[]);
 	void OPSML(char *);
 	int OPSo (tsys *);
 	// Parser
@@ -279,6 +294,12 @@
 	// color
 	tcolor ScanColor(tcolor, tcolor);
 	int ColorRangeCheck(tcolor, tcolor, tcolor);
+	// debug
+	void PrintStype(tStype *);
+	void DebugPrint(char *);
+	void InitDebug();
+	void DebugObject(tobj *);
+	void DebugInt(int);
  
 // CSpace's functions sorted by dependance
 	#include "debug.c"
@@ -287,10 +308,10 @@
 	#include "interface functions.c"
 	#include "string functions.c"
 	#include "type.c"
+	#include "OpenGL UI.c"
 	#include "OnlyPrintfSystem.c"
 	#include "OPSo.c"
 	#include "menù.c"
 	#include "pmotor.c"
 	#include "Parser.c"
 	#include "shell.c"
-	#include "OpenGL UI.c"

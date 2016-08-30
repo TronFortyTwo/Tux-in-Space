@@ -17,9 +17,8 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * This is the shell that connect the engines and the user
+ * This is the shell that connect everything and is the main program loop
  * 
- * whit some others elaboration in the middle
  */
 	
 	int Shell (tStype *Stype) {
@@ -34,8 +33,13 @@
 		// MENU AND SYSTEM INITIALIZATION
 		
 		while(1) {
+			// here stime.year is used as temp variable
+			if(inf.vmode == V_OPS)
+				stime.year = Menu(Stype);
+			else
+				stime.year = GlMenu(Stype);
 			// Call the mean menù, it tell to shell what to do.
-			switch (Menu(Stype)) {
+			switch (stime.year) {
 				case NEW_SIG:
 					sys = InitSystem(Stype);
 					break;
@@ -55,16 +59,26 @@
 		//
 		
 		stime = sys->stime;
-		while(1) {
-			// call the output system accordingly to inf->vmode (for now can be only OPSo, OpenGL interface implementation is WIP)
-			OPSo (sys);
-			// call the instruction parser and ask him for destination time
-			stime = Parser(sys);
-			// check if the user want to exit
-			if (stime.year == QUITSIGNAL)
-				break;
-			// call the phisic motor
-			Pmotor (sys, stime);
+		// Use the right loop (inf.vmode)
+		if (inf.vmode == V_OPS) {
+			while(stime.year != QUITSIGNAL) {
+				// call the phisic engine
+				Pmotor (sys, stime);
+				// Output
+				OPSo (sys);
+				// call the instruction parser and ask him for destination time
+				stime = Parser(sys);
+			}
+		}
+		else if (inf.vmode == V_FREEGLUT) {
+			while(stime.year != QUITSIGNAL) {
+				// call the phisic engine
+				Pmotor(sys, stime);
+				// output
+				SGLGUI(sys);
+				// instruction parser
+				stime = GLparser(sys);
+			}
 		}
 
 		// delete the system and exit

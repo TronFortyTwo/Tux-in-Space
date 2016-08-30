@@ -24,3 +24,66 @@
  * <-!-> WORK IN PROGRESS <-!->
  * 
  */
+
+
+	/*
+	 * This function initialize freeGLUT and the window
+	 */
+	void InitGL(int argc, char *argv[]){
+		
+		// initialize lut and window
+		glutInit(&argc, argv);
+		glutInitWindowPosition (inf.gl.winx, inf.gl.winy);
+		glutInitWindowSize (inf.gl.winw, inf.gl.winh);
+		glutInitDisplayMode (GLUT_RGBA);
+		// create the window
+		glutCreateWindow("CSpace, the space simulator");
+		
+		return;
+	}
+	
+	/*
+	 * This function finish the work whit the window and close it
+	 */
+	void CloseGL(){
+		
+		// glutDestroyWindow();
+		
+	}
+
+
+	/*
+	 * This is the menù that use FreeGLUT
+	 */
+	int GLMenu (tStype *Stype){
+		
+		return GOODSIGNAL;
+	}
+
+	/*
+	 * 	This is the simulation(S) graphical(GL) interface(GUI)
+	 */
+
+	 void SGLGUI (tsys *sys) {
+	
+		return;
+	}
+	
+	/*
+	 * 	This is the parser using FreeGLUT
+	 */
+	
+	ttime GLparser (tsys *sys) {
+		
+		return sys->stime;
+	}
+	
+	
+	/*
+	 * 	This is the menu
+	 */
+
+	int GlMenu (tStype *Stype) {
+		
+		return NEW_SIG;
+	}

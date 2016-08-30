@@ -85,9 +85,7 @@
  * This function return a "random" int in a range given
  */
 	int RandomInt (int min, int max) {
-		
 		srand(time(NULL));
-		
 		return (rand() % (max - min)) + min;
 	}
 
@@ -236,38 +234,6 @@
 		return GOODSIGNAL;
 	}
 	
-	
-/***
- * Free Stype is a function that free the allocated memory in the structures of type tStype
- */
-	void FreeStype(tStype *Stype){
-		
-		WORD i, l, p=0;						// counters
-		BYTE f;								// flag
-		char *prod[Stype->number];			// the addresses of the string alredy free
-			
-		for(i=0; i!=Stype->number; i++) {
-			// free name
-			free(Stype->type[i].name);
-			
-			// free Stype.type.product
-			prod[i] = NULL;
-			f = 0;
-			// search if in prod[] there is already this address
-			for(l=0; l!=Stype->number; l++)
-				if(prod[l] == Stype->type[i].product)
-					f = 1;
-			if(f == 0){
-				prod[p] = Stype->type[i].product;
-				free(Stype->type[i].product);
-				p++;
-			}
-		}
-		free(Stype->type);
-		
-		return;
-	}
-	
 /***
  * SaveConfig save in a file the config of tinf inf
  */
@@ -275,11 +241,18 @@
 		
 		FILE *cf = fopen(CONFIGURATION_FILE, "w");
 		
-		fprintf(cf, "%d\n", inf.height);
-		fprintf(cf, "%d\n", inf.width);
-		fprintf(cf, "%d\n", inf.debug);
-		fprintf(cf, "%d\n", inf.numprecision);
+		// scan the vmode and debug
 		fprintf(cf, "%d\n", inf.vmode);
+		fprintf(cf, "%d\n", inf.debug);
+		// scan OPS settings
+		fprintf(cf, "%d\n", inf.ops.height);
+		fprintf(cf, "%d\n", inf.ops.width);
+		fprintf(cf, "%d\n", inf.ops.numprecision);
+		// scan Window setting
+		fprintf(cf, "%d\n", inf.gl.winh);
+		fprintf(cf, "%d\n", inf.gl.winw);
+		fprintf(cf, "%d\n", inf.gl.winx);
+		fprintf(cf, "%d\n", inf.gl.winy);
 		
 		fclose(cf);
 		return;
@@ -288,16 +261,23 @@
 /***
  * InitConfig is a function that load from the config file 
  */
-	void InitConfig(tinf *inf) {
+	void InitConfig() {
 		
 		FILE *cf = fopen(CONFIGURATION_FILE, "r");
 		// If there is a file
 		if(cf != NULL) {
-			fscanf(cf, "%d", &inf->height);
-			fscanf(cf, "%d", &inf->width);
-			fscanf(cf, "%d", &inf->debug);
-			fscanf(cf, "%d", &inf->numprecision);
-			fscanf(cf, "%d", &inf->vmode);
+			// scan the vmode and debug
+			fscanf(cf, "%d", &inf.vmode);
+			fscanf(cf, "%d", &inf.debug);
+			// scan OPS settings
+			fscanf(cf, "%d", &inf.ops.height);
+			fscanf(cf, "%d", &inf.ops.width);
+			fscanf(cf, "%d", &inf.ops.numprecision);
+			// scan Window setting
+			fscanf(cf, "%d", &inf.gl.winh);
+			fscanf(cf, "%d", &inf.gl.winw);
+			fscanf(cf, "%d", &inf.gl.winx);
+			fscanf(cf, "%d", &inf.gl.winy);
 			fclose(cf);
 		}
 		// if not, load defaults
@@ -312,11 +292,15 @@
  */
 	void SetDefaultConfig(){
 		
-		inf.height = DEFAULT_HEIGHT;
-		inf.width = DEFAULT_WIDTH;
+		inf.ops.height = DEFAULT_OPS_HEIGHT;
+		inf.ops.width = DEFAULT_OPS_WIDTH;
 		inf.debug = DEFAULT_DEBUG;
-		inf.numprecision = DEFAULT_NUMPRECISION;
+		inf.ops.numprecision = DEFAULT_OPS_NUMPRECISION;
 		inf.vmode = DEFAULT_V_MODE;
+		inf.gl.winh = DEFAULT_GL_WINH;
+		inf.gl.winw = DEFAULT_GL_WINW;
+		inf.gl.winx = DEFAULT_GL_WINX;
+		inf.gl.winy = DEFAULT_GL_WINY;
 
 		return;
 	}

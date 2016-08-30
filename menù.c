@@ -59,36 +59,79 @@
 	/***
 	 * Setting. here can be changed some value of tinf inf
 	 */
-	void Setting() {
-		
-		int i;
-		BYTE quit = OFF;
-		void *var[3];
-		
-		while(quit == OFF) {
-			OPS ("SETTING\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Turn on/off debug\n\n5) Done\n6) Restore defaults", NULL);
+	void OPSsettings() {
+		int i;		 // input variable
+		void *var[1];
+		while(1) {
+			OPS("SETTINGS/OPS\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Back", NULL);
 			SafeIScan(&i);
 			// WIDTH
 			if(i == 1) {
-				var[0] = &inf.width;
-				OPS("SETTING\n\nInsert the new number of columns:\n&tdnow %i", var);
-				SafeIScan(&inf.width);
+				var[0] = &inf.ops.width;
+				OPS("SETTINGS/OPS\n\nInsert the new number of columns:\n&tdnow %i", var);
+				SafeUScan(&inf.ops.width);
 			}
 			// HEIGHT
 			else if(i == 2){
-				var[0] = &inf.height;
-				OPS("SETTING\n\nInsert the new number of lines:\n&tdnow %i", var);
-				SafeIScan(&inf.height);
+				var[0] = &inf.ops.height;
+				OPS("SETTINGS/OPS\n\nInsert the new number of lines:\n&tdnow %i", var);
+				SafeUScan(&inf.ops.height);
 			}
 			// NUMBER PRECISION
 			else if(i == 3){
-				var[0] = &inf.numprecision;
-				OPS("SETTING\n\nInsert the new number decimal printed:\n&tdnow %i", var);
+				var[0] = &inf.ops.numprecision;
+				OPS("SETTINGS/OPS\n\nInsert the new number of deciaml digits printed:\n&tdnow %i", var);
 				SafeIScan(&i);
-				inf.numprecision = i;
+				inf.ops.numprecision = i;
 			}
+			else if(i == 4)
+				return;
+		}
+	}
+	void GLsettings() {
+		int i;		 // input variable
+		void *var[1];
+		while(1) {
+			OPS("SETTINGS/VIDEO\n\n1) Change window width\n2) Change window height\n3) Change window position\n4) Back", NULL);
+			SafeIScan(&i);
+			// WIDTH
+			if(i == 1) {
+				var[0] = &inf.gl.winw;
+				OPS("SETTINGS/VIDEO\n\nInsert the new width: of the window\n&tdnow %i pixels", var);
+				SafeUScan(&inf.gl.winw);
+			}
+			// HEIGHT
+			else if(i == 2){
+				var[0] = &inf.gl.winh;
+				OPS("SETTINGS/VIDEO\n\nInsert the new height of the window:\n&tdnow %i pixels", var);
+				SafeUScan(&inf.gl.winh);
+			}
+			// POSITION
+			else if(i == 3){
+				var[0] = &inf.gl.winx;
+				OPS("SETTINGS/VIDEO\n\nInsert the new x of the window:\n&tdnow %i pixels", var);
+				SafeUScan(&inf.gl.winx);
+				OPS("SETTINGS/VIDEO\n\nInsert the new y of the window:\n&tdnow %i pixels", var);
+				SafeUScan(&inf.gl.winy);
+			}
+			else if(i == 4)
+				return;
+		}
+		
+		return;
+	}
+	 
+	void Setting() {
+		
+		int i;
+		void *var[3];
+		
+		while(1) {
+			OPS ("SETTINGS\n\n1) Turn on/off debug\n2) Select video mode\n3) OPS settings\n4) Video settings\n\n5) Done\n6) Restore defaults", NULL);
+			SafeIScan(&i);
+			
 			// TURN ON / OFF DEBUG
-			else if(i == 4) {
+			if(i == 1) {
 				char debug[2][4];						// Can contein "ON" or "OFF". the first contein the thruth, the second not
 				char debugfile[DEBUG_FILE_LENGHT];		// Contein the debug file name
 				strcpy(debugfile, DEBUG_FILE);
@@ -103,7 +146,7 @@
 				var[0] = &debug[0];
 				var[1] = &debug[1];
 				var[2] = &debugfile;
-				OPS("SETTING\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file '%s' debug information", var);
+				OPS("SETTINGS\n\nNow the debug is %s. Do you want to turn %s the debug? [Y/N]\n&tdthe debug will print in the file '%s' debug information", var);
 				scanf("%s", debug[0]);
 				if((debug[0][0] == 'y') || (debug[0][0] == 'Y')) {
 					if(inf.debug == OFF)
@@ -112,13 +155,34 @@
 						inf.debug = OFF;
 				}
 			}
+			// V_MODE
+			else if(i == 2){
+				char mode[6];
+				if (inf.vmode == V_OPS)
+					strcpy(mode, "OPS");
+				else
+					strcpy(mode, "GLUT");
+				var[0] = &mode;
+				OPS("SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) GLUT --EXPERIMENTAL--", var);
+				SafeIScan(&inf.vmode);
+				if(inf.vmode == 2)
+					inf.vmode = V_FREEGLUT;
+				else
+					inf.vmode = V_OPS;
+			}
+			// OPS settings
+			else if(i == 3)
+				OPSsettings();
+			// GL settings
+			else if(i == 4)
+				GLsettings();
 			// DONE
 			else if(i == 5)
-				quit = ON;
+				break;
 			// RESTORE DEFAULTS
 			else if(i == 6){
 				char input[2];
-				OPS("SETTING\n\nAre you sure you want to restore the settings to the default ones? [y/N]", NULL);
+				OPS("SETTINGS\n\nAre you sure you want to restore the settings to the default ones? [y/N]", NULL);
 				scanf("%s", input);
 				if ((input[0] == 'n') || (input[0] == 'N'))
 					continue;
