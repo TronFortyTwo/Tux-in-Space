@@ -196,9 +196,20 @@
 	}
 
 /***
- * InitSystem is a function that initialize a new system
+ * Switch between the OPS and the GL init system
  */
 	tsys *InitSystem (tStype *Stype) {
+	
+		if(inf.vmode == V_OPS)
+			return InitSystemOPS(Stype);
+		return InitSystemGl(Stype);
+	}
+ 
+
+/***
+ * InitSystemOPS is a function that initialize a new system
+ */
+	tsys *InitSystemOPS (tStype *Stype) {
 		DebugPrint("Initsystem");
 		
 		// var to give to OPS and counter
@@ -240,11 +251,21 @@
 	 	return sys;
 	}
 	
+	/***
+	 * Switch between LoadSystemOPS and LoadSystemGl
+	 */
+	tsys *LoadSystem(tStype *Stype){
+		if(inf.vmode == V_OPS)
+			return LoadSystemOPS(Stype);
+		return LoadSystemGl(Stype);
+	}
+	
+	
 	/**
-	 * Load a system from a file
+	 * Load a system from a file using OPS
 	 * create a new system and return his pointer
 	 */
-	tsys *LoadSystem(tStype *Stype) {
+	tsys *LoadSystemOPS (tStype *Stype) {
 		DebugPrint("loadsystem");
 	
 		char path[NAMELUN+12];	// the file of the system

@@ -55,7 +55,7 @@
 		// Initialize the debug
 		InitDebug();
 		
-		// Initialize Stype structure. (Read the types from a file)
+		// Initialize Stype structure.
 		Ftype = fopen(TYPE_DATABASE_FILE, "r");
 		if(Ftype != NULL) {
 			Stype = Inittype(Ftype);
@@ -67,7 +67,8 @@
 			return EXIT_FAILURE;
 		}
 
-		// initialize video if needed
+		// initialize video
+		inf.gl.winopen = NO;
 		if(inf.vmode == V_FREEGLUT)
 			InitGL(argc, argv);
 
@@ -77,9 +78,6 @@
 		
 		
 		// EXITING THE PROGRAM
-		
-		if(inf.vmode == V_FREEGLUT)
-			CloseGL(argc, argv);
 		
 		// goodbye message
 		OPS ("CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);

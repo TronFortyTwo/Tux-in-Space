@@ -171,14 +171,16 @@
 	 * The structure info is a structure that contein information about the options and other tecnical things 
 	 */
 	typedef struct infoOps {
-		unsigned int width;					// The number of columns that the program use
-		unsigned int height;					// The number of lines that the program use
-		unsigned int numprecision;	// Number of character used for printing the deciamal of a long double
+		unsigned int width;				// The number of columns that the program use
+		unsigned int height;			// The number of lines that the program use
+		unsigned int numprecision;		// Number of character used for printing the deciamal of a long double
 	} tinfops;
 	
 	typedef struct infoGl {
-		unsigned int winx, winy;			// the position (x, y) of the window in the screen
-		unsigned int winh, winw;			// the dimension (height, width) of the window
+		unsigned int winx, winy;	// the position (x, y) of the window in the screen
+		unsigned int winh, winw;	// the dimension (height, width) of the window
+		int wincode;				// the int code of the program window
+		BYTE winopen;				// YES if the window is opened, NO if NOT
 	} tinfgl;
 	
 	typedef struct info {
@@ -254,6 +256,10 @@
 	void SaveObject(tobj *);
 	void InitObject (tobj *, tStype *);
 	tsys *InitSystem (tStype *);
+	tsys *InitSystemOPS (tStype *);
+	tsys *InitSystemGl (tStype *);
+	tsys *LoadSystemOPS (tStype *);
+	tsys *LoadSystemGl (tStype *);
 	void ReduceObjBuf(tsys *);
 	tStype *Inittype (FILE *);
 	char *typeDescriptionFromName (tStype *, char *);

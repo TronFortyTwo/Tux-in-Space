@@ -21,7 +21,7 @@
  * 
  * WARNING:
  * 
- * <-!-> WORK IN PROGRESS <-!->
+ * <-!-> HEAVY WORK IN PROGRESS <-!->
  * 
  */
 
@@ -37,7 +37,8 @@
 		glutInitWindowSize (inf.gl.winw, inf.gl.winh);
 		glutInitDisplayMode (GLUT_RGBA);
 		// create the window
-		glutCreateWindow("CSpace, the space simulator");
+		inf.gl.wincode = glutCreateWindow("CSpace, the space simulator");
+		inf.gl.winopen = YES;
 		
 		return;
 	}
@@ -47,7 +48,7 @@
 	 */
 	void CloseGL(){
 		
-		// glutDestroyWindow();
+		glutDestroyWindow(inf.gl.wincode);
 		
 	}
 
@@ -85,5 +86,39 @@
 
 	int GlMenu (tStype *Stype) {
 		
-		return NEW_SIG;
+		return QUITSIGNAL;
 	}
+
+	/*
+	 * Initialize the system
+	 */
+	tsys *InitSystemGl(tStype *Stype) {
+		
+		tsys *sys;
+		sys = (tsys *) malloc (sizeof(tsys));
+		while (sys == NULL) {
+			OPSML("sys");
+			sys = (tsys *) malloc (sizeof(tsys));
+		}
+		
+		return sys;
+	}
+
+	/*
+	 * Load a system
+	 */
+	tsys *LoadSystemGl(tStype *Stype) {
+		
+		tsys *sys;
+		sys = (tsys *) malloc (sizeof(tsys));
+		while (sys == NULL) {
+			OPSML("sys");
+			sys = (tsys *) malloc (sizeof(tsys));
+		}
+		
+		return sys;
+	}
+
+
+
+

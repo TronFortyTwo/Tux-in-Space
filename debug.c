@@ -42,7 +42,7 @@
 /***
  * This function print in the debug file the attributes of an object
  */
-	void DebugObject(tobj *obj){
+	void DebugObject(tobj *obj) {
 		
 		if(inf.debug == OFF)
 			return;
