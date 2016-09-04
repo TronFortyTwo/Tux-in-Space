@@ -43,7 +43,7 @@
 		// initialize the program directories
 		if(InitDir() != GOODSIGNAL) {
 			printf("\n\nCSpace:\n\nError: can't create program directories!\nPress something to exit");
-			getchar();
+			sgetchar();
 			return EXIT_FAILURE;
 		}
 		// Initialize tinf inf from a file

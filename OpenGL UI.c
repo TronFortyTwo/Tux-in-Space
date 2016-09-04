@@ -25,21 +25,35 @@
  * 
  */
 
-
+	/*
+	 * This function clear the window
+	 */
+	void ClearWindow() {
+		 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glutSwapBuffers();
+		
+		return;
+	}
+	 
 	/*
 	 * This function initialize freeGLUT and the window
 	 */
 	void InitGL(int argc, char *argv[]){
 		
-		// initialize lut and window
+		// initializing
 		glutInit(&argc, argv);
-		glutInitWindowPosition (inf.gl.winx, inf.gl.winy);
-		glutInitWindowSize (inf.gl.winw, inf.gl.winh);
-		glutInitDisplayMode (GLUT_RGBA);
+		glutInitWindowPosition(inf.gl.winx, inf.gl.winy);
+		glutInitWindowSize(inf.gl.winw, inf.gl.winh);
+		glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 		// create the window
 		inf.gl.wincode = glutCreateWindow("CSpace, the space simulator");
 		inf.gl.winopen = YES;
-		
+		// clean the window
+		glutDisplayFunc(*ClearWindow);
+		glutMainLoop();
+
 		return;
 	}
 	

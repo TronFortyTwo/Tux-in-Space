@@ -73,10 +73,10 @@
 	// The size of a type's description. It must is bigger than NAMELUN
 	#define DESCRIPTIONSIZE 512
 	
-	//the size of a buffer of character
+	// the size of a buffer of character
 	#define BUFFERSIZE 1024
 	
-	//max lenght of the buffer used by SafeScan function
+	// max lenght of the buffer used by SafeScan function
 	#define BUFFERINPUTSIZE 32
 	
 	// the max lenght of a command word
@@ -93,11 +93,11 @@
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 
-	//constant used by the Impacts function (Pmotor)
+	// constant used by the Impacts function (Pmotor)
 	#define BIGGER_TOLERANCE 1.3
 	#define COLOR_PREDOMINANCE 1.35
 	
-	//this are the code that refer to a template (AIB)(see template.which)
+	// this are the code that refer to a template (AIB)(see template.which)
 	#define TEMPLATE_IRREGULAR 0
 	#define TEMPLATE_POINT 1
 	#define TEMPLATE_CIRCLE 2
@@ -123,8 +123,8 @@
 	#define DEFAULT_DEBUG 				OFF
 	#define DEFAULT_OPS_NUMPRECISION 	6
 	#define DEFAULT_V_MODE 				V_OPS
-	#define DEFAULT_GL_WINX				0
-	#define DEFAULT_GL_WINY				0
+	#define DEFAULT_GL_WINX				128
+	#define DEFAULT_GL_WINY				128
 	#define DEFAULT_GL_WINW				256
 	#define DEFAULT_GL_WINH				256
 	
@@ -252,7 +252,7 @@
 	void SafeIScan(int *);
 	void SafeUScan (unsigned int *);
 	void PrintLine (char *, int);
-	void ScanFString(char *, FILE *);	
+	void ScanFString(char *, FILE *);
 	void SaveObject(tobj *);
 	void InitObject (tobj *, tStype *);
 	tsys *InitSystem (tStype *);

@@ -270,11 +270,6 @@
 		// set p (over 8, under 92)
 		p = (double) RandomInt(8, 92);
 		p /= 100.0;
-		DebugDouble(p);
-		
-		DebugPrint("\nstart\n");
-		DebugObject(&sys->o[er]);
-		DebugObject(&sys->o[ed]);
 		
 		// the hunted one is reduced to his product
 		sys->o[ed].type = typeSearchName(sys->Stype, sys->o[ed].type->product);
