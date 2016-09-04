@@ -17,4 +17,4 @@ You are encouraged enjoy and test this program.
 
 Status
 ------
-The program is in alpha status: this mean that the program is far away from being complete, but is alredy usable.
+The program is in alpha status: this mean that the program is far away from being complete.
