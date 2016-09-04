@@ -40,6 +40,21 @@
 
 
 /***
+ * This function print a double in the debug file
+ */
+	void DebugDouble(double n) {
+		
+		if(inf.debug == OFF)
+			return;
+		
+		char buffer[32];
+		snprintf(buffer, 32, "%lf", n);
+		DebugPrint(buffer);
+		
+		return;
+	}
+
+/***
  * This function print in the debug file the attributes of an object
  */
 	void DebugObject(tobj *obj) {

@@ -257,18 +257,20 @@
 	void Hunting_Impact(tsys *sys, int er, int ed) {
 		
 		// a random number that is the (p)ercentage that the hunter eats of the hunted /100
-		int p;
+		double p;
 		// a variable that store the volume of an object
 		double volum;
 		// a force variable
 		long double f;
 		// indicate in which direction the hunter is faster
 		WORD faster;
+		// the velocity of the hunter in three axis
+		long double vx, vy, vz;
 		
 		// set p (over 8, under 92)
-		p = RandomInt(8, 92);
-		DebugInt(p);
-		p /= 100;
+		p = (double) RandomInt(8, 92);
+		p /= 100.0;
+		DebugDouble(p);
 		
 		DebugPrint("\nstart\n");
 		DebugObject(&sys->o[er]);
@@ -279,12 +281,7 @@
 		
 		// move a percentage p of ed mass in er
 		sys->o[er].mass += sys->o[ed].mass * p;
-		printf("%Lf", sys->o[er].mass);
 		sys->o[ed].mass -= sys->o[ed].mass * p;
-		
-		DebugPrint("\nafter mass and type\n");
-		DebugObject(&sys->o[er]);
-		DebugObject(&sys->o[ed]);
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 		// the hunter volume before
@@ -300,20 +297,26 @@
 		volum -= volum * p;
 		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
-		DebugPrint("\nafter radius\n");
-		DebugObject(&sys->o[er]);
-		DebugObject(&sys->o[ed]);
-		
 		// move the hunted a bit away and give him some velocity from the hunter
 		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
-		if (sys->o[er].velx > sys->o[er].vely) {
-			if(sys->o[er].velx > sys->o[er].velz)
+		// We use the absolute value of the velocity
+		vx = sys->o[er].velx;
+		if(vx < 0)
+			vx = -vx;
+		vy = sys->o[er].vely;
+		if(vy < 0)
+			vy = -vy;
+		vz = sys->o[er].velz;
+		if(vz < 0)
+			vz = -vz;
+		if (vx > vy) {
+			if(vx > vz)
 				faster = X_AXIS;
 			else
 				faster = Z_AXIS;
 		}
 		else {
-			if(sys->o[er].vely > sys->o[er].velz)
+			if(vy > vz)
 				faster = Y_AXIS;
 			else
 				faster = Z_AXIS;
@@ -321,32 +324,40 @@
 		// if x is the fastest
 		if(faster == X_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
-			sys->o[ed].x += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(sys->o[ed].x > sys->o[er].x)
+				sys->o[ed].x += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			else
+				sys->o[ed].x -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
 			// transimit half of the hunter fast on the hunted (f = m*a)
 			f = sys->o[er].velx * sys->o[er].mass /2;
 			sys->o[ed].velx = f / sys->o[ed].mass;
+			sys->o[er].velx /= 2;
 			
 		}
 		// if y is the fastest
 		else if(faster == Y_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
-			sys->o[ed].y += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(sys->o[ed].y > sys->o[er].y)
+				sys->o[ed].y += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			else
+				sys->o[ed].y -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
 			// transimit half of the hunter fast on the hunted (f = m*a)
 			f = sys->o[er].vely * sys->o[er].mass /2;
 			sys->o[ed].vely = f / sys->o[ed].mass;
+			sys->o[er].vely /= 2;
 		}
 		// if z is the fastest
 		else {
 			// move the hunted away from the hunter enought to not touch it
-			sys->o[ed].z += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(sys->o[ed].z > sys->o[er].z)
+				sys->o[ed].z += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			else
+				sys->o[ed].z -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
 			// transimit half of the hunter fast on the hunted	(f = m*a)
 			f = sys->o[er].velz * sys->o[er].mass /2;
 			sys->o[ed].velz = f / sys->o[ed].mass;
+			sys->o[er].velz /= 2;
 		}
-		
-		DebugPrint("\nend\n");
-		DebugObject(&sys->o[er]);
-		DebugObject(&sys->o[ed]);
 		
 		return;
 	}
