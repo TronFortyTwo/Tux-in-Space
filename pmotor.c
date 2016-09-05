@@ -186,11 +186,11 @@
 	 * Impacts between object
 	 * HERE THERE IS MUCH MUCH MUCH WORK TO DO IT MORE REALISTIC AND ACCURATE
 	 * for example:
-	 * 	- elastics hits
+	 * 	- elastics hits (WIP)
 	 * 	- hit that take time
 	 * 	- partial hit
 	 * 	- creation of moon, asteroids, debris and other objects from hits
-	 * 	- special hit mechanics depending on the types of the objects (WIP)
+	 * 	- special hit mechanics depending on the types of the objects (Partial)
 	 */
 	void Impacts(tsys *sys) {
 		
@@ -217,9 +217,9 @@
 				// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
 				
 				if((sys->o[i].type->hunter == YES) && (sys->o[l].type->hunted == YES))
-					Hunting_Impact(sys, i, l);
+					Hunting_Impact(sys->Stype, &sys->o[i], &sys->o[l]);
 				else if((sys->o[i].type->hunted == YES) && (sys->o[l].type->hunter == YES))
-					Hunting_Impact(sys, l, i);
+					Hunting_Impact(sys->Stype, &sys->o[l], &sys->o[i]);
 					
 				// regular impact whit merging
 				else {
@@ -247,6 +247,13 @@
 		
 		return;
 	}
+	
+	/***
+	 * This function simulate an elastic hit
+	 */
+	void ElasticImpact(tobj *o, tobj *u) {
+		
+	}
 
 	/***
 	 * This function simulate when an hunter 'eats' a hunted object
@@ -254,10 +261,10 @@
 	 * sys->o[er] is the object huntER
 	 * sys->o[ed] is the object huntED
 	 */
-	void Hunting_Impact(tsys *sys, int er, int ed) {
+	void Hunting_Impact(tStype *Stype, tobj *ed, tobj *er) {
 		
 		// a random number that is the (p)ercentage that the hunter eats of the hunted /100
-		double p;
+		float p;
 		// a variable that store the volume of an object
 		double volum;
 		// a force variable
@@ -267,41 +274,41 @@
 		// the velocity of the hunter in three axis
 		long double vx, vy, vz;
 		
-		// set p (over 8, under 92)
-		p = (double) RandomInt(8, 92);
+		// set p (over 50, under 92)
+		p = (float) RandomInt(50, 92);
 		p /= 100.0;
 		
 		// the hunted one is reduced to his product
-		sys->o[ed].type = typeSearchName(sys->Stype, sys->o[ed].type->product);
+		ed->type = typeSearchName(Stype, ed->type->product);
 		
 		// move a percentage p of ed mass in er
-		sys->o[er].mass += sys->o[ed].mass * p;
-		sys->o[ed].mass -= sys->o[ed].mass * p;
+		er->mass += ed->mass * p;
+		ed->mass -= ed->mass * p;
 		
 		// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 		// the hunter volume before
-		volum = 4/3 * PI * sys->o[er].radius * sys->o[er].radius * sys->o[er].radius;
+		volum = 4/3 * PI * er->radius * er->radius * er->radius;
 		// the hunter volume after
-		volum +=  (4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius) * p;	// volum += volum_eated
+		volum +=  (4/3 * PI * ed->radius * ed->radius * ed->radius) * p;	// volum += volum_eated
 		// the hunter radius compute from the new volume
-		sys->o[er].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		er->radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
 		// the hunted volume before
-		volum = 4/3 * PI * sys->o[ed].radius * sys->o[ed].radius * sys->o[ed].radius;
+		volum = 4/3 * PI * ed->radius * ed->radius * ed->radius;
 		// reduce the hunted volume
 		volum -= volum * p;
-		sys->o[ed].radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
+		ed->radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
 		// move the hunted a bit away and give him some velocity from the hunter
 		// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
 		// We use the absolute value of the velocity
-		vx = sys->o[er].velx;
+		vx = er->velx;
 		if(vx < 0)
 			vx = -vx;
-		vy = sys->o[er].vely;
+		vy = er->vely;
 		if(vy < 0)
 			vy = -vy;
-		vz = sys->o[er].velz;
+		vz = er->velz;
 		if(vz < 0)
 			vz = -vz;
 		if (vx > vy) {
@@ -319,39 +326,39 @@
 		// if x is the fastest
 		if(faster == X_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
-			if(sys->o[ed].x > sys->o[er].x)
-				sys->o[ed].x += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(ed->x > er->x)
+				ed->x += ed->radius + er->radius + 0.01 + Distance(ed, er);
 			else
-				sys->o[ed].x -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+				ed->x -= ed->radius + er->radius + 0.01 + Distance(ed, er);
 			// transimit half of the hunter fast on the hunted (f = m*a)
-			f = sys->o[er].velx * sys->o[er].mass /2;
-			sys->o[ed].velx = f / sys->o[ed].mass;
-			sys->o[er].velx /= 2;
+			f = er->velx * er->mass /2;
+			ed->velx = f / ed->mass;
+			er->velx /= 2;
 			
 		}
 		// if y is the fastest
 		else if(faster == Y_AXIS) {
 			// move the hunted away from the hunter enought to not touch it
-			if(sys->o[ed].y > sys->o[er].y)
-				sys->o[ed].y += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(ed->y > er->y)
+				ed->y += ed->radius + er->radius + 0.01 + Distance(ed, er);
 			else
-				sys->o[ed].y -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+				ed->y -= ed->radius + er->radius + 0.01 + Distance(ed, er);
 			// transimit half of the hunter fast on the hunted (f = m*a)
-			f = sys->o[er].vely * sys->o[er].mass /2;
-			sys->o[ed].vely = f / sys->o[ed].mass;
-			sys->o[er].vely /= 2;
+			f = er->vely * er->mass /2;
+			ed->vely = f / ed->mass;
+			er->vely /= 2;
 		}
 		// if z is the fastest
 		else {
 			// move the hunted away from the hunter enought to not touch it
-			if(sys->o[ed].z > sys->o[er].z)
-				sys->o[ed].z += sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+			if(ed->z > er->z)
+				ed->z += ed->radius + er->radius + 0.01 + Distance(ed, er);
 			else
-				sys->o[ed].z -= sys->o[ed].radius + sys->o[er].radius + 0.01 + Distance(&sys->o[ed], &sys->o[er]);
+				ed->z -= ed->radius + er->radius + 0.01 + Distance(ed, er);
 			// transimit half of the hunter fast on the hunted	(f = m*a)
-			f = sys->o[er].velz * sys->o[er].mass /2;
-			sys->o[ed].velz = f / sys->o[ed].mass;
-			sys->o[er].velz /= 2;
+			f = er->velz * er->mass /2;
+			ed->velz = f / ed->mass;
+			er->velz /= 2;
 		}
 		
 		return;

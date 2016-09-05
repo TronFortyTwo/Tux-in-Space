@@ -33,8 +33,28 @@
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		glutSwapBuffers();
+	}
+	
+	/*
+	 * This function reshape the window
+	 */
+	void ChangeSize(int w, int h) {
 		
-		return;
+		// Prevent a divide by zero, when window is too short
+		if(h == 0)
+			h = 1;
+		float ratio = 1.0 * w / h;
+
+		// Use the Projection Matrix
+		glMatrixMode(GL_PROJECTION);
+        // Reset Matrix
+		glLoadIdentity();
+		// Set the viewport to be the entire window
+		glViewport(0, 0, w, h);
+		// Set the correct perspective.
+		gluPerspective(45,ratio,1,1000);
+		// Get Back to the Modelview
+		glMatrixMode(GL_MODELVIEW);
 	}
 	 
 	/*
@@ -50,27 +70,33 @@
 		// create the window
 		inf.gl.wincode = glutCreateWindow("CSpace, the space simulator");
 		inf.gl.winopen = YES;
-		// clean the window
-		glutDisplayFunc(*ClearWindow);
-		glutMainLoop();
-
-		return;
+		// clean the window and start the loop
+		glutDisplayFunc(ClearWindow);
+		glutReshapeFunc(ChangeSize);
+		glutMainLoopEvent();
 	}
 	
 	/*
 	 * This function finish the work whit the window and close it
 	 */
 	void CloseGL(){
-		
+
 		glutDestroyWindow(inf.gl.wincode);
-		
 	}
 
 
 	/*
 	 * This is the menù that use FreeGLUT
 	 */
+	void DisplayMenu() {
+		
+		
+	}
+	
 	int GLMenu (tStype *Stype){
+		
+		glutDisplayFunc(DisplayMenu);
+		glutMainLoop();
 		
 		return GOODSIGNAL;
 	}

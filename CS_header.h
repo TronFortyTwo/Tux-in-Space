@@ -295,7 +295,8 @@
 	void HunterIA(tsys *);
 	void HunterIA_single(tsys *, tobj *);
 	tobj MergeObject_Impact (tobj *, tobj *);
-	void Hunting_Impact(tsys *, int, int);
+	void Hunting_Impact(tStype *, tobj *, tobj *);
+	void ElasticImpact(tobj *, tobj *);
 	long double Distance(tobj *i, tobj *l);
 	// color
 	tcolor ScanColor(tcolor, tcolor);

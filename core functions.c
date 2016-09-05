@@ -82,7 +82,7 @@
 	}
 
 /***
- * This function return a "random" int in a range given
+ * This function return a "random" int in a range given, but the gap can't be greater than 100
  */
 	int RandomInt (int min, int max) {
 		srand(time(NULL));
@@ -122,7 +122,6 @@
 			sys->o = NULL;
 		//exit
 		free(newo);
-		return;
 	}
 	
 /***
@@ -150,7 +149,6 @@
 			free(sys->o);
 		// point sys->o at the new buffer
 		sys->o = newo;
-		return;
 	}
 	
 	
@@ -194,8 +192,6 @@
 	
 		OPS("SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", NULL);
 		scanf("%s", input);		
-	
-		return;
 	}
 	
 /***
@@ -207,11 +203,9 @@
  */
 	void WriteObject (FILE *stream, tobj *obj) {
 		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf", obj->name, obj->type->name, obj->color.red, obj->color.green, obj->color.blue, obj->radius, obj->mass);
-		return;
 	}
 	void WriteObjectComplete (FILE *stream, tobj *obj) {
 		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", obj->name, obj->type->name, obj->color.red, obj->color.green,obj->color.blue, obj->radius, obj->mass, obj->x, obj->y, obj->z, obj->velx, obj->vely, obj->velz);
-		return;
 	}
 	int ReadObject (FILE *stream, tobj *obj, tStype *Stype) {
 		char type[NAMELUN];
@@ -255,7 +249,6 @@
 		fprintf(cf, "%d\n", inf.gl.winy);
 		
 		fclose(cf);
-		return;
 	}
 	
 /***
@@ -283,8 +276,6 @@
 		// if not, load defaults
 		else 
 			SetDefaultConfig(inf);
-		
-		return; 
 	}
 	
 /***
