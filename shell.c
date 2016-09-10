@@ -70,7 +70,7 @@
 				stime = Parser(sys);
 			}
 		}
-		else if (inf.vmode == V_FREEGLUT) {
+		else if (inf.vmode == V_SDL) {
 			while(stime.year != QUITSIGNAL) {
 				// call the phisic engine
 				Pmotor(sys, stime);

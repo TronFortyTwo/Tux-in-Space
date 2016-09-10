@@ -1,6 +1,7 @@
 //////////////////////////////////////
 COMPLING UNDER OTHER OPERATIVE SYSTEMS
 //////////////////////////////////////
+
 For now the only know issue about compiling in other operative systems is the function InitDir() in the "core function.c" file
 that cannot be compiled under windows. You can rewrite it for windows using system.h (I guess), or remove it and manually create the folders.
 

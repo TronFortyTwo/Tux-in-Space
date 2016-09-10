@@ -31,8 +31,7 @@
 	#include <stdint.h>
 	// Other libraries for linux
 	#include <sys/stat.h>
-	// OpenGL library
-	#include <GL/freeglut.h>
+	// SDL library
 
 
 	// Pi
@@ -107,7 +106,7 @@
 
 	// The video mode
 	#define V_OPS 0
-	#define V_FREEGLUT 1
+	#define V_SDL 1
 	
 	// The files
 	#define DEBUG_FILE "debug.dbg"				// Where are printed debug information
@@ -315,7 +314,7 @@
 	#include "interface functions.c"
 	#include "string functions.c"
 	#include "type.c"
-	#include "OpenGL UI.c"
+	#include "SDL core.c"
 	#include "OnlyPrintfSystem.c"
 	#include "OPSo.c"
 	#include "menù.c"

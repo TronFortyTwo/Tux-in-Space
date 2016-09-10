@@ -244,15 +244,15 @@
 		// If some impacts happened, restart to recheck for impact from start
 		if (impacts == YES)
 			Impacts(sys);
-		
-		return;
 	}
 	
 	/***
 	 * This function simulate an elastic hit
+	 * 
+	 * NOTE:
+	 *	WIP
 	 */
 	void ElasticImpact(tobj *o, tobj *u) {
-		
 	}
 
 	/***
@@ -270,11 +270,12 @@
 		// a force variable
 		long double f;
 		// indicate in which direction the hunter is faster
-		WORD faster;
+		BYTE faster;
 		// the velocity of the hunter in three axis
 		long double vx, vy, vz;
 		
 		// set p (over 50, under 92)
+		// over 50 because elsewhere the hunter could collide in the hunted after this impact
 		p = (float) RandomInt(50, 92);
 		p /= 100.0;
 		
@@ -360,8 +361,6 @@
 			ed->velz = f / ed->mass;
 			er->velz /= 2;
 		}
-		
-		return;
 	}
 
 	/***

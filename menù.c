@@ -163,10 +163,10 @@
 				else
 					strcpy(mode, "GLUT");
 				var[0] = &mode;
-				OPS("SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) GLUT --EXPERIMENTAL--", var);
+				OPS("SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) SDL --EXPERIMENTAL--", var);
 				SafeIScan(&inf.vmode);
 				if(inf.vmode == 2)
-					inf.vmode = V_FREEGLUT;
+					inf.vmode = V_SDL;
 				else
 					inf.vmode = V_OPS;
 			}

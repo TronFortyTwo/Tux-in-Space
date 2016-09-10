@@ -69,7 +69,7 @@
 
 		// initialize video
 		inf.gl.winopen = NO;
-		if(inf.vmode == V_FREEGLUT)
+		if(inf.vmode == V_SDL)
 			InitGL(argc, argv);
 
 		// RUNNING
