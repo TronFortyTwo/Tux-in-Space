@@ -224,18 +224,18 @@
 				// regular impact whit merging
 				else {
 					// write the new object in the first of the two position
-					// then move the last object in the last of the two position
-					// set the first and the last
+					// then move the new object in the last of the two position
+					// TODO: Make this part of the code use AutoRemoveObject()
 					if (i < l) {
+						CleanObject(&sys->o[i]);
 						sys->o[i] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
-						sys->o[l] = sys->o[sys->nactive-1];
+						sys->o[l] = sys->o[--sys->nactive];
 					}
 					else {
+						CleanObject(&sys->o[l]);
 						sys->o[l] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
-						sys->o[i] = sys->o[sys->nactive-1];
+						sys->o[i] = sys->o[--sys->nactive];
 					}
-					sys->nactive--;
-					// if necessary resize the object buffer
 					if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
 						ReduceObjBuf(sys);
 				}

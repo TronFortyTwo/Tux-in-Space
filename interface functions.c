@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * HERE we have functions that help whit the interface system of the program 
+ * HERE we have high-level program function
  * 
  */
  
@@ -39,6 +39,11 @@
 		char color_irregularity[3];	// assume the value IRREGULARITY if the color is out of range
 		
 		// Initialize the object whit blank attributes
+		obj->name = (char *) malloc (sizeof(char[strlen("Chose a name for your new object")]));
+		while(obj->name == NULL){
+			OPSML("InitObject");
+			obj->name = (char *) malloc (sizeof(char[strlen("Chose a name for your new object")]));
+		}
 		strcpy(obj->name, "Chose a name for your new object");
 		obj->type = typeSearchName(Stype, "Choose a type");
 		obj->mass = 0;
@@ -52,6 +57,7 @@
 		obj->velx = 0;
 		obj->vely = 0;
 		obj->velz = 0;
+		obj->data = NULL;
 		
 		// the loop
 		strcpy(comment, " ");
@@ -82,10 +88,16 @@
 		
 			// Name
 			if(input == 1) {
+				// a temp variable
+				TNAME name;
 				temp = NAMELUN-1;
 				var[0] = &temp;
 				OPS ("INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character and can't contein spaces", var);
-				ScanString(obj->name);
+				ScanString(name);
+				// apply the new name
+				free(obj->name);
+				obj->name = (char *) malloc (sizeof(strlen(name)));
+				strcpy(obj->name, name);
 				strcpy(comment, "\nNew name assigned succefully!");
 			}
 			// Type
@@ -138,15 +150,18 @@
 			}
 			// LOAD
 			else if(input == 8) {
+				// free the name
+				free(obj->name);
+				// load the object
 				temp = LoadObject(obj, Stype, obj->name);
 				strcpy(comment, "\n");
 				if (temp == GOODSIGNAL)									//load success
 					strcat(comment, "New object loaded succefully!");
 				else { 													//load failed
-					strcat(comment, "Can't load the object!");
+					strcat(comment, "Can't load the object! ");
 					if (temp == FILE_ERR_SIG)
 						strcat(comment, "No object whit that name found!");
-					else 		//CORRUPTED_SIG
+					else 		//temp == CORRUPTED_SIG
 						strcat(comment, "File corrupted or outdated!");
 				}
 			}
@@ -196,7 +211,7 @@
 	}
 
 /***
- * Switch between the OPS and the GL init system
+ * Switch between the OPS and the GL system initialization
  */
 	tsys *InitSystem (tStype *Stype) {
 	
@@ -308,7 +323,7 @@
 		for(i=0; i!=sys->nactive; i++) {
 			if(ReadObjectComplete(dest, &sys->o[i], Stype) == CORRUPTED_SIG) {
 				DebugPrint("(!) the system to load seem corrupted or outdated!");
-				DebugPrint(sys->o[i].type->name);
+				DebugPrint(sys->o[i].name);
 			}
 		}
 		fclose(dest);

@@ -19,6 +19,8 @@
  *
  * HERE we are starting to build an OpenGL interface using SDL
  * 
+ * This is the file that contein the core of the interface, others will come soon
+ * 
  * WARNING:
  * 
  * <-!-> HEAVY WORK IN PROGRESS <-!->

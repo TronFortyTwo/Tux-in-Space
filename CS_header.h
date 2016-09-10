@@ -192,7 +192,7 @@
 	// definition of the type of the object's structures
 	// structure of one object
 	typedef struct object {
-		TNAME name;				// the name of the object (es.: Earth, My_Planet, Moon)
+		char *name;				// the name of the object (es.: Earth, My_Planet, Moon)
 		ttype *type;			// the type of object.
 		long double	radius;		// the object for now are sphere
 		long double mass;		// the mass
@@ -203,6 +203,7 @@
 		long double vely;		// the fast of the movement in y
 		long double velz;		// the fast of the movement in z
 		tcolor color;			// the color
+		void *data;				// type specific information about the object
 	} tobj;
 	
 	//in this structure is conteined a moment

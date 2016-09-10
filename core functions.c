@@ -17,9 +17,33 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * HERE we have functions that help whit the core system of the program
+ * HERE we have low-level functions that help whit the core system of the program
  * 
  */
+
+/***
+ * 	This function delete an object freeing the memory
+ */
+	void CleanObject(tobj *obj) {
+		// free the name
+		free(obj->name);
+	}
+
+/***
+ * This function Delete an object from the system object buffer in an automatic way, ehitout the need of more free() or sys->nactive--, and resize the buffer. all the code is packed here
+ * So, call it whitout worry
+ * p is the position of the object
+ */
+	void AutoRemoveObject (tsys *sys, int p) {
+		// Move the last object in the p position, update counters and free memory
+		CleanObject(&sys->o[p]);
+		sys->o[p] = sys->o[--sys->nactive];
+		// if necessary resize the object buffer
+		if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
+			ReduceObjBuf(sys);
+	}
+ 
+ 
  
 /***
  * The load object function load from a file the information about a object
@@ -208,21 +232,39 @@
 		fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", obj->name, obj->type->name, obj->color.red, obj->color.green,obj->color.blue, obj->radius, obj->mass, obj->x, obj->y, obj->z, obj->velx, obj->vely, obj->velz);
 	}
 	int ReadObject (FILE *stream, tobj *obj, tStype *Stype) {
-		char type[NAMELUN];
-		ScanFString(obj->name, stream);
-		ScanFString(type, stream);
+		TNAME buffer;	// temporany buffer that store the name of the object and the name of the name of the type of the object
+		// scan the name
+		ScanFString(buffer, stream);
+		obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		while (obj->name == NULL) {
+			OPSML("ReadObject");
+			obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		}
+		strcpy(obj->name, buffer);
+		// scan the type
+		ScanFString(buffer, stream);
+		obj->type = typeSearchName(Stype, buffer);
+		// scan all the other things
 		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass);
-		obj->type = typeSearchName(Stype, type);
 		if (obj->type == NULL)
 			return CORRUPTED_SIG;
 		return GOODSIGNAL;
 	}
 	int ReadObjectComplete (FILE *stream, tobj *obj, tStype *Stype) {
-		char type[NAMELUN];
-		ScanFString(obj->name, stream);
-		ScanFString(type, stream);
+		TNAME buffer;
+		// scan the name
+		ScanFString(buffer, stream);
+		obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		while (obj->name == NULL) {
+			OPSML("ReadObjectComplete");
+			obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		}
+		strcpy(obj->name, buffer);
+		// scan the type
+		ScanFString(buffer, stream);
+		obj->type = typeSearchName(Stype, buffer);
+		// scan the other stuff
 		fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass, &obj->x, &obj->y, &obj->z, &obj->velx, &obj->vely, &obj->velz);
-		obj->type = typeSearchName(Stype, type);
 		if (obj->type == NULL)
 			return CORRUPTED_SIG;
 		return GOODSIGNAL;

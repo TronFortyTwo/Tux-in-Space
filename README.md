@@ -1,5 +1,5 @@
 # CSpace
-CSpace: the C space's simulator
+CSpace: the space's simulator
 
 This program is a simulator game. The program simulates the moving, under the phisic's law, of planets, spaceships, suns, and everything else in the deep space.
 Now have:
@@ -11,7 +11,7 @@ for test/use the program:
 -------------------------
 There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
 You need freeGLUT packages installed, also the dev ones.
-You can compile the program easily whit "gcc -Wall -o main.c cspace -lm -lGL -lGLU -lglut" in the master directory.
+You can compile the program easily whit "gcc -Wall -o main.c cspace -lm" in the master directory.
 The program is programmed for linux only, but whit very few work can also run on other operative systems. (See information file)
 You are encouraged enjoy and test this program.
 

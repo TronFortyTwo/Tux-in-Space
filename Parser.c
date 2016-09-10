@@ -165,8 +165,9 @@
 		
 		TNAME name;			//the name of the object
 		tobj *obj;			//the pointer to the object
+		int p;				//the position of obj in the object buffer
 		
-		//ask the user for the name
+		// ask the user for the name
 		OPS("Which object do you want do delete?\n\n&t1Press 'n' to quit", NULL);
 		ScanString(name);
 		if (!strcmp(name, "n")) {
@@ -174,20 +175,16 @@
 			return;
 		}
 		
-		//search the object
+		// search the object
 		obj = SearchObject(sys, name);
 		if (obj == NULL) {	//if there isn't any object whit that name
 			OPSE("There isn't any object whit that name!\n\nInsert a new command", NULL);
 			return;
 		}
 		
-		//delete the object moving the last object in the position of this object, and, if needed resize the object buffer
-		*obj = sys->o[sys->nactive-1];		
-		sys->nactive--;
-		if (sys->nalloc - sys->nactive >= OBJBUFSIZE)
-			ReduceObjBuf(sys);
-		
-		return;
+		// delete the object moving the last object in the position of this object, and, if needed resize the object buffer
+		p = (obj - sys->o) / sizeof(tobj);
+		AutoRemoveObject(sys, p);
 	}
 	
 	/***
