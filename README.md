@@ -1,5 +1,5 @@
 # CSpace
-CSpace: the space's simulator
+CSpace: the space simulator
 
 This program is a simulator game. The program simulates the moving, under the phisic's law, of planets, spaceships, suns, and everything else in the deep space.
 Now have:
