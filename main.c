@@ -70,7 +70,8 @@
 		// initialize video
 		inf.gl.winopen = NO;
 		if(inf.vmode == V_SDL)
-			InitGL(argc, argv);
+			if(InitGL() == BADSIGNAL)
+				return EXIT_FAILURE;
 
 		// RUNNING
 		while

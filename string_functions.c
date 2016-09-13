@@ -22,6 +22,8 @@
  * 
  */
 
+#include "CS_header.h"
+
 /***
  * This function scan a string WHIT spaces
  * NOT. this feature will came, maybe

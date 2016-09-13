@@ -21,6 +21,8 @@
  * 
  */
  
+#include "CS_header.h"
+ 
 /***
  * 	The function InitObject initialize a new object and ask information about it
  * 

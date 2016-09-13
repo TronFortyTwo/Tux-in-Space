@@ -20,6 +20,10 @@
  * In this file there are functions that manage types and type.typ file
  * 
  */
+ 
+#include "CS_header.h"
+  
+
 	/***
 	 * The function InitObject set the type structure reading it from a file and return his address
 	 */

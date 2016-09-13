@@ -26,12 +26,39 @@
  * <-!-> HEAVY WORK IN PROGRESS <-!->
  * 
  */
+ 
+#include "CS_header.h"
+#include <SDL2/SDL.h>
+
 	/*
 	 * This function initialize SDL and the window
 	 */
-	void InitGL(int argc, char *argv[]){
+	BYTE InitGL(){
+		/*
+		inf.gl.win = NULL;	// Our window
+		inf.gl.sur = NULL;
 		
-	
+		// initialize SDL
+		if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+			char error[128];	// the error
+			void *var = error;
+			strcpy(error, SDL_GetError());
+			OPSE("Cannot initialize SDL library! Error: %s", &var);
+			return BADSIGNAL;
+		}
+		// create the window
+		inf.gl.win = SDL_CreateWindow("CSpace: The space simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		// Quit if failed to load the window
+		if(inf.gl.win == NULL) {
+			char error[128];
+			void *var = error;
+			strcpy(error, SDL_GetError());
+			OPSE("Cannot create window! SDL Error: %s", &var);
+			return BADSIGNAL;
+		}
+		
+		return GOODSIGNAL;
+		*/
 	}
 	
 	/*

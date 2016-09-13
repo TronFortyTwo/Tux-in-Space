@@ -30,6 +30,8 @@
  * 
  */
 
+#include "CS_header.h"
+
  /**Only Printf System */
 	void OPS(char *phrase, void *var[]) {
 		DebugPrint("ops");

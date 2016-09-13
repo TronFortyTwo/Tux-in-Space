@@ -32,7 +32,7 @@
 	// Other libraries for linux
 	#include <sys/stat.h>
 	// SDL library
-
+	#include <SDL2/SDL.h>
 
 	// Pi
 	#define PI M_PI
@@ -44,6 +44,10 @@
 	#define OFF 0
 	#define NO OFF
 	#define YES ON
+		
+	// Window size
+	#define SCREEN_WIDTH 256
+	#define SCREEN_HEIGHT 256
 		
 	// The three axis must have different codes
 	#define X_AXIS 0
@@ -122,10 +126,6 @@
 	#define DEFAULT_DEBUG 				OFF
 	#define DEFAULT_OPS_NUMPRECISION 	6
 	#define DEFAULT_V_MODE 				V_OPS
-	#define DEFAULT_GL_WINX				128
-	#define DEFAULT_GL_WINY				128
-	#define DEFAULT_GL_WINW				256
-	#define DEFAULT_GL_WINH				256
 	
 	// A two-in-one function call whitout argurment (safe getchar)
 	#define sgetchar() (scanf(" "), getchar())
@@ -176,9 +176,8 @@
 	} tinfops;
 	
 	typedef struct infoGl {
-		unsigned int winx, winy;	// the position (x, y) of the window in the screen
-		unsigned int winh, winw;	// the dimension (height, width) of the window
-		int wincode;				// the int code of the program window
+		SDL_Window *win;			// the window
+		SDL_Surface *sur;
 		BYTE winopen;				// YES if the window is opened, NO if NOT
 	} tinfgl;
 	
@@ -233,11 +232,13 @@
 	// THE INF STRUCTURE, THE ONLY GLOBAL VARIABLE
 	//
 	tinf inf;
-	
+
 	
 	// System functions
 	BYTE InitDir();
+	void InitConfig();
 	void SetDefaultConfig();
+	void SaveConfig();
 	void Setting();
 	int	LoadObject(tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
@@ -261,18 +262,23 @@
 	tsys *LoadSystemOPS (tStype *);
 	tsys *LoadSystemGl (tStype *);
 	void ReduceObjBuf(tsys *);
+	void ExtendObjBuf(tsys *);
 	tStype *Inittype (FILE *);
 	char *typeDescriptionFromName (tStype *, char *);
 	ttype *typeSearchName (tStype *, char *);
 	char *typeParentFromName (tStype *, char *);
 	long double RadiusestoVolume (long double, long double);
-	void ScanString(char *dest);
+	void ScanString(char *);
+	void AutoRemoveObject(tsys *, int);
+	void CleanObject(tobj *);
+	int RandomInt (int, int);
 	// OPS and derivates
 	void OPS(char *, void *[]);
 	void OPSE(char *, void *[]);
 	void OPSML(char *);
 	int OPSo (tsys *);
 	// Parser
+	ttime Parser(tsys *);
 	void Reask(char *);
 	void SaveSys(tsys *);
 	void Create(tsys *);
@@ -307,18 +313,9 @@
 	void InitDebug();
 	void DebugObject(tobj *);
 	void DebugInt(int);
- 
-// CSpace's functions sorted by dependance
-	#include "debug.c"
-	#include "color.c"
-	#include "core functions.c"
-	#include "interface functions.c"
-	#include "string functions.c"
-	#include "type.c"
-	#include "SDL core.c"
-	#include "OnlyPrintfSystem.c"
-	#include "OPSo.c"
-	#include "menù.c"
-	#include "pmotor.c"
-	#include "Parser.c"
-	#include "shell.c"
+	// SDL
+	BYTE InitGL();
+	int GlMenu(tStype *);
+	tsys *LoadSystem(tStype *);
+	void SGLGUI (tsys *);
+	ttime GLparser (tsys *);

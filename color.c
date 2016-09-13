@@ -20,6 +20,8 @@
  * In this file there are things correlated whit colors (very few)
  */
 
+#include "CS_header.h"
+
 /***
  * The ScanColor function get a color and return it
  */

@@ -26,6 +26,8 @@
  * 		- 'Intelligence' of the hunters
  */
  
+#include "CS_header.h"
+ 
 	void Pmotor (tsys *sys, ttime dest) {
 		DebugPrint("pmotor");
 		

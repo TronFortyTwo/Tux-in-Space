@@ -23,6 +23,8 @@
  * 
  */
 
+#include "CS_header.h"
+
 	int OPSo (tsys *sys) {
 		DebugPrint("opso");
 		

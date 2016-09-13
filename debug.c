@@ -23,6 +23,8 @@
  * debugging function that you can call from everywhere easily 
  */
 
+#include "CS_header.h"
+
 /***
  * This function print an int in the debug file
  */

@@ -21,6 +21,9 @@
  * The returning value is a number that shell needs for know what do
  * 
  */
+ 
+#include "CS_header.h"
+ 
 	int Menu(tStype *Stype) {
 		DebugPrint("menu");
 		
@@ -90,31 +93,10 @@
 	}
 	void GLsettings() {
 		int i;		 // input variable
-		void *var[1];
 		while(1) {
-			OPS("SETTINGS/VIDEO\n\n1) Change window width\n2) Change window height\n3) Change window position\n4) Back", NULL);
+			OPS("SETTINGS/VIDEO\n\n1) Back", NULL);
 			SafeIScan(&i);
-			// WIDTH
-			if(i == 1) {
-				var[0] = &inf.gl.winw;
-				OPS("SETTINGS/VIDEO\n\nInsert the new width: of the window\n&tdnow %i pixels", var);
-				SafeUScan(&inf.gl.winw);
-			}
-			// HEIGHT
-			else if(i == 2){
-				var[0] = &inf.gl.winh;
-				OPS("SETTINGS/VIDEO\n\nInsert the new height of the window:\n&tdnow %i pixels", var);
-				SafeUScan(&inf.gl.winh);
-			}
-			// POSITION
-			else if(i == 3){
-				var[0] = &inf.gl.winx;
-				OPS("SETTINGS/VIDEO\n\nInsert the new x of the window:\n&tdnow %i pixels", var);
-				SafeUScan(&inf.gl.winx);
-				OPS("SETTINGS/VIDEO\n\nInsert the new y of the window:\n&tdnow %i pixels", var);
-				SafeUScan(&inf.gl.winy);
-			}
-			else if(i == 4)
+			if(i == 1)
 				return;
 		}
 		

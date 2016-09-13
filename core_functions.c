@@ -21,6 +21,8 @@
  * 
  */
 
+#include "CS_header.h"
+
 /***
  * 	This function delete an object freeing the memory
  */
@@ -284,11 +286,6 @@
 		fprintf(cf, "%d\n", inf.ops.height);
 		fprintf(cf, "%d\n", inf.ops.width);
 		fprintf(cf, "%d\n", inf.ops.numprecision);
-		// scan Window setting
-		fprintf(cf, "%d\n", inf.gl.winh);
-		fprintf(cf, "%d\n", inf.gl.winw);
-		fprintf(cf, "%d\n", inf.gl.winx);
-		fprintf(cf, "%d\n", inf.gl.winy);
 		
 		fclose(cf);
 	}
@@ -308,11 +305,6 @@
 			fscanf(cf, "%d", &inf.ops.height);
 			fscanf(cf, "%d", &inf.ops.width);
 			fscanf(cf, "%d", &inf.ops.numprecision);
-			// scan Window setting
-			fscanf(cf, "%d", &inf.gl.winh);
-			fscanf(cf, "%d", &inf.gl.winw);
-			fscanf(cf, "%d", &inf.gl.winx);
-			fscanf(cf, "%d", &inf.gl.winy);
 			fclose(cf);
 		}
 		// if not, load defaults
@@ -330,10 +322,6 @@
 		inf.debug = DEFAULT_DEBUG;
 		inf.ops.numprecision = DEFAULT_OPS_NUMPRECISION;
 		inf.vmode = DEFAULT_V_MODE;
-		inf.gl.winh = DEFAULT_GL_WINH;
-		inf.gl.winw = DEFAULT_GL_WINW;
-		inf.gl.winx = DEFAULT_GL_WINX;
-		inf.gl.winy = DEFAULT_GL_WINY;
 
 		return;
 	}
