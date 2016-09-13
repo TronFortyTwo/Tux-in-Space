@@ -225,27 +225,79 @@
 					
 				// regular impact whit merging
 				else {
+					tobj temp = MergeObject_Impact (&sys->o[i], &sys->o[l]);
 					// write the new object in the first of the two position
 					// then move the new object in the last of the two position
-					// TODO: Make this part of the code use AutoRemoveObject()
 					if (i < l) {
-						CleanObject(&sys->o[i]);
-						sys->o[i] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
-						sys->o[l] = sys->o[--sys->nactive];
+						MoveObject(&temp, &sys->o[i]);
+						MoveObject(&sys->o[--sys->nactive], &sys->o[l]);
 					}
 					else {
-						CleanObject(&sys->o[l]);
-						sys->o[l] = MergeObject_Impact (&sys->o[i], &sys->o[l]);
-						sys->o[i] = sys->o[--sys->nactive];
+						MoveObject(&temp, &sys->o[l]);
+						MoveObject(&sys->o[--sys->nactive], &sys->o[i]);
 					}
-					if(sys->nalloc - sys->nactive >= OBJBUFSIZE)
-						ReduceObjBuf(sys);
+					UpdateObjBuf(sys);
 				}
 			}
 		}
 		// If some impacts happened, restart to recheck for impact from start
 		if (impacts == YES)
 			Impacts(sys);
+	}
+	
+	/***
+	 * This function create a new object from the impact of two objects given, as they are two liquid balls whit a coesion very very very high
+	 */
+	tobj MergeObject_Impact(tobj *oi, tobj *ol) {
+		
+		// the new object
+		tobj newobj;
+		// the two objects
+		tobj *bigger;			// the bigger is the object that, relatively, is being hit by the smaller
+		tobj *smaller;			// the smaller is the object that fuse whit the bigger and lose personality
+		
+		// set the bigger and the smaller
+		ComputeBigger(oi, ol, &bigger);
+		if(oi == bigger)
+			smaller = ol;
+		else
+			smaller = oi;
+		// The new object mantein the name of the bigger. The new object is written in the bigger position
+		newobj.name = (char *) malloc (sizeof(char[strlen(bigger->name)]));
+		strcpy(newobj.name, bigger->name);
+		// the type is the type of the bigger
+		newobj.type = bigger->type;
+		// the color is the average, but considering the radius and the type's range
+		newobj.color.blue = ((bigger->color.blue * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.blue * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		newobj.color.green = ((bigger->color.green * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.green * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		newobj.color.red = ((bigger->color.red * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.red * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+		
+		if(newobj.color.blue > newobj.type->color_max.blue)
+			newobj.color.blue = newobj.type->color_max.blue;
+		else if(newobj.color.blue < newobj.type->color_min.blue)
+			newobj.color.blue = newobj.type->color_min.blue;
+		if(newobj.color.red > newobj.type->color_max.red)
+			newobj.color.red = newobj.type->color_max.red;
+		else if(newobj.color.red < newobj.type->color_min.red)
+			newobj.color.red = newobj.type->color_min.red;
+		if(newobj.color.green > newobj.type->color_max.green)
+			newobj.color.green = newobj.type->color_max.green;
+		else if(newobj.color.green < newobj.type->color_min.green)
+			newobj.color.green = newobj.type->color_min.green;
+		// the mass is the sum
+		newobj.mass = oi->mass + ol->mass;
+		// the coordinates are the average
+		newobj.x = ((oi->x * oi->mass) + (ol->x * ol->mass)) / (ol->mass + oi->mass);
+		newobj.y = ((oi->y * oi->mass) + (ol->y * ol->mass)) / (ol->mass + oi->mass);
+		newobj.z = ((oi->z * oi->mass) + (ol->z * ol->mass)) / (ol->mass + oi->mass);
+		// the velocity is the average
+		newobj.velx = ((oi->velx * oi->mass) + (ol->velx * ol->mass)) / (ol->mass + oi->mass);
+		newobj.vely = ((oi->vely * oi->mass) + (ol->vely * ol->mass)) / (ol->mass + oi->mass);
+		newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
+		// to calculate the radius we calculate the volum of the two object,
+		newobj.radius = RadiusestoVolume(oi->radius, ol->radius);
+		
+		return newobj;
 	}
 	
 	/***
@@ -365,60 +417,7 @@
 		}
 	}
 
-	/***
-	 * This function create a new object from the impact of two objects given, as they are two liquid balls whit a coesion very very very high
-	 */
-	tobj MergeObject_Impact(tobj *oi, tobj *ol) {
-		
-		// the new object
-		tobj newobj;
-		// the two objects
-		tobj *bigger;			// the bigger is the object that, relatively, is being hit by the smaller
-		tobj *smaller;			// the smaller is the object that fuse whit the bigger and lose personality
-		
-		// set the bigger and the smaller
-		ComputeBigger(oi, ol, &bigger);
-		if(oi == bigger)
-			smaller = ol;
-		else
-			smaller = oi;
-		// The new object mantein the name of the bigger. The new object is written in the bigger position
-		newobj.name = (char *) malloc (sizeof(char[strlen(bigger->name)]));
-		strcpy(newobj.name, bigger->name);
-		// the type is the type of the bigger
-		newobj.type = bigger->type;
-		// the color is the average, but considering the radius and the type's range
-		newobj.color.blue = ((bigger->color.blue * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.blue * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
-		newobj.color.green = ((bigger->color.green * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.green * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
-		newobj.color.red = ((bigger->color.red * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.red * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
-		
-		if(newobj.color.blue > newobj.type->color_max.blue)
-			newobj.color.blue = newobj.type->color_max.blue;
-		else if(newobj.color.blue < newobj.type->color_min.blue)
-			newobj.color.blue = newobj.type->color_min.blue;
-		if(newobj.color.red > newobj.type->color_max.red)
-			newobj.color.red = newobj.type->color_max.red;
-		else if(newobj.color.red < newobj.type->color_min.red)
-			newobj.color.red = newobj.type->color_min.red;
-		if(newobj.color.green > newobj.type->color_max.green)
-			newobj.color.green = newobj.type->color_max.green;
-		else if(newobj.color.green < newobj.type->color_min.green)
-			newobj.color.green = newobj.type->color_min.green;
-		// the mass is the sum
-		newobj.mass = oi->mass + ol->mass;
-		// the coordinates are the average
-		newobj.x = ((oi->x * oi->mass) + (ol->x * ol->mass)) / (ol->mass + oi->mass);
-		newobj.y = ((oi->y * oi->mass) + (ol->y * ol->mass)) / (ol->mass + oi->mass);
-		newobj.z = ((oi->z * oi->mass) + (ol->z * ol->mass)) / (ol->mass + oi->mass);
-		// the velocity is the average
-		newobj.velx = ((oi->velx * oi->mass) + (ol->velx * ol->mass)) / (ol->mass + oi->mass);
-		newobj.vely = ((oi->vely * oi->mass) + (ol->vely * ol->mass)) / (ol->mass + oi->mass);
-		newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
-		// to calculate the radius we calculate the volum of the two object,
-		newobj.radius = RadiusestoVolume(oi->radius, ol->radius);
-		
-		return newobj;
-	}
+
 
 
 

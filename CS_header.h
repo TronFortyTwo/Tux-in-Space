@@ -269,7 +269,9 @@
 	char *typeParentFromName (tStype *, char *);
 	long double RadiusestoVolume (long double, long double);
 	void ScanString(char *);
-	void AutoRemoveObject(tsys *, int);
+	void AutoRemoveObject (tsys *, tobj *);
+	void MoveObject (tobj *, tobj *);
+	void UpdateObjBuf(tsys *);
 	void CleanObject(tobj *);
 	int RandomInt (int, int);
 	// OPS and derivates

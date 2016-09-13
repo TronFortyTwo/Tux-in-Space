@@ -184,9 +184,8 @@
 			return;
 		}
 		
-		// delete the object moving the last object in the position of this object, and, if needed resize the object buffer
-		p = (obj - sys->o) / sizeof(tobj);
-		AutoRemoveObject(sys, p);
+		// delete the object
+		AutoRemoveObject(sys, obj);
 	}
 	
 	/***
