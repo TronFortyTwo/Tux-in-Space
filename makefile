@@ -1,7 +1,5 @@
 cspace: color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o
-		gcc -o cspace color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o CS_header.h -lm
-main.o: main.c CS_header.h
-	cc -c main.c -lm
+		gcc -o  cspace color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o CS_header.h -lm -lSDL2
 color.o: color.c CS_header.h
 	cc -c color.c -lm
 core_functions.o: core_functions.c CS_header.h
@@ -30,3 +28,5 @@ type.o: type.c CS_header.h
 	cc -c type.c -lm
 clean:
 	rm color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o
+main.o: main.c CS_header.h
+	cc -c main.c -lm

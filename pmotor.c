@@ -383,8 +383,9 @@
 		else
 			smaller = oi;
 		// The new object mantein the name of the bigger. The new object is written in the bigger position
+		newobj.name = (char *) malloc (sizeof(char[strlen(bigger->name)]));
 		strcpy(newobj.name, bigger->name);
-		// the type is the type of the bigger, so is alredy written
+		// the type is the type of the bigger
 		newobj.type = bigger->type;
 		// the color is the average, but considering the radius and the type's range
 		newobj.color.blue = ((bigger->color.blue * bigger->radius *COLOR_PREDOMINANCE) + (smaller->color.blue * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);

@@ -162,7 +162,7 @@
 			else if(i == 5)
 				break;
 			// RESTORE DEFAULTS
-			else if(i == 6){
+			else if(i == 6) {
 				char input[2];
 				OPS("SETTINGS\n\nAre you sure you want to restore the settings to the default ones? [y/N]", NULL);
 				scanf("%s", input);

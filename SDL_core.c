@@ -34,7 +34,7 @@
 	 * This function initialize SDL and the window
 	 */
 	BYTE InitGL(){
-		/*
+		
 		inf.gl.win = NULL;	// Our window
 		inf.gl.sur = NULL;
 		
@@ -58,7 +58,7 @@
 		}
 		
 		return GOODSIGNAL;
-		*/
+		
 	}
 	
 	/*
