@@ -62,26 +62,24 @@ int Shell (tStype *Stype) {
 		
 	stime = sys->stime;
 	// Use the right loop (inf.vmode)
-	if (inf.vmode == V_OPS) {
+	if (inf.vmode == V_OPS)
 		while(stime.year != QUITSIGNAL) {
 			// call the phisic engine
-			Pmotor (sys, stime);
+			Pengine (sys, stime);
 			// Output
 			OPSo (sys);
 			// call the instruction parser and ask him for destination time
 			stime = Parser(sys);
 		}
-	}
-	else if (inf.vmode == V_SDL) {
+	else if (inf.vmode == V_SDL)
 		while(stime.year != QUITSIGNAL) {
 			// call the phisic engine
-			Pmotor(sys, stime);
+			Pengine(sys, stime);
 			// output
 			SGLGUI(sys);
 			// instruction parser
 			stime = GLparser(sys);
 		}
-	}
 
 	// delete the system and exit
 	free(sys->o);

@@ -26,7 +26,7 @@
 /***
  * The load object function load from a file the information about a object
  */
-	int LoadObject(tobj *obj, tStype *Stype, char *name) {
+	BYTE LoadObject(tobj *obj, tStype *Stype, char *name) {
 		DebugPrint("loadobject");
 		
 		FILE *ofile;				// (the) o(bject) file

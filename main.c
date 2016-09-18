@@ -18,9 +18,9 @@
 #############################################################################################
 
 
-#################################################################################################################################################
-# This is the Main function of the program but doesn't do much, is a launchpad for compiling and esecution and contein files' initialization	#
-#################################################################################################################################################
+#################################################################
+# This is the Main function and contein program initialization	#
+#################################################################
 */
 
 	// Include the header file
@@ -68,7 +68,6 @@
 		}
 
 		// initialize video
-		inf.gl.winopen = NO;
 		if(inf.vmode == V_SDL)
 			if(InitGL() == BADSIGNAL)
 				return EXIT_FAILURE;
@@ -82,6 +81,9 @@
 		
 		// goodbye message
 		OPS ("CSPACE\n\n%f-&t5SEE YOU LATER!", NULL);
+		
+		// quit SDL (note taht the function is called always, this is wanted)
+		CloseGL();
 		
 		return EXIT_SUCCESS;
 	}

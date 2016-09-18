@@ -60,15 +60,14 @@
 	// A three char string that represent a picture of ALLERT or ATTENCTION
 	#define IRREGULARITY "(!)"
 	
-	// Values returned by functions (the two mean)
+	// Values returned by functions
 	#define GOODSIGNAL 1
-	#define BADSIGNAL 2	
-	// Advanced returned signals
+	#define BADSIGNAL 2
 	#define FILE_ERR_SIG 3
 	#define CORRUPTED_SIG 4
 	#define NEW_SIG 5
 	#define LOAD_SIG 6
-	#define QUITSIGNAL 7			// The value that the variable ttime.year assumes if the user want to quit
+	#define QUITSIGNAL -1			// is even the value that the variable ttime.year assumes if the user want to quit, so must be negative!
 	
 	// The lenght of a name of an object, a system or a type
 	#define NAMELUN 64
@@ -96,7 +95,7 @@
 	#define FRAMESTART "#"
 	#define FRAMEEND " "
 
-	// constant used by the Impacts function (Pmotor)
+	// constant used by the Impacts function (Pengine)
 	#define BIGGER_TOLERANCE 1.3
 	#define COLOR_PREDOMINANCE 1.35
 	
@@ -177,8 +176,10 @@
 	
 	typedef struct infoGl {
 		SDL_Window *win;			// the window
-		SDL_Surface *sur;
-		BYTE winopen;				// YES if the window is opened, NO if NOT
+		BYTE SDLinit;				// YES if SDL is initialized, NO if not
+		BYTE winopen;				// YES if the window is opened, NO if not
+		float framerate;			// the framerate wanted of the program
+		
 	} tinfgl;
 	
 	typedef struct info {
@@ -202,7 +203,7 @@
 		long double vely;		// the fast of the movement in y
 		long double velz;		// the fast of the movement in z
 		tcolor color;			// the color
-		void *data;				// type specific information about the object
+		// void *data;				// type specific information about the object (coming soon)
 	} tobj;
 	
 	//in this structure is conteined a moment
@@ -240,7 +241,7 @@
 	void SetDefaultConfig();
 	void SaveConfig();
 	void Setting();
-	int	LoadObject(tobj *, tStype *, char *);
+	BYTE LoadObject(tobj *, tStype *, char *);
 	long double Pitagora(long double, long double, long double);
 	long double Pitagora2D(long double, long double);
 	tobj *SearchObject(tsys *, char *);
@@ -295,8 +296,8 @@
 	void WriteObjectComplete (FILE *, tobj *);
 	int ReadObject (FILE *, tobj *, tStype *);
 	int ReadObjectComplete (FILE *, tobj *, tStype *);
-	// Pmotor
-	void Pmotor (tsys *, ttime dest);
+	// Pengine
+	void Pengine (tsys *, ttime dest);
 	void Gravity(tsys *);
 	void Inertia(tsys *);
 	void Impacts(tsys *);
@@ -308,7 +309,7 @@
 	long double Distance(tobj *i, tobj *l);
 	// color
 	tcolor ScanColor(tcolor, tcolor);
-	int ColorRangeCheck(tcolor, tcolor, tcolor);
+	BYTE ColorRangeCheck(tcolor, tcolor, tcolor);
 	// debug
 	void PrintStype(tStype *);
 	void DebugPrint(char *);
@@ -318,6 +319,7 @@
 	// SDL
 	BYTE InitGL();
 	int GlMenu(tStype *);
+	void CloseGL();
 	tsys *LoadSystem(tStype *);
 	void SGLGUI (tsys *);
 	ttime GLparser (tsys *);

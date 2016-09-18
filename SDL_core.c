@@ -19,14 +19,17 @@
  *
  * HERE we are starting to build an OpenGL interface using SDL
  * 
- * This is the file that contein the core of the interface, others will come soon
+ * This is the file that contein the core of the SDL interface,
+ * Initialization, closing and low-level stuff
+ * 
  * 
  * WARNING:
  * 
  * <-!-> HEAVY WORK IN PROGRESS <-!->
+ * I'm not jokking. HEAVY wip.
  * 
  */
- 
+
 #include "CS_header.h"
 #include <SDL2/SDL.h>
 
@@ -36,26 +39,45 @@
 	BYTE InitGL(){
 		
 		inf.gl.win = NULL;	// Our window
-		inf.gl.sur = NULL;
 		
 		// initialize SDL
 		if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-			char error[128];	// the error
+			char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+			while(error == NULL){
+				OPSML("InitGL");
+				error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+			}
 			void *var = error;
 			strcpy(error, SDL_GetError());
 			OPSE("Cannot initialize SDL library! Error: %s", &var);
+			free(error);
+			inf.gl.SDLinit = NO;
+			sgetchar();
+			SDL_Quit();
 			return BADSIGNAL;
 		}
+		// if the program get here SDL is intialized
+		inf.gl.SDLinit = YES;
 		// create the window
 		inf.gl.win = SDL_CreateWindow("CSpace: The space simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		// Quit if failed to load the window
 		if(inf.gl.win == NULL) {
-			char error[128];
+			char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+			while(error == NULL){
+				OPSML("InitGL");
+				error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+			}
 			void *var = error;
 			strcpy(error, SDL_GetError());
 			OPSE("Cannot create window! SDL Error: %s", &var);
+			free(error);
+			inf.gl.winopen = NO;
+			sgetchar();
+			SDL_Quit();
 			return BADSIGNAL;
 		}
+		// If nothing happened, the window is created succefully
+		inf.gl.winopen = YES;
 		
 		return GOODSIGNAL;
 		
@@ -64,82 +86,11 @@
 	/*
 	 * This function finish the work whit the window and close it
 	 */
-	void CloseGL(){
-
+	void CloseGL() {
+		// destroy the window if is created
+		if(inf.gl.winopen == YES)
+			SDL_DestroyWindow (inf.gl.win);
+		// quit SDL if SDL is initialized
+		if(inf.gl.SDLinit == YES)
+			SDL_Quit ();
 	}
-
-
-	/*
-	 * This is the menù that use SDL
-	 */
-	void DisplayMenu() {
-		
-		
-	}
-	
-	int GLMenu (tStype *Stype){
-		
-		return GOODSIGNAL;
-	}
-
-	/*
-	 * 	This is the simulation(S) graphical(GL) interface(GUI)
-	 */
-
-	 void SGLGUI (tsys *sys) {
-	
-		return;
-	}
-	
-	/*
-	 * 	This is the parser using SDL
-	 */
-	
-	ttime GLparser (tsys *sys) {
-		
-		return sys->stime;
-	}
-	
-	
-	/*
-	 * 	This is the menu
-	 */
-
-	int GlMenu (tStype *Stype) {
-		
-		return QUITSIGNAL;
-	}
-
-	/*
-	 * Initialize the system
-	 */
-	tsys *InitSystemGl(tStype *Stype) {
-		
-		tsys *sys;
-		sys = (tsys *) malloc (sizeof(tsys));
-		while (sys == NULL) {
-			OPSML("sys");
-			sys = (tsys *) malloc (sizeof(tsys));
-		}
-		
-		return sys;
-	}
-
-	/*
-	 * Load a system
-	 */
-	tsys *LoadSystemGl(tStype *Stype) {
-		
-		tsys *sys;
-		sys = (tsys *) malloc (sizeof(tsys));
-		while (sys == NULL) {
-			OPSML("sys");
-			sys = (tsys *) malloc (sizeof(tsys));
-		}
-		
-		return sys;
-	}
-
-
-
-

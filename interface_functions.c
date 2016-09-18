@@ -59,7 +59,6 @@
 		obj->velx = 0;
 		obj->vely = 0;
 		obj->velz = 0;
-		obj->data = NULL;
 		
 		// the loop
 		strcpy(comment, " ");
@@ -238,6 +237,7 @@
 			OPSML("sys");
 			sys = (tsys *) malloc (sizeof(tsys));
 		}
+		sys->o = NULL;
 		
 		// set the type struct pointer
 		sys->Stype = Stype;
@@ -263,7 +263,6 @@
 		
 		sys->nactive = 0;
 		sys->nalloc = 0;
-		sys->o = NULL;
 	 
 	 	return sys;
 	}
@@ -330,5 +329,7 @@
 		}
 		fclose(dest);
 		sys->Stype = Stype;
+		if(sys->nalloc == 0)
+			sys->o = NULL;
 		return sys;
 	}

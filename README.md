@@ -9,8 +9,8 @@ Now have:
 
 for test/use the program:
 -------------------------
-There is a Main executable file, compiled in a Linux 64 bit. Maybe can run in other computers.
-You can compile the program easily whit the makefile.
+There is an executable file (cspace), compiled in a Linux 64 bit. Maybe can run in other computers.
+You can compile the program easily whit the makefile, but you need some developer and runtime SDL2 packages.
 The program is programmed for linux only, but whit very few work can also run on other operative systems. (See information file)
 You are encouraged enjoy and test this program.
 

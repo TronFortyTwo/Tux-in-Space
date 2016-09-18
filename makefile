@@ -1,11 +1,13 @@
-cspace: color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o object_functions.o
-		gcc -o  cspace color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o object_functions.o string_functions.o type.o CS_header.h -lm -lSDL2
+cspace: color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o string_functions.o type.o object_functions.o SDL_interface_functions.o
+		gcc -o  cspace color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o object_functions.o SDL_interface_functions.o string_functions.o type.o CS_header.h -lm -lSDL2
 color.o: color.c CS_header.h
 	cc -c color.c -lm
 core_functions.o: core_functions.c CS_header.h
 	cc -c core_functions.c -lm
 debug.o: debug.c CS_header.h
 	cc -c debug.c -lm
+Pengine.o: Pengine.c CS_header.h
+	cc -c Pengine.c -lm
 object_functions.o: object_functions.c CS_header.h
 	cc -c object_functions.c -lm
 interface_functions.o: interface_functions.c CS_header.h
@@ -18,10 +20,10 @@ OPSo.o: OPSo.c CS_header.h
 	cc -c OPSo.c -lm
 Parser.o: Parser.c CS_header.h
 	cc -c Parser.c -lm
-pmotor.o: pmotor.c CS_header.h
-	cc -c pmotor.c -lm
 SDL_core.o: SDL_core.c CS_header.h
 	cc -c SDL_core.c -lm
+SDL_interface_functions.o: SDL_interface_functions.c CS_header.h
+	cc -c SDL_interface_functions.c -lm
 shell.o: shell.c CS_header.h
 	cc -c shell.c -lm
 string_functions.o: string_functions.c CS_header.h
@@ -29,6 +31,6 @@ string_functions.o: string_functions.c CS_header.h
 type.o: type.c CS_header.h
 	cc -c type.c -lm
 clean:
-	rm color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o pmotor.o SDL_core.o shell.o string_functions.o type.o object_functions.o
+	rm color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o string_functions.o type.o object_functions.o SDL_interface_functions.o
 main.o: main.c CS_header.h
 	cc -c main.c -lm

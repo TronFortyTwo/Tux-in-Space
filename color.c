@@ -26,7 +26,6 @@
  * The ScanColor function get a color and return it
  */
 	tcolor ScanColor(tcolor range_min, tcolor range_max) {
-		DebugPrint("scancolor");
 		
 		tcolor color;	//our color
 		void *var[3];	//the vars to give to OPS
@@ -84,7 +83,7 @@
 	/***
 	 * This function check if the color given is in or out the color range given
 	 */
-	int ColorRangeCheck(tcolor color, tcolor min, tcolor max) {
+	BYTE ColorRangeCheck(tcolor color, tcolor min, tcolor max) {
 		
 		if(color.red < min.red)
 			return BADSIGNAL;

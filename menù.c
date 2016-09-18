@@ -25,7 +25,6 @@
 #include "CS_header.h"
  
 	int Menu(tStype *Stype) {
-		DebugPrint("menu");
 		
 		// input variable
 		int i;

@@ -82,6 +82,9 @@
 		// type
 		sprintf(buffer, "TYPE:\t\t\t%s", obj->type->name);
 		DebugPrint(buffer);
+		// type product
+		sprintf(buffer, "TYPE:\t\t\t%s", obj->type->product);
+		DebugPrint(buffer);
 		// coordinates
 		sprintf(buffer, "COORDINATES:\t%Lf %Lf %Lf", obj->x, obj->y, obj->z);
 		DebugPrint(buffer);
