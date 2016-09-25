@@ -129,6 +129,18 @@
 	// A two-in-one function call whitout argurment (safe getchar)
 	#define sgetchar() (scanf(" "), getchar())
 	
+	
+	//
+	// This macro compute the radius of a sphere from the radius of two sphere of equal mass if summed
+	//
+	// 	 V = 4 * PI * r^3 / 3
+	// 		|
+	// 		v
+	// 	r^3 = V * 3 / (4 * PI)
+	//
+	#define RadiusestoVolume(x, y) (pow(x * x * x + y * y * y, 1.0/3.0))
+
+	
 	// BYTE is a value that occupies one byte max
 	typedef 	int8_t		BYTE;	// max +/- 128
 	typedef 	int16_t 	WORD;	// max +/- 32768
@@ -268,7 +280,6 @@
 	char *typeDescriptionFromName (tStype *, char *);
 	ttype *typeSearchName (tStype *, char *);
 	char *typeParentFromName (tStype *, char *);
-	long double RadiusestoVolume (long double, long double);
 	void ScanString(char *);
 	void AutoRemoveObject (tsys *, tobj *);
 	void MoveObject (tobj *, tobj *);

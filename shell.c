@@ -24,7 +24,6 @@
 #include "CS_header.h"	
 	
 int Shell (tStype *Stype) {
-	DebugPrint("shell");
 
 	// he pointer to a system
 	tsys *sys;

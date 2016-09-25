@@ -1,5 +1,6 @@
-cspace: color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o string_functions.o type.o object_functions.o SDL_interface_functions.o
-		gcc -o  cspace color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o object_functions.o SDL_interface_functions.o string_functions.o type.o CS_header.h -lm -lSDL2
+cspace-dev: color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o string_functions.o type.o object_functions.o SDL_interface_functions.o
+		cc -o cspace-dev color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o object_functions.o SDL_interface_functions.o string_functions.o type.o CS_header.h -g -Wall -lm -lSDL2
+		cc -o cspace-opt color.o core_functions.o debug.o interface_functions.o main.o menù.o OnlyPrintfSystem.o OPSo.o Parser.o Pengine.o SDL_core.o shell.o object_functions.o SDL_interface_functions.o string_functions.o type.o CS_header.h -O2 -Wall -lm -lSDL2
 color.o: color.c CS_header.h
 	cc -c color.c -lm
 core_functions.o: core_functions.c CS_header.h

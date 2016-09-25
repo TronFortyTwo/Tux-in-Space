@@ -348,7 +348,7 @@
 		// the hunter radius compute from the new volume
 		er->radius = pow(volum * 3 / (4 * PI), 1.0/3.0);
 		
-		// the hunted volume before
+		// the hunted volume before (v = 4/3 * PI * r^3)
 		volum = 4/3 * PI * ed->radius * ed->radius * ed->radius;
 		// reduce the hunted volume
 		volum -= volum * p;
@@ -399,7 +399,7 @@
 			else
 				ed->y -= ed->radius + er->radius + 0.01 + Distance(ed, er);
 			// transimit half of the hunter fast on the hunted (f = m*a)
-			f = er->vely * er->mass /2;
+			f = er->vely * er->mass / 2;
 			ed->vely = f / ed->mass;
 			er->vely /= 2;
 		}
@@ -428,7 +428,7 @@
 	/***
 	 * This function compute the distance between the core of two objects
 	 */
-	long double Distance(tobj *i, tobj *l){
+	long double Distance(tobj *i, tobj *l) {
 		return Pitagora(i->x - l->x, i->y - l->y, i->z - l->z);
 	}
 
@@ -467,10 +467,7 @@
 	 * 		v
 	 * 	r^3 = V * 3 / (4 * PI)
 	 */
-	long double RadiusestoVolume (long double r1, long double r2) {
-		return pow(r1 * r1 * r1 + r2 * r2 * r2, 1.0/3.0);
-	}
-	 
+	#define RadiusestoVolume(x, y) (pow(x * x * x + y * y * y, 1.0/3.0))
 
 	/***
 	 * Pitagora functions calculate a diagonal distance from ortogonal component

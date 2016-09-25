@@ -26,7 +26,6 @@
  * WARNING:
  * 
  * <-!-> HEAVY WORK IN PROGRESS <-!->
- * I'm not jokking. HEAVY wip.
  * 
  */
 
@@ -88,9 +87,11 @@
 	 */
 	void CloseGL() {
 		// destroy the window if is created
-		if(inf.gl.winopen == YES)
+		if(inf.gl.winopen == YES) {
 			SDL_DestroyWindow (inf.gl.win);
+			SDL_Quit();
+		}
 		// quit SDL if SDL is initialized
-		if(inf.gl.SDLinit == YES)
+		else if (inf.gl.SDLinit == YES)
 			SDL_Quit ();
 	}

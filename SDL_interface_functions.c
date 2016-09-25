@@ -24,7 +24,6 @@
  * WARNING:
  * 
  * <-!-> HEAVY WORK IN PROGRESS <-!->
- * I'm not jokking. HEAVY wip.
  * 
  */
 
@@ -67,7 +66,7 @@ int GLMenu (tStype *Stype){
 	}
 	SDL_FreeSurface(sur);
 	// a loop that wait for a user interaction to exit whit a result
-	while(1){
+	while(1) {
 		// clear the renderer
 		SDL_RenderClear(ren);
 		// draw the texture
