@@ -99,9 +99,9 @@
 		debug_Printf("\n\nSTYPE PRINTING-------------------------\n");
 		
 		for (i=0; i!=Stype->number; i++) {
-			sprintf(buffer, "NAME:\t\t\t%p\t\t%s",Stype->type[i].name, Stype->type[i].name);
+			sprintf(buffer, "NAME:\t\t\t%p\t\t%s", Stype->type[i].name, Stype->type[i].name);
 			debug_Printf(buffer);
-			sprintf(buffer, "DESCRPTION:\t\t%p\t\t%s",Stype->type[i].description, Stype->type[i].description);
+			sprintf(buffer, "DESCRPTION:\t\t%p\t\t%s", Stype->type[i].description, Stype->type[i].description);
 			debug_Printf(buffer);
 			sprintf(buffer, "PARENT:\t\t\t%p\t\t%s", Stype->type[i].parent, Stype->type[i].parent);
 			debug_Printf(buffer);

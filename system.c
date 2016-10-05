@@ -277,7 +277,7 @@ tsys *sys_LoadOPS (tStype *Stype) {
 tobj *sys_SearchObj(tsys *sys, char *name) {
 	int i;
 	for (i=0; i != sys->nactive; i++)
-		if(strcmp(sys->o[i].name, name) == 0)
+		if(!strcmp(sys->o[i].name, name))
 			return &sys->o[i];
 	return NULL;
 }

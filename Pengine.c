@@ -319,7 +319,7 @@ tobj pe_AnaelasticImpact(tobj *oi, tobj *ol) {
 /***
  * This function simulate an elastic hit
  * 
- * Coming soon! (I need to study them...)
+ * Coming soon! (I need to study them... ;)
  */
 void pe_ElasticImpact(tobj *o, tobj *u) {
 }
