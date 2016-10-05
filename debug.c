@@ -23,19 +23,18 @@
  * debugging function that you can call from everywhere easily 
  */
 
-#include "CS_header.h"
+#include "generic.h"
+#include "debug.h"
 
+#if DEBUG
 /***
  * This function print an int in the debug file
  */
-	void DebugInt(int n) {
-		
-		if(inf.debug == OFF)
-			return;
+	void debug_Int(int n) {
 		
 		char buffer[32];
 		snprintf(buffer, 32, "%d", n);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		
 		return;
 	}
@@ -46,12 +45,9 @@
  */
 	void DebugDouble(double n) {
 		
-		if(inf.debug == OFF)
-			return;
-		
 		char buffer[32];
 		snprintf(buffer, 32, "%lf", n);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		
 		return;
 	}
@@ -59,38 +55,35 @@
 /***
  * This function print in the debug file the attributes of an object
  */
-	void DebugObject(tobj *obj) {
-		
-		if(inf.debug == OFF)
-			return;
+	void debug_Object(tobj *obj) {
 		
 		// a string
 		char buffer[DESCRIPTIONSIZE + 15];
 		
 		// the name
 		sprintf(buffer, "NAME:\t\t\t%s", obj->name);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// the mass
 		sprintf(buffer, "MASS:\t\t\t%Lf", obj->mass);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// the radius
 		sprintf(buffer, "RADIUS:\t\t\t%Lf", obj->radius);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// the color
 		sprintf(buffer, "COLOR:\t\t\t%i %i %i", obj->color.blue, obj->color.green, obj->color.red);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// type
 		sprintf(buffer, "TYPE:\t\t\t%s", obj->type->name);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// type product
 		sprintf(buffer, "TYPE:\t\t\t%s", obj->type->product);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// coordinates
 		sprintf(buffer, "COORDINATES:\t%Lf %Lf %Lf", obj->x, obj->y, obj->z);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		// velocity
 		sprintf(buffer, "VELOCITY:\t\t%Lf %Lf %Lf", obj->velx, obj->vely, obj->velz);
-		DebugPrint(buffer);
+		debug_Printf(buffer);
 		
 		return;
 	}
@@ -98,48 +91,45 @@
 /***
  * This function print the Stype structure
  */
-	void PrintStype(tStype *Stype) {
-	
-		if(inf.debug == OFF)
-			return;
+	void debug_Stype(tStype *Stype) {
 	
 		int i; //counters
 		char buffer[DESCRIPTIONSIZE + 32];
 		
-		DebugPrint("\n\nSTYPE PRINTING-------------------------\n");
+		debug_Printf("\n\nSTYPE PRINTING-------------------------\n");
 		
 		for (i=0; i!=Stype->number; i++) {
 			sprintf(buffer, "NAME:\t\t\t%p\t\t%s",Stype->type[i].name, Stype->type[i].name);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "DESCRPTION:\t\t%p\t\t%s",Stype->type[i].description, Stype->type[i].description);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "PARENT:\t\t\t%p\t\t%s", Stype->type[i].parent, Stype->type[i].parent);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "MASS MIN:\t\t%p\t\t%lf", &Stype->type[i].mass_min, Stype->type[i].mass_min);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "MASS MAX:\t\t%p\t\t%lf", &Stype->type[i].mass_max, Stype->type[i].mass_max);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "BLUE_RANGE:\t\t%i\t\t\t\t%i", Stype->type[i].color_min.blue, Stype->type[i].color_max.blue);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "RED_RANGE:\t\t%i\t\t\t\t%i", Stype->type[i].color_min.red, Stype->type[i].color_max.red);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "GREEN_RANGE:\t%i\t\t\t\t%i",  Stype->type[i].color_min.green, Stype->type[i].color_max.green);
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "HUNTED:\t\t\t%p\t\t", &Stype->type[i].hunted);
 			if (Stype->type[i].hunted == YES)
 				strcat(buffer, "YES");
 			else
 				strcat(buffer, "NO");
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "HUNTER:\t\t\t%p\t\t", &Stype->type[i].hunter);
 			if (Stype->type[i].hunter == YES)
 				strcat(buffer, "YES");
 			else
 				strcat(buffer, "NO");
-			DebugPrint(buffer);
+			debug_Printf(buffer);
 			sprintf(buffer, "PRODUCT:\t\t%p\t\t%s", Stype->type[i].product, Stype->type[i].product);
-			DebugPrint(buffer);
-			DebugPrint("\n");
+			debug_Printf(buffer);
+			debug_Printf("\n");
 		}
 		return;
 	}
@@ -147,9 +137,7 @@
 /***
  *	Initialize the debug function
  */
-	void InitDebug() {
-		if(inf.debug == OFF)
-			return;
+	void debug_Init() {
 		fclose(fopen(DEBUG_FILE, "w"));
 		return;
 	}
@@ -159,20 +147,17 @@
 /***
  * This function write in the debug support (a file, stderr or something else) what is called to write
  */
-	void DebugPrint(char *txt) {
-		
-		if(inf.debug == OFF)
-			return;
-		
-		// for now the debug support is a file
-		FILE *file;
-		file = fopen(DEBUG_FILE, "a");
-		
-		// write what is requested (whit a '\n' after)
-		fprintf(file, "%s", txt);
-		fprintf(file, "\n"); 
-		
-		fclose(file);
-		
-		return;
-	}
+void debug_Printf(char *txt) {
+	
+	// for now the debug support is a file
+	FILE *file;
+	file = fopen(DEBUG_FILE, "a");
+	// write what is requested (whit a '\n' after)
+	fprintf(file, "%s", txt);
+	fprintf(file, "\n"); 
+	// finalize all
+	fclose(file);
+	return;
+}
+
+#endif

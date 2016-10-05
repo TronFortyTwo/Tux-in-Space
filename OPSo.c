@@ -17,34 +17,43 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * The purpose of this is to create a friendly UI using only the OPS (OnlyPrintfSystem).
+ * The purpose of this is to Create a friendly UI using only the OPS (OnlyPrintfSystem).
  * 
- * print an intestation whit the current time and other stuff, then reserve some space for information about the objects
+ * print an intestation whit the current time and other stuff, then reserve some space for settingrmation about the objects
  * 
  */
 
-#include "CS_header.h"
+#include "generic.h"
+#include "OPSo.h"
+#include "OnlyPrintfSystem.h"
 
-	int OPSo (tsys *sys) {
-		DebugPrint("opso");
+void OPSo (tsys *sys) {
 		
-		// this array contein the screen to return to send to OPS for printing. HIs size is inf.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
-		char buffer[BUFFERSIZE];
-		// the array to give to Rengine whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
+	// this array contein the screen to return to send to OPS for printing. HIs size is set.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
+	char buffer[BUFFERSIZE];
+	// the array to give to Rengine whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
+	void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
+	while(var == NULL){
+		OPS_MemLack("OPSo");
 		void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
-		int pos;
-		// counters
-		int i;
+	}
+	int pos;
+	// counters
+	int i;
 		
-		// Printf the line whit the time and two lines of '-'
-		strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
-		var[0] = & sys->stime.year;
-		var[1] = & sys->stime.day;
-		var[2] = & sys->stime.hour;
-		var[3] = & sys->stime.min;
-		var[4] = & sys->stime.sec;
-		var[5] = & sys->stime.millisec;
-		
+	// Printf the line whit the time and two lines of '-'
+	strcpy (buffer, "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-");
+	var[0] = & sys->stime.year;
+	var[1] = & sys->stime.day;
+	var[2] = & sys->stime.hour;
+	var[3] = & sys->stime.min;
+	var[4] = & sys->stime.sec;
+	var[5] = & sys->stime.millisec;
+	
+	// if there isn't any object
+	if(sys->nactive == 0)
+		strcat(buffer, "\n&t1The system is empty. Use the 'Create' command to Create a new object");
+	else {
 		pos = 6;
 		// A loop that tell to every object something
 		for (i=0; i!=sys->nactive; i++) {
@@ -59,14 +68,10 @@
 			var[pos++] = &sys->o[i].z;
 			var[pos++] = &sys->o[i].velz;
 		}
-		// if there isn't any object
-		if(sys->nactive == 0)
-			strcat(buffer, "\n&t1The system is empty. Use the 'create' command to create a new object");
-		
-		// Print
-		OPS(buffer, var);
-		
-		// free the RAM and exit
-		free(var);
-		return 0;
 	}
+	// Print all
+	OPS(buffer, var);
+		
+	// free the RAM
+	free(var);
+}

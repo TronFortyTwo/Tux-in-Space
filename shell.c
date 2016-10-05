@@ -21,8 +21,15 @@
  * 
  */
 
-#include "CS_header.h"	
-	
+#include "generic.h"
+#include "shell.h"
+#include "system.h"
+#include "menù.h"
+#include "SDL_interface.h"
+#include "pengine.h"
+#include "OPSo.h"
+#include "parser.h"
+
 int Shell (tStype *Stype) {
 
 	// he pointer to a system
@@ -31,21 +38,21 @@ int Shell (tStype *Stype) {
 	ttime stime;
 		
 	//////////////////////////////////////////
-	// MENU AND SYSTEM INITIALIZATION
+	// menu_main AND SYSTEM INITIALIZATION
 	
 	while(1) {
 		// here stime.year is used as temp variable
-		if(inf.vmode == V_OPS)
-			stime.year = Menu(Stype);
+		if(set.vmode == V_OPS)
+			stime.year = menu_main(Stype);
 		else
-			stime.year = GlMenu(Stype);
+			stime.year = Video_Menu(Stype);
 		// Call the mean menù, it tell to shell what to do.
 		switch (stime.year) {
 			case NEW_SIG:
-				sys = InitSystem(Stype);
+				sys = sys_Init(Stype);
 				break;
 			case LOAD_SIG:
-				sys = LoadSystem(Stype);
+				sys = sys_Load(Stype);
 				break;
 			case QUITSIGNAL:
 				return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
@@ -60,8 +67,8 @@ int Shell (tStype *Stype) {
 	//
 		
 	stime = sys->stime;
-	// Use the right loop (inf.vmode)
-	if (inf.vmode == V_OPS)
+	// Use the right loop (set.vmode)
+	if (set.vmode == V_OPS)
 		while(stime.year != QUITSIGNAL) {
 			// call the phisic engine
 			Pengine (sys, stime);
@@ -70,18 +77,18 @@ int Shell (tStype *Stype) {
 			// call the instruction parser and ask him for destination time
 			stime = Parser(sys);
 		}
-	else if (inf.vmode == V_SDL)
+	else if (set.vmode == V_SDL)
 		while(stime.year != QUITSIGNAL) {
 			// call the phisic engine
 			Pengine(sys, stime);
 			// output
-			SGLGUI(sys);
+			Video_SimGUI(sys);
 			// instruction parser
-			stime = GLparser(sys);
+			stime = Video_parser(sys);
 		}
 
 	// delete the system and exit
-	free(sys->o);
+	sys_Free(sys);
 	free(sys);
 
 	return GOODSIGNAL;

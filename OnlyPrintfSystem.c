@@ -16,7 +16,7 @@
 #    along with this program; if not, write to the Free Software			#
 #    Foundation, Inc.														#
 #############################################################################
-
+ *
  * The function OnlyPrintfSystem: print words in a simple behavior that adapts on the value of width and height
  * 
  * The advantages on use OnlyPrintfSystem is:
@@ -30,11 +30,26 @@
  * 
  */
 
-#include "CS_header.h"
+#include "generic.h"
+#include "OnlyPrintfSystem.h"
+#include "debug.h"
+#include "stdio.h"
 
- /**Only Printf System */
+// internal constant
+#define FRAME "# "
+#define FRAMER " #"		// FRAME R(ight)
+#define FRAMELEN 2		// FRAME LENGHT
+#define TWOFRAMELEN 4	// 2 * FRAME LENGHT
+#define FRAMESTART "#"
+#define FRAMEEND " "
+#define THEETDESCR 5	// The number of space when '&td'
+
+// internal functions
+void OPS_Line(char *, int);
+
+
+/**Only Printf System */
 	void OPS(char *phrase, void *var[]) {
-		DebugPrint("ops");
 	
 		//loop counter
 		int i;
@@ -51,10 +66,10 @@
 		// the position in the var array
 		QWORD pos = 0;
 		// the buffer to print, his size and position
-		DWORD size = (inf.ops.width-TWOFRAMELUN) * (inf.ops.height-5) +1;
+		DWORD size = (set.ops.width-TWOFRAMELEN) * (set.ops.height-5) +1;
 		char *buf = (char *) malloc (sizeof(char[size]));
 		while (buf == NULL) {
-			OPSML("OPS");
+			OPS_MemLack("OPS allocates buf");
 			buf = (char *) malloc (sizeof(char[size]));
 		}
 		DWORD bufpos = 0;
@@ -79,7 +94,7 @@
 				}
 				// a long double value to print
 				else if(phrase[chardone] == 'l') {
-					bufpos += sprintf(&buf[bufpos], "%.*Lf", inf.ops.numprecision, *((long double *)var[pos]) );
+					bufpos += sprintf(&buf[bufpos], "%.*Lf", set.ops.numprecision, *((long double *)var[pos]) );
 					pos++;
 				}
 				// a string to print
@@ -90,7 +105,7 @@
 				// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 				else if(phrase[chardone] == 'f') {
 					chardone++;
-					for(i=0; i!=inf.ops.width-TWOFRAMELUN; i++) {
+					for(i=0; i!=set.ops.width-TWOFRAMELEN; i++) {
 						buf[bufpos] = phrase[chardone];
 						bufpos++;
 					}
@@ -128,16 +143,16 @@
 		bufpos=0;
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		//the first two line of the frame
-		PrintLine(FRAMESTART, 0);
+		OPS_Line(FRAMESTART, 0);
 		printf("\n%s", FRAME);
-		PrintLine(FRAMEEND, TWOFRAMELUN);
+		OPS_Line(FRAMEEND, TWOFRAMELEN);
 		printf("%s\n", FRAMER);
 		//printf the buf
-		for(linedone=0; linedone < inf.ops.height-5; linedone++) {
+		for(linedone=0; linedone < set.ops.height-5; linedone++) {
 			//the frame
 			printf("%s", FRAME);
 			//print the buf
-			for(columndone=0; columndone < inf.ops.width-TWOFRAMELUN; columndone++) {
+			for(columndone=0; columndone < set.ops.width-TWOFRAMELEN; columndone++) {
 				
 				// PART ONE: check for directives. a directive started whit '&'
 				if (buf[bufpos] == '&') {
@@ -168,7 +183,7 @@
 							case '9': theet=9; break;
 							// or scan a letter whit a meaning
 							case 'd': theet=THEETDESCR; break;		// for a description
-							case 'i': {								// for two digit theet
+							case 'i': {								// for a theet in the 10-19 range
 								bufpos++;
 								switch(buf[bufpos]) {
 									case '0': theet=10; break;
@@ -208,10 +223,10 @@
 				// a '\n' character
 				else {
 					// print the remaining space whit spaces
-					PrintLine(" ", columndone+TWOFRAMELUN);
+					OPS_Line(" ", columndone+TWOFRAMELEN);
 					bufpos++;
 					// if there is space for more line print the new line
-					if(linedone < inf.ops.height-5) {
+					if(linedone < set.ops.height-5) {
 						printf("%s\n%s", FRAMER, FRAME);
 						linedone++;
 						columndone = -1;
@@ -223,9 +238,9 @@
 		}
 		//last lines
 		printf("%s", FRAME);
-		PrintLine(FRAMEEND, TWOFRAMELUN);
+		OPS_Line(FRAMEEND, TWOFRAMELEN);
 		printf("%s\n", FRAMER);
-		PrintLine(FRAMESTART, 0);
+		OPS_Line(FRAMESTART, 0);
 		printf("\n%s: ", FRAME);
 	
 		// finish the function
@@ -235,10 +250,9 @@
 	
 	
 /***
- * OPSE (OnlyPrintfSystemError) printf an error message whit the OPS
+ * OPS_Error (OnlyPrintfSystemError) printf an error message whit the OPS
  */
-	void OPSE(char *message, void *var[]){
-		DebugPrint("opse");
+	void OPS_Error(char *message, void *var[]){
 		
 		//size of message
 		WORD size;
@@ -246,7 +260,7 @@
 		//the message to print
 		char *buffer = (char *) malloc (sizeof(char[8+size]));
 		while(buffer == NULL){
-			OPSML("OPSE");
+			OPS_MemLack("OPS_Error");
 			buffer = (char *) malloc (sizeof(char[8+size]));
 		}
 		//a nice bip
@@ -262,15 +276,29 @@
 	}
 
 /***
- * OPSML (OnlyPrintfSystemMemorylack) is called when the memory lack to signal the problem
+ * OPS_MemLack (OnlyPrintfSystemMemorylack) is called when the memory lack to signal the problem
  */	
-	void OPSML(char *data) {
+	void OPS_MemLack(char *data) {
 		
-		printf ("\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
-		DebugPrint("opsml: the program has problem whit memory allocation while:");
-		DebugPrint(data);
+		printf ("\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while: '%s'. Probably the RAM is overload. Press something to retry\n\t", data);
+		#if DEBUG
+		debug_Printf("OPS_MemLack: the program has problem whit memory allocation while:");
+		debug_Printf(data);
+		#endif
 		getchar();
 		
 		return;
 	}
 
+	
+/*** PrintLine is a function that printf a line of characters
+ * 	can be setted a number num of characters that must not printed
+ *	*/
+	void OPS_Line (char *character, int num) {
+		int p;	//(p)rinted
+		for ( p=set.ops.width-num; p!=0; p--) {
+			printf("%c", *character);
+		}
+
+		return;
+	}

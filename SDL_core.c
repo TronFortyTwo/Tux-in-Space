@@ -29,69 +29,74 @@
  * 
  */
 
-#include "CS_header.h"
+#include "generic.h"
+#include "SDL_core.h"
 #include <SDL2/SDL.h>
+#include "OnlyPrintfSystem.h"
 
-	/*
-	 * This function initialize SDL and the window
-	 */
-	BYTE InitGL(){
-		
-		inf.gl.win = NULL;	// Our window
-		
-		// initialize SDL
-		if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-			char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
-			while(error == NULL){
-				OPSML("InitGL");
-				error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
-			}
-			void *var = error;
-			strcpy(error, SDL_GetError());
-			OPSE("Cannot initialize SDL library! Error: %s", &var);
-			free(error);
-			inf.gl.SDLinit = NO;
-			sgetchar();
-			SDL_Quit();
-			return BADSIGNAL;
-		}
-		// if the program get here SDL is intialized
-		inf.gl.SDLinit = YES;
-		// create the window
-		inf.gl.win = SDL_CreateWindow("CSpace: The space simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		// Quit if failed to load the window
-		if(inf.gl.win == NULL) {
-			char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
-			while(error == NULL){
-				OPSML("InitGL");
-				error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
-			}
-			void *var = error;
-			strcpy(error, SDL_GetError());
-			OPSE("Cannot create window! SDL Error: %s", &var);
-			free(error);
-			inf.gl.winopen = NO;
-			sgetchar();
-			SDL_Quit();
-			return BADSIGNAL;
-		}
-		// If nothing happened, the window is created succefully
-		inf.gl.winopen = YES;
-		
-		return GOODSIGNAL;
-		
-	}
+// local constants
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 256
+
+/*
+ * This function initialize SDL and the window
+ */
+BYTE Video_init(){
 	
-	/*
-	 * This function finish the work whit the window and close it
-	 */
-	void CloseGL() {
-		// destroy the window if is created
-		if(inf.gl.winopen == YES) {
-			SDL_DestroyWindow (inf.gl.win);
-			SDL_Quit();
+	set.gl.win = NULL;	// Our window
+	
+	// initialize SDL
+	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+		char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+		while(error == NULL){
+			OPS_MemLack("Video_init");
+			error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
 		}
-		// quit SDL if SDL is initialized
-		else if (inf.gl.SDLinit == YES)
-			SDL_Quit ();
+		void *var = error;
+		strcpy(error, SDL_GetError());
+		OPS_Error("Cannot initialize SDL library! Error: %s", &var);
+		free(error);
+		set.gl.SDLinit = NO;
+		sgetchar();
+		SDL_Quit();
+		return BADSIGNAL;
 	}
+	// if the program get here SDL is intialized
+	set.gl.SDLinit = YES;
+	// Create the window
+	set.gl.win = SDL_CreateWindow("CSpace: The space simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	// Quit if failed to load the window
+	if(set.gl.win == NULL) {
+		char *error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+		while(error == NULL){
+			OPS_MemLack("Video_init");
+			error = (char *) malloc (sizeof(char[strlen(SDL_GetError())]));
+		}
+		void *var = error;
+		strcpy(error, SDL_GetError());
+		OPS_Error("Cannot Create window! SDL Error: %s", &var);
+		free(error);
+		set.gl.winopen = NO;
+		sgetchar();
+		SDL_Quit();
+		return BADSIGNAL;
+	}
+	// If nothing happened, the window is created succefully
+	set.gl.winopen = YES;
+	
+	return GOODSIGNAL;	
+}
+
+/*
+ * This function finish the work whit the window and close it
+ */
+void Video_Close() {
+	// destroy the window if is created
+	if(set.gl.winopen == YES) {
+		SDL_DestroyWindow (set.gl.win);
+		SDL_Quit();
+	}
+	// quit SDL if SDL is initialized
+	else if (set.gl.SDLinit == YES)
+		SDL_Quit ();
+}
