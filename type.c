@@ -260,84 +260,80 @@ char *type_GetParent (tStype *type, char *name) {
  */ 
 ttype *type_Browser(tStype *Stype, char *title) {
 		
-	//in the gerarchic tree of type, is the common parent that the types shown have
-	char commonparent[NAMELUN] = "NULL";
+	// in the gerarchic tree of type, is the common parent that the types shown have
+	TNAME commonparent = "NULL";
 	// static buffer and dinamic buffer
-	char sbuf[BUFFERSIZE];
-	char dbuf[BUFFERSIZE];
-	//temp string
+	char sbuf[1024];
+	char dbuf[1024];
+	// temp string
 	char number[4];
-	//counters
+	// counters
 	int i;
 	int maxnum;
-	//the number m at the position n represent that if the user pick the number n he mean the Stype->type[m]
+	// the number m at the position n represent that if the user pick the number n he mean the Stype->type[m]
 	int *npoint = (int *) malloc (sizeof(int) * Stype->number);
 	while (npoint == NULL){
 		OPS_MemLack("type_Browser");
 		npoint = (int *) malloc (sizeof(int) * Stype->number);
 	}
-	//inputs
+	// inputs
 	int input;
 	int input2;
-	//array to give to OPS
+	// array to give to OPS
 	void *var[8];
 	int varpos;
 	
-	//initialize the buffers
+	// the title
 	strcpy (sbuf, title);
 	strcat (sbuf, "\n");
 	
-	//the main loop
-	do {
-		//reset the dinamic buffer
+	// the main loop
+	while (1){
+		// reset the dinamic buffer
 		strcpy(dbuf, sbuf);
-		//write in the dbuf the parent if one else a generic word
-		if (strcmp(commonparent, "NULL") != 0)
+		// write in the dbuf the parent if one else a generic word
+		if (strcmp(commonparent, "NULL"))
 			strcat(dbuf, commonparent);
 		else
 			strcat(dbuf, "Object");
 		strcat(dbuf, ":\n\n");
-		//search for types that have have as parent commonparent and add them to the buffer
+		// search for types that have have as parent commonparent and add them to the buffer
 		i=0;
 		maxnum=0;
 		do{
-			//if the type has commonparent as parent
+			// if the type has commonparent as parent
 			if(strcmp(Stype->type[i].parent, commonparent) == 0) {
 				snprintf(number, 3, "%d", maxnum+1);
 				strcat(dbuf, number);
 				strcat(dbuf, ") ");
 				strcat(dbuf, Stype->type[i].name);
 				strcat(dbuf, "\n");
-				npoint[maxnum] = i;
-				maxnum++;
+				npoint[maxnum++] = i;
 			}
-			//go to the next type
+			// go to the next type
 			i++;
 		}
 		while(i!=Stype->number);
 	
-		//add the Generic type button
-		maxnum++;
-		snprintf(number, 3, "%d", maxnum);
+		// add the Generic type button
+		snprintf(number, 3, "%d", ++maxnum);
 		strcat(dbuf, number);
 		strcat(dbuf, ") Generic ");
 		if(strcmp(commonparent, "NULL") != 0)
 			strcat(dbuf, commonparent);
 		else
 			strcat(dbuf, " object");
-		//add the description button
-		maxnum++;
-		snprintf(number, 3, "%d", maxnum);
+		// add the description button
+		snprintf(number, 3, "%d", ++maxnum);
 		strcat(dbuf, "\n\n");
 		strcat(dbuf, number);
 		strcat(dbuf, ") description of an object\n");
-		//add the back button
-		maxnum++;
-		snprintf(number, 3, "%d", maxnum);
+		// add the back button
+		snprintf(number, 3, "%d", ++maxnum);
 		strcat(dbuf, number);
 		strcat(dbuf, ") back to the top of the tree");
 		
-		//print
+		// print
 		OPS(dbuf, NULL);
 			
 		// scan input
@@ -353,7 +349,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 		if (input > maxnum)
 			continue;
 		
-		//if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
+		// if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
 		if (input < maxnum-2) {
 			strcpy(commonparent, Stype->type[npoint[input]].name);
 			input2 = 0;
@@ -368,7 +364,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 			}
 			continue;
 		}
-		//if is the generic type button
+		// if is the generic type button
 		if (input == maxnum-2) {
 			free(npoint);
 			if(strcmp(commonparent, "NULL") != 0)
@@ -376,7 +372,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 			else
 				return type_Search(Stype, "Generic object");
 		}
-		//if is the description button
+		// if is the description button
 		if (input == maxnum-1){
 			OPS("Of which type of object do you want an explaination? [type its number]", NULL);
 			in_i(&input2);
@@ -385,7 +381,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 				continue;
 			if (input2 >= maxnum)
 				continue;
-			//if is the generic object type (that is a strange type) use this particular procedure
+			// if is the generic object type (that is a strange type) use this particular procedure
 			if(strcmp(commonparent, "NULL") == 0) {
 				if (maxnum-2 == input2) {
 					OPS("There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", NULL);
@@ -393,7 +389,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 					continue;
 				}
 			}
-			//if is the generic "commonparent" object
+			// if is the generic "commonparent" object
 			strcpy(dbuf, Stype->type[npoint[input2]].name);
 			strcat(dbuf, ":");
 			strcat(dbuf, "\n\nDescription: &t9");
@@ -405,33 +401,26 @@ ttype *type_Browser(tStype *Stype, char *title) {
 			}
 			else
 				strcat(dbuf, "\nThis type of object isn't under any category");
-			//the mass range
+			// the mass range
 			strcat(dbuf, "\nMinimum mass: %l");
 			strcat(dbuf, "\nMaximum mass: ");
-			varpos=0;
-			var[varpos] = &Stype->type[npoint[input2]].mass_min;
-			varpos++;
+			var[0] = &Stype->type[npoint[input2]].mass_min;
+			varpos=1;
 			if(Stype->type[npoint[input2]].mass_max == -1)
 				strcat(dbuf, "infinity");
 			else{
 				strcat(dbuf, "%l");
-				var[varpos] = & Stype->type[npoint[input2]].mass_max;
-				varpos++;
+				var[varpos++] = & Stype->type[npoint[input2]].mass_max;
 			}
-			//the color range
+			// the color range
 			strcat(dbuf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
-			var[varpos] = & Stype->type[npoint[input2]].color_min.red;
-			varpos++;
-			var[varpos] = & Stype->type[npoint[input2]].color_max.red;
-			varpos++;
-			var[varpos] = & Stype->type[npoint[input2]].color_min.green;
-			varpos++;
-			var[varpos] = & Stype->type[npoint[input2]].color_max.green;
-			varpos++;
-			var[varpos] = & Stype->type[npoint[input2]].color_min.blue;
-			varpos++;
+			var[varpos++] = & Stype->type[npoint[input2]].color_min.red;
+			var[varpos++] = & Stype->type[npoint[input2]].color_max.red;
+			var[varpos++] = & Stype->type[npoint[input2]].color_min.green;
+			var[varpos++] = & Stype->type[npoint[input2]].color_max.green;
+			var[varpos++] = & Stype->type[npoint[input2]].color_min.blue;
 			var[varpos] = & Stype->type[npoint[input2]].color_max.blue;
-			//finalizing the description page
+			// finalizing the description page
 			strcat(dbuf, "\n\nPress a number to continue");
 			OPS(dbuf, var);
 			in_i(&input2);
@@ -441,12 +430,8 @@ ttype *type_Browser(tStype *Stype, char *title) {
 		if (input == maxnum) {
 			strcpy (commonparent, "NULL");
 			continue;
-		}		
+		}
 	}
-	while(1);
  
 	return NULL;
 }
-	 
-	 
-	 
