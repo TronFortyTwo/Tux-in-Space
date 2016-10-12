@@ -68,9 +68,6 @@
 	
 // The lenght of a name of an object, a system or a type
 #define NAMELUN 64
-	
-// the size of a buffer of character (to remove!!!! do NOT use it in new code)
-#define BUFFERSIZE 1024
 
 // The video mode
 #define V_OPS 0

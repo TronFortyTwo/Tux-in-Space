@@ -33,7 +33,13 @@
  */
 void in_s (char *d) {
 	
-	scanf("%s", d);
+	if(set.vmode == V_OPS) {
+		scanf("%s", d);
+	}
+	
+	if(set.vmode == V_SDL) {
+		// Here should be something corrispondent to scanf but whit SDL
+	}
 }
 
 /***

@@ -27,7 +27,7 @@
 #include "generic.h"
 
 // the time structure
-typedef struct strtime {
+typedef struct struct_time {
 	QWORD year;
 	int day;
 	int hour;

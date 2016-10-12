@@ -67,20 +67,20 @@ ttime Parser(tsys *sys) {
 		scanf("%s", input);
 	}
 	// parser_Jump
-	else if ((!strcmp("parser_Jump", input)) || (!strcmp("j", input)))
+	else if ((!strcmp("jump", input)) || (!strcmp("j", input)))
 		t = parser_Jump(&sys->stime, &sys->precision);
 		
 	// parser_Settings
-	else if (!strcmp("parser_Settings", input))
+	else if (!strcmp("settings", input))
 		parser_Settings(sys);
 	// parser_Wait
-	else if ((!strcmp("parser_Wait", input)) || (!strcmp("w", input)))
+	else if ((!strcmp("wait", input)) || (!strcmp("w", input)))
 		t = parser_Wait(&sys->stime, &sys->precision);
 	// parser_Create
-	else if (!(strcmp("parser_Create", input)) || (!strcmp("c", input)))
+	else if (!(strcmp("create", input)) || (!strcmp("c", input)))
 		parser_Create(sys);
 	// parser_Quit / exit
-	else if (!(strcmp("parser_Quit", input)) || (!strcmp("exit", input)))
+	else if (!(strcmp("quit", input)) || (!strcmp("exit", input)))
 		t = parser_Quit(sys, &sys->stime);
 	// save
 	else if (!strcmp("save", input))
@@ -111,7 +111,7 @@ ttime Parser(tsys *sys) {
  */
 void parser_Reask(char *command){
 	void *var = command;
-	OPS_Error("Sorry. But the command %s that you wrote is unknow. Press something to continue:", &var);
+	OPS_Error("Sorry. But the command %s that you wrote is unknown. Press something to continue:", &var);
 	return;
 }
 	
@@ -159,7 +159,7 @@ ttime parser_Quit (tsys *sys, ttime *now){
 	ttime t;	 	//this is the escape time
 	char input;		
 	//ask for confirm to parser_Quit
-	OPS("CSPACE\n\nAre you sure you want to parser_Quit? [y/n]\nOr you want to save before go? [s]", NULL);
+	OPS("QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", NULL);
 	scanf(" %c", &input);
 	//if doesn't want to parser_Quit return now
 	if (input == 'n')
@@ -186,7 +186,7 @@ void parser_Delete(tsys *sys) {
 	int p;				//the position of obj in the object buffer
 		
 	// ask the user for the name
-	OPS("Which object do you want do delete?\n\n&t1Press 'n' to Quit", NULL);
+	OPS("DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to Quit", NULL);
 	in_s(name);
 	if (!strcmp(name, "n"))
 		return;
@@ -215,7 +215,7 @@ void parser_Settings(tsys *sys) {
 	var[0] = sys->name;
 	var[1] = &sys->nactive;
 	// Generic settingrmation about the system
-	OPS("parser_Settings\n\nSystem %s whit %i objects\n\nOf which object do you want settingrmations? press 'n' to not display any object settingrmation", var);
+	OPS("Settings\n\nSystem %s whit %i objects\n\nOf which object do you want settingrmations? press 'n' to not display any object settingrmation", var);
 	in_s(input);
 	if(strcmp(input, "n") == 0){
 		OPS("Insert a new command", NULL);
@@ -241,7 +241,7 @@ void parser_Settings(tsys *sys) {
 	var[10] = &obj->velx;
 	var[11] = &obj->vely; 
 	var[12] = &obj->velz; 
-	OPS("parser_Settings %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
+	OPS("Settings %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
 	sgetchar();
 	return;
 }
@@ -254,13 +254,28 @@ ttime parser_Wait(ttime *now, long double *precision) {
 		
 	ttime t;
 		
-	OPS("parser_Wait\n\nInsert the settingrmation about how much simulation-time you want to parser_Wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
+	OPS("Wait\n\nInsert the settingrmation about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
+	//scanf the time
 	scanf("%ld", &t.year);
 	scanf("%d", &t.day);
 	scanf("%d", &t.hour);
 	scanf("%d", &t.min);
 	scanf("%d", &t.sec);
 	scanf("%d", &t.millisec);
+	// set all the t times 0 if are negative
+	if (t.year < 0)
+		t.year = 0;
+	if (t.day < 0)
+		t.day = 0;
+	if (t.hour < 0)
+		t.hour = 0;
+	if (t.min < 0)
+		t.min = 0;
+	if (t.sec < 0)
+		t.sec = 0;
+	if (t.millisec < 0)
+		t.millisec = 0;
+	// elabore the new time and return
 	t.millisec += now->millisec;
 	t.sec += now->sec;
 	t.min += now->min;
@@ -274,17 +289,42 @@ ttime parser_Wait(ttime *now, long double *precision) {
 /***
  * The parser_Jump function make the simulation parser_Jump to a determined time 
  */
-ttime parser_Jump(ttime *now,long double *precision) {
-		
+ttime parser_Jump(ttime *now, long double *precision) {
+
 	ttime t;
-		
-	OPS("parser_Jump\n\nInsert the settingrmation about the moment you want to parser_Jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe parser_Jump will be made whit an error of max %l seconds" , (void **)&precision);
-	scanf("%ld", &t.year);
-	scanf("%d", &t.day);
-	scanf("%d", &t.hour);
-	scanf("%d", &t.min);
-	scanf("%d", &t.sec);
-	scanf("%d", &t.millisec);
+	void *var[7];
+	// set the var to give to OPS
+	var[0] = &now->year;
+	var[1] = &now->day;
+	var[2] = &now->hour;
+	var[3] = &now->min;
+	var[4] = &now->sec;
+	var[5] = &now->millisec;
+	var[6] = &precision;
+	
+	OPS("Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe actual time is: YEAR %i DAY %i TIME %i:%i:%i.%i\nThe jump will be made whit an error of max %l seconds" , var);
+	while(1) {
+		// year
+		scanf("%ld", &t.year);
+		// day
+		scanf("%ld", &t.day);
+		// hour
+		scanf("%ld", &t.hour);
+		// minute
+		scanf("%ld", &t.min);
+		// second
+		scanf("%ld", &t.sec);
+		// millisecond
+		scanf("%ld", &t.millisec);
+		if(time_GetBigger(&t, now) == 1)	{ // if the bigger is now
+			// Error message if the time given isn't valid
+			t = *now;
+			OPS_Error("The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%i.%i\nThe jump will be made whit an error of max %l seconds", var);
+		}
+		else
+			break;
+	}
+	
 	time_Update(&t);
 	return t;
 }

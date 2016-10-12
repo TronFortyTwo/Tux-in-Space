@@ -243,7 +243,7 @@ void OPS_Line(char *, int);
 		OPS_Line(FRAMESTART, 0);
 		printf("\n%s: ", FRAME);
 	
-		// finish the function
+		// finalize the function
 		free(buf);
 		return;
 	}

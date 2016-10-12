@@ -30,7 +30,7 @@
 void OPSo (tsys *sys) {
 		
 	// this array contein the screen to return to send to OPS for printing. HIs size is set.maxoutput but, because there are special string that occupy more than one character(like %s) we alloc more than the minimum
-	char buffer[BUFFERSIZE];
+	char buffer[1024];
 	// the array to give to Rengine whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
 	void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
 	while(var == NULL){
@@ -51,7 +51,7 @@ void OPSo (tsys *sys) {
 	var[5] = & sys->stime.millisec;
 	
 	// if there isn't any object
-	if(sys->nactive == 0)
+	if(!sys->nactive)
 		strcat(buffer, "\n&t1The system is empty. Use the 'Create' command to Create a new object");
 	else {
 		pos = 6;
