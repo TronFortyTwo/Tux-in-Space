@@ -37,7 +37,9 @@ typedef struct struct_time {
 } ttime;
 
 // function that can be called from everywhere
-BYTE time_GetBigger(ttime *, ttime *);
-void time_Update(ttime *);
+BYTE time_GetBigger(ttime *, ttime *);				// from two times given, return 0 if the bigger is the first,
+													// 1 if id the second and 2 are equal
+void time_Update(ttime *);							// Make a wrong formatted time structure into a right one 
+													// (for example from 61 sec make 1 min and 1 sec)
 
 #endif

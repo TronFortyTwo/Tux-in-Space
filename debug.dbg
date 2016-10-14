@@ -1,0 +1,610 @@
+
+
+STYPE PRINTING-------------------------
+
+NAME:			0x15652c0		Artificial object
+DESCRPTION:		0x15658c8		The product of an intentional human manufacture, often buildt whit metals
+PARENT:			0x1565ac8		NULL
+MASS MIN:		0x1565b08		0.000000
+MASS MAX:		0x1565b10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1565b30		YES
+HUNTER:			0x1565b31		NO
+PRODUCT:		0x15652e0		Debris
+
+
+NAME:			0x1565300		Asteroid
+DESCRPTION:		0x1565b48		An asteroid is a minor planet that have a composition very similar to a terrestrial planet. Asteroid composed meanly by ice are called comets, some asteroids are comets that have lose the ice
+PARENT:			0x1565d48		Minor planet
+MASS MIN:		0x1565d88		0.000000
+MASS MAX:		0x1565d90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1565db0		NO
+HUNTER:			0x1565db1		NO
+PRODUCT:		0x1565320		Meteroid
+
+
+NAME:			0x1565340		Binary asteroids
+DESCRPTION:		0x1565dc8		No description is available yet for this type
+PARENT:			0x1565fc8		Asteroid
+MASS MIN:		0x1566008		0.000000
+MASS MAX:		0x1566010		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1566030		NO
+HUNTER:			0x1566031		NO
+PRODUCT:		0x1565360		Meteroid
+
+
+NAME:			0x1565380		Black hole
+DESCRPTION:		0x1566048		No description is available yet for this type
+PARENT:			0x1566248		Compact star
+MASS MIN:		0x1566288		0.000000
+MASS MAX:		0x1566290		-1.000000
+BLUE_RANGE:		0				0
+RED_RANGE:		0				0
+GREEN_RANGE:	0				0
+HUNTED:			0x15662b0		NO
+HUNTER:			0x15662b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x15653a0		Brown Dwarf
+DESCRPTION:		0x15662c8		A brown dwarf is a particular type of celestial object that are more massive than planets, but they don't have nuclear fusion in their core
+PARENT:			0x15664c8		Celestial object
+MASS MIN:		0x1566508		24676469999999998790467584.000000
+MASS MAX:		0x1566510		152855199999999996132851712.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1566530		NO
+HUNTER:			0x1566531		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x15653c0		Carbon Planet
+DESCRPTION:		0x1566548		A carbon planet is a planet that contein much much carbon, and a minor quantity of oxygen
+PARENT:			0x1566748		Planet
+MASS MIN:		0x1566788		0.000000
+MASS MAX:		0x1566790		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15667b0		NO
+HUNTER:			0x15667b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x15653e0		Cataclysmic variable star
+DESCRPTION:		0x15667c8		No description is available yet for this type
+PARENT:			0x15669c8		Star
+MASS MIN:		0x1566a08		0.000000
+MASS MAX:		0x1566a10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1566a30		NO
+HUNTER:			0x1566a31		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x1565410		Celestial object
+DESCRPTION:		0x1566a48		A celestial object is a natural object
+PARENT:			0x1566c48		NULL
+MASS MIN:		0x1566c88		0.000000
+MASS MAX:		0x1566c90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1566cb0		NO
+HUNTER:			0x1566cb1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x1565430		Chthonian planet
+DESCRPTION:		0x1566cc8		A chtonian planet is a planet generated from the hydrodinamic escape of a Gas Giant atmosphere. The remaining metal and rocky core form this planet
+PARENT:			0x1566ec8		Planet
+MASS MIN:		0x1566f08		0.000000
+MASS MAX:		0x1566f10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1566f30		NO
+HUNTER:			0x1566f31		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x1565450		Choose a type
+DESCRPTION:		0x1566f48		for your new object
+PARENT:			0x1567148		Whitout parent
+MASS MIN:		0x1567188		0.000000
+MASS MAX:		0x1567190		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15671b0		NO
+HUNTER:			0x15671b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x1565470		Comet
+DESCRPTION:		0x15671c8		No description is available yet for this type
+PARENT:			0x15673c8		Small body
+MASS MIN:		0x1567408		0.000000
+MASS MAX:		0x1567410		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1567430		NO
+HUNTER:			0x1567431		NO
+PRODUCT:		0x1565490		Meteroid
+
+
+NAME:			0x156cbd0		Compact star
+DESCRPTION:		0x1567448		A compact star is a star that is composed by esotic matter (like white dwarf, neutron star and others) or other objects like the Black Holes that we don't know of which matter are composed. All these objects have big mass but are small, having a very high density.
+PARENT:			0x1567648		Star
+MASS MIN:		0x1567688		0.000000
+MASS MAX:		0x1567690		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15676b0		NO
+HUNTER:			0x15676b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cbf0		Contact binary
+DESCRPTION:		0x15676c8		No description is available yet for this type
+PARENT:			0x15678c8		Small body
+MASS MIN:		0x1567908		0.000000
+MASS MAX:		0x1567910		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1567930		NO
+HUNTER:			0x1567931		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cc10		Debris
+DESCRPTION:		0x1567948		Debrises are spacecraft remaining, stages used and discarded that often travel in the spaces freely and sometimes falls onto some planet surface
+PARENT:			0x1567b48		Spacecraft
+MASS MIN:		0x1567b88		0.000000
+MASS MAX:		0x1567b90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1567bb0		NO
+HUNTER:			0x1567bb1		NO
+PRODUCT:		0x156cc30		Debris
+
+
+NAME:			0x156cc50		Deep Space Kraken
+DESCRPTION:		0x1567bc8		Terrifying enormous creature that destroy anything what encouter. No one survived his attacks to confirm his existent
+PARENT:			0x1567dc8		Space Monster
+MASS MIN:		0x1567e08		0.000000
+MASS MAX:		0x1567e10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1567e30		NO
+HUNTER:			0x1567e31		YES
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cc70		Dwarf planet
+DESCRPTION:		0x1567e48		No description is available yet for this type
+PARENT:			0x1568048		Minor planet
+MASS MIN:		0x1568088		0.000000
+MASS MAX:		0x1568090		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15680b0		NO
+HUNTER:			0x15680b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cc90		Earth analog
+DESCRPTION:		0x15680c8		An Earth analog is a terrestrial planet whit characteristich much similar to the Earth's characteristics
+PARENT:			0x15682c8		Terrestrial planet
+MASS MIN:		0x1568308		0.000000
+MASS MAX:		0x1568310		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1568330		NO
+HUNTER:			0x1568331		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ccb0		Gas giant
+DESCRPTION:		0x1568348		No description is available yet for this type
+PARENT:			0x1568548		Giant planet
+MASS MIN:		0x1568588		0.000000
+MASS MAX:		0x1568590		25000000000000001191182336.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15685b0		NO
+HUNTER:			0x15685b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ccd0		Generic object
+DESCRPTION:		0x15685c8		We don't know the nature of a Generic object, so we call it generic
+PARENT:			0x15687c8		System
+MASS MIN:		0x1568808		0.000000
+MASS MAX:		0x1568810		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1568830		NO
+HUNTER:			0x1568831		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ccf0		Giant planet
+DESCRPTION:		0x1568848		No description is available yet for this type
+PARENT:			0x1568a48		Planet
+MASS MIN:		0x1568a88		0.000000
+MASS MAX:		0x1568a90		24676469999999998790467584.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1568ab0		NO
+HUNTER:			0x1568ab1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cd10		Helium planet
+DESCRPTION:		0x1568ac8		An helium planet is a planet whit an atmosphere composly mainly by helium
+PARENT:			0x1568cc8		Planet
+MASS MIN:		0x1568d08		0.000000
+MASS MAX:		0x1568d10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1568d30		NO
+HUNTER:			0x1568d31		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cd30		Ice giant
+DESCRPTION:		0x1568d48		No description is available yet for this type
+PARENT:			0x1568f48		Giant planet
+MASS MIN:		0x1568f88		0.000000
+MASS MAX:		0x1568f90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1568fb0		NO
+HUNTER:			0x1568fb1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cd50		Iron planet
+DESCRPTION:		0x1568fc8		An iron planet is a planet whit the core composed mainly of iron and whit mantle very little or whitout any mantle
+PARENT:			0x15691c8		Planet
+MASS MIN:		0x1569208		0.000000
+MASS MAX:		0x1569210		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1569230		NO
+HUNTER:			0x1569231		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cd70		Lava planet
+DESCRPTION:		0x1569248		A lava planet is a type of terrestrial planet whit the surface completely covered whit lava
+PARENT:			0x1569448		Terrestrial planet
+MASS MIN:		0x1569488		0.000000
+MASS MAX:		0x1569490		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15694b0		NO
+HUNTER:			0x15694b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cd90		Leviatan
+DESCRPTION:		0x15694c8		Enormous dragon of the space, the information about him are few
+PARENT:			0x15696c8		Space Monster
+MASS MIN:		0x1569708		0.000000
+MASS MAX:		0x1569710		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1569730		NO
+HUNTER:			0x1569731		YES
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cdb0		Magnetar
+DESCRPTION:		0x1569748		A magnetar is a Neutron star whit a very strong magnetic field
+PARENT:			0x1569948		Neutron star
+MASS MIN:		0x1569988		0.000000
+MASS MAX:		0x1569990		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x15699b0		NO
+HUNTER:			0x15699b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cdd0		Mega Earth
+DESCRPTION:		0x15699c8		A Mega Earth is a terrestrial planet ten or more times more massive than Earth, even more massive than super-Earths that are five to ten times more massive than Earth 
+PARENT:			0x1569bc8		Terrestrial planet
+MASS MIN:		0x1569c08		29799999999999997902848.000000
+MASS MAX:		0x1569c10		60000000000000000000000.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1569c30		NO
+HUNTER:			0x1569c31		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cdf0		Meteroid
+DESCRPTION:		0x1569c48		A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores
+PARENT:			0x1569e48		Small body
+MASS MIN:		0x1569e88		0.000000
+MASS MAX:		0x1569e90		100000.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x1569eb0		NO
+HUNTER:			0x1569eb1		NO
+PRODUCT:		0x156ce10		Micrometeroid
+
+
+NAME:			0x156ce30		Micrometeroid
+DESCRPTION:		0x1569ec8		No description is available yet for this type
+PARENT:			0x156a0c8		Meteroid
+MASS MIN:		0x156a108		0.000000
+MASS MAX:		0x156a110		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156a130		NO
+HUNTER:			0x156a131		NO
+PRODUCT:		0x156ce50		Micrometeroid
+
+
+NAME:			0x156ce70		Mini-Neptune
+DESCRPTION:		0x156a148		No description is available yet for this type
+PARENT:			0x156a348		Planet
+MASS MIN:		0x156a388		0.000000
+MASS MAX:		0x156a390		99999999999999991611392.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156a3b0		NO
+HUNTER:			0x156a3b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ce90		Minor planet
+DESCRPTION:		0x156a3c8		No description is available yet for this type
+PARENT:			0x156a5c8		Celestial object
+MASS MIN:		0x156a608		0.000000
+MASS MAX:		0x156a610		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156a630		NO
+HUNTER:			0x156a631		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ceb0		Minor-planet moon
+DESCRPTION:		0x156a648		Is a moon orbiting a minor planet
+PARENT:			0x156a848		Minor planet
+MASS MIN:		0x156a888		0.000000
+MASS MAX:		0x156a890		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156a8b0		NO
+HUNTER:			0x156a8b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156ced0		Neutron star
+DESCRPTION:		0x156a8c8		Description coming soon
+PARENT:			0x156aac8		Compact star
+MASS MIN:		0x156ab08		0.000000
+MASS MAX:		0x156ab10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156ab30		NO
+HUNTER:			0x156ab31		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cef0		Ocean planet
+DESCRPTION:		0x156ab48		No description is available yet for this type
+PARENT:			0x156ad48		Planet
+MASS MIN:		0x156ad88		0.000000
+MASS MAX:		0x156ad90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156adb0		NO
+HUNTER:			0x156adb1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cf10		Planet
+DESCRPTION:		0x156adc8		A planet is a celestial body that is rounded by its own gravity because is massive enought, has cleared its neightbouring region of planetesimal and doesn't have thermonuclear fusion into it for is mass
+PARENT:			0x156afc8		Celestial object
+MASS MIN:		0x156b008		0.000000
+MASS MAX:		0x156b010		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156b030		NO
+HUNTER:			0x156b031		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cf30		Planetesimal
+DESCRPTION:		0x156b048		No description is available yet for this type
+PARENT:			0x156b248		Small body
+MASS MIN:		0x156b288		0.000000
+MASS MAX:		0x156b290		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156b2b0		NO
+HUNTER:			0x156b2b1		NO
+PRODUCT:		0x156cf50		Meteroid
+
+
+NAME:			0x156cf70		Pulsar
+DESCRPTION:		0x156b2c8		No description is available yet for this type
+PARENT:			0x156b4c8		Neutron star
+MASS MIN:		0x156b508		0.000000
+MASS MAX:		0x156b510		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156b530		NO
+HUNTER:			0x156b531		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cf90		Small body
+DESCRPTION:		0x156b548		No description is available yet for this type
+PARENT:			0x156b748		Celestial object
+MASS MIN:		0x156b788		0.000000
+MASS MAX:		0x156b790		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156b7b0		NO
+HUNTER:			0x156b7b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cfb0		Space Monster
+DESCRPTION:		0x156b7c8		As in the old times big and unknow creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
+PARENT:			0x156b9c8		NULL
+MASS MIN:		0x156ba08		0.000000
+MASS MAX:		0x156ba10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156ba30		NO
+HUNTER:			0x156ba31		YES
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156cfd0		Spacecraft
+DESCRPTION:		0x156ba48		Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
+PARENT:			0x156bc48		Artificial object
+MASS MIN:		0x156bc88		0.000000
+MASS MAX:		0x156bc90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156bcb0		YES
+HUNTER:			0x156bcb1		NO
+PRODUCT:		0x156cff0		Debris
+
+
+NAME:			0x156d010		Spaceplane
+DESCRPTION:		0x156bcc8		Often winged, a spaceplane is a spacecraft designed only for manned flight. For example the Space Shuttle is a spaceplane
+PARENT:			0x156bec8		Spacecraft
+MASS MIN:		0x156bf08		0.000000
+MASS MAX:		0x156bf10		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156bf30		YES
+HUNTER:			0x156bf31		NO
+PRODUCT:		0x156d030		Debris
+
+
+NAME:			0x156d050		Star
+DESCRPTION:		0x156bf48		A star is a celestial body that have termonuclear reaction inside it, for that shine of its own light. Stars have a mass between 0.08 and 200 Sun Masses. Lighter objects are called brown dwarfs, and they don't produce energy via nuclear fusion
+PARENT:			0x156c148		Celestial object
+MASS MIN:		0x156c188		9241818.000000
+MASS MAX:		0x156c190		397784000000000010785333968896.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156c1b0		NO
+HUNTER:			0x156c1b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156d070		Sub-brown dwarf
+DESCRPTION:		0x156c1c8		No description is available yet for this type
+PARENT:			0x156c3c8		Brown dwarf
+MASS MIN:		0x156c408		0.000000
+MASS MAX:		0x156c410		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156c430		NO
+HUNTER:			0x156c431		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156d090		Super Earth
+DESCRPTION:		0x156c448		A super Earth is a terrestrial planet massive two to five Earth masses, more massive terrestrial planet are called Mega Earth
+PARENT:			0x156c648		Terrestrial planet
+MASS MIN:		0x156c688		11000000000000000000000.000000
+MASS MAX:		0x156c690		29863000000000000262144.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156c6b0		NO
+HUNTER:			0x156c6b1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156d0b0		Terrestrial planet
+DESCRPTION:		0x156c6c8		A terrestrial planet is a planet composed mainly by rock and metal
+PARENT:			0x156c8c8		Planet
+MASS MIN:		0x156c908		0.000000
+MASS MAX:		0x156c910		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156c930		NO
+HUNTER:			0x156c931		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			0x156d0d0		White dwarf
+DESCRPTION:		0x156c948		No description is available yet for this type
+PARENT:			0x156cb48		Compact star
+MASS MIN:		0x156cb88		0.000000
+MASS MAX:		0x156cb90		-1.000000
+BLUE_RANGE:		0				255
+RED_RANGE:		0				255
+GREEN_RANGE:	0				255
+HUNTED:			0x156cbb0		NO
+HUNTER:			0x156cbb1		NO
+PRODUCT:		0x15652a0		Asteroid
+
+
+NAME:			Hunted
+MASS:			1024.000000
+RADIUS:			0.600000
+COLOR:			0 0 0
+TYPE:			Spacecraft
+TYPE:			Debris
+COORDINATES:	0.000000 0.000000 0.000000
+VELOCITY:		0.000000 0.000000 0.000000

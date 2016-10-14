@@ -42,7 +42,7 @@ int menu_main(tStype *Stype) {
 	while (1) {
 		
 		//Principal menù, first screen	
-		OPS("&t5CSPACE: The space simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) settingrmation\n\n5) Quit", NULL);
+		OPS("&t5CSPACE: The space simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) informations\n\n5) Quit", NULL);
 		in_i(&i);
 			
 		// If "new simulation" tell the Shell 0; (uninitialized obj)

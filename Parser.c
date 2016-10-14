@@ -28,6 +28,7 @@
 #include "system.h"
 #include "math.h"
 #include "time.h"
+#include "menù.h"
 
 // internal functions
 void parser_Reask(char *);
@@ -36,9 +37,10 @@ void parser_Create(tsys *);
 void parser_Delete(tsys *);
 ttime parser_Quit (tsys *, ttime *);
 void parser_Distance(tsys *);
-void parser_Settings(tsys *);
 ttime parser_Jump(ttime *, long double *);
 ttime parser_Wait(ttime *, long double *);
+void parser_Information (tsys *);
+
 // internal constants
 #define COMMANDLENGHT 12	// the max lenght of a command word
 
@@ -63,7 +65,7 @@ ttime Parser(tsys *sys) {
 	}
 	// help
 	else if ((!strcmp("help", input)) || (!strcmp("h", input))) {
-		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-parser_Create (c)\n-parser_Jump (j)\n-parser_Wait (w)\n-parser_Settings\n-settings\n-save\n-distance\n-parser_Quit\n-delete\n\nPress something to continue...", NULL);
+		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-parser_Create (c)\n-parser_Jump (j)\n-parser_Wait (w)\n-Information (i)\n-settings\n-save\n-distance\n-parser_Quit\n-delete\n\nPress something to continue...", NULL);
 		scanf("%s", input);
 	}
 	// parser_Jump
@@ -71,8 +73,8 @@ ttime Parser(tsys *sys) {
 		t = parser_Jump(&sys->stime, &sys->precision);
 		
 	// parser_Settings
-	else if (!strcmp("settings", input))
-		parser_Settings(sys);
+	else if ((!strcmp("information", input)) || (!strcmp("i", input)))
+		parser_Information(sys);
 	// parser_Wait
 	else if ((!strcmp("wait", input)) || (!strcmp("w", input)))
 		t = parser_Wait(&sys->stime, &sys->precision);
@@ -93,12 +95,12 @@ ttime Parser(tsys *sys) {
 		parser_Delete(sys);
 	// settings
 	else if (!(strcmp("settings", input)) || (!strcmp("configuration", input))){
-		parser_Settings(sys);
+		menu_Settings(sys);
 	}
 	// wrong command
 	else {
 		parser_Reask(input);
-		scanf("%s", input);
+		sgetchar();
 	}
 	// Print a loading message
 	OPS("Loading...", NULL);
@@ -206,16 +208,16 @@ void parser_Delete(tsys *sys) {
 /***
  * parser_Settings about the system and the objects
  */
-void parser_Settings(tsys *sys) {
+void parser_Information(tsys *sys) {
 		
-	tobj *obj;			// The object to describe
-	void *var[13];		// The variables to give to OPS
+	tobj *obj;		// The object to describe
+	void *var[13];	// The variables to give to OPS
 	TNAME input;
 
 	var[0] = sys->name;
 	var[1] = &sys->nactive;
 	// Generic settingrmation about the system
-	OPS("Settings\n\nSystem %s whit %i objects\n\nOf which object do you want settingrmations? press 'n' to not display any object settingrmation", var);
+	OPS("Informations\n\nSystem %s whit %i objects\n\nOf which object do you want settingrmations? press 'n' to not display any object settingrmation", var);
 	in_s(input);
 	if(strcmp(input, "n") == 0){
 		OPS("Insert a new command", NULL);
@@ -262,19 +264,6 @@ ttime parser_Wait(ttime *now, long double *precision) {
 	scanf("%d", &t.min);
 	scanf("%d", &t.sec);
 	scanf("%d", &t.millisec);
-	// set all the t times 0 if are negative
-	if (t.year < 0)
-		t.year = 0;
-	if (t.day < 0)
-		t.day = 0;
-	if (t.hour < 0)
-		t.hour = 0;
-	if (t.min < 0)
-		t.min = 0;
-	if (t.sec < 0)
-		t.sec = 0;
-	if (t.millisec < 0)
-		t.millisec = 0;
 	// elabore the new time and return
 	t.millisec += now->millisec;
 	t.sec += now->sec;
@@ -287,7 +276,7 @@ ttime parser_Wait(ttime *now, long double *precision) {
 }
 	
 /***
- * The parser_Jump function make the simulation parser_Jump to a determined time 
+ * The parser_Jump function make the simulation Jump to a determined time 
  */
 ttime parser_Jump(ttime *now, long double *precision) {
 
@@ -307,16 +296,18 @@ ttime parser_Jump(ttime *now, long double *precision) {
 		// year
 		scanf("%ld", &t.year);
 		// day
-		scanf("%ld", &t.day);
+		scanf("%d", &t.day);
 		// hour
-		scanf("%ld", &t.hour);
+		scanf("%d", &t.hour);
 		// minute
-		scanf("%ld", &t.min);
+		scanf("%d", &t.min);
 		// second
-		scanf("%ld", &t.sec);
+		scanf("%d", &t.sec);
 		// millisecond
-		scanf("%ld", &t.millisec);
-		if(time_GetBigger(&t, now) == 1)	{ // if the bigger is now
+		scanf("%d", &t.millisec);
+		// update the time
+		time_Update(&t);
+		if(time_GetBigger(&t, now) == 1)	{ // if the time given is 
 			// Error message if the time given isn't valid
 			t = *now;
 			OPS_Error("The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%i.%i\nThe jump will be made whit an error of max %l seconds", var);
