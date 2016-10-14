@@ -1,0 +1,8 @@
+# personal configuration
+cspace.conf
+
+# debug output file
+debug.dbg
+
+# object file
+*.o
