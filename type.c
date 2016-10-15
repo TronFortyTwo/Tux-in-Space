@@ -248,7 +248,7 @@ char *type_GetParent (tStype *type, char *name) {
 		#if DEBUG
 		debug_Printf("type_GetDescription (!) NO type whit that name has been found! This is a bug!");
 		#endif
-		return "This object type doesn't exist! I'm a bug";
+		return NULL;
 	}
 }
 	 
@@ -265,7 +265,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 	// static buffer and dinamic buffer
 	char sbuf[1024];
 	char dbuf[1024];
-	// temp string
+	// temp string that stores a number written in ASCII
 	char number[4];
 	// counters
 	int i;

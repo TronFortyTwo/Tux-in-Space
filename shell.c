@@ -89,7 +89,6 @@ int Shell (tStype *Stype) {
 
 	// delete the system and exit
 	sys_Free(sys);
-	free(sys);
 
 	return GOODSIGNAL;
 }

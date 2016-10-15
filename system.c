@@ -220,8 +220,8 @@ tsys *sys_Load(tStype *Stype){
  */
 tsys *sys_LoadOPS (tStype *Stype) {
 
-	char path[NAMELUN+12];	// the system file
-	FILE *dest;				// the system file
+	char path[NAMELUN+12];	// the system file (path)
+	FILE *sysfp;			// the system file (pointer)
 	int i;					// counter
 	tsys *sys = (tsys *) malloc (sizeof(tsys));		// the new system
 	while(sys == NULL){
@@ -236,16 +236,16 @@ tsys *sys_LoadOPS (tStype *Stype) {
 	strcat (path, sys->name);
 	strcat (path, ".sys");
 	// open the file
-	dest = fopen(path, "r");
-	if (dest == NULL) {
+	sysfp = fopen(path, "r");
+	if (sysfp == NULL) {
 		OPS_Error("A system whit that name doesn't exist! Type something to continue and return to the main menu", NULL);
 		sgetchar();
 		free(sys);
 		return NULL;
 	}
 	// scanf system's settingrmations
-	fscanf (dest, "%Lf\n%ld\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
-	fscanf (dest, "%ld\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
+	fscanf (sysfp, "%Lf\n%ld\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
+	fscanf (sysfp, "%ld\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
 	// alloc memory
 	sys->nalloc = 0;
 	while (sys->nalloc < sys->nactive)
@@ -257,14 +257,14 @@ tsys *sys_LoadOPS (tStype *Stype) {
 	}
 	// fscanf for objects datas
 	for(i=0; i!=sys->nactive; i++) {
-		if(obj_ReadComplete(dest, &sys->o[i], Stype) == CORRUPTED_SIG) {
+		if(obj_InitFromFileComplete(&sys->o[i], sysfp, Stype) == CORRUPTED_SIG) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
 			debug_Printf(sys->o[i].name);
 			#endif
 		}
 	}
-	fclose(dest);
+	fclose(sysfp);
 	sys->Stype = Stype;
 	if(sys->nalloc == 0)
 		sys->o = NULL;
@@ -282,6 +282,10 @@ tobj *sys_SearchObj(tsys *sys, char *name) {
 	return NULL;
 }
 
+/***
+ * This function free a system (mem leack safe). MUST USE when exiting a simulation!
+ */
+
 void sys_Free (tsys *sys) {
 	
 	int i;
@@ -291,4 +295,5 @@ void sys_Free (tsys *sys) {
 		obj_Wipe(&sys->o[i]);
 	// free the buffer of objects
 	free(sys->o);
+	free(sys);
 }

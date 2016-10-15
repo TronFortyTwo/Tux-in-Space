@@ -73,7 +73,7 @@ ttime Parser(tsys *sys) {
 		t = parser_Jump(&sys->stime, &sys->precision);
 		
 	// parser_Settings
-	else if ((!strcmp("information", input)) || (!strcmp("i", input)))
+	else if ((!strcmp("information", input)) || (!strcmp("i", input)) ||  (!strcmp("info", input)))
 		parser_Information(sys);
 	// parser_Wait
 	else if ((!strcmp("wait", input)) || (!strcmp("w", input)))
@@ -122,7 +122,7 @@ void parser_Reask(char *command){
  */
 void parser_Distance(tsys *sys){
 	
-	char name[NAMELUN];
+	TNAME name;
 	tobj *o;
 	tobj *u;
 	long double distance[2];
@@ -216,8 +216,8 @@ void parser_Information(tsys *sys) {
 
 	var[0] = sys->name;
 	var[1] = &sys->nactive;
-	// Generic settingrmation about the system
-	OPS("Informations\n\nSystem %s whit %i objects\n\nOf which object do you want settingrmations? press 'n' to not display any object settingrmation", var);
+	// Generic informations about the system
+	OPS("Informations\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object informations", var);
 	in_s(input);
 	if(strcmp(input, "n") == 0){
 		OPS("Insert a new command", NULL);
@@ -243,9 +243,8 @@ void parser_Information(tsys *sys) {
 	var[10] = &obj->velx;
 	var[11] = &obj->vely; 
 	var[12] = &obj->velz; 
-	OPS("Settings %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
+	OPS("Informations about %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
 	sgetchar();
-	return;
 }
 	
 	
@@ -315,7 +314,6 @@ ttime parser_Jump(ttime *now, long double *precision) {
 		else
 			break;
 	}
-	
 	time_Update(&t);
 	return t;
 }

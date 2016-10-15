@@ -51,17 +51,19 @@ typedef struct object {
 // Functions that can called from everywhere
 // NOTE:
 // Is deprecated the modify the obj structure whitout passing through one of these functions
-void obj_Move 				(tobj *, tobj *);				// Move the first object in the second position securely
-void obj_MoveBigger 		(tobj *, tobj *, tobj *);		// Move the bigger of the two object in the third position securely
-void obj_Wipe				(tobj *);						// Clean the dinamic memory of an object
-BYTE obj_Load				(tobj *, tStype *, char *);		// Load an object from a file
-void obj_Save				(tobj *);						// Save the object in a file
-void obj_Init 				(tobj *, tStype *);				// Init a new object
-void obj_Rename				(tobj *, char *);				// Rename an object
-long double obj_Distance	(tobj *, tobj *);				// Compute the distance between two objects
-void obj_Write 				(FILE *, tobj *);				// Write in a file an object
-void obj_WriteComplete		(FILE *, tobj *);				// Write in a file an object whit coordinates
-BYTE obj_Read 				(FILE *, tobj *, tStype *Stype);// Read from a file an object
-BYTE obj_ReadComplete 		(FILE *, tobj *, tStype *Stype);// Read from a file an object whit coordinates
+// All these funtions should be memory leack and seg fault safe
+void obj_Move 					(tobj *, tobj *);			// Move the first object in the second position
+void obj_MoveBigger 			(tobj *, tobj *, tobj *);	// Move the bigger of the two object in the third position
+void obj_Wipe					(tobj *);					// Clean the dinamic memory of an object
+BYTE obj_Load					(tobj *, tStype *, char *);	// Load an object from a file
+void obj_Save					(tobj *);					// Save the object in a file
+void obj_Init 					(tobj *, tStype *);			// Init a new object
+void obj_Rename					(tobj *, char *);			// Rename an object safely
+long double obj_Distance		(tobj *, tobj *);			// Compute the distance between two objects
+BYTE obj_InitFromFile			(tobj *, FILE *, tStype *);	// Init an object from a file
+BYTE obj_InitFromFileComplete	(tobj *, FILE *, tStype *);	// Init an object from a file already opened
+void obj_Write 					(FILE *, tobj *);			// Write in a file an object already opened
+void obj_WriteComplete			(FILE *, tobj *);			// Write in a file an object whit coordinates
+void obj_SetType				(tobj *, tStype *, char *);	// Give to the object the type whit the name given
 
 #endif

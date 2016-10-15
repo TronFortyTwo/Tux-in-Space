@@ -30,6 +30,11 @@
 
 // local constants
 #define BIGGER_TOLERANCE 1.18
+// internal functions
+void obj_WipeName 		(char *);						// Wipe the name of an object (no mem lack)
+BYTE obj_Read 			(FILE *, tobj *, tStype *Stype);// Read from a file an object
+BYTE obj_ReadComplete 	(FILE *, tobj *, tStype *Stype);// Read from a file an object whit coordinates
+void obj_LowInit		(tobj *);						// init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
 
 /***
  * The obj_Save function save a object in a file
@@ -89,14 +94,20 @@ BYTE obj_Load(tobj *obj, tStype *Stype, char *name) {
 }
 
 /***
- * 	This function delete an object freeing the memory that is dinamically allocated
+ * this function delete free the name of an object
+ * the name then is set to NULL
+ */
+void obj_WipeName(char *name) {
+	free(name);
+	name = NULL;
+}
+
+/***
+ * 	This function frees the object memory that is dinamically allocated (for now only the name)
  */
 void obj_Wipe(tobj *obj) {
 	// free the name
-	if(obj->name != NULL) {
-		free(obj->name);
-		obj->name = NULL;
-	}
+	obj_WipeName(obj->name);
 }
 
 /***
@@ -123,12 +134,42 @@ void obj_Move (tobj *p, tobj *d) {
  * This function renames an object
  */
 void obj_Rename(tobj *o, char *nn) {	// nn is New Name
+	// Wipe the old name
+	obj_WipeName(o->name);
 	// resize the name buffer
-	o->name = (char *) realloc(o->name, sizeof(char[strlen(nn)]));
+	o->name = (char *) malloc (sizeof(char[strlen(nn)]));
 	// copy the name
 	strcpy(o->name, nn);
 	return;
 }
+
+/***
+ * This function is born as a higher level obj_ReadComplete that is memory leack and seg fault safe
+ */
+BYTE obj_InitFromFileComplete(tobj *o, FILE *fp, tStype *s) {
+	// make some basic initialization at the object to prevent memory leack (or seg fault)
+	obj_LowInit(o);
+	
+	obj_ReadComplete(fp, o, s);
+}
+/***
+ * This function is born as a higher level obj_Read that is memory leack and seg fault safe
+ */
+BYTE obj_InitFromFile(tobj *o, FILE *fp, tStype *s) {
+	// make some basic initialization at the object to prevent memory leack (or seg fault)
+	obj_LowInit(o);
+	
+	obj_Read(fp, o, s);
+}
+
+/***
+ * This function set the type given to the object pointed given
+ */
+void obj_SetType(tobj *o, tStype *s, char *nt) {
+	
+	o->type = type_Search(s, nt);
+}
+
 
 /***
  * OBJECT I/O       (READ/WRITE)
@@ -144,15 +185,14 @@ void obj_WriteComplete (FILE *stream, tobj *obj) {
 	fprintf(stream, "%s\n%s\n%d\n%d\n%d\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n%.128Lf\n", obj->name, obj->type->name, obj->color.red, obj->color.green,obj->color.blue, obj->radius, obj->mass, obj->x, obj->y, obj->z, obj->velx, obj->vely, obj->velz);
 }
 BYTE obj_Read (FILE *stream, tobj *obj, tStype *Stype) {
-	TNAME buffer;	// temporany buffer that store the name of the object and the name of the name of the type of the object
+	TNAME buffer;	// temporany buffer that store the name of the object and the name of the type of the object
 	// scan the name
 	in_fs(buffer, stream);
-	obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+	obj_Rename(obj, buffer);
 	while (obj->name == NULL) {
-		OPS_MemLack("obj_Read");
-		obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		OPS_MemLack("obj_ReadComplete");
+		obj_Rename(obj, buffer);
 	}
-	strcpy(obj->name, buffer);
 	// scan the type
 	in_fs(buffer, stream);
 	obj->type = type_Search(Stype, buffer);
@@ -166,12 +206,11 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 	TNAME buffer;
 	// scan the name
 	in_fs(buffer, stream);
-	obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+	obj_Rename(obj, buffer);
 	while (obj->name == NULL) {
 		OPS_MemLack("obj_ReadComplete");
-		obj->name = (char *) malloc (sizeof(char[strlen(buffer)]));
+		obj_Rename(obj, buffer);
 	}
-	strcpy(obj->name, buffer);
 	// scan the type
 	in_fs(buffer, stream);
 	obj->type = type_Search(Stype, buffer);
@@ -181,6 +220,14 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 		return CORRUPTED_SIG;
 	return GOODSIGNAL;
 }
+
+/***
+ *  init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
+ */
+void obj_LowInit (tobj *o){
+	
+	o->name = NULL;
+};
 
 /***
  * 	The function InitObject initialize a new object and ask settingrmation about it
@@ -198,14 +245,10 @@ void obj_Init (tobj *obj, tStype *Stype) {
 	char mass_irregularity[3];	// assume the value IRREGULARITY if the mass is out of range
 	char color_irregularity[3];	// assume the value IRREGULARITY if the color is out of range
 	
-	// Initialize the object whit blank attributes
-	obj->name = (char *) malloc (sizeof(char[strlen("Chose a name for your new object")]));
-	while(obj->name == NULL){
-		OPS_MemLack("InitObject");
-		obj->name = (char *) malloc (sizeof(char[strlen("Chose a name for your new object")]));
-	}
-	strcpy(obj->name, "Chose a name for your new object");
-	obj->type = type_Search(Stype, "Choose a type");
+	// Initialize the object
+	obj_LowInit(obj);
+	obj_Rename(obj, "Choose a name for your new object");
+	obj_SetType(obj, Stype, "Choose a type");
 	obj->mass = 0;
 	obj->radius = 0;
 	obj->color.blue = 0;
@@ -365,8 +408,6 @@ void obj_Init (tobj *obj, tStype *Stype) {
 				break;
 		}
 	}
-		
-	return;
 }
 
 
