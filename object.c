@@ -34,7 +34,6 @@
 void obj_WipeName 		(char *);						// Wipe the name of an object (no mem lack)
 BYTE obj_Read 			(FILE *, tobj *, tStype *Stype);// Read from a file an object
 BYTE obj_ReadComplete 	(FILE *, tobj *, tStype *Stype);// Read from a file an object whit coordinates
-void obj_LowInit		(tobj *);						// init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
 
 /***
  * The obj_Save function save a object in a file
@@ -422,26 +421,21 @@ long double obj_Distance(tobj *i, tobj *l) {
 /***
  * This function move the bigger object in the third position
  * i and l are the two objects,
- * b the variable address to set = at the bigger
+ * b is the pointer that at the end of the function must point to the bigger
  */
 void obj_MoveBigger (tobj *i, tobj *l, tobj *b) {
-		
-	tobj *bigger;	//the bigger
-		
-	// an object is bigger if has mass much bigger, else make the bigger a random one, but whit advantages (see below at the else)
+	
+	// an object is bigger if has mass much bigger
 	if (i->mass > l->mass*BIGGER_TOLERANCE)
-		bigger = i;
+		b = i;
 	else if (l->mass > i->mass*BIGGER_TOLERANCE)
-		bigger = l;
-	// if no one of the two have the requisites, pick one randomly, but considering the mass
+		b = l;
+	// if no one is much bigger than the other, pick one randomly, but considering the mass
 	else {
 		srand(time(NULL));
 		if 		( (rand()/RAND_MAX) > (i->mass/(l->mass+i->mass)) )
-			bigger = l;
+			b = l;
 		else
-			bigger = i;
+			b = i;
 	}
-	// set the bigger and exit
-	obj_Move(bigger, b);
-	return; 
 }

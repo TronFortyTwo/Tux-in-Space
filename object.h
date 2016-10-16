@@ -65,5 +65,8 @@ BYTE obj_InitFromFileComplete	(tobj *, FILE *, tStype *);	// Init an object from
 void obj_Write 					(FILE *, tobj *);			// Write in a file an object already opened
 void obj_WriteComplete			(FILE *, tobj *);			// Write in a file an object whit coordinates
 void obj_SetType				(tobj *, tStype *, char *);	// Give to the object the type whit the name given
+// ONLY THE PHISIC MOTOR CAN USE THIS!!! HOWEVER IS DEPRECATED THAT
+void obj_LowInit				(tobj *);					// init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
+
 
 #endif

@@ -272,6 +272,8 @@ tobj pe_AnaelasticImpact(tobj *oi, tobj *ol) {
 	tobj *bigger;			// the bigger is the object that, relatively, is being hit by the smaller
 	tobj *smaller;			// the smaller is the object that fuse whit the bigger and lose personality
 	
+	// Low level initialization of newobj
+	obj_LowInit(&newobj);
 	// set the bigger and the smaller
 	obj_MoveBigger(oi, ol, bigger);
 	if(oi == bigger)
@@ -279,8 +281,7 @@ tobj pe_AnaelasticImpact(tobj *oi, tobj *ol) {
 	else
 		smaller = oi;
 	// The new object mantein the name of the bigger. The new object is written in the bigger position
-	newobj.name = (char *) malloc (sizeof(char[strlen(bigger->name)]));
-	strcpy(newobj.name, bigger->name);
+	obj_Rename(&newobj, bigger->name);
 	// the type is the type of the bigger
 	newobj.type = bigger->type;
 	// the color is the average, but considering the radius and the type's range
@@ -312,6 +313,11 @@ tobj pe_AnaelasticImpact(tobj *oi, tobj *ol) {
 	newobj.velz = ((oi->velz * oi->mass) + (ol->velz * ol->mass)) / (ol->mass + oi->mass);
 	// to calculate the radius we calculate the volum of the two object,
 	newobj.radius = RadiusestoVolume(oi->radius, ol->radius);
+	
+	#if DEBUG
+	debug_Printf("Anaelastic Impact: Created this new object:");
+	debug_Object(&newobj);
+	#endif
 	
 	return newobj;
 }
@@ -352,7 +358,7 @@ void pe_HuntingImpact(tStype *Stype, tobj *ed, tobj *er) {
 	#if DEBUG
 	debug_Object(ed);
 	#endif
-	ed->type = type_Search(Stype, ed->type->product);
+	obj_SetType (ed, Stype, ed->type->product);
 	
 	// move a percentage p of ed mass in er
 	er->mass += ed->mass * p;

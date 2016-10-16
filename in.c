@@ -25,6 +25,7 @@
 #include "generic.h"
 #include "OnlyPrintfSystem.h"
 #include "in.h"
+#include "debug.h"
 
 /***
  * This function scan a string WHIT spaces
@@ -54,7 +55,7 @@ void in_fs (char *dest, FILE *stream) {
 	fscanf(stream, "%9999[^\n]%*1[\n]", dest);
 	
 	#if DEBUG
-	debug_Printf("dest");
+	debug_Printf(dest);
 	#endif
 }
 
