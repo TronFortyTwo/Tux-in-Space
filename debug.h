@@ -22,6 +22,7 @@
  *	HEADER FILE
  */
 
+#if DEBUG
 #ifndef debugh
 #define debugh
 
@@ -29,13 +30,12 @@
 #include "object.h"
 
 // functions
-#if DEBUG
 void debug_Stype(tStype *);		// Print in the debug target a structure tStype given
 void debug_Printf(char *);		// Print in the debug target a string
 void debug_Init();				// init the debug target
 void debug_Object(tobj *);		// Print in the debug target an object
 void debug_Int(int);			// Print in the debug target an int number
 void DebugDouble(double n);		// Print in the debug target a long double number
-#endif
 
+#endif
 #endif

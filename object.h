@@ -53,7 +53,7 @@ typedef struct object {
 // Is deprecated the modify the obj structure whitout passing through one of these functions
 // All these funtions should be memory leack and seg fault safe
 void obj_Move 					(tobj *, tobj *);			// Move the first object in the second position
-void obj_MoveBigger 			(tobj *, tobj *, tobj *);	// Move the bigger of the two object in the third position
+void obj_GetBigger 				(tobj *, tobj *, tobj **);	// Move the bigger of the two object in the third position
 void obj_Wipe					(tobj *);					// Clean the dinamic memory of an object
 BYTE obj_Load					(tobj *, tStype *, char *);	// Load an object from a file
 void obj_Save					(tobj *);					// Save the object in a file

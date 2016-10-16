@@ -28,9 +28,9 @@
 #include "generic.h"
 
 // Global functions
-BYTE set_InitDir();
-void set_Init();
-void set_SetDefault();
-void set_Save();
+BYTE set_InitDir();		//initialize directoryes
+void set_Init();		//initialize set structure
+void set_SetDefault();	//initialize set structure as default
+void set_Save();		//save set structure in a file
 
 #endif

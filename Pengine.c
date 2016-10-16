@@ -275,7 +275,7 @@ tobj pe_AnaelasticImpact(tobj *oi, tobj *ol) {
 	// Low level initialization of newobj
 	obj_LowInit(&newobj);
 	// set the bigger and the smaller
-	obj_MoveBigger(oi, ol, bigger);
+	obj_GetBigger(oi, ol, &bigger);
 	if(oi == bigger)
 		smaller = ol;
 	else

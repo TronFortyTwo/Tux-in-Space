@@ -226,6 +226,7 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 void obj_LowInit (tobj *o){
 	
 	o->name = NULL;
+	o->type = NULL;
 };
 
 /***
@@ -419,23 +420,22 @@ long double obj_Distance(tobj *i, tobj *l) {
 
 
 /***
- * This function move the bigger object in the third position
+ * Put in *b the address of the bigger object
  * i and l are the two objects,
- * b is the pointer that at the end of the function must point to the bigger
  */
-void obj_MoveBigger (tobj *i, tobj *l, tobj *b) {
+void obj_GetBigger (tobj *i, tobj *l, tobj **b) {
 	
 	// an object is bigger if has mass much bigger
 	if (i->mass > l->mass*BIGGER_TOLERANCE)
-		b = i;
+		*b = i;
 	else if (l->mass > i->mass*BIGGER_TOLERANCE)
-		b = l;
+		*b = l;
 	// if no one is much bigger than the other, pick one randomly, but considering the mass
 	else {
 		srand(time(NULL));
 		if 		( (rand()/RAND_MAX) > (i->mass/(l->mass+i->mass)) )
-			b = l;
+			*b = l;
 		else
-			b = i;
+			*b = i;
 	}
 }
