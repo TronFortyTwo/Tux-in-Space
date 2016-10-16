@@ -249,7 +249,7 @@ void pe_Impacts(tsys *sys) {
 					obj_Move(&temp, &sys->o[i]);
 					sys_RemoveObj(sys, &sys->o[l]);
 				}
-				else {
+				else {	// i > l
 					obj_Move(&temp, &sys->o[l]);
 					sys_RemoveObj(sys, &sys->o[i]);
 				}

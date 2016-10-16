@@ -55,8 +55,8 @@ void obj_Save(tobj *obj) {
 	if(dest != NULL) {
 		fclose(dest);
 		OPS("While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", NULL);
-		scanf("%s", input);
-		if(strcmp(input, "n") == 0)
+		in_s(input);
+		if(!strcmp(input, "n"))
 			return;
 	}
 
@@ -64,8 +64,6 @@ void obj_Save(tobj *obj) {
 	dest = fopen(path, "w");
 	obj_Write(dest, obj);
 	fclose(dest);
-
-	return;	
 }
 /***
  * The load object function load from a file the settingrmation about a object
@@ -73,16 +71,17 @@ void obj_Save(tobj *obj) {
 BYTE obj_Load(tobj *obj, tStype *Stype, char *name) {
 		
 	FILE *ofile;				// (the) o(bject) file
-	char path [NAMELUN + 15];	// the path of the object
+	{	// From the name, get the file address
+		char path [NAMELUN + 15];	// the path of the object
 		
-	strcpy(path, OBJECT_PATH);
-	strcat(path, name);
-	strcat(path, ".object");
+		strcpy(path, OBJECT_PATH);
+		strcat(path, name);
+		strcat(path, ".object");
 		
-	ofile = fopen(path, "r");
-	while(ofile == NULL)
-		return FILE_ERR_SIG;
-		
+		ofile = fopen(path, "r");
+		while(ofile == NULL)
+			return FILE_ERR_SIG;
+	}	
 	// Read type, color, radius and mass
 	obj_Read(ofile, obj, Stype);
 		
@@ -139,7 +138,6 @@ void obj_Rename(tobj *o, char *nn) {	// nn is New Name
 	o->name = (char *) malloc (sizeof(char[strlen(nn)]));
 	// copy the name
 	strcpy(o->name, nn);
-	return;
 }
 
 /***
@@ -148,7 +146,6 @@ void obj_Rename(tobj *o, char *nn) {	// nn is New Name
 BYTE obj_InitFromFileComplete(tobj *o, FILE *fp, tStype *s) {
 	// make some basic initialization at the object to prevent memory leack (or seg fault)
 	obj_LowInit(o);
-	
 	obj_ReadComplete(fp, o, s);
 }
 /***
@@ -157,7 +154,6 @@ BYTE obj_InitFromFileComplete(tobj *o, FILE *fp, tStype *s) {
 BYTE obj_InitFromFile(tobj *o, FILE *fp, tStype *s) {
 	// make some basic initialization at the object to prevent memory leack (or seg fault)
 	obj_LowInit(o);
-	
 	obj_Read(fp, o, s);
 }
 
@@ -194,7 +190,7 @@ BYTE obj_Read (FILE *stream, tobj *obj, tStype *Stype) {
 	}
 	// scan the type
 	in_fs(buffer, stream);
-	obj->type = type_Search(Stype, buffer);
+	obj_SetType(obj, Stype, buffer);
 	// scan all the other things
 	fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass);
 	if (obj->type == NULL)
@@ -212,7 +208,7 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 	}
 	// scan the type
 	in_fs(buffer, stream);
-	obj->type = type_Search(Stype, buffer);
+	obj_SetType(obj, Stype, buffer);
 	// scan the other stuff
 	fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass, &obj->x, &obj->y, &obj->z, &obj->velx, &obj->vely, &obj->velz);
 	if (obj->type == NULL)
@@ -297,9 +293,7 @@ void obj_Init (tobj *obj, tStype *Stype) {
 			OPS ("INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character and can't contein spaces", var);
 			in_s(name);
 			// apply the new name
-			free(obj->name);
-			obj->name = (char *) malloc (sizeof(strlen(name)));
-			strcpy(obj->name, name);
+			obj_Rename(obj, name);
 			strcpy(comment, "\nNew name assigned succefully!");
 		}
 		// Type
@@ -352,8 +346,8 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		}
 		// LOAD
 		else if(input == 8) {
-			// free the name
-			free(obj->name);
+			// free the object
+			obj_Wipe(obj);
 			// load the object
 			temp = obj_Load(obj, Stype, obj->name);
 			strcpy(comment, "\n");

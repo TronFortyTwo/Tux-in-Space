@@ -28,6 +28,6 @@
 #include "time.h"
 
 // Global functions
-void Pengine (tsys *, ttime );
+void Pengine (tsys *, ttime );	// Process a system given to make his simulation arrive at the time given
 
 #endif
