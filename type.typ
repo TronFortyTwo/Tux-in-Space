@@ -60,7 +60,7 @@ PARENT: Planet
 
 NAME: Choose a type
 DESCRIPTION: for your new object
-PARENT: Whitout parent
+PARENT: System
 
 NAME: Comet
 DESCRIPTION: A comet is an icy body composed of water and dust. When exposed to solar wind, some of it's mass sublime and behind him a 'tail' appears.
