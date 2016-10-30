@@ -32,7 +32,7 @@
 // The structure that represent a type of a object
 typedef struct sStype {
 	char *name;
-	char description[DESCRIPTIONSIZE];
+	char *description;
 	TNAME parent;
 	double mass_min;			// Mass range
 	double mass_max;

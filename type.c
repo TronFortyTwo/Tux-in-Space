@@ -39,8 +39,6 @@ tStype *type_Init (FILE *stream) {
 	ttype defaultype;
 	// a temp buffer
 	char buffer[DESCRIPTIONSIZE + 13];
-	// counters
-	int i;
 	
 	// count how many types there are in the file (-1 because there is the default type)
 	Stype.number = -1;
@@ -66,9 +64,18 @@ tStype *type_Init (FILE *stream) {
 	// name
 	in_hfs(buffer, stream);
 	defaultype.name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
+	while(defaultype.name == NULL){
+		OPS_MemLack("type_Init");
+		defaultype.name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
+	}
 	strcpy(defaultype.name, &buffer[6]);
 	// description
 	in_hfs(buffer, stream);
+	defaultype.description = (char *) malloc (sizeof(char[strlen(&buffer[13])]));
+	while(defaultype.description == NULL){
+		OPS_MemLack("type_Init");
+		defaultype.description = (char *) malloc (sizeof(char[strlen(&buffer[13])]));
+	}
 	strcpy(defaultype.description, &buffer[13]);
 	// the mass range
 	in_hfs(buffer, stream);
@@ -114,7 +121,7 @@ tStype *type_Init (FILE *stream) {
 	
 	// scan the other types
 	in_hfs(buffer, stream);
-	for(i=0; i != Stype.number; i++) {
+	for(int i=0; i != Stype.number; i++) {
 		// assign at the type the default values
 		Stype.type[i] = defaultype;
 		// scan customized values
@@ -126,9 +133,14 @@ tStype *type_Init (FILE *stream) {
 		strcpy(Stype.type[i].name, &buffer[6]);	//the name
 		while(1) {
 			in_hfs(buffer, stream);
-			if(!strncmp(buffer, "DESCRIPTION: ", 13))					//the description
+			if(!strncmp(buffer, "DESCRIPTION: ", 13)){					//the description
+				Stype.type[i].description = (char *) malloc (sizeof(char[strlen(&buffer[13])]));
+				while(Stype.type[i].description == NULL) {
+					OPS_MemLack("type_Init");
+					Stype.type[i].description = (char *) malloc (sizeof(char[strlen(&buffer[13])]));
+				}
 				strcpy(Stype.type[i].description, &buffer[13]);
-				
+			}	
 			else if(!strncmp(buffer, "MASS_MAX: ", 10)) {				//the maximum mass
 				Stype.type[i].mass_max = strtod(&buffer[10], NULL);
 			}

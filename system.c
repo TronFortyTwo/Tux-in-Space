@@ -79,10 +79,10 @@ void sys_ReduceObjBuf(tsys *sys) {
 	
 	tobj *backptr = sys->o;
 	
-	sys->o = (tobj *) realloc (sys->o, sys->nalloc-OBJBUFSIZE);
+	sys->o = (tobj *) realloc (sys->o, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 	if (sys->o == NULL){
 		OPS_MemLack("Reduceobjbuf");
-		sys->o = (tobj *) realloc (backptr, sys->nalloc-OBJBUFSIZE);
+		sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 	}
 	sys->nalloc+=OBJBUFSIZE;
 }
@@ -95,10 +95,10 @@ void sys_ExtendObjBuf(tsys *sys){
 	
 	tobj *backptr = sys->o;		//the old pointer
 	
-	sys->o = (tobj *) realloc (sys->o, sys->nalloc+OBJBUFSIZE);
+	sys->o = (tobj *) realloc (sys->o, sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 	if (sys->o == NULL){
 		OPS_MemLack("Extendobjbuf");
-		sys->o = (tobj *) realloc (backptr, sys->nalloc+OBJBUFSIZE);
+		sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc+OBJBUFSIZE]));
 	}
 	sys->nalloc+=OBJBUFSIZE;
 }
