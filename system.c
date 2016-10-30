@@ -194,7 +194,17 @@ tsys *sys_InitOPS (tStype *Stype) {
 	c = NAMELUN-1;
 	var = &c;
 	OPS ("NEW SYSTEM INITIALIZATION\n\nname of the system:\n&tdThe name can be of a maximum of %i characters and can't contein spaces", &var);
-	scanf("%s", sys->name);
+	// scan the name
+	{
+		TNAME name;
+		in_s(name);
+		sys->name = (char *) malloc (sizeof(char[strlen(name)]));
+		while(sys->name == NULL){
+			OPS_MemLack("sys_InitOPS");
+			sys->name = (char *) malloc (sizeof(char[strlen(name)]));
+		}
+		strcpy(sys->name, name);
+	}
 	//ask for the precision
 	OPS ("NEW SYSTEM INITIALIZATION\n\nprecision of the simulation:\n&tdIndicate how much the simulation is precise. A big value mean leess precision but lighter hardware use.\nrecommended values: < 2", NULL);
 	scanf("%Lf", &sys->precision);
@@ -223,6 +233,7 @@ tsys *sys_Load(tStype *Stype){
  */
 tsys *sys_LoadOPS (tStype *Stype) {
 
+	TNAME name;				// the name of the system
 	char path[NAMELUN+12];	// the system file (path)
 	FILE *sysfp;			// the system file (pointer)
 	int i;					// counter
@@ -233,10 +244,10 @@ tsys *sys_LoadOPS (tStype *Stype) {
 	}
 	// ask which system
 	OPS("LOAD SYSTEM\n\nWhat is the name of the system you want to load?", NULL);
-	in_s(sys->name);
+	in_s(name);
 	// write the path
 	strcpy (path, SYSTEM_PATH);
-	strcat (path, sys->name);
+	strcat (path, name);
 	strcat (path, ".sys");
 	// open the file
 	sysfp = fopen(path, "r");
@@ -246,6 +257,13 @@ tsys *sys_LoadOPS (tStype *Stype) {
 		free(sys);
 		return NULL;
 	}
+	// set the name
+	sys->name = (char *) malloc (sizeof(char[strlen(name)]));
+	while(sys->name == NULL){
+		OPS_MemLack("sys_InitOPS");
+		sys->name = (char *) malloc (sizeof(char[strlen(name)]));
+	}
+	strcpy(sys->name, name);
 	// scanf system's settingrmations
 	fscanf (sysfp, "%Lf\n%ld\n%Lf\n", &sys->precision, &sys->nactive, &sys->G);
 	fscanf (sysfp, "%ld\n%d\n%d\n%d\n%d\n%d\n", &sys->stime.year, &sys->stime.day, &sys->stime.hour, &sys->stime.min, &sys->stime.sec, &sys->stime.millisec);
@@ -291,12 +309,11 @@ tobj *sys_SearchObj(tsys *sys, char *name) {
 
 void sys_Free (tsys *sys) {
 	
-	int i;
-	
 	// free all the objects of the buffer
-	for(i=0; i!= sys->nactive; i++)
+	for(int i=0; i!= sys->nactive; i++)
 		obj_Wipe(&sys->o[i]);
-	// free the buffer of objects
+	// free system buffers
 	free(sys->o);
+	free(sys->name);
 	free(sys);
 }

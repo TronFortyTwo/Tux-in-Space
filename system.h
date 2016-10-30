@@ -32,7 +32,7 @@
 
 // one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
 typedef struct system {
-	TNAME name;
+	char *name;
 	long double precision;	// Precision of the simulation (in second)
 	ttime stime;			// the time of the simulation
 	QWORD nactive;			// number of objects active
