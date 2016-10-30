@@ -1,3 +1,11 @@
+
+# NOTES:
+# - EVERY type must have a name and a parent
+# - Maximum mass -1 means whitout limit
+# - NAME must be the first element of a type, PARENT the last
+# - Please keep the alphabetical order
+# - to write comment, start the line whit '#'
+
 NAME: DEFAULT TYPE
 DESCRIPTION: No description is available yet for this type
 MASS_MAX: -1
@@ -24,11 +32,9 @@ DESCRIPTION: An asteroid is a minor planet that have a composition very similar 
 PRODUCT: Meteroid
 PARENT: Minor planet
 
-NAME: Binary asteroids
-PRODUCT: Meteroid
-PARENT: Asteroid
-
 NAME: Black hole
+DESCRIPTION: A so massive and dense body that even the light can escape from it.
+MASS_MIN: 0.02177
 BLUE_MAX: 0
 RED_MAX: 0
 GREEN_MAX: 0
@@ -44,9 +50,6 @@ NAME: Carbon Planet
 DESCRIPTION: A carbon planet is a planet that contein much much carbon, and a minor quantity of oxygen
 PARENT: Planet
 
-NAME: Cataclysmic variable star
-PARENT: Star
-
 NAME: Celestial object
 DESCRIPTION: A celestial object is a natural object
 PARENT: NULL
@@ -60,6 +63,7 @@ DESCRIPTION: for your new object
 PARENT: Whitout parent
 
 NAME: Comet
+DESCRIPTION: A comet is an icy body composed of water and dust. When exposed to solar wind, some of it's mass sublime and behind him a 'tail' appears.
 PRODUCT: Meteroid
 PARENT: Small body
 
@@ -81,6 +85,7 @@ HUNTER: Y
 PARENT: Space Monster
 
 NAME: Dwarf planet
+DESCRIPTION: A dwarf planet is a planetary mass object enought massive to have an hydrostatic equilibrium, but not enought to clear the materials in the neightbouroud space
 PARENT: Minor planet
 
 NAME: Earth analog
@@ -212,11 +217,3 @@ NAME: White dwarf
 PARENT: Compact star
 
 EOF
-
-NOTES:
-- EVERY type must have a name and a parent
-- Maximum mass -1 means whitout limit
-- NAME must be the first element of a type, PARENT the last
-- Please keep the alphabetical order
-- Leave a blank line between two types and don't put blank lines between type's elements
-- Don't write comments before the "END OF FILE"

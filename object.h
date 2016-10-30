@@ -45,7 +45,7 @@ typedef struct object {
 	long double vely;		// velocity on y
 	long double velz;		// velocity on z
 	tcolor color;			// the color
-	// void *data;			// type specific information about the object (coming soon ;)
+	void *data;				// type specific information about the object (coming soon ;)
 } tobj;
 
 // Functions that can called from everywhere

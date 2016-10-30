@@ -34,9 +34,8 @@
  */
 void in_s (char *d) {
 	
-	if(set.vmode == V_OPS) {
+	if(set.vmode == V_OPS) 
 		scanf("%s", d);
-	}
 	
 	if(set.vmode == V_SDL) {
 		// Here should be something corrispondent to scanf but whit SDL
@@ -48,17 +47,21 @@ void in_s (char *d) {
  * 
  * */
 void in_fs (char *dest, FILE *stream) {
-	#if DEBUG
-	debug_Printf("in_fs:");
-	#endif
 	
 	fscanf(stream, "%9999[^\n]%*1[\n]", dest);
-	
-	#if DEBUG
-	debug_Printf(dest);
-	#endif
 }
 
+void in_hfs (char *dest, FILE *stream) {
+	
+	// don't save commented line (process to optimize)
+	do {
+		// remove '\n', '\t' and ' '
+		fscanf(stream, " ");
+		// scan the raw row
+		in_fs(dest, stream);
+	}
+	while(dest[0] == '#');
+}
 
 /***
  * SafeIScanf scan an int value more "safely" that the normal scanf() function

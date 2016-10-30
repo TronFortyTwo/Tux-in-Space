@@ -26,9 +26,10 @@
 #define inh
 
 // global functions
-void in_u (unsigned int *);
-void in_i (int *);
-void in_fs (char *, FILE *);
-void in_s (char *);
+void in_u	(unsigned int *);	// scan an unsigned int
+void in_i	(int *);			// scan a signed int
+void in_s	(char *);			// scan a string
+void in_fs	(char *, FILE *);	// scan from a file as long as a '\n'
+void in_hfs	(char *, FILE *);	// like in_fs, but jump comment lines (lines that start whit '#')
 
 #endif

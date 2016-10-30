@@ -60,12 +60,12 @@ ttime Parser(tsys *sys) {
 	scanf("%s", input);
 	// continue
 	if ((!strcmp("step", input)) || (!strcmp("s", input))) {
-		t.millisec = t.millisec + (1000 * sys->precision);
+		t.millisec += 1000 * sys->precision;
 		time_Update(&t);
 	}
 	// help
 	else if ((!strcmp("help", input)) || (!strcmp("h", input))) {
-		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-parser_Create (c)\n-parser_Jump (j)\n-parser_Wait (w)\n-Information (i)\n-settings\n-save\n-distance\n-parser_Quit\n-delete\n\nPress something to continue...", NULL);
+		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
 		scanf("%s", input);
 	}
 	// parser_Jump
@@ -94,9 +94,8 @@ ttime Parser(tsys *sys) {
 	else if (!(strcmp("delete", input)) || (!strcmp("remove", input)))
 		parser_Delete(sys);
 	// settings
-	else if (!(strcmp("settings", input)) || (!strcmp("configuration", input))){
+	else if (!(strcmp("settings", input)) || (!strcmp("configuration", input)))
 		menu_Settings(sys);
-	}
 	// wrong command
 	else {
 		parser_Reask(input);

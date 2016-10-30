@@ -39,7 +39,7 @@
 void set_Save(){
 	
 	FILE *cf = fopen(CONFIGURATION_FILE, "w");
-		
+	
 	// print the vmode
 	fprintf(cf, "%d\n", set.vmode);
 	// print OPS settings

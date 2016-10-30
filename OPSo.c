@@ -52,7 +52,7 @@ void OPSo (tsys *sys) {
 	
 	// if there isn't any object
 	if(!sys->nactive)
-		strcat(buffer, "\n&t1The system is empty. Use the 'Create' command to Create a new object");
+		strcat(buffer, "\n&t1The system is empty. Use the 'help' command for help");
 	else {
 		pos = 6;
 		// A loop that tell to every object something

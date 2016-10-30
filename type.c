@@ -46,7 +46,7 @@ tStype *type_Init (FILE *stream) {
 	Stype.number = -1;
 	while(1) {
 		fscanf(stream, "\n");
-		in_fs (buffer, stream);				// read a line
+		in_hfs (buffer, stream);					// read a line
 		if (!strcmp(buffer, "EOF"))					// if the file is finished exit
 			break;
 		else if (!strncmp (buffer, "NAME:", 5))		// if is a new object memorize that there is a new object
@@ -60,47 +60,48 @@ tStype *type_Init (FILE *stream) {
 		Stype.type = (ttype *) malloc (sizeof(ttype[Stype.number]));
 	}
 		
-	// scan the DEFAULT TYPE
 	rewind(stream);
+		
+	// scan the DEFAULT TYPE
 	// name
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	defaultype.name = (char *) malloc (sizeof(char[strlen(&buffer[6])]));
 	strcpy(defaultype.name, &buffer[6]);
 	// description
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	strcpy(defaultype.description, &buffer[13]);
 	// the mass range
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	defaultype.mass_max = strtoll(&buffer[10], NULL, 0);
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	defaultype.mass_min = strtoll(&buffer[10], NULL, 0);
 	// the color range
-	in_fs(buffer, stream);							// blue
+	in_hfs(buffer, stream);							// blue
 	defaultype.color_max.blue = strtod(&buffer[10], NULL);
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	defaultype.color_min.blue = strtod(&buffer[10], NULL);
-	in_fs(buffer, stream);							// red
+	in_hfs(buffer, stream);							// red
 	defaultype.color_max.red = strtod(&buffer[9], NULL);		
-	in_fs(buffer, stream);								
+	in_hfs(buffer, stream);								
 	defaultype.color_min.red = strtod(&buffer[9], NULL);		
-	in_fs(buffer, stream);							//green
+	in_hfs(buffer, stream);							//green
 	defaultype.color_max.green = strtod(&buffer[11], NULL);		
-	in_fs(buffer, stream);								
+	in_hfs(buffer, stream);								
 	defaultype.color_min.green = strtod(&buffer[11], NULL);	
 	// hunted
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	if(buffer[8] == 'Y')
 		defaultype.hunted = ON;
 	else if(buffer[8] == 'N')
 		defaultype.hunted = OFF;
 	// hunter
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	if(buffer[8] == 'Y')
 		defaultype.hunter = ON;
 	else if(buffer[8] == 'N')
 		defaultype.hunter = OFF;
 	// product (defaultype has only one product)
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	defaultype.product = (char *) malloc (sizeof(char[strlen(&buffer[9])]));
 	while(defaultype.product == NULL){
 		OPS_MemLack("initype");
@@ -108,12 +109,11 @@ tStype *type_Init (FILE *stream) {
 	}
 	strcpy(defaultype.product, &buffer[9]);
 	// parent
-	in_fs(buffer, stream);
+	in_hfs(buffer, stream);
 	strcpy(defaultype.parent, &buffer[8]);
-	fscanf(stream, "\n");
 	
-	//scan the other types
-	in_fs(buffer, stream);
+	// scan the other types
+	in_hfs(buffer, stream);
 	for(i=0; i != Stype.number; i++) {
 		// assign at the type the default values
 		Stype.type[i] = defaultype;
@@ -125,7 +125,7 @@ tStype *type_Init (FILE *stream) {
 		}
 		strcpy(Stype.type[i].name, &buffer[6]);	//the name
 		while(1) {
-			in_fs(buffer, stream);
+			in_hfs(buffer, stream);
 			if(!strncmp(buffer, "DESCRIPTION: ", 13))					//the description
 				strcpy(Stype.type[i].description, &buffer[13]);
 				
@@ -175,7 +175,6 @@ tStype *type_Init (FILE *stream) {
 			}
 			else if(!strncmp(buffer, "PARENT: ", 8)) {					//the parent
 				strcpy(Stype.type[i].parent, &buffer[8]);
-				fscanf(stream, "\n");
 			}
 			else
 				break;
@@ -195,10 +194,8 @@ tStype *type_Init (FILE *stream) {
  */
 ttype *type_Search(tStype *Stype, char *name) {
 	
-	//counter
-	int i;
 	//the loop that search the type whit the true name
-	for(i=0; i!=Stype->number; i++) {
+	for(int i=0; i!=Stype->number; i++) {
 		//if the two name are the same
 		if (0 == strcmp(Stype->type[i].name, name))
 			 return &Stype->type[i];
@@ -262,176 +259,200 @@ ttype *type_Browser(tStype *Stype, char *title) {
 		
 	// in the gerarchic tree of type, is the common parent that the types shown have
 	TNAME commonparent = "NULL";
-	// static buffer and dinamic buffer
-	char sbuf[1024];
-	char dbuf[1024];
-	// temp string that stores a number written in ASCII
-	char number[4];
-	// counters
-	int i;
-	int maxnum;
-	// the number m at the position n represent that if the user pick the number n he mean the Stype->type[m]
-	int *npoint = (int *) malloc (sizeof(int) * Stype->number);
-	while (npoint == NULL){
-		OPS_MemLack("type_Browser");
-		npoint = (int *) malloc (sizeof(int) * Stype->number);
+	// the output buffer
+	char buf[1024];
+	// the last object number
+	int maxn;
+	// the number of the back, description and generic button
+	int backn, descrn, genericn;
+	
+	// The pointers to the types listed
+	ttype **types_listed = (ttype **) malloc (sizeof(ttype *) * Stype->number);
+	while (types_listed == NULL){
+		OPS_MemLack("type browser");
+		types_listed = (ttype **) malloc (sizeof(ttype *) * Stype->number);
 	}
-	// inputs
+	// input
 	int input;
-	int input2;
-	// array to give to OPS
-	void *var[8];
+	// stuff to give to OPS and its counter
+	int *ivar = (int *) malloc (sizeof(int) * (Stype->number + 4));
+	while(ivar == NULL){
+		OPS_MemLack("type Browser");
+		ivar = (int *) malloc (sizeof(int) * (Stype->number + 4));
+	}
+	void **var = (void **) malloc(sizeof(void*) * (Stype->number * 2 + 4));	// +4 because there are other numbers to give to OPS
+	while(var == NULL){
+		OPS_MemLack("type Browser");
+		var = (void **) malloc(sizeof(void*) * (Stype->number * 2 + 4));
+	}
 	int varpos;
-	
-	// the title
-	strcpy (sbuf, title);
-	strcat (sbuf, "\n");
-	
+
+
 	// the main loop
-	while (1){
-		// reset the dinamic buffer
-		strcpy(dbuf, sbuf);
-		// write in the dbuf the parent if one else a generic word
+	while(1) {
+		// restart elaborate the output
+		varpos = 0;
+		maxn = 0;
+		// the title
+		strcpy (buf, title);
+		strcat (buf, "\n");
+		// write in the dbuf the parent if there is one, else a generic word
 		if (strcmp(commonparent, "NULL"))
-			strcat(dbuf, commonparent);
+			strcat(buf, commonparent);
 		else
-			strcat(dbuf, "Object");
-		strcat(dbuf, ":\n\n");
-		// search for types that have have as parent commonparent and add them to the buffer
-		i=0;
-		maxnum=0;
-		do{
+			strcat(buf, "Object");
+		strcat(buf, ":\n");
+		// search for types that have have as parent commonparent
+		for (int i=0; i!=Stype->number; i++) {
 			// if the type has commonparent as parent
-			if(strcmp(Stype->type[i].parent, commonparent) == 0) {
-				snprintf(number, 3, "%d", maxnum+1);
-				strcat(dbuf, number);
-				strcat(dbuf, ") ");
-				strcat(dbuf, Stype->type[i].name);
-				strcat(dbuf, "\n");
-				npoint[maxnum++] = i;
+			if(!strcmp(Stype->type[i].parent, commonparent)) {
+				// write its number
+				strcat(buf, "\n%i) %s");	// Write the object in the buffer
+				types_listed[maxn++] = &Stype->type[i];
+				ivar[varpos] = maxn;
+				var[varpos] = &ivar[varpos++];
+				var[varpos++] = Stype->type[i].name;
 			}
-			// go to the next type
-			i++;
 		}
-		while(i!=Stype->number);
-	
 		// add the Generic type button
-		snprintf(number, 3, "%d", ++maxnum);
-		strcat(dbuf, number);
-		strcat(dbuf, ") Generic ");
-		if(strcmp(commonparent, "NULL") != 0)
-			strcat(dbuf, commonparent);
+		genericn = maxn+1;
+		strcat(buf, "\n%i");
+		var[varpos++] = &genericn;
+		strcat(buf, ") Generic ");
+		if(strcmp(commonparent, "NULL"))
+			strcat(buf, commonparent);
 		else
-			strcat(dbuf, " object");
-		// add the description button
-		snprintf(number, 3, "%d", ++maxnum);
-		strcat(dbuf, "\n\n");
-		strcat(dbuf, number);
-		strcat(dbuf, ") description of an object\n");
+			strcat(buf, "object");
+		// some space then add the description button
+		descrn = maxn+2;
+		var[varpos++] = &descrn;
+		strcat(buf, "\n\n%i) description of an object");
 		// add the back button
-		snprintf(number, 3, "%d", ++maxnum);
-		strcat(dbuf, number);
-		strcat(dbuf, ") back to the top of the tree");
+		backn = maxn+3;
+		var[varpos++] = &backn;
+		strcat(buf, "\n%i) back to the top");
 		
 		// print
-		OPS(dbuf, NULL);
-			
-		// scan input
-		in_i(&input);
+		OPS(buf, var);
 		
-		// make the numbers start from zero
-		input--;
-		maxnum--;
+		// make indexes start from 0
+		maxn--;
+		genericn--;
+		descrn--;
+		backn--;
 		
-		// control that the value given is valid, if not, restart.
-		if (input < 0)
-			continue;
-		if (input > maxnum)
-			continue;
+		// scan the input as long as a valid number is given
+		do {
+			in_i(&input);
+			input--;
+		}
+		while ((input < 0) || (input > backn));
 		
-		// if the value point to a type set this type as pointer and continue if the type is parent of some type, else exit the loop
-		if (input < maxnum-2) {
-			strcpy(commonparent, Stype->type[npoint[input]].name);
-			input2 = 0;
-			for(i=0; i!=Stype->number; i++) {
-				if(strcmp(commonparent, Stype->type[i].parent) == 0)
-					input2++;
+		// if the value point to a type, set this type as pointer and continue if the type is parent of some type, else exit the loop
+		if (input <= maxn) {
+			BYTE flag = NO;		// NO if the type haven't any child  
+			strcpy(commonparent, types_listed[input]->name);
+			for(int i=0; i!=Stype->number; i++) {
+				if(!strcmp(commonparent, Stype->type[i].parent))
+					flag = YES;
 			}
-			if(input2 == 0) {
-				input = npoint[input];
-				free(npoint);
-				return &Stype->type[input];
+			if(flag == NO) {
+				ttype *typetemp = types_listed[input];	// temp variable
+				free(types_listed);
+				free(var);
+				free(ivar);
+				return typetemp;
 			}
-			continue;
 		}
 		// if is the generic type button
-		if (input == maxnum-2) {
-			free(npoint);
-			if(strcmp(commonparent, "NULL") != 0)
-				return type_Search(Stype, commonparent);
-			else
+		else if (input == genericn) {
+			free(types_listed);
+			free(var);
+			free(ivar);
+			if(!strcmp(commonparent, "NULL"))
 				return type_Search(Stype, "Generic object");
+			else
+				return type_Search(Stype, commonparent);
 		}
 		// if is the description button
-		if (input == maxnum-1){
-			OPS("Of which type of object do you want an explaination? [type its number]", NULL);
-			in_i(&input2);
-			input2--;
-			if (input2 < 0)
-				continue;
-			if (input2 >= maxnum)
-				continue;
-			// if is the generic object type (that is a strange type) use this particular procedure
-			if(strcmp(commonparent, "NULL") == 0) {
-				if (maxnum-2 == input2) {
-					OPS("There is no available description for the Common object type. Is for definition the object whitout caratteristic, so isn't suggested to use it.\n\npress a number to continue", NULL);
-					in_i(&input2);
-					continue;
-				}
+		else if (input == descrn) {
+			int n;
+			ttype *type_descr;	// the type described
+			varpos = 0;
+			// output
+			strcpy(buf, "Of which type of object do you want an explaination? [type its number]\n");
+			for(int i=0; i <= maxn; i++){
+				strcat(buf, "\n%i) %s");
+				ivar[varpos] = i+1;
+				var[varpos] = &ivar[varpos];
+				varpos++;
+				var[varpos++] = types_listed[i]->name;
 			}
-			// if is the generic "commonparent" object
-			strcpy(dbuf, Stype->type[npoint[input2]].name);
-			strcat(dbuf, ":");
-			strcat(dbuf, "\n\nDescription: &t9");
-			strcat(dbuf, Stype->type[npoint[input2]].description);
-			strcat(dbuf, "&t0");
-			if(strcmp(Stype->type[npoint[input2]].parent, "NULL") != 0) {  
-				strcat(dbuf, "\nCategory:   ");
-				strcat(dbuf, Stype->type[npoint[input2]].parent);
+			// generic
+			strcat(buf, "\n%i) Generic %s");
+			ivar[varpos] = descrn;				// descrn = genericn+1
+			var[varpos] = &ivar[varpos];
+			varpos++;
+			if(!strcmp(commonparent, "NULL"))	// if we are in the root
+				var[varpos] = (type_Search(Stype, "Generic object"))->name;
+			else
+				var[varpos] = (type_Search(Stype, commonparent))->name;
+			OPS(buf, var);
+			// input
+			in_i(&n);
+			n--;
+			// elaboration
+			if ((n < 0) || (n > genericn)) {
+				OPS("There is no object whit that number out there! press something to continue...", NULL);
+				sgetchar();
+				continue;
+			}
+			// if is the generic object type (that is a strange type) use this particular procedure
+			else if(!strcmp(commonparent, "NULL")){
+				if (n == genericn)
+					type_descr = type_Search(Stype, "Generic object");
+				else
+					type_descr = type_Search(Stype, commonparent);
 			}
 			else
-				strcat(dbuf, "\nThis type of object isn't under any category");
+				type_descr = types_listed[n];
+			strcpy(buf, "Info about:  ");
+			strcat(buf, type_descr->name);
+			strcat(buf, "\n\nDescription: &ti3");
+			strcat(buf, type_descr->description);
+			strcat(buf, "&t0");
+			strcat(buf, "\nUnder the category:&t9 ");
+			if ((!strcmp(type_descr->parent, "NULL")) || (!strcmp(type_descr->parent, "System")))
+				strcat(buf, "(Not under any category)");
+			else
+				strcat(buf, type_descr->parent);
+			strcat(buf, "&t0");
 			// the mass range
-			strcat(dbuf, "\nMinimum mass: %l");
-			strcat(dbuf, "\nMaximum mass: ");
-			var[0] = &Stype->type[npoint[input2]].mass_min;
-			varpos=1;
-			if(Stype->type[npoint[input2]].mass_max == -1)
-				strcat(dbuf, "infinity");
+			strcat(buf, "\nMinimum mass: %l");
+			strcat(buf, "\nMaximum mass: ");
+			var[0] = &type_descr->mass_min;
+			varpos = 1;
+			if(type_descr->mass_max == -1)
+				strcat(buf, "infinite");
 			else{
-				strcat(dbuf, "%l");
-				var[varpos++] = & Stype->type[npoint[input2]].mass_max;
+				strcat(buf, "%l");
+				var[varpos++] = &type_descr->mass_max;
 			}
 			// the color range
-			strcat(dbuf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
-			var[varpos++] = & Stype->type[npoint[input2]].color_min.red;
-			var[varpos++] = & Stype->type[npoint[input2]].color_max.red;
-			var[varpos++] = & Stype->type[npoint[input2]].color_min.green;
-			var[varpos++] = & Stype->type[npoint[input2]].color_max.green;
-			var[varpos++] = & Stype->type[npoint[input2]].color_min.blue;
-			var[varpos] = & Stype->type[npoint[input2]].color_max.blue;
+			strcat(buf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
+			var[varpos++] = &type_descr->color_min.red;
+			var[varpos++] = &type_descr->color_max.red;
+			var[varpos++] = &type_descr->color_min.green;
+			var[varpos++] = &type_descr->color_max.green;
+			var[varpos++] = &type_descr->color_min.blue;
+			var[varpos]   = &type_descr->color_max.blue;
 			// finalizing the description page
-			strcat(dbuf, "\n\nPress a number to continue");
-			OPS(dbuf, var);
-			in_i(&input2);
-			continue;
+			strcat(buf, "\n\nPress something to continue...");
+			OPS(buf, var);
+			sgetchar();
 		}
-		//if is the back button return to the start
-		if (input == maxnum) {
+		// if is the back button return to the start
+		else if (input == backn)
 			strcpy (commonparent, "NULL");
-			continue;
-		}
 	}
- 
-	return NULL;
 }
