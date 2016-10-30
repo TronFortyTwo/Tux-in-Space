@@ -84,7 +84,10 @@ void sys_ReduceObjBuf(tsys *sys) {
 		OPS_MemLack("Reduceobjbuf");
 		sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 	}
-	sys->nalloc+=OBJBUFSIZE;
+	sys->nalloc-=OBJBUFSIZE;
+	// make sure to set sys->o to NULL if the system is empty
+	if(sys->nalloc == 0)
+		sys->o = NULL;
 }
 
 	
