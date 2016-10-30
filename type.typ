@@ -33,7 +33,7 @@ PRODUCT: Meteroid
 PARENT: Minor planet
 
 NAME: Black hole
-DESCRIPTION: A so massive and dense body that even the light can escape from it.
+DESCRIPTION: A so massive and dense body that even the light can't escape from it
 MASS_MIN: 0.02177
 BLUE_MAX: 0
 RED_MAX: 0

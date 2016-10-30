@@ -96,19 +96,14 @@ void pe_Inertia(tsys *sys) {
  */
 void pe_HunterIA(tsys *sys) {
 	
-	// counter
-	int i;
-		
 	// Search the monster
-	for(i=0; i!=sys->nactive; i++)
+	for(int i=0; i!=sys->nactive; i++)
 		if(sys->o[i].type->hunter == ON)
 			pe_HunterIA_Single(sys, &sys->o[i]);
 }
 	
 void pe_HunterIA_Single(tsys *sys, tobj *mon) {
 	
-	// counter
-	int i;
 	// an object pointer array
 	tobj **list = (tobj **) malloc(sizeof(tobj *[sys->nactive-1]));
 	while (list == NULL) {
@@ -129,7 +124,7 @@ void pe_HunterIA_Single(tsys *sys, tobj *mon) {
 	}
 	// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
 	// search for huntable objects
-	for(i=0; i!=sys->nactive; i++) {
+	for(int i=0; i!=sys->nactive; i++) {
 		if(sys->o[i].type->hunted == ON) {
 			list[num] = &sys->o[i];
 			num++;
@@ -142,7 +137,7 @@ void pe_HunterIA_Single(tsys *sys, tobj *mon) {
 	}
 	// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 	closest = list[0];
-	for(i=1; i!=num; i++)
+	for(int i=1; i!=num; i++)
 		if( obj_Distance(mon, closest) > obj_Distance(mon, list[i]) )
 			closest = list[i];
 	

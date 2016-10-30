@@ -222,7 +222,7 @@ void parser_Information(tsys *sys) {
 		OPS("Insert a new command", NULL);
 		return;
 	}
-	// settingrmations about a precise object
+	// information about a precise object
 	obj = sys_SearchObj(sys, input);
 	if(obj == NULL){
 		OPS_Error("No object whit this name is been found. press a button to continue", NULL);
