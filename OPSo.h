@@ -28,6 +28,6 @@
 
 #include "system.h"
 
-void OPSo (tsys *sys);
+void OPSo (tsys *);
 
 #endif

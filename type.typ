@@ -1,11 +1,14 @@
-
+################################################################################
 # NOTES:
 # - EVERY type must have a name and a parent
 # - Maximum mass -1 means whitout limit
 # - NAME must be the first element of a type, PARENT the last
 # - Please keep the alphabetical order
 # - to write comment, start the line whit '#'
-
+#################################################################################
+#################################################################################
+# the default type is the base for all the other types, but isn't a real type	
+#################################################################################
 NAME: DEFAULT TYPE
 DESCRIPTION: No description is available yet for this type
 MASS_MAX: -1
@@ -21,6 +24,10 @@ HUNTER: N
 PRODUCT: Asteroid
 PARENT: System
 
+###############################################################################
+# These are the real types. The information missing are taken 
+# from the default type
+###############################################################################
 NAME: Artificial object
 DESCRIPTION: The product of an intentional human manufacture, often buildt whit metals
 HUNTED: Y
@@ -142,6 +149,7 @@ MASS_MIN: 1e-11
 PARENT: Small body
 
 NAME: Micrometeroid
+DESCRIPTION: A very little little meteroid
 PRODUCT: Micrometeroid
 PARENT: Meteroid
 
@@ -217,3 +225,4 @@ NAME: White dwarf
 PARENT: Compact star
 
 EOF
+# (END OF FILE)
