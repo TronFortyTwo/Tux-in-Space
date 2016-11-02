@@ -30,6 +30,7 @@
 #include "OnlyPrintfSystem.h"
 #include "in.h"
 #include "math.h"
+#include "debug.h"
 
 // local constants
 #define BIGGER_TOLERANCE 1.21
@@ -80,7 +81,6 @@ void obj_Init (tobj *obj, tStype *Stype) {
 	//variables
 	void *var[18];
 	int input;
-	int temp;
 	char comment[64];			// This is a buffer that contein comment of what is just been done
 	char mass_irregularity[3];	// assume the value IRREGULARITY if the mass is out of range
 	char color_irregularity[3];	// assume the value IRREGULARITY if the color is out of range
@@ -130,9 +130,9 @@ void obj_Init (tobj *obj, tStype *Stype) {
 	
 		// Name
 		if(input == 1) {
-			// a temp variable
+			// two temp variable
 			TNAME name;
-			temp = NAMELUN-1;
+			int temp = NAMELUN-1;
 			var[0] = &temp;
 			OPS ("INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name must be of maximum %i character and can't contein spaces", var);
 			in_s(name);
@@ -190,19 +190,27 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		}
 		// LOAD
 		else if(input == 8) {
+			// load the object in a temporany variable
+			int temp = obj_Load(obj, Stype, obj->name);
 			// free the object
 			obj_Wipe(obj);
-			// load the object
-			temp = obj_Load(obj, Stype, obj->name);
-			strcpy(comment, "\n");
-			if (temp == GOODSIGNAL)									//load success
-				strcat(comment, "New object loaded succefully!");
-			else { 													//load failed
-				strcat(comment, "Can't load the object! ");
+			// positive comment (resetting the previous) if success
+			if (temp == GOODSIGNAL)
+				strcpy(comment, "New object loaded succefully!");
+			// negative comment if fail
+			else {
+				strcat(comment, "\nCan't load the object! ");
 				if (temp == FILE_ERR_SIG)
 					strcat(comment, "No object whit that name found!");
-				else 		//temp == CORRUPTED_SIG
+				else if (temp == CORRUPTED_SIG)
 					strcat(comment, "File corrupted or outdated!");
+				else {
+					strcat(comment, "Unregognized error signal");
+					#if DEBUG
+					debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
+					debug_Int(temp);
+					#endif
+				}
 			}
 		}
 		// SAVE

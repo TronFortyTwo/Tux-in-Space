@@ -56,7 +56,7 @@ int menu_main(tStype *Stype) {
 		// If is menu_Settings can be changed value set
 		else if (i == 3)
 			menu_Settings(set);
-		// if settingrmation printf the license
+		// if information printf the license
 		else if(i == 4){
 			OPS ("Code hosted on GitHub: TronFourtyTwo/CSpace\n\nLICENSE: GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016  emanuele.sorce@hotmail.com\n\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 for more details.\n\nYou should have received a copy of the GNU General Public License version 3 along with this program; if not, write to the Free Software Foundation, Inc.\n\nPress something to continue...", NULL);
 			sgetchar();
@@ -107,8 +107,6 @@ void menu_Settings_G() {
 		if(i == 1)
 			return;
 	}
-	
-	return;
 }
 	 
 void menu_Settings() {
@@ -156,5 +154,4 @@ void menu_Settings() {
 	}
 	// Save and exit
 	set_Save();
-	return;
 }
