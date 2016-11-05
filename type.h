@@ -31,8 +31,8 @@
 
 // The structure that represent a type of a object
 typedef struct sStype {
-	char *name;
-	char *description;
+	char *name;					// dinamically allocated
+	char *description;			// dinamically allocated
 	TNAME parent;
 	double mass_min;			// Mass range
 	double mass_max;

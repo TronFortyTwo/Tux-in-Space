@@ -84,16 +84,14 @@ void sys_ReduceObjBuf(tsys *sys) {
 	tobj *backptr = sys->o;
 	
 	sys->o = (tobj *) realloc (sys->o, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
-	if (sys->o == NULL) {
-		if (sys->nalloc-OBJBUFSIZE != 0) {	// because if thhe new size given to realloc is 0 is returned NULL, but is OK!
-			OPS_MemLack("Reduceobjbuf");
-			sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
-		}
+	if ((sys->o == NULL) && (sys->nalloc-OBJBUFSIZE)) { // because if the new size given to realloc is 0 realloc return NULL, but is OK!
+		OPS_MemLack("Reduceobjbuf");
+		sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
 	}
 	// update sys->nalloc
 	sys->nalloc-=OBJBUFSIZE;
 	// make sure to set sys->o to NULL if the system is empty
-	if(sys->nalloc == 0)
+	if(!sys->nalloc)
 		sys->o = NULL;
 }
 
@@ -122,8 +120,6 @@ void sys_Save(tsys *sys){
 	char path[NAMELUN+13];
 	char input[2];
 	FILE *dest;
-	// counter
-	int i;
 	
 	// Write the path
 	strcpy(path, SYSTEM_PATH);
@@ -146,7 +142,7 @@ void sys_Save(tsys *sys){
 	fprintf (dest, "%.128Lf\n%ld\n%.128Lf\n",  sys->precision, sys->nactive, sys->G);
 	fprintf (dest, "%ld\n%d\n%d\n%d\n%d\n%d\n", sys->stime.year, sys->stime.day, sys->stime.hour, sys->stime.min, sys->stime.sec, sys->stime.millisec);	//the time
 	// write the system's object's datas
-	for(i=0; i!=sys->nactive; i++)
+	for(int i=0; i!=sys->nactive; i++)
 		obj_WriteComplete(dest, &sys->o[i]);
 	fclose(dest);
 
@@ -243,7 +239,7 @@ tsys *sys_LoadOPS (tStype *Stype) {
 	TNAME name;				// the name of the system
 	char path[NAMELUN+12];	// the system file (path)
 	FILE *sysfp;			// the system file (pointer)
-	int i;					// counter
+	
 	tsys *sys = (tsys *) malloc (sizeof(tsys));		// the new system
 	while(sys == NULL){
 		OPS_MemLack("sys_Init");
@@ -284,7 +280,7 @@ tsys *sys_LoadOPS (tStype *Stype) {
 		sys->o = (tobj *) malloc (sizeof(tobj[sys->nalloc]));
 	}
 	// fscanf for objects datas
-	for(i=0; i!=sys->nactive; i++) {
+	for(int i=0; i!=sys->nactive; i++) {
 		if(obj_InitFromFileComplete(&sys->o[i], sysfp, Stype) == CORRUPTED_SIG) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
