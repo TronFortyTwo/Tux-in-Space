@@ -42,7 +42,7 @@ ttime parser_Wait(ttime *, long double *);
 void parser_Information (tsys *);
 
 // internal constants
-#define COMMANDLENGHT 12	// the max lenght of a command word
+#define COMMANDLENGHT 64	// the max lenght of a command word
 
 /**
  * The main function
@@ -57,7 +57,7 @@ ttime Parser(tsys *sys) {
 		
 	// Now for every possible command call the correct command's function or simply do it if is short.
 	// when you write a new command, you must add the corrispondent if and add it
-	scanf("%s", input);
+	in_s(input);
 	// continue
 	if ((!strcmp("step", input)) || (!strcmp("s", input))) {
 		t.millisec += 1000 * sys->precision;
