@@ -13,6 +13,7 @@ There is an executable file, compiled in a Linux 64 bit. Maybe they can run in o
 You can compile the program easily whit the makefile, but you need some developer and runtime SDL2 packages.
 The program is programmed for linux only, but whit very few work can also run on other operative systems. (See information file)
 Before compiling, go to the "generic.h" file to choose to active or shut down debug. (default is ON)
+For developers is suggested to use the latest version in the master branch, for normal users the latest release.
 
 Status
 ------
