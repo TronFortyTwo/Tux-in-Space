@@ -107,7 +107,34 @@ void obj_Init (tobj *obj, tStype *Stype) {
 	strcpy(color_irregularity, " ");
 	
 	while(1) {
-		// Print and scan the desire of the user
+		// check for IRREGALARITY
+		// irregularity: MASS
+		if ((obj->mass > obj->type->mass_min) && ((obj->mass < obj->type->mass_max) || (obj->type->mass_max == -1))) {
+			strcpy(mass_irregularity, "  ");
+		}
+		else {
+			strcpy(mass_irregularity, IRREGULARITY);
+			strcat(comment, "\n");
+			strcat(comment, IRREGULARITY);
+			strcat(comment, ": mass out of range");
+		}
+		// irregularity: COLOR
+		if (color_CheckRange(obj->color, obj->type->color_min, obj->type->color_max) == GOODSIGNAL)
+			strcpy(color_irregularity, " ");
+		else {
+			strcpy(color_irregularity, IRREGULARITY);
+			strcat(comment, "\n");
+			strcat(comment, IRREGULARITY);
+			strcat(comment, ": color out of range");
+		}
+		// irregularity: TYPE
+		if (obj->type == type_Search(Stype, "Choose a type")) {
+			strcat(comment, "\n");
+			strcat(comment, IRREGULARITY);
+			strcat(comment, ": Choose a type!");
+		}
+		
+		// Print the actual state and scan the desire of the user
 		var[0] = obj->name;
 		var[1] = obj->type->name;
 		var[2] = obj->type->description;
@@ -125,8 +152,11 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		var[14] = &obj->vely;
 		var[15] = &obj->velz;
 		var[16] = comment;
-		OPS("CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object in a file\n%f-10) DONE\n\n%s", var);
+		OPS("CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n\n%s", var);
 		in_i(&input);
+		
+		// reset previous comment
+		comment[0] = 0;
 	
 		// Name
 		if(input == 1) {
@@ -191,24 +221,36 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		// LOAD
 		else if(input == 8) {
 			// load the object in a temporany variable
-			int temp = obj_Load(obj, Stype, obj->name);
-			// free the object
-			obj_Wipe(obj);
-			// positive comment (resetting the previous) if success
-			if (temp == GOODSIGNAL)
+			tobj new;
+			// initialize new
+			obj_LowInit(&new);
+			BYTE result = obj_Load(&new, Stype, obj->name);
+			// if success
+			if (result == GOODSIGNAL) {
+				// move cinematic stats
+				new.x = obj->x;
+				new.y = obj->y;
+				new.z = obj->z;
+				new.velx = obj->velx;
+				new.vely = obj->vely;
+				new.velz = obj->velz;
+				// move the temp(the new) object in the location
+				obj_Move(&new, obj);
+				// positive comment (resetting the previous)
 				strcpy(comment, "New object loaded succefully!");
+			}
 			// negative comment if fail
 			else {
 				strcat(comment, "\nCan't load the object! ");
-				if (temp == FILE_ERR_SIG)
+				if (result == FILE_ERR_SIG)
 					strcat(comment, "No object whit that name found!");
-				else if (temp == CORRUPTED_SIG)
+				else if (result == CORRUPTED_SIG)
 					strcat(comment, "File corrupted or outdated!");
 				else {
 					strcat(comment, "Unregognized error signal");
 					#if DEBUG
 					debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
-					debug_Int(temp);
+					debug_Int(result);
 					#endif
 				}
 			}
@@ -221,33 +263,6 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		// EXIT. Always added this. In case of exit however this isn't printed
 		else if(input == 10)
 			strcpy(comment, "\nCannot exit! Fix irregularity first");
-		
-		// check for IRREGALARITY
-		// irregularity: MASS
-		if ((obj->mass > obj->type->mass_min) && ((obj->mass < obj->type->mass_max) || (obj->type->mass_max == -1))) {
-			strcpy(mass_irregularity, "  ");
-		}
-		else {
-			strcpy(mass_irregularity, IRREGULARITY);
-			strcat(comment, "\n");
-			strcat(comment, IRREGULARITY);
-			strcat(comment, ": mass out of range");
-		}
-		// irregularity: COLOR
-		if (color_CheckRange(obj->color, obj->type->color_min, obj->type->color_max) == GOODSIGNAL)
-			strcpy(color_irregularity, " ");
-		else {
-			strcpy(color_irregularity, IRREGULARITY);
-			strcat(comment, "\n");
-			strcat(comment, IRREGULARITY);
-			strcat(comment, ": color out of range");
-		}
-		// irregularity: TYPE
-		if (obj->type == type_Search(Stype, "Choose a type")) {
-			strcat(comment, "\n");
-			strcat(comment, IRREGULARITY);
-			strcat(comment, ": Choose a type!");
-		}
 		// EXIT
 		if(input == 10) {
 			if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0) || (obj->type == type_Search(Stype, "Choose a type")) ) )
@@ -284,14 +299,14 @@ BYTE obj_InitFromFileComplete(tobj *o, FILE *fp, tStype *s) {
  *	- This function move the pointer to the dinamically allocated memory too,
  * 		so there is no need to obj_Wipe an object after is copyied to delete the first one
  */
-void obj_Move (tobj *p, tobj *d) {
+void obj_Move (tobj *obj, tobj *dest) {
 	// if are the same object, exit
-	if (p == d)
+	if (obj == dest)
 		return;
 	// delete the old object in the destination
-	obj_Wipe(d);
+	obj_Wipe(dest);
 	// move the object
-	*d = *p;
+	*dest = *obj;
 }
 
 /***
@@ -308,10 +323,10 @@ BYTE obj_Load(tobj *obj, tStype *Stype, char *name) {
 		strcat(path, ".object");
 		
 		ofile = fopen(path, "r");
-		while(ofile == NULL)
+		if (ofile == NULL)
 			return FILE_ERR_SIG;
 	}	
-	// Read type, color, radius and mass
+	// Read the object
 	obj_Read(ofile, obj, Stype);
 		
 	//close the file and exit
@@ -323,7 +338,7 @@ BYTE obj_Load(tobj *obj, tStype *Stype, char *name) {
 /***
  *  init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
  */
-void obj_LowInit (tobj *o){
+void obj_LowInit (tobj *o) {
 	
 	o->name = NULL;
 	o->type = NULL;
@@ -336,10 +351,6 @@ BYTE obj_Read (FILE *stream, tobj *obj, tStype *Stype) {
 	// scan the name
 	in_fs(buffer, stream);
 	obj_Rename(obj, buffer);
-	while (obj->name == NULL) {
-		OPS_MemLack("obj_ReadComplete");
-		obj_Rename(obj, buffer);
-	}
 	// scan the type
 	in_fs(buffer, stream);
 	obj_SetType(obj, Stype, buffer);
@@ -355,10 +366,6 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 	// scan the name
 	in_fs(buffer, stream);
 	obj_Rename(obj, buffer);
-	while (obj->name == NULL) {
-		OPS_MemLack("obj_ReadComplete");
-		obj_Rename(obj, buffer);
-	}
 	// scan the type
 	in_fs(buffer, stream);
 	obj_SetType(obj, Stype, buffer);
@@ -376,6 +383,10 @@ void obj_Rename(tobj *o, char *nn) {	// nn is New Name
 	obj_WipeName(o->name);
 	// resize the name buffer
 	o->name = (char *) malloc (sizeof(char[strlen(nn)]));
+	while(o->name == NULL) {
+		OPS_MemLack("Obj_Rename");
+		o->name = (char *) malloc (sizeof(char[strlen(nn)]));
+	}
 	// copy the name
 	strcpy(o->name, nn);
 }

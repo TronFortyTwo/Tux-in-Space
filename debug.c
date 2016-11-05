@@ -84,8 +84,6 @@
 		// velocity
 		sprintf(buffer, "VELOCITY:\t\t%Lf %Lf %Lf", obj->velx, obj->vely, obj->velz);
 		debug_Printf(buffer);
-		
-		return;
 	}
 
 /***
@@ -141,7 +139,6 @@
  */
 	void debug_Init() {
 		fclose(fopen(DEBUG_FILE, "w"));
-		return;
 	}
  
  
@@ -159,7 +156,6 @@ void debug_Printf(char *txt) {
 	fprintf(file, "\n"); 
 	// finalize all
 	fclose(file);
-	return;
 }
 
 #endif

@@ -28,8 +28,9 @@ PARENT: System
 # These are the real types. The information missing are taken 
 # from the default type
 ###############################################################################
+
 NAME: Artificial object
-DESCRIPTION: The product of an intentional human manufacture, often buildt whit metals
+DESCRIPTION: The product of an intentional human manifacture, often buildt whit metals
 HUNTED: Y
 PRODUCT: Debris
 PARENT: NULL
