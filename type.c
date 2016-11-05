@@ -29,7 +29,7 @@
   
 
 /***
- * The function obj_Init set the type structure reading it from a file and return his address
+ * The function type_Init set the type structure reading it from a file and return his address
  */
 tStype *type_Init (FILE *stream) {
 		

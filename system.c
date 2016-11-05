@@ -45,7 +45,11 @@ void sys_NewObj (tsys *sys) {
 		sys_ExtendObjBuf(sys);
 	// initialize the new object (that is created in the last active postion of the buffer)
 	// and update the counter
-	obj_Init(&sys->o[sys->nactive++], sys->Stype);
+	if ( obj_Init(&sys->o[sys->nactive++], sys->Stype) == ABORTED_SIG ) {
+		// if the user doesn't want anymore to create a new object
+		sys->nactive--;
+		sys_UpdateObjBuf(sys);
+	}
 }
 
 
@@ -80,10 +84,13 @@ void sys_ReduceObjBuf(tsys *sys) {
 	tobj *backptr = sys->o;
 	
 	sys->o = (tobj *) realloc (sys->o, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
-	if (sys->o == NULL){
-		OPS_MemLack("Reduceobjbuf");
-		sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
+	if (sys->o == NULL) {
+		if (sys->nalloc-OBJBUFSIZE != 0) {	// because if thhe new size given to realloc is 0 is returned NULL, but is OK!
+			OPS_MemLack("Reduceobjbuf");
+			sys->o = (tobj *) realloc (backptr, sizeof(tobj[sys->nalloc-OBJBUFSIZE]));
+		}
 	}
+	// update sys->nalloc
 	sys->nalloc-=OBJBUFSIZE;
 	// make sure to set sys->o to NULL if the system is empty
 	if(sys->nalloc == 0)
@@ -296,8 +303,7 @@ tsys *sys_LoadOPS (tStype *Stype) {
  * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
  */
 tobj *sys_SearchObj(tsys *sys, char *name) {
-	int i;
-	for (i=0; i != sys->nactive; i++)
+	for (int i=0; i != sys->nactive; i++)
 		if(!strcmp(sys->o[i].name, name))
 			return &sys->o[i];
 	return NULL;

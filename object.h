@@ -57,7 +57,7 @@ void obj_GetBigger 				(tobj *, tobj *, tobj **);	// Move the bigger of the two 
 void obj_Wipe					(tobj *);					// Clean the dinamic memory of an object
 BYTE obj_Load					(tobj *, tStype *, char *);	// Load an object from a file
 void obj_Save					(tobj *);					// Save the object in a file
-void obj_Init 					(tobj *, tStype *);			// Init a new object
+BYTE obj_Init 					(tobj *, tStype *);			// Init a new object
 void obj_Rename					(tobj *, char *);			// Rename an object safely
 long double obj_Distance		(tobj *, tobj *);			// Compute the distance between two objects
 BYTE obj_InitFromFile			(tobj *, FILE *, tStype *);	// Init an object from a file

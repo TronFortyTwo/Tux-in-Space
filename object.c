@@ -74,9 +74,9 @@ void obj_GetBigger (tobj *i, tobj *l, tobj **b) {
  * 	The function InitObject initialize a new object and ask information about it
  * 
  * 	n is the number of the object to initialize, if in a list
- * 	
+ * 	return ABORTED_SIG if the new object isn't initialized
  */
-void obj_Init (tobj *obj, tStype *Stype) {
+BYTE obj_Init (tobj *obj, tStype *Stype) {
 		
 	//variables
 	void *var[18];
@@ -152,7 +152,7 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		var[14] = &obj->vely;
 		var[15] = &obj->velz;
 		var[16] = comment;
-		OPS("CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n\n%s", var);
+		OPS("CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n11) EXIT whitout saving\n\n%s", var);
 		in_i(&input);
 		
 		// reset previous comment
@@ -259,16 +259,22 @@ void obj_Init (tobj *obj, tStype *Stype) {
 		else if(input == 9) {
 			obj_Save(obj);
 			strcpy(comment, "\nNew object saved succefully!");
-		}
-		// EXIT. Always added this. In case of exit however this isn't printed
-		else if(input == 10)
-			strcpy(comment, "\nCannot exit! Fix irregularity first");
-		// EXIT
-		if(input == 10) {
+		}	
+		// DONE
+		else if(input == 10) {
 			if (!((strcmp(mass_irregularity, IRREGULARITY) == 0) || (strcmp(color_irregularity, IRREGULARITY) == 0) || (obj->type == type_Search(Stype, "Choose a type")) ) )
 				break;
+			else
+				strcpy(comment, "\nCannot exit! Fix irregularity first");
+		}
+		// EXIT WHITOUT SAVE
+		else if(input == 11) {
+			// wipe the new object and quit
+			obj_Wipe(obj);
+			return ABORTED_SIG;
 		}
 	}
+	return GOODSIGNAL;
 }
 
 /***

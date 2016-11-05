@@ -58,12 +58,13 @@
 #define IRREGULARITY "(!)"
 	
 // Values returned by functions
-#define GOODSIGNAL 1
-#define BADSIGNAL 2
+#define GOODSIGNAL 1	// good
+#define BADSIGNAL 2		// generic bad
 #define FILE_ERR_SIG 3
 #define CORRUPTED_SIG 4
 #define NEW_SIG 5
 #define LOAD_SIG 6
+#define ABORTED_SIG 7
 #define QUITSIGNAL -1			// is even the value that the variable ttime.year assumes if the user want to quit, so must be negative!
 	
 // The lenght of a name of an object, a system or a type
