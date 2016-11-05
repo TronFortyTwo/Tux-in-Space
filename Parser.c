@@ -65,7 +65,7 @@ ttime Parser(tsys *sys) {
 	}
 	// help
 	else if ((!strcmp("help", input)) || (!strcmp("h", input))) {
-		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some command are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+		OPS("HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
 		scanf("%s", input);
 	}
 	// parser_Jump
