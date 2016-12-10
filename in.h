@@ -1,7 +1,7 @@
 /*
 #########################################################################################
 #    CSpace - space simulator															#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com										#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com								#
 #																						#
 #    This program is free software; you can redistribute it and/or modify				#
 #    it under the terms of the GNU General Public License as published by				#
@@ -24,12 +24,13 @@
 
 #ifndef inh
 #define inh
+#include "stdio.h"
 
 // global functions
 void in_u	(unsigned int *);	// scan an unsigned int
 void in_i	(int *);			// scan a signed int
 void in_s	(char *);			// scan a string
 void in_fs	(char *, FILE *);	// scan from a file as long as a '\n'
-void in_hfs	(char *, FILE *);	// like in_fs, but jump comment lines (lines that start whit '#')
+void in_hfs	(char *, FILE *);	// like in_fs, but jump blank lines and comment lines
 
 #endif

@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -21,7 +21,7 @@
  * 
  */
 
-#include "parser.h"
+#include "Parser.h"
 #include "generic.h"
 #include "OnlyPrintfSystem.h"
 #include "in.h"
@@ -184,7 +184,6 @@ void parser_Delete(tsys *sys) {
 		
 	TNAME name;			//the name of the object
 	tobj *obj;			//the pointer to the object
-	int p;				//the position of obj in the object buffer
 		
 	// ask the user for the name
 	OPS("DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to Quit", NULL);

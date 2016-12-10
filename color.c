@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -22,6 +22,7 @@
 #include "generic.h"
 #include "color.h"
 #include "OnlyPrintfSystem.h"
+#include "stdio.h"
 
 /***
  * The color_Scan function get a color and return it

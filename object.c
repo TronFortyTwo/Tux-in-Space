@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -88,7 +88,7 @@ BYTE obj_Init (tobj *obj, tStype *Stype) {
 	// Initialize the object
 	obj_LowInit(obj);
 	obj_Rename(obj, "Choose a name for your new object");
-	obj_SetType(obj, Stype, "Choose a type");
+	obj->type = type_Search(Stype, "Generic object");
 	obj->mass = 0;
 	obj->radius = 0;
 	obj->color.blue = 0;
@@ -283,7 +283,7 @@ BYTE obj_Init (tobj *obj, tStype *Stype) {
 BYTE obj_InitFromFile(tobj *o, FILE *fp, tStype *s) {
 	// make some basic initialization at the object to prevent memory leack (and seg fault)
 	obj_LowInit(o);
-	obj_Read(fp, o, s);
+	return obj_Read(fp, o, s);
 }
 
 /***
@@ -292,7 +292,7 @@ BYTE obj_InitFromFile(tobj *o, FILE *fp, tStype *s) {
 BYTE obj_InitFromFileComplete(tobj *o, FILE *fp, tStype *s) {
 	// make some basic initialization at the object to prevent memory leack (and seg fault)
 	obj_LowInit(o);
-	obj_ReadComplete(fp, o, s);
+	return obj_ReadComplete(fp, o, s);
 }
 
 /***
@@ -359,7 +359,7 @@ BYTE obj_Read (FILE *stream, tobj *obj, tStype *Stype) {
 	obj_Rename(obj, buffer);
 	// scan the type
 	in_fs(buffer, stream);
-	obj_SetType(obj, Stype, buffer);
+	obj->type = type_Search(Stype, buffer);
 	// scan all the other things
 	fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass);
 	if (obj->type == NULL)
@@ -374,7 +374,7 @@ BYTE obj_ReadComplete (FILE *stream, tobj *obj, tStype *Stype) {
 	obj_Rename(obj, buffer);
 	// scan the type
 	in_fs(buffer, stream);
-	obj_SetType(obj, Stype, buffer);
+	obj->type = type_Search(Stype, buffer);
 	// scan the other stuff
 	fscanf(stream, "%d\n%d\n%d\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n%Lf\n", &obj->color.red, &obj->color.green, &obj->color.blue, &obj->radius, &obj->mass, &obj->x, &obj->y, &obj->z, &obj->velx, &obj->vely, &obj->velz);
 	if (obj->type == NULL)
@@ -426,14 +426,6 @@ void obj_Save(tobj *obj) {
 	dest = fopen(path, "w");
 	obj_Write(dest, obj);
 	fclose(dest);
-}
-
-/***
- * This function set the type given to the object pointed given
- */
-void obj_SetType(tobj *o, tStype *s, char *nt) {
-	
-	o->type = type_Search(s, nt);
 }
 
 /***

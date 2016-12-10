@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -23,9 +23,8 @@
  */
 #ifndef mathh
 #define mathh
-
-#include "generic.h"
-
+#include "time.h"
+#include "stdlib.h"
 
 // Pi
 #define PI M_PI

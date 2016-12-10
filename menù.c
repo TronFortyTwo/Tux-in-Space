@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -46,23 +46,24 @@ int menu_main(tStype *Stype) {
 		in_i(&i);
 			
 		// If "new simulation" tell the Shell 0; (uninitialized obj)
-		if (i == 1)
-			return NEW_SIG;
-				
-		// if "Load system" tell the Shell 1;
-		else if (i == 2)
-			return LOAD_SIG;
-			
-		// If is menu_Settings can be changed value set
-		else if (i == 3)
-			menu_Settings(set);
-		// if information printf the license
-		else if(i == 4){
-			OPS ("Code hosted on GitHub: TronFourtyTwo/CSpace\n\nLICENSE: GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016  emanuele.sorce@hotmail.com\n\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 for more details.\n\nYou should have received a copy of the GNU General Public License version 3 along with this program; if not, write to the Free Software Foundation, Inc.\n\nPress something to continue...", NULL);
-			sgetchar();
+		switch (i) {
+			case 1:
+				return NEW_SIG;
+			// if "Load system" tell the Shell 1;
+			case 2:
+				return LOAD_SIG;
+			// If is menu_Settings can be changed value set
+			case 3:
+				menu_Settings(set);
+				break;
+			// if information printf the license banner
+			case 4: 
+				OPS ("Code hosted on GitHub: TronFourtyTwo/CSpace\n\nLICENSE: GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\n\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 for more details.\n\nYou should have received a copy of the GNU General Public License version 3 along with this program; if not, write to the Free Software Foundation, Inc.\n\nPress something to continue...", NULL);
+				sgetchar();
+				break;
+			case 5:
+				return QUITSIGNAL;
 		}
-		else if(i == 5)
-			return QUITSIGNAL;
 	}
 	return BADSIGNAL;
 }
@@ -126,10 +127,10 @@ void menu_Settings() {
 			else
 				strcpy(mode, "SDL");
 			var[0] = &mode;
-			OPS("SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) SDL --EXPERIMENTAL--", var);
+			OPS("SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) GRAPHIC --EXPERIMENTAL--", var);
 			in_i(&set.vmode);
 			if(set.vmode == 2)
-				set.vmode = V_SDL;
+				set.vmode = V_GL;
 			else
 				set.vmode = V_OPS;
 		}

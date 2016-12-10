@@ -18,3 +18,21 @@ For developers is suggested to use the latest version in the master branch, for 
 Status
 ------
 The program is in alpha status: this mean that the program is far away from being complete.
+
+License
+------
+CSpace - space simulator
+Copyright (C) 2016-2017  emanuele.sorce@hotmail.com
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 or compatible.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty or
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc.								

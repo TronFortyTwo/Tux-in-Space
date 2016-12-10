@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -32,11 +32,7 @@ void OPSo (tsys *sys) {
 	// this array contein the screen to return to send to OPS for printing
 	char buffer[1024];
 	// the array to give to Rengine whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
-	void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
-	while(var == NULL){
-		OPS_MemLack("OPSo");
-		void **var = (void *) malloc (sizeof(void *[sys->nactive * 8 + 6]));
-	}
+	void **var = (void **) alloc_heap(sizeof(void *[sys->nactive * 8 + 6]), "OPSo");
 	int pos;
 	// counters
 	int i;

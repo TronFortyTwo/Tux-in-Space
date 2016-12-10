@@ -1,14 +1,15 @@
-/////////////////////////////////////////
+########################################################################
 COMPLING UNDER OTHER OPERATIVE SYSTEMS
-/////////////////////////////////////////
+########################################################################
 
-For now the only know issue about compiling in other operative systems is the function InitDir() in the "core function.c" file
-that cannot be compiled under windows. You can rewrite it for windows using system.h (I guess), or remove it and manually create the folders.
+For now the only know issue about compiling in other operative systems is
+the function InitDir() in the "core function.c" file. that cannot be 
+compiled under windows. You can rewrite it for windows using system.h 
+(I guess), or remove it, but lose its functionalities.
 
-
-////////////////////////////////
-CSPACE STUFFS
-////////////////////////////////
+########################################################################
+ASTRONOMIC INFORMATION
+########################################################################
 
 MISUR UNIT
 
@@ -18,19 +19,14 @@ MISUR UNIT
 	mass:		t	(1000 Kg)
 	time:		s
 	
-	then,
+	so,
 	
 	fast:		Km/s
 	acc:		Km/s*s
 
-/////////////
 VARIOUS
-/////////////
 
 	A Sun mass is 		1.98892 e30 	Kg
-	
 	A Sun mass is 		27 068 510 	Moon masses
-	
 	A Sun mass is 		332 946 	Earth masses
-	
 	A jupiter mass is 	1.89819 e27	Kg

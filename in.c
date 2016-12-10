@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -34,16 +34,11 @@
  */
 void in_s (char *d) {
 	
-	if(set.vmode == V_OPS)
-		scanf("%s", d);
-
-	else if(set.vmode == V_SDL) {
-		// Here should be something corrispondent to scanf but whit SDL
-	}
+	scanf("%s", d);
 }
 
 /***
- * This function scan a string WHIT space, to use when scanning a name, a type... but from a file
+ * Scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 
  * */
 void in_fs (char *dest, FILE *stream) {
@@ -51,6 +46,9 @@ void in_fs (char *dest, FILE *stream) {
 	fscanf(stream, "%9999[^\n]%*1[\n]", dest);
 }
 
+/***
+ * Scan a string like in_fs but whit support for comments, indentation
+ */
 void in_hfs (char *dest, FILE *stream) {
 	
 	// don't save commented line (process to optimize)

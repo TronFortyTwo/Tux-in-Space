@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -25,12 +25,11 @@
 #include "shell.h"
 #include "system.h"
 #include "menù.h"
-#include "SDL_interface.h"
-#include "pengine.h"
+#include "Pengine.h"
 #include "OPSo.h"
-#include "parser.h"
+#include "Parser.h"
 
-int Shell (tStype *Stype) {
+BYTE Shell (tStype *Stype) {
 
 	// he pointer to a system
 	tsys *sys;
@@ -41,13 +40,8 @@ int Shell (tStype *Stype) {
 	// menu_main AND SYSTEM INITIALIZATION
 	
 	while(1) {
-		// here stime.year is used as temp variable
-		if(set.vmode == V_OPS)
-			stime.year = menu_main(Stype);
-		else
-			stime.year = Video_Menu(Stype);
 		// Call the mean menù, it tell to shell what to do.
-		switch (stime.year) {
+		switch (menu_main(Stype)) {
 			case NEW_SIG:
 				sys = sys_Init(Stype);
 				break;
@@ -55,7 +49,7 @@ int Shell (tStype *Stype) {
 				sys = sys_Load(Stype);
 				break;
 			case QUITSIGNAL:
-				return QUITSIGNAL;				//there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
+				return QUITSIGNAL;				// there is no need to free the dinamycally allocated system like below because sys here isn't allocated yet
 		}
 		if (sys != NULL)
 			break;
@@ -67,8 +61,10 @@ int Shell (tStype *Stype) {
 	//
 		
 	stime = sys->stime;
-	// Use the right loop (set.vmode)
+	// Use the right loop (set.vmode) (for now only V_OPS availabile)
+	/*
 	if (set.vmode == V_OPS)
+	*/
 		while(stime.year != QUITSIGNAL) {
 			// call the phisic engine
 			Pengine (sys, stime);
@@ -77,15 +73,11 @@ int Shell (tStype *Stype) {
 			// call the instruction parser and ask him for destination time
 			stime = Parser(sys);
 		}
-	else if (set.vmode == V_SDL)
-		while(stime.year != QUITSIGNAL) {
-			// call the phisic engine
-			Pengine(sys, stime);
-			// output
-			Video_SimGUI(sys);
-			// instruction parser
-			stime = Video_parser(sys);
+	/*
+	else if (set.vmode == V_GL) {
+			some graphic stuff...
 		}
+	*/
 
 	// delete the system and exit
 	sys_Free(sys);

@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -27,7 +27,7 @@
  */
  
 #include "generic.h"
-#include "pengine.h"
+#include "Pengine.h"
 #include "time.h"
 #include "OnlyPrintfSystem.h"
 #include "object.h"
@@ -47,7 +47,7 @@ void pe_ElasticImpact	(tobj *, tobj *);
 
 // internal constants
 #define COLOR_PREDOMINANCE 1.35
-#define HUNTER_ACCELERATION 0.002	// The acceleration of a hunter (Km/s)
+#define HUNTER_ACCELERATION 0.002	// The acceleration of a hunter (Km/s*s)
 
 
 /****
@@ -353,7 +353,7 @@ void pe_HuntingImpact(tStype *Stype, tobj *ed, tobj *er) {
 	#if DEBUG
 	debug_Object(ed);
 	#endif
-	obj_SetType (ed, Stype, ed->type->product);
+	ed->type = ed->type->product;
 	
 	// move a percentage p of ed mass in er
 	er->mass += ed->mass * p;

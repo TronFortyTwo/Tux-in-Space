@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -22,6 +22,7 @@
 
 #include "generic.h"
 #include "setting.h"
+#include "stdio.h"
 // Other libraries for unix-like
 #include <sys/stat.h>
 
@@ -36,7 +37,7 @@
 /***
  * set_Save save in a file the config of tset set
  */
-void set_Save(){
+void set_Save() {
 	
 	FILE *cf = fopen(CONFIGURATION_FILE, "w");
 	
@@ -86,24 +87,27 @@ void set_SetDefault(){
 
 /***
  * This function initializes the directories if them doesn't exist
+ * NOTE:
+ * 	This function works only in *nix! Is not portable!
  */
 BYTE set_InitDir() {
 	// The state of the directories
 	struct stat st = {0};
 	// Check for the object directory and Create it if not present
-	if (stat(OBJECT_PATH, &st) == -1)
+	if (stat(OBJECT_PATH, &st) == -1) {
 		mkdir(OBJECT_PATH, 0700);
-		
+		// Check that the directories has been created succefully
+		if (stat(OBJECT_PATH, &st) == -1)
+			return FILE_ERR_SIG;
+	}
 	// Check for the system directory and Create it if not present
-	if (stat(SYSTEM_PATH, &st) == -1) 
-		mkdir(SYSTEM_PATH, 0700);
-		
-	// Check that the directories has been created succefully
-	if (stat(SYSTEM_PATH, &st) == -1)
-		return FILE_ERR_SIG;
-			
-	if (stat(OBJECT_PATH, &st) == -1)
-		return FILE_ERR_SIG;
+	if (stat(SYSTEM_PATH, &st) == -1) { 
+		mkdir(SYSTEM_PATH, 0700);	
+		// Check that the directories has been created succefully
+		if (stat(SYSTEM_PATH, &st) == -1)
+			return FILE_ERR_SIG;
+	}
+	
 		
 	return GOODSIGNAL;
 }

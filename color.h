@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -35,7 +35,7 @@ typedef struct scolor {
 } tcolor;
 
 // prototypes
-tcolor color_Scan(tcolor, tcolor);
-BYTE color_CheckRange(tcolor, tcolor, tcolor);
+tcolor color_Scan(tcolor, tcolor);				// An interface to create a color using OPS
+BYTE color_CheckRange(tcolor, tcolor, tcolor);	// Check if a color is in a range of colours given (a color max and a color min)
 
 #endif

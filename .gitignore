@@ -6,3 +6,4 @@ debug.dbg
 
 # object file
 *.o
+*.ghc

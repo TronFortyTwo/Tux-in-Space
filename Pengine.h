@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -17,26 +17,19 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * HERE we are starting to build an OpenGL interface using SDL
- * 
- * This is the file that contein the core of the SDL interface,
- * Initialization, closing and low-level stuff
- * 
- * 
- * WARNING:
- * 
- * <-!-> HEAVY WORK IN PROGRESS <-!->
+ * This is the engine that emules the phisic law
  * 
  *	HEADER FILE
  */
-#ifndef sdlcoreh
-#define sdlcoreh
+#ifndef pengineh
+#define pengineh
 
-#include "type.h"
 #include "system.h"
 #include "time.h"
+#include "math.h"
+#include "object.h"
 
-BYTE Video_init();
-void Video_Close();
+// Global functions
+void Pengine (tsys *, ttime );	// Process a system given to make his simulation arrive at the time given
 
 #endif

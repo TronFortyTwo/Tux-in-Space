@@ -1,7 +1,7 @@
 /*
 #############################################################################
 #    CSpace - space simulator												#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com							#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com					#
 #																			#
 #    This program is free software; you can redistribute it and/or modify	#
 #    it under the terms of the GNU General Public License as published by	#
@@ -58,7 +58,7 @@ void OPS(char *phrase, void *var[]) {
 	// the number of character of phrase elaborated
 	QWORD chardone;
 	// the number of space to leave blank at the start of every line (max one digit)
-	BYTE theet = 0;
+	BYTE indentation = 0;
 	// one if the buf is finished
 	BYTE bufend = 0;
 	// the position in the var array
@@ -169,31 +169,31 @@ void OPS(char *phrase, void *var[]) {
 					bufpos++;
 					// scan the new number
 					switch(buf[bufpos]) {
-						case '0': theet=0; break;
-						case '1': theet=1; break;
-						case '2': theet=2; break;
-						case '3': theet=3; break;
-						case '4': theet=4; break;
-						case '5': theet=5; break;
-						case '6': theet=6; break;
-						case '7': theet=7; break;
-						case '8': theet=8; break;
-						case '9': theet=9; break;
+						case '0': indentation=0; break;
+						case '1': indentation=1; break;
+						case '2': indentation=2; break;
+						case '3': indentation=3; break;
+						case '4': indentation=4; break;
+						case '5': indentation=5; break;
+						case '6': indentation=6; break;
+						case '7': indentation=7; break;
+						case '8': indentation=8; break;
+						case '9': indentation=9; break;
 						// or scan a letter whit a meaning
-						case 'd': theet=THEETDESCR; break;		// for a description
-						case 'i': {								// for a theet in the 10-19 range
+						case 'd': indentation=THEETDESCR; break;		// for a description
+						case 'i': {								// for a indentation in the 10-19 range
 							bufpos++;
 							switch(buf[bufpos]) {
-								case '0': theet=10; break;
-								case '1': theet=11; break;
-								case '2': theet=12; break;
-								case '3': theet=13; break;
-								case '4': theet=14; break;
-								case '5': theet=15; break;
-								case '6': theet=16; break;
-								case '7': theet=17; break;
-								case '8': theet=18; break;
-								case '9': theet=19;
+								case '0': indentation=10; break;
+								case '1': indentation=11; break;
+								case '2': indentation=12; break;
+								case '3': indentation=13; break;
+								case '4': indentation=14; break;
+								case '5': indentation=15; break;
+								case '6': indentation=16; break;
+								case '7': indentation=17; break;
+								case '8': indentation=18; break;
+								case '9': indentation=19;
 							}
 						}
 					}
@@ -205,11 +205,11 @@ void OPS(char *phrase, void *var[]) {
 			// if the buffer is finished print only spaces
 			if (bufend == 1)
 				printf(" ");
-			// print a space if we are behind the theet
-			else if (columndone < theet)
+			// print a space if we are behind the indentation
+			else if (columndone < indentation)
 				printf(" ");
 			// a space in the first column is ignored
-			else if ((columndone == theet) && (buf[bufpos] == ' ')) {
+			else if ((columndone == indentation) && (buf[bufpos] == ' ')) {
 				bufpos++;
 				columndone--;
 			}

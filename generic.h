@@ -1,7 +1,7 @@
 /*
 #############################################################################################
 #    CSpace - space simulator																#
-#    Copyright (C) 2016  emanuele.sorce@hotmail.com											#
+#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
 #    it under the terms of the GNU General Public License as published by					#
@@ -24,11 +24,17 @@
 #ifndef generich
 #define generich
 
+// Is important the YES = ON and OFF = NO
+#define ON 1
+#define OFF 0
+#define NO OFF
+#define YES ON
+
 /////////////////////////////////////////////////////
-// This is the flag that active/deactive debug. (1/0)
+// This is the flag that active/deactive debug. (ON/OFF)
 // A debugless binary is lighter and faster, but is debugless
 
-#define DEBUG 1
+#define DEBUG ON
 
 /////////////////////////////////////////////////////
 
@@ -41,13 +47,8 @@
 #include <time.h>
 #include <limits.h>
 #include <stdint.h>
-#include <SDL2/SDL.h>
+#include "OnlyPrintfSystem.h"
 	
-// Is important the YES = ON and OFF = NO
-#define ON 1
-#define OFF 0
-#define NO OFF
-#define YES ON
 		
 // The three axis must have different codes
 #define X_AXIS 0
@@ -66,13 +67,10 @@
 #define LOAD_SIG 6
 #define ABORTED_SIG 7
 #define QUITSIGNAL -1			// is even the value that the variable ttime.year assumes if the user want to quit, so must be negative!
-	
-// The lenght of a name of an object, a system or a type
-#define NAMELUN 64
 
 // The video mode
 #define V_OPS 0
-#define V_SDL 1
+#define V_GL 1
 
 // The files and directoryes
 #define DEBUG_FILE "debug.dbg"				// Where are printed debug settingrmation
@@ -83,16 +81,18 @@
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
 	
 	
-// A two-in-one function call whitout argurment (safe getchar)
+// A two-in-one macro whitout argurment (safe getchar)
 #define sgetchar() (scanf(" "), getchar())
-	
+
 // More precise data types
 typedef 	int8_t		BYTE;	// max +/- 128
 typedef 	int16_t 	WORD;	// max +/- 32768
 typedef		int32_t		DWORD;
 typedef		int64_t		QWORD;
 
-// the string that contein a name of a type/system/object (deprecated, I'll switch to dinamically allocated buffers)
+// the string as long as the max lenght of a type/system/object name
+// to use carefully because is very long, use dinamically allocated strings instead where possible
+#define NAMELUN 128
 typedef char TNAME[NAMELUN];
 
 /*
@@ -105,10 +105,7 @@ typedef struct settingOPS {
 } tsetOPS;
 	
 typedef struct settingGl {
-	SDL_Window *win;			// the window
-	BYTE SDLinit;				// YES if SDL is initialized, NO if not
-	BYTE winopen;				// YES if the window is opened, NO if not
-	float framerate;			// the framerate wanted of the program	
+	// Coming soon
 } tsetgl;
 	
 typedef struct Settings {
@@ -120,5 +117,8 @@ typedef struct Settings {
 //////////// THE ONLY GLOBAL VARIABLE /////////////
 tset set;
 ////////////////////////////////////////////////////
+
+// the function that will allocate a bunch of RAM in the heap
+void *alloc_heap (size_t, char *);
 
 #endif
