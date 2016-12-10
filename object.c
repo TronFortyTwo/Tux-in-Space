@@ -50,7 +50,7 @@ long double obj_Distance(tobj *i, tobj *l) {
 }
 
 /***
- * Put in *b the address of the bigger object
+ * Put in *b the address of the biggest object
  * i and l are the two objects,
  */
 void obj_GetBigger (tobj *i, tobj *l, tobj **b) {
@@ -88,7 +88,7 @@ BYTE obj_Init (tobj *obj, tStype *Stype) {
 	// Initialize the object
 	obj_LowInit(obj);
 	obj_Rename(obj, "Choose a name for your new object");
-	obj->type = type_Search(Stype, "Generic object");
+	obj->type = type_Search(Stype, "Object");
 	obj->mass = 0;
 	obj->radius = 0;
 	obj->color.blue = 0;

@@ -83,7 +83,7 @@ tStype *type_Init (FILE *stream) {
 	rewind(stream);
 	// loop to scan all the types
 	for(int i=0; i!=Stype.number; i++) {
-		// start assigning some values of his parent
+		// start assigning some values
 		Stype.type[i].color_max = Stype.type[i].parent->color_max;
 		Stype.type[i].color_min = Stype.type[i].parent->color_min;
 		Stype.type[i].hunted = Stype.type[i].parent->hunted;
@@ -91,6 +91,7 @@ tStype *type_Init (FILE *stream) {
 		Stype.type[i].mass_max = Stype.type[i].parent->mass_max;
 		Stype.type[i].mass_min = Stype.type[i].parent->mass_min;
 		Stype.type[i].product = Stype.type[i].parent->product;
+		Stype.type[i].description = NULL;
 		
 		// then scan own values over his parent ones
 		// name, jump it
@@ -163,6 +164,11 @@ tStype *type_Init (FILE *stream) {
 			Stype.type[i].product = type_Search(&Stype, &buf[9]);
 			in_hfs(buf, stream);
 		}
+		// assign the description if none has been set
+		if(Stype.type[i].description == NULL) {
+			Stype.type[i].description = (char *) alloc_heap (sizeof(char) * 50, "type_Init");
+			strcpy(Stype.type[i].description, "No description is available yet for this type");
+		}
 	}
 	
 	// end
@@ -209,14 +215,14 @@ ttype *type_Search(tStype *Stype, char *name) {
 ttype *type_Browser(tStype *Stype, char *title) {
 		
 	// in the gerarchic tree of types, is the common parent that the types listed have
-	ttype *commonparent = type_Search(Stype, "Generic object");
+	ttype *commonparent = type_Search(Stype, "Object");
 	ttype *genobj = commonparent;
 	// the output buffer
 	char buf[1024];
 	// the last object number
 	int maxn;
 	// the number of the back and description buttons
-	int backn, descrn;
+	int backn, descrn, genericn;
 	// The pointers to the types listed
 	ttype **types_listed = (ttype **) alloc_heap(sizeof(ttype *) * Stype->number, "type browser");
 	// input
@@ -238,10 +244,14 @@ ttype *type_Browser(tStype *Stype, char *title) {
 		// write in the dbuf the parent
 		strcat(buf, commonparent->name);
 		strcat(buf, ":\n");
-		// search for types that have have as parent commonparent
+		// search for types that have as parent commonparent
 		for (int i=0; i!=Stype->number; i++) {
 			// if the type has commonparent as parent
 			if(Stype->type[i].parent == commonparent) {
+				// if the type and his parent are the same, go ahead, because
+				// it will be printed in the generic
+				if(&Stype->type[i] == Stype->type[i].parent)
+					continue;
 				// write its number
 				strcat(buf, "\n%i) %s");	// Write the object in the buffer
 				types_listed[maxn++] = &Stype->type[i];
@@ -251,20 +261,26 @@ ttype *type_Browser(tStype *Stype, char *title) {
 				var[varpos++] = Stype->type[i].name;
 			}
 		}
-		// some space then add the description button
-		descrn = maxn+1;
+		// add the generic button
+		genericn = maxn+1;
+		var[varpos++] = &genericn;
+		strcat(buf, "\n%i) Generic ");
+		strcat(buf, commonparent->name);
+		// add the description button
+		descrn = maxn+2;
 		var[varpos++] = &descrn;
 		strcat(buf, "\n\n%i) description of an object");
 		// add the back button
-		backn = maxn+2;
+		backn = maxn+3;
 		var[varpos++] = &backn;
 		strcat(buf, "\n%i) back to the top");
-		
+		types_listed[maxn] = genobj;
 		// print
 		OPS(buf, var);
 		
 		// make indexes start from 0
 		maxn--;
+		genericn--;
 		descrn--;
 		backn--;
 		
@@ -273,7 +289,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 			in_i(&input);
 			input--;
 		}
-		while ((input < 0) || (input > backn));
+		while ((input < 0) || (input > descrn));
 		
 		// if the value point to a type, set this type as pointer and continue if the type is parent of some type, else exit the loop
 		if (input <= maxn) {
@@ -291,13 +307,20 @@ ttype *type_Browser(tStype *Stype, char *title) {
 				return typetemp;
 			}
 		}
+		// if is the generic xxx button
+		else if (input == genericn) {
+			free(types_listed);
+			free(var);
+			free(ivar);
+			return commonparent;
+		}
 		// if is the description button
 		else if (input == descrn) {
 			int n;
 			ttype *type_descr;	// the type described
 			varpos = 0;
 			// output
-			strcpy(buf, "Of which type of object do you want an explaination? [type its number]\n");
+			strcpy(buf, "Of which type of object do you want an explaination?\n");
 			for(int i=0; i <= maxn; i++){
 				strcat(buf, "\n%i) %s");
 				ivar[varpos] = i+1;
@@ -306,7 +329,7 @@ ttype *type_Browser(tStype *Stype, char *title) {
 				var[varpos++] = types_listed[i]->name;
 			}
 			// generic
-			strcat(buf, "\n%i) Generic %s");
+			strcat(buf, "\n%i) %s");
 			ivar[varpos] = descrn;				// descrn = genericn+1
 			var[varpos] = &ivar[varpos];
 			varpos++;
@@ -337,12 +360,8 @@ ttype *type_Browser(tStype *Stype, char *title) {
 			strcat(buf, "\nMaximum mass: ");
 			var[0] = &type_descr->mass_min;
 			varpos = 1;
-			if(type_descr->mass_max == -1)
-				strcat(buf, "infinite");
-			else{
-				strcat(buf, "%l");
-				var[varpos++] = &type_descr->mass_max;
-			}
+			strcat(buf, "%l");
+			var[varpos++] = &type_descr->mass_max;
 			// the color range
 			strcat(buf, "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0");
 			var[varpos++] = &type_descr->color_min.red;

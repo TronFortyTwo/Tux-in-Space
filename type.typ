@@ -15,8 +15,8 @@
 ########################################################################
 # the generic type is the base for all other types
 ########################################################################
-NAME: Generic object
-DESCRIPTION: No description available
+NAME: Object
+DESCRIPTION: An object is a bunch of matter whit a mass, examples are the Sun and a cellphone
 MASS MAX: INF
 MASS MIN: 0
 BLUE MAX: 255
@@ -27,8 +27,8 @@ GREEN MAX: 255
 GREEN MIN: 0
 HUNTED: N
 HUNTER: N
-PRODUCT: Asteroid
-PARENT: Generic object
+PRODUCT: Object
+PARENT: Object
 
 ########################################################################
 # The information missing from the next types are taken 
@@ -42,7 +42,7 @@ NAME: Artificial object
 DESCRIPTION: The product of an intentional human manifacture, often buildt whit metals
 HUNTED: Y
 PRODUCT: Debris
-PARENT: Generic object
+PARENT: Object
 
 	NAME: Spacecraft
 	DESCRIPTION: Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
@@ -72,7 +72,7 @@ PARENT: Generic object
 #
 NAME: Celestial object
 DESCRIPTION: A celestial object is a natural object
-PARENT: Generic object
+PARENT: Object
 
 	NAME: Brown Dwarf
 	DESCRIPTION: A brown dwarf is a particular type of celestial object that are more massive than planets, but doesn't have nuclear fusion in its core
@@ -225,7 +225,7 @@ PARENT: Generic object
 NAME: Space Monster
 DESCRIPTION: As in the old times big and unknow creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
 HUNTER: Y
-PARENT: Generic object
+PARENT: Object
 
 	NAME: Deep Space Kraken
 	DESCRIPTION: Terrifying enormous creature that destroy anything what encouter. No one survived his attacks to confirm theyr existent

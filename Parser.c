@@ -140,6 +140,7 @@ void parser_Distance(tsys *sys){
 	u = sys_SearchObj(sys, name);
 	if(u == NULL) {
 		OPS_Error("There isn't any object whit that name!\n\nInsert a new command", NULL);
+		sgetchar();
 		return;
 	}
 	distance[0] = math_Pitagora3D(o->x-u->x, o->y-u->y, o->z-u->z);
