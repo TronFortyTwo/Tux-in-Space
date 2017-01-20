@@ -24,13 +24,11 @@
 
 #ifndef inh
 #define inh
-#include "stdio.h"
 
-// global functions
-void in_u	(unsigned int *);	// scan an unsigned int
-void in_i	(int *);			// scan a signed int
-void in_s	(char *);			// scan a string
-void in_fs	(char *, FILE *);	// scan from a file as long as a '\n'
-void in_hfs	(char *, FILE *);	// like in_fs, but jump blank lines and comment lines
+#include "generic.h"
+
+void in_s	(std::string&);					// scan a string
+void in_fs	(std::string&, std::istream&);	// scan as long as a '\n'
+void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines and commented lines
 
 #endif

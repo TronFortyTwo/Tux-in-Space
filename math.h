@@ -23,13 +23,12 @@
  */
 #ifndef mathh
 #define mathh
-#include "time.h"
-#include "stdlib.h"
 
 // Pi
 #define PI M_PI
 
-#define RadiusestoVolume(x, y) (pow(x * x * x + y * y * y, 1.0/3.0))
+
+#define RadiusestoVolume(x, y) (pow(x * x * x + y * y * y, 1/3.0))
 
 // global functions
 int 		math_RandomI	(int, int);

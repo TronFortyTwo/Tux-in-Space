@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * This is CSpace header file
+ * Generic stuff
  * 
  */
 
@@ -32,23 +32,23 @@
 
 /////////////////////////////////////////////////////
 // This is the flag that active/deactive debug. (ON/OFF)
-// A debugless binary is lighter and faster, but is debugless
+// A debugless binary is lighter and faster
 
-#define DEBUG ON
+#define DEBUG OFF
 
 /////////////////////////////////////////////////////
 
+#include <limits>
+#include <cstdint>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include <vector>
+#include <fstream>
 
-
-// External standard library
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <time.h>
-#include <limits.h>
-#include <stdint.h>
-#include "OnlyPrintfSystem.h"
-	
 		
 // The three axis must have different codes
 #define X_AXIS 0
@@ -59,24 +59,23 @@
 #define IRREGULARITY "(!)"
 	
 // Values returned by functions
-#define GOODSIGNAL 1	// good
-#define BADSIGNAL 2		// generic bad
-#define FILE_ERR_SIG 3
-#define CORRUPTED_SIG 4
-#define NEW_SIG 5
-#define LOAD_SIG 6
-#define ABORTED_SIG 7
-#define QUITSIGNAL -1			// is even the value that the variable ttime.year assumes if the user want to quit, so must be negative!
+#define GOOD_SIG		1	// good
+#define BAD_SIG			2	// generic bad
+#define FILE_ERR_SIG	3
+#define CORRUPTED_SIG	4
+#define NEW_SIG			5
+#define LOAD_SIG		6
+#define ABORTED_SIG		7
+#define QUIT_SIG	   -1	// must be negative
 
 // The video mode
 #define V_OPS 0
 #define V_GL 1
 
 // The files and directoryes
-#define DEBUG_FILE "debug.dbg"				// Where are printed debug settingrmation
-#define DEBUG_FILE_LENGHT 10				// The size of DEBUG_FILE
-#define TYPE_DATABASE_FILE "type.typ"		// Where read type settingrmation
-#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration settingrmation
+#define DEBUG_FILE "debug.dbg"				// Where are printed debug information
+#define TYPE_DATABASE_FILE "type.typ"		// Where read type information
+#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration inormation
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
 	
@@ -85,40 +84,13 @@
 #define sgetchar() (scanf(" "), getchar())
 
 // More precise data types
-typedef 	int8_t		BYTE;	// max +/- 128
-typedef 	int16_t 	WORD;	// max +/- 32768
+typedef 	int8_t		BYTE;
+typedef 	int16_t 	WORD;
 typedef		int32_t		DWORD;
 typedef		int64_t		QWORD;
-
-// the string as long as the max lenght of a type/system/object name
-// to use carefully because is very long, use dinamically allocated strings instead where possible
-#define NAMELUN 128
-typedef char TNAME[NAMELUN];
-
-/*
- * The structure menu_Settings is a structure that contein settings and other tecnical things 
- */
-typedef struct settingOPS {
-	unsigned int width;				// The number of columns that the program use
-	unsigned int height;			// The number of lines that the program use
-	unsigned int numprecision;		// Number of character used for printing the deciamal of a long double
-} tsetOPS;
-	
-typedef struct settingGl {
-	// Coming soon
-} tsetgl;
-	
-typedef struct Settings {
-	int vmode;		// Visual mode
-	tsetOPS ops;	// OPS settings
-	tsetgl gl;		// Window and OpenGL settings
-} tset;
-	
-//////////// THE ONLY GLOBAL VARIABLE /////////////
-tset set;
-////////////////////////////////////////////////////
-
-// the function that will allocate a bunch of RAM in the heap
-void *alloc_heap (size_t, char *);
+typedef 	uint8_t		UBYTE;
+typedef 	uint16_t 	UWORD;
+typedef		uint32_t	UDWORD;
+typedef		uint64_t	UQWORD;
 
 #endif

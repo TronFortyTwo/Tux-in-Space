@@ -21,13 +21,17 @@
  *
  * 	HEADER FILE
  */
+
 #ifndef OPSh
 #define OPSh
+
 #include "generic.h"
+#include "debug.h"
+#include "setting.h"
 
 // global functions
-void OPS(char *, void *[]);			// Use it to print things
-void OPS_Error(char *, void *[]);	// Use it to signal errors
-void OPS_MemLack(char *);			// Call it when you can't alloc more RAM (for example when a malloc return NULL)
+void OPS		(const setting&, const std::string&, const void *const* const);	// Use it to print things
+void OPS_Error	(const setting&, const std::string&, const void *const* const);	// Use it to signal errors
+void OPS_MemLack(const std::string&);			// Call it when you can't alloc more RAM (for example when a malloc return NULL)
 
 #endif

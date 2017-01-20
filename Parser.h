@@ -26,8 +26,9 @@
 
 #include "time.h"
 #include "system.h"
+#include "menù.h"
 
 // functions that can called from everywhere
-ttime Parser(tsys *);
+time_sim Parser(setting& set, system_c&);
 
 #endif

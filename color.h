@@ -21,21 +21,25 @@
  *
  *	HEADER FILE
  */
- 
+
 #ifndef colorh
 #define colorh
 
 #include "generic.h"
+#include "OnlyPrintfSystem.h"
+#include "in.h"
 
-// the type that we use as color
-typedef struct scolor {
-	unsigned int red;
-	unsigned int green;
-	unsigned int blue;
-} tcolor;
+class color {
+	public:
+		unsigned int red;
+		unsigned int green;
+		unsigned int blue;
+		
+		void Scan(const setting&, const color&, const color&);		// An interface to create a color using OPS
+		BYTE CheckRange(const color&, const color&);	// Check if the color is in a range of colours given (a color max and a color min)
+};
 
 // prototypes
-tcolor color_Scan(tcolor, tcolor);				// An interface to create a color using OPS
-BYTE color_CheckRange(tcolor, tcolor, tcolor);	// Check if a color is in a range of colours given (a color max and a color min)
+
 
 #endif

@@ -21,25 +21,26 @@
  *
  * 	HEADER FILE
  */
+
 #ifndef timeh
 #define timeh
 
 #include "generic.h"
 
 // the time structure
-typedef struct struct_time {
-	QWORD year;
-	int day;
-	int hour;
-	int min;
-	int sec;
-	int millisec;
-} ttime;
+class time_sim {	// the time of a simulation
+	public:
+		QWORD year;
+		int day;
+		int hour;
+		int min;
+		int sec;
+		int millisec;
+	
+		BYTE Compare(time_sim&);	// return 0 if the given is bigger
+								// 1 if is smaller and 2 are equal
+		void Update();			// format correctly 
+								// (for example from 61 sec make 1 min and 1 sec)
 
-// function that can be called from everywhere
-BYTE time_GetBigger(ttime *, ttime *);				// from two times given, return 0 if the bigger is the first,
-													// 1 if id the second and 2 are equal
-void time_Update(ttime *);							// Make a wrong formatted time structure into a right one 
-													// (for example from 61 sec make 1 min and 1 sec)
-
+};
 #endif

@@ -27,10 +27,25 @@
 
 #include "generic.h"
 
-// Global functions
-BYTE set_InitDir();		//initialize directoryes
-void set_Init();		//initialize set structure
-void set_SetDefault();	//initialize set structure as default
-void set_Save();		//save set structure in a file
+// Other libraries for unix-like
+#include <sys/stat.h>
+
+
+class setting {
+	public:
+		unsigned int width;			// The number of columns that OPS use
+		unsigned int height;		// The number of lines that OPS use
+		unsigned int numprecision;	// Number of character used for printing the deciamal of a long double (OPS)
+		int vmode;					// Visual mode
+		
+		
+		BYTE InitDir();		// initialize directoryes
+		void Defaults();	// set default setting
+		void Save();		// save set structure in a file
+		
+		setting();
+	
+};
+
 
 #endif

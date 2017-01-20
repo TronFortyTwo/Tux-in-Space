@@ -11,6 +11,7 @@
 # - please, use the indentation (using the tab)
 # - to write comment, start the line whit '#'
 # - write the type elements in the same order of the Generic object
+# - there is no support yet for object that are both hunter AND hunted
 ########################################################################
 ########################################################################
 # the generic type is the base for all other types

@@ -27,28 +27,41 @@
 
 #include "generic.h"
 #include "object.h"
+#include "type.h"
 #include "time.h"
 
+class object;
 
-// one system's structure: include the objects, the name and the number, the active object's position, the time of the system and the G constant of universal gravitation
-typedef struct system {
-	char *name;
-	long double precision;	// Precision of the simulation (in second)
-	ttime stime;			// the time of the simulation
-	QWORD nactive;			// number of objects active
-	QWORD nalloc;			// number of objects allocated
-	tobj *o;				// the pointer to the dinamic allocated array of objects
-	long double G;
-	tStype *Stype;			// The pointer at the structure that coontein all the type
-} tsys;
+// system structure
+class system_c {
+	public:
+		std::string name;
+		time_sim stime;			// the time of the simulation
+		int nobj;			// number of objects
+		std::vector<object> o;// the object vector
+		double G;			// the universal gravitation constant
+		typeSTR *stype;		// The pointer at the structure that contein all the types
+		double precision;	// Precision of the simulation
+		
+		object *SearchObj	(const std::string&);	// Search for an object in the system from his name
+		void RemoveObj 		(object&);				// Remove an object from a system
+		void Save			(const setting& set);	// Save an object in a file
+		void NewObj			(const setting& set);	// Create a new object, put it in the system and initialize it
+		
+		// old pengine stuff
+		void Physic	(time_sim& dest);		// Apply the physic to the object
+		
+		// constructor
+		system_c (const setting&, typeSTR&);		// Init the system
+		system_c (const setting&, typeSTR&, BYTE&);	// Init the system loading it from a file
 	
-// prototypes of functions that can be called from everywhere
-tsys *sys_Init		(tStype *);				// Init a new system
-tsys *sys_Load		(tStype *);				// Load a system from a file
-tobj *sys_SearchObj	(tsys *, char *);		// Search for an object in the system from his name
-void  sys_RemoveObj (tsys *, tobj *);		// Remove an object from a system
-void  sys_Save		(tsys *);				// Save an object in a file
-void  sys_Free		(tsys *);				// Free all the dinamic allocated things in the sys structure (must use before close a system)
-void  sys_NewObj	(tsys *);				// Create a new object and initialize it
+	private:
+		// internal functions
+		void Physic_Inertia();	// apply the law: inertia
+		void Physic_Gravity();	// "     "    " : gravity
+		void Hunter_AI	   ();	// activate the hunter AIs and make them influence the system
+		void physic_Impacts();	// Compute impacts between objects
+};
+
 
 #endif

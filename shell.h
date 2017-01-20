@@ -21,11 +21,18 @@
  * 
  *	HEADER FILE
  */
+
 #ifndef shellh
 #define shellh
 
-#include "type.h"
+#include "generic.h"
+#include "system.h"
+#include "menù.h"
+#include "OPSo.h"
+#include "Parser.h"
 
-BYTE Shell (tStype *Stype);
+class typeSTR;
+
+BYTE Shell (setting&, typeSTR&);
 
 #endif

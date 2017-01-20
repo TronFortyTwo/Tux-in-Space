@@ -25,48 +25,57 @@
  *	HEADER FILE
  */
 
+
 #ifndef objecth
 #define objecth
 
 #include "generic.h"
-#include "time.h"
-#include "type.h"
+#include "color.h"
+#include "object_data.h"
+#include "math.h"
+#include "typeSTR.h"
+#include "in.h"
+#include "system.h"
 
-// Object structure
-typedef struct object {
-	char *name;				// the name of the object
-	ttype *type;			// the type of object
-	long double	radius;		// the object for now are sphere
-	long double mass;
-	long double x;
-	long double y;
-	long double z;
-	long double velx;		// velocity on x
-	long double vely;		// velocity on y
-	long double velz;		// velocity on z
-	tcolor color;			// the color
-	void *data;				// type specific information about the object (coming soon ;)
-} tobj;
+class type;
+class system_c;
 
-// Functions that can called from everywhere
-// NOTE:
-// Is deprecated the modify the obj structure whitout passing through one of these functions
-// All these funtions should be memory leack and seg fault safe
-void obj_Move 					(tobj *, tobj *);			// Move the first object in the second position
-void obj_GetBigger 				(tobj *, tobj *, tobj **);	// Move the bigger of the two object in the third position
-void obj_Wipe					(tobj *);					// Clean the dinamic memory of an object
-BYTE obj_Load					(tobj *, tStype *, char *);	// Load an object from a file
-void obj_Save					(tobj *);					// Save the object in a file
-BYTE obj_Init 					(tobj *, tStype *);			// Init a new object
-void obj_Rename					(tobj *, char *);			// Rename an object safely
-long double obj_Distance		(tobj *, tobj *);			// Compute the distance between two objects
-BYTE obj_InitFromFile			(tobj *, FILE *, tStype *);	// Init an object from a file
-BYTE obj_InitFromFileComplete	(tobj *, FILE *, tStype *);	// Init an object from a file already opened
-void obj_Write 					(FILE *, tobj *);			// Write in a file an object already opened
-void obj_WriteComplete			(FILE *, tobj *);			// Write in a file an object whit coordinates
-void obj_SetType				(tobj *, tStype *, char *);	// Give to the object the type whit the name given
-// ONLY THE PHISIC MOTOR CAN USE THIS!!! HOWEVER IS DEPRECATED THAT
-void obj_LowInit				(tobj *);					// init a object in a low level manner to prevent seg fault or memory leack when doing the REAL initialization
+class object {
+	private:
+		void 		WipeData		();							// Wipe the data struct of an object
+			
+	public:
+		objdata data;		// the data about the object
+		std::string name;	// the name
+		type *typ;			// the type of object
+		long double	radius;	// the object for now are sphere
+		long double mass;
+		long double posx;	// position on x
+		long double posy;	// position on y
+		long double posz;	// position on z
+		long double velx;	// velocity on x
+		long double vely;	// velocity on y
+		long double velz;	// velocity on z
+		color colour;		// the color
 
+		void 		GetBigger 		(object&, object *&);		// Put the address of the bigger of the two object in the third position
+		void 		Save			(const setting&);			// Save the object in a file
+		double 		Distance		(const object&);			// Compute the distance between this objects and another one
+		BYTE 		Read 			(std::ifstream&, typeSTR&);	// Read from a file an object
+		BYTE 		ReadComplete 	(std::ifstream&, typeSTR&);	// Read from a file an object whit coordinates
+		void 		Write 			(std::ofstream&);			// Write in a file an object already opened
+		void 		WriteComplete	(std::ofstream&);			// Write in a file an object already opened whit coordinates
+		void		UpdateFast		(double);					// Update x, y, z of an object accordingly to his fast and the simulation precision
+		
+		void 	AI_Hunter 	(system_c&);		// the hunter object will behaviour in the system given
+		
+		void	Impact_Anaelastic(object&);	// create a new object from an impact with another one
+		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
+		
+		// CONSTRUCTOR:
+		object (typeSTR&, const std::string&, BYTE&);	// Load from a file (UI)
+		object (const setting&, typeSTR&, BYTE&);		// Init using an UI
+		object () {;}									// init a free object
+};
 
 #endif

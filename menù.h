@@ -21,12 +21,18 @@
  * 
  * 	HEADER FILE
  */
+
 #ifndef menuh
 #define menuh
-#include "type.h"
+
+#include "OnlyPrintfSystem.h"
+#include "in.h"
+#include "setting.h"
+
+class typeSTR;
 
 // Global functions
-int menu_main(tStype *);
-void menu_Settings();
+int menu_main(setting& set);
+void menu_Settings(setting& set);
 
 #endif

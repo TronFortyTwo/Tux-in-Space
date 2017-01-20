@@ -23,11 +23,12 @@
  * 
  *	HEADER FILE
  */
+
 #ifndef opsoh
 #define opsoh
 
 #include "system.h"
 
-void OPSo (tsys *);
+void OPSo (const setting&, system_c&);
 
 #endif
