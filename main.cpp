@@ -23,13 +23,7 @@
 ########################################################################
 */
 
-// Include the header files
-#include "generic.h"
-#include "typeSTR.h"
-#include "debug.h"
-#include "shell.h"
-#include "OnlyPrintfSystem.h"
-#include "setting.h"
+#include "main.h"
 
 using namespace std;
 
@@ -43,6 +37,11 @@ int main () {
 	// settings
 	setting set;
 	
+	// Initialize the debug
+	#if DEBUG
+	debug_Init();
+	#endif
+	
 	// initialize the program directories
 	if(set.InitDir() != GOOD_SIG) {
 		printf("\n\nCSpace:\n\nError: can't Create program directories!\nPress something to exit");
@@ -52,11 +51,6 @@ int main () {
 	
 	// print loading and license banner
 	OPS(set, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", nullptr);
-		
-	// Initialize the debug
-	#if DEBUG
-	debug_Init();
-	#endif
 	
 	// The big type STRucture
 	typeSTR stype;
@@ -71,6 +65,5 @@ int main () {
 	// goodbye message
 	OPS (set, "CSPACE\n\n\n%f-&t5SEE YOU LATER!", nullptr);
 	
-		
 	return EXIT_SUCCESS;
 }

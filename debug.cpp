@@ -23,25 +23,28 @@
  * debugging function that you can call from everywhere easily 
  */
 
-#if DEBUG
-
 #include "debug.h"
 
 using namespace std;
 
+
+void debug_Init(){
+	ofstream file(DEBUG_FILE);
+}
+
 /***
  * Print a type
  */
-void debug_Type(type& t) {
+void debug_Type(const type& t) {
 	
 	debug_Printf("\nName:");
-	debug_Printf(t->name);
+	debug_Printf(t.name);
 	debug_Printf("Description:");
-	debug_Printf(t->description);
+	debug_Printf(t.description);
 	debug_Printf("Product:");
-	debug_Printf(t->product->name);
+	debug_Printf(t.product->name);
 	debug_Printf("Parent:");
-	debug_Printf(t->parent->name);
+	debug_Printf(t.parent->name);
 }
 
 /***
@@ -68,7 +71,7 @@ void debug_Double(double n) {
 /***
  * Print in the debug file the attributes of an object
  */
-void debug_Object(object& o) {
+void debug_Object(const object& o) {
 		
 	// a string
 	std::string buffer;
@@ -76,35 +79,35 @@ void debug_Object(object& o) {
 		
 	// the name
 	buffer = "NAME:\t\t\t";
-	buffer += o->GetName();
+	buffer += o.name;
 	debug_Printf(buffer);
 	// the mass
 	buffer = "MASS:\t\t\t";
-	ob << o->mass;
+	ob << o.mass;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// the radius
 	buffer = "RADIUS:\t\t\t";
-	ob << o->radius;
+	ob << o.radius;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// the color
 	buffer = "COLOR:\t\t\t";
-	ob << o->color.blue << ' ' << o->color.green << ' ' << o->color.red;
+	ob << o.colour.blue << ' ' << o.colour.green << ' ' << o.colour.red;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// type
 	buffer = "TYPE:\t\t\t";
-	buffer += o->typ.name;
+	buffer += o.typ->name;
 	debug_Printf(buffer);
 	// coordinates
 	buffer = "COORDINATES:\t";
-	ob << o->x << ' ' << o->y << ' ' << o->z;
+	ob << o.posx << ' ' << o.posy << ' ' << o.posz;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// velocity
 	buffer = "VELOCITY:\t";
-	ob << o->velx << ' ' << o->vely << ' ' << o->velz;
+	ob << o.velx << ' ' << o.vely << ' ' << o.velz;
 	buffer += ob.str();
 	debug_Printf(buffer);
 }
@@ -112,86 +115,71 @@ void debug_Object(object& o) {
 /***
  * This function print the Stype structure
  */
-void debug_Stype(typeSTR& stype) {
+void debug_Stype(const typeSTR& stype) {
 
 	std::string buffer;
 	std::ostringstream ob;
 		
 	debug_Printf("\n\nSTYPE PRINTING -- types found:");
-	debug_Int(stype->number);
+	debug_Int(stype.number);
 	debug_Printf("\n");
 	
-	for (int i=0; i!=stype->number; i++) {
+	for (int i=0; i!=stype.number; i++) {
 		buffer = "NAME:\t\t\t";
-		buffer += stype->t[i].name;
+		buffer += stype.t[i].name;
 		debug_Printf(buffer);
 		buffer = "DESCRPTION:\t\t";
-		buffer += stype->t[i].description;
+		buffer += stype.t[i].description;
 		debug_Printf(buffer);
 		buffer = "PARENT:\t\t\t";
-		buffer += stype->t[i].parent->name;
+		buffer += stype.t[i].parent->name;
 		debug_Printf(buffer);
 		buffer = "MASS MIN:\t\t";
-		ob << stype->t[i].mass_min;
+		ob << stype.t[i].mass_min;
 		buffer += ob.str();
 		debug_Printf(buffer);
 		buffer = "MASS MAX:\t\t";
-		ob << stype->t[i].mass_max;
+		ob << stype.t[i].mass_max;
 		buffer += ob.str();
 		debug_Printf(buffer);
 		buffer = "BLUE RANGE\t\t";
-		ob << stype->t[i].color_min.blue << "\t\t\t\t" << stype->t[i].color_max.blue;
+		ob << stype.t[i].color_min.blue << "\t\t\t\t" << stype.t[i].color_max.blue;
 		buffer += ob.str();
 		debug_Printf(buffer);
 		buffer = "GREEN RANGE\t\t";
-		ob << stype->t[i].color_min.green << "\t\t\t\t" << stype->t[i].color_max.green;
+		ob << stype.t[i].color_min.green << "\t\t\t\t" << stype.t[i].color_max.green;
 		buffer += ob.str();
 		debug_Printf(buffer);
 		buffer = "RED RANGE\t\t";
-		ob << stype->t[i].color_min.red << "\t\t\t\t" << stype->t[i].color_max.red;
+		ob << stype.t[i].color_min.red << "\t\t\t\t" << stype.t[i].color_max.red;
 		buffer += ob.str();
 		debug_Printf(buffer);
 		buffer = "HUNTED:\t\t\t";
-		if (stype->t[i].hunted == YES)
+		if (stype.t[i].hunted == YES)
 			buffer += "YES";
 		else
 			buffer += "NO";
 		debug_Printf(buffer);
 		buffer = "HUNTER:\t\t\t%p\t\t";
-		if (stype->t[i].hunter == YES)
+		if (stype.t[i].hunter == YES)
 			buffer += "YES";
 		else
 			buffer += "NO";
 		debug_Printf(buffer);
 		buffer = "PRODUCT:\t\t%s";
-		buffer += stype->t[i].product->name;
+		buffer += stype.t[i].product->name;
 		debug_Printf(buffer);
 		debug_Printf("\n");
 	}
 }
 
 /***
- *	Initialize the debug function
- */
-	void debug_Init() {
-		fclose(fopen(DEBUG_FILE, "w"));
-	}
- 
- 
-
-/***
  * This function write in the debug support (a file, stderr or something else) what is called to write
  */
-void debug_Printf(string txt) {
+void debug_Printf(const string& txt) {
 	
 	// for now the debug support is a file
-	FILE *file;
-	file = fopen(DEBUG_FILE, "a");
+	ofstream file(DEBUG_FILE);
 	// write what is requested (whit a '\n' after)
-	fprintf(file, "%s", txt);
-	fprintf(file, "\n"); 
-	// finalize all
-	fclose(file);
+	file << txt << endl; 
 }
-
-#endif

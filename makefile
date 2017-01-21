@@ -2,6 +2,7 @@ CXXFLAGS = -Wall -g
 
 # write them in logic order
 objects = \
+		debug.o\
 		generic.o\
 		setting.o\
 		in.o\
@@ -18,9 +19,9 @@ objects = \
 		shell.o\
 		OPSo.o\
 		menù.o\
-		debug.o\
 # like object but whit .h but without main.h and with generic.h
 libraries = \
+		debug.h\
 		generic.h\
 		setting.h\
 		in.h\
@@ -37,7 +38,6 @@ libraries = \
 		shell.h\
 		OPSo.h\
 		menù.h\
-		debug.h\
 
 cspace: $(objects) $(libraries)
 		g++ -o cspace $(CXXFLAGS) $(objects)

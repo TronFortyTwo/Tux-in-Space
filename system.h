@@ -29,6 +29,7 @@
 #include "object.h"
 #include "type.h"
 #include "time.h"
+#include "debug.h"
 
 class object;
 

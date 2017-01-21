@@ -34,7 +34,7 @@
 // This is the flag that active/deactive debug. (ON/OFF)
 // A debugless binary is lighter and faster
 
-#define DEBUG OFF
+#define DEBUG ON
 
 /////////////////////////////////////////////////////
 
