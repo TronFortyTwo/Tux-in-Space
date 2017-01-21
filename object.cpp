@@ -75,7 +75,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 	
 	// Initialize the object
 	name = "Choose a name for your new object";
-	typ = &stype.Search("Object");
+	typ = stype.Search("Object");
 	mass = 0;
 	radius = 0;
 	colour.blue = 0;
@@ -299,7 +299,7 @@ BYTE object::Read (ifstream& stream, typeSTR& stype) {
 	// scan the type
 	string buffer;
 	in_fs(buffer, stream);
-	typ = &stype.Search(buffer);
+	typ = stype.Search(buffer);
 	if (typ == nullptr)
 		return CORRUPTED_SIG;
 	// scan all the other things
@@ -318,7 +318,7 @@ BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	// scan the type
 	string buffer;
 	in_fs(buffer, stream);
-	typ = &stype.Search(buffer);
+	typ = stype.Search(buffer);
 	if (typ == nullptr)
 		return CORRUPTED_SIG;
 	// scan all the other things

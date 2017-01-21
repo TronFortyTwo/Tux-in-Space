@@ -24,6 +24,9 @@
  */
 
 #include "debug.h"
+#include "object.h"
+#include "type.h"
+#include "typeSTR.h"
 
 using namespace std;
 
@@ -179,7 +182,7 @@ void debug_Stype(const typeSTR& stype) {
 void debug_Printf(const string& txt) {
 	
 	// for now the debug support is a file
-	ofstream file(DEBUG_FILE);
+	ofstream file(DEBUG_FILE, ios_base::app);
 	// write what is requested (whit a '\n' after)
 	file << txt << endl; 
 }

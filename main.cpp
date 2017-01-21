@@ -53,12 +53,23 @@ int main () {
 	OPS(set, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", nullptr);
 	
 	// The big type STRucture
-	typeSTR stype;
+	BYTE result;
+	typeSTR stype(result);
+	// error handling
+	if(result != GOOD_SIG){
+		if(result == FILE_ERR_SIG) {
+			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.", nullptr);
+			#if DEBUG
+			debug_Printf("Stype initialization failed! exiting with:");
+			debug_Int(FILE_ERR_SIG);
+			#endif
+			return EXIT_FAILURE;
+		}
+	}
 	
 	// RUNNING
 	while
 		(Shell (set, stype) != QUIT_SIG);
-		
 		
 	// EXITING THE PROGRAM
 		

@@ -35,10 +35,10 @@ class typeSTR{
 		std::vector<type> t;					// all the types
 		
 		type&	Browse	(const setting&, const std::string&);	// Browse and choose a type (give a title to the page)
-		type&	Search	(const std::string&);	// Search a type from the name
+		type	*Search	(const std::string&);	// Search a type from the name
 		
 		// constructor
-		typeSTR();
+		typeSTR(BYTE& result);
 };
 
 #endif

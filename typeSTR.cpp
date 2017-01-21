@@ -27,7 +27,7 @@ using namespace std;
 /***
  * Build the type structure reading it from a file
  */
-typeSTR::typeSTR () {
+typeSTR::typeSTR (BYTE& result) {
 	
 	// buffer (always helpful)
 	string buf;
@@ -36,6 +36,10 @@ typeSTR::typeSTR () {
 	{	
 		// the stream to use
 		ifstream stream(TYPE_DATABASE_FILE);
+		if(!stream) {
+			result = FILE_ERR_SIG;
+			return;
+		}
 		// reset the number
 		number = 0;
 		// loop
@@ -79,7 +83,7 @@ typeSTR::typeSTR () {
 			while
 				(!buf.compare(0, 8, "PARENT:"));
 			string parent = buf.substr(8, buf.length());
-		t[i].parent = &Search(parent);
+		t[i].parent = Search(parent);
 		}
 	}
 	// OTHER STUFF
@@ -175,7 +179,7 @@ typeSTR::typeSTR () {
 			// product:
 			if(!buf.compare(0, 7, "PRODUCT: ")) {
 				string temp = buf.substr(0, 9);
-				t[i].product = &Search(temp);
+				t[i].product = Search(temp);
 				in_hfs(buf, stream);
 			}
 			// assign the description if none has been set
@@ -190,19 +194,19 @@ typeSTR::typeSTR () {
 /***
  * Given a name, this function return the pointer to that type. If there isn't any type whit that name return NULL
  */
-type& typeSTR::Search (const string& tofind) {
+type *typeSTR::Search (const string& tofind) {
 	
 	// the loop that search the type whit the right name
 	for(int i=0; i!=number; ++i)
 		if (!t[i].name.compare(tofind))
-			 return t[i];
+			 return &t[i];
 	
 	#if DEBUG
-	debug_Printf("type_Search (!) No type whit the name (read below) has been found! This is a bug!");
+	debug_Printf("type_Search (!) No type whit the name has been found! This is a bug!");
 	debug_Printf(tofind);
 	#endif
 	
-	return Search("Object");
+	return nullptr;
 }
 
 
@@ -216,8 +220,8 @@ type& typeSTR::Search (const string& tofind) {
 type& typeSTR::Browse(const setting& set, const string& title) {
 		
 	// in the gerarchic tree of types, is the common parent that the types listed have
-	type *commonparent = &Search("Object");
-	type& genobj = Search("Object");
+	type *commonparent = Search("Object");
+	type& genobj = *Search("Object");
 	// the output buffer
 	std::string buf;
 	// the last object number
