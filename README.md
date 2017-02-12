@@ -5,10 +5,10 @@ This program is a simulation game. The program simulates the moving, under
 the phisic's law, of planets, spaceships, suns, and everything else in 
 the deep space.
 Now have:
-- An extended gerarchic collection of various object types whit different
+- An wide gerarchic collection of various object types whit different
 behavior
-- Phisic engine that simulate the gravity force and the impacts between 
-the objects whit different types of impacts
+- Phisic engine that simulate the gravity force and different types of 
+impacts between the objects
 - Space Monster whit a basic AI
 
 for test/use the program:

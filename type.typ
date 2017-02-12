@@ -6,11 +6,10 @@
 #
 # READ CAREFULLY BEFORE EDIT THIS FILE:
 # - every type must have a name and a parent
-# - name must be the first element of a type, PARENT the last
-# - never write a children type over his parent
-# - please, use the indentation (using the tab)
-# - to write comment, start the line whit '#'
-# - write the type elements in the same order of the Generic object
+# - NAME must be the first element of a type, PARENT the last
+# - please, use the indentation (using tabs)
+# - to write comments, start a line with '#'
+# - write the type elements in the same order
 # - there is no support yet for object that are both hunter AND hunted
 ########################################################################
 ########################################################################
@@ -84,7 +83,6 @@ PARENT: Object
 		NAME: Sub-brown dwarf
 		DESCRIPTION: A particular type of Brown Dwarf that is smaller than a regular one
 		PARENT: Brown Dwarf
-	
 	
 	NAME: Small body
 	PARENT: Celestial object
@@ -234,10 +232,17 @@ PARENT: Object
 	PARENT: Space Monster
 	
 	NAME: Leviatan
-	DESCRIPTION: Enormous dragon of the space, the information about him are very few
+	DESCRIPTION: Huge dragon of the space, the information about him are very few
 	HUNTER: Y
 	PARENT: Space Monster
 
+########################################################################
+#	TUX
+#
+NAME: Tux
+DESCRIPTION: Our hero!
+HUNTED: Y
+PARENT: Object
 
 EOF
-# (END OF FILE)
+(END OF FILE)

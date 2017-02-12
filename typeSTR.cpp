@@ -29,10 +29,9 @@ using namespace std;
  */
 typeSTR::typeSTR (BYTE& result) {
 	
-	// buffer (always helpful)
 	string buf;
 	
-	// count how many types there are in the file in a loop
+	// count how many types there are in the file
 	{	
 		// the stream to use
 		ifstream stream(TYPE_DATABASE_FILE);
@@ -40,9 +39,8 @@ typeSTR::typeSTR (BYTE& result) {
 			result = FILE_ERR_SIG;
 			return;
 		}
-		// reset the number
 		number = 0;
-		// loop
+		
 		while(1) {
 			// read the line (jumping blank ones)
 			in_hfs (buf, stream);
@@ -68,29 +66,30 @@ typeSTR::typeSTR (BYTE& result) {
 			do
 				in_hfs(buf, stream);
 			while
-				(!buf.compare(0, 6, "NAME: "));
+				(buf.compare(0, 6, "NAME: "));
 			t[i].name = buf.substr(6, buf.length());
 		}
 	}
+	
 	// PARENT. Set all the parent
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
-		
 		for(int i=0; i!=number; i++) {
 			do
 				in_hfs(buf, stream);
 			while
-				(!buf.compare(0, 8, "PARENT:"));
+				(buf.compare(0, 8, "PARENT: "));
 			string parent = buf.substr(8, buf.length());
-		t[i].parent = Search(parent);
+			t[i].parent = Search(parent);
 		}
 	}
+	
+	
 	// OTHER STUFF
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
-	
 		// loop to scan all the types
 		for(int i=0; i!=number; i++) {
 			// start assigning some values
@@ -104,59 +103,60 @@ typeSTR::typeSTR (BYTE& result) {
 			t[i].description.clear();
 
 			// then scan own values over his parent ones
+			
 			// name, jump it
 			in_hfs(buf, stream);
-			// description
+			
 			in_hfs(buf, stream);
 			if(!buf.compare(0, 13, "DESCRIPTION: ")) {
-				t[i].description = buf.substr(13,buf.length());
+				t[i].description = buf.substr(13, buf.length());
 				in_hfs(buf, stream);
 			}
 			// mass max:
-			if(!buf.compare(0, 9, "MASS_MAX: ")) {
-				string temp = buf.substr(9,buf.length());
+			if(!buf.compare(0, 10, "MASS MAX: ")) {
+				string temp = buf.substr(9, buf.length());
 				t[i].mass_max = atof(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// mass min:
-			if(!buf.compare(0, 9, "MASS_MIN: ")) {
-				string temp = buf.substr(9,buf.length());
+			if(!buf.compare(0, 10, "MASS MIN: ")) {
+				string temp = buf.substr(9, buf.length());
 				t[i].mass_min = atof(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// blue max:
-			if(!buf.compare(0, 9, "BLUE MAX: ")) {
-				string temp = buf.substr(9,buf.length());
+			if(!buf.compare(0, 10, "BLUE MAX: ")) {
+				string temp = buf.substr(10, buf.length());
 				t[i].color_max.blue = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// blue min:
-			if(!buf.compare(0, 9, "BLUE MIN: ")) {
-				string temp = buf.substr(9,buf.length());
+			if(!buf.compare(0, 10, "BLUE MIN: ")) {
+				string temp = buf.substr(10, buf.length());
 				t[i].color_min.blue = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// red max:
-			if(!buf.compare(0, 8, "RED MAX: ")) {
-				string temp = buf.substr(8, buf.length());
+			if(!buf.compare(0, 9, "RED MAX: ")) {
+				string temp = buf.substr(9, buf.length());
 				t[i].color_max.red = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// red min:
-			if(!buf.compare(0, 8, "RED MIN: ")) {
-				string temp = buf.substr(8, buf.length());
+			if(!buf.compare(0, 9, "RED MIN: ")) {
+				string temp = buf.substr(9, buf.length());
 				t[i].color_min.red = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// green max:
-			if(!buf.compare(0, 10, "GREEN MAX: ")) {
-				string temp = buf.substr(10, buf.length());
+			if(!buf.compare(0, 11, "GREEN MAX: ")) {
+				string temp = buf.substr(11, buf.length());
 				t[i].color_max.green = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
 			// green min:
-			if(!buf.compare(0, 10, "GREEN MIN: ")) {
-				string temp = buf.substr(10,buf.length());
+			if(!buf.compare(0, 11, "GREEN MIN: ")) {
+				string temp = buf.substr(11,buf.length());
 				t[i].color_min.green = atoi(temp.c_str());
 				in_hfs(buf, stream);
 			}
@@ -176,17 +176,35 @@ typeSTR::typeSTR (BYTE& result) {
 					t[i].hunter = YES;
 				in_hfs(buf, stream);
 			}
-			// product:
-			if(!buf.compare(0, 7, "PRODUCT: ")) {
+			// PRODUCT:
+			if(!buf.compare(0, 9, "PRODUCT: ")) {
 				string temp = buf.substr(0, 9);
 				t[i].product = Search(temp);
 				in_hfs(buf, stream);
 			}
+			
+			#if DEBUG
+			if(buf.compare(0, 8, "PARENT: ")) {
+				debug_Printf("(!) typeSTR::typeSTR! Unparsable line");
+				debug_Printf(buf);
+				debug_Printf("while object");
+				debug_Printf(t[i].name);
+			}
+			#endif
+			
 			// assign the description if none has been set
 			if(!t[i].description.length())
 				t[i].description =  "No description is available yet for this type";
 		}
 	}
+	
+	
+	
+	#if DEBUG
+	debug_Printf("TypeSTR initialization complete");
+	debug_Stype(*this);
+	#endif
+	
 }
 
 
@@ -202,7 +220,7 @@ type *typeSTR::Search (const string& tofind) {
 			 return &t[i];
 	
 	#if DEBUG
-	debug_Printf("type_Search (!) No type whit the name has been found! This is a bug!");
+	debug_Printf("(!) typeSTR::Search: No type whit the name has been found!");
 	debug_Printf(tofind);
 	#endif
 	

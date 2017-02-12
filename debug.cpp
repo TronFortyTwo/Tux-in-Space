@@ -30,6 +30,7 @@
 
 using namespace std;
 
+#if DEBUG
 
 void debug_Init(){
 	ofstream file(DEBUG_FILE);
@@ -121,55 +122,53 @@ void debug_Object(const object& o) {
 void debug_Stype(const typeSTR& stype) {
 
 	std::string buffer;
-	std::ostringstream ob;
 		
 	debug_Printf("\n\nSTYPE PRINTING -- types found:");
 	debug_Int(stype.number);
 	debug_Printf("\n");
 	
 	for (int i=0; i!=stype.number; i++) {
+		
 		buffer = "NAME:\t\t\t";
 		buffer += stype.t[i].name;
-		debug_Printf(buffer);
-		buffer = "DESCRPTION:\t\t";
+		
+		buffer += "\nDESCRPTION:\t\t";
 		buffer += stype.t[i].description;
-		debug_Printf(buffer);
-		buffer = "PARENT:\t\t\t";
+		
+		buffer += "\nPARENT:\t\t\t";
 		buffer += stype.t[i].parent->name;
+		
+		buffer += "\nMASS MIN:\t\t";
 		debug_Printf(buffer);
-		buffer = "MASS MIN:\t\t";
-		ob << stype.t[i].mass_min;
-		buffer += ob.str();
-		debug_Printf(buffer);
-		buffer = "MASS MAX:\t\t";
-		ob << stype.t[i].mass_max;
-		buffer += ob.str();
-		debug_Printf(buffer);
-		buffer = "BLUE RANGE\t\t";
-		ob << stype.t[i].color_min.blue << "\t\t\t\t" << stype.t[i].color_max.blue;
-		buffer += ob.str();
-		debug_Printf(buffer);
-		buffer = "GREEN RANGE\t\t";
-		ob << stype.t[i].color_min.green << "\t\t\t\t" << stype.t[i].color_max.green;
-		buffer += ob.str();
-		debug_Printf(buffer);
-		buffer = "RED RANGE\t\t";
-		ob << stype.t[i].color_min.red << "\t\t\t\t" << stype.t[i].color_max.red;
-		buffer += ob.str();
-		debug_Printf(buffer);
+		debug_Double(stype.t[i].mass_min);
+		debug_Printf("MASS MAX:\t\t");
+		debug_Double(stype.t[i].mass_max);
+		
+		debug_Printf("BLUE RANGE\t\t");
+		debug_Int(stype.t[i].color_min.blue);
+		debug_Int(stype.t[i].color_max.blue);
+		
+		debug_Printf("GREEN RANGE\t\t");
+		debug_Int(stype.t[i].color_min.green);
+		debug_Int(stype.t[i].color_max.green);
+		
+		debug_Printf("RED RANGE\t\t");
+		debug_Int(stype.t[i].color_min.red);
+		debug_Int(stype.t[i].color_max.red);
+		
 		buffer = "HUNTED:\t\t\t";
 		if (stype.t[i].hunted == YES)
 			buffer += "YES";
 		else
 			buffer += "NO";
-		debug_Printf(buffer);
-		buffer = "HUNTER:\t\t\t%p\t\t";
+		
+		buffer += "\nHUNTER:\t\t\t";
 		if (stype.t[i].hunter == YES)
 			buffer += "YES";
 		else
 			buffer += "NO";
-		debug_Printf(buffer);
-		buffer = "PRODUCT:\t\t%s";
+		
+		buffer += "\nPRODUCT:\t\t";
 		buffer += stype.t[i].product->name;
 		debug_Printf(buffer);
 		debug_Printf("\n");
@@ -183,6 +182,10 @@ void debug_Printf(const string& txt) {
 	
 	// for now the debug support is a file
 	ofstream file(DEBUG_FILE, ios_base::app);
-	// write what is requested (whit a '\n' after)
+	if(!file)
+		return;
+	// write what is requested
 	file << txt << endl; 
 }
+
+#endif
