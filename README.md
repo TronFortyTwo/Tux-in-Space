@@ -9,7 +9,7 @@ Now have:
 behavior
 - Phisic engine that simulate the gravity force and different types of 
 impacts between the objects
-- Space Monster whit a basic AI
+- Space Monsters whit a basic AI
 
 for test/use the program:
 -------------------------
