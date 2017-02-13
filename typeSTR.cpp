@@ -178,7 +178,7 @@ typeSTR::typeSTR (BYTE& result) {
 			}
 			// PRODUCT:
 			if(!buf.compare(0, 9, "PRODUCT: ")) {
-				string temp = buf.substr(0, 9);
+				string temp = buf.substr(9, buf.length());
 				t[i].product = Search(temp);
 				in_hfs(buf, stream);
 			}
@@ -201,7 +201,6 @@ typeSTR::typeSTR (BYTE& result) {
 	
 	
 	#if DEBUG
-	debug_Printf("TypeSTR initialization complete");
 	debug_Stype(*this);
 	#endif
 	
@@ -220,7 +219,7 @@ type *typeSTR::Search (const string& tofind) {
 			 return &t[i];
 	
 	#if DEBUG
-	debug_Printf("(!) typeSTR::Search: No type with the name has been found!");
+	debug_Printf("(!) typeSTR::Search: No type with this name has been found!");
 	debug_Printf(tofind);
 	#endif
 	
