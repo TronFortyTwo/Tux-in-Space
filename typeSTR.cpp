@@ -169,7 +169,7 @@ typeSTR::typeSTR (BYTE& result) {
 				in_hfs(buf, stream);
 			}
 			// HUNTER:
-			if(!buf.compare(0, 8,"HUNTED: ")) {
+			if(!buf.compare(0, 8,"HUNTER: ")) {
 				if(buf[8] == 'N')
 					t[i].hunter = NO;
 				else
@@ -220,7 +220,7 @@ type *typeSTR::Search (const string& tofind) {
 			 return &t[i];
 	
 	#if DEBUG
-	debug_Printf("(!) typeSTR::Search: No type whit the name has been found!");
+	debug_Printf("(!) typeSTR::Search: No type with the name has been found!");
 	debug_Printf(tofind);
 	#endif
 	

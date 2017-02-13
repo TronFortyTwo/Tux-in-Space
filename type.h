@@ -37,12 +37,16 @@ class type {
 	public:
 		std::string name;
 		std::string description;
+		
 		type *parent;
 		type *product;
+		
 		double mass_min;		// Mass range
 		double mass_max;
+		
 		color color_max;		// Color range
 		color color_min;
+		
 		BYTE hunted;			// if is hunted (ON/OFF)
 		BYTE hunter;			// if hunts (ON/OFF)
 		// BYTE datatype;		// the type of the data the type has (coming  soon)

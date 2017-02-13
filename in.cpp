@@ -52,14 +52,11 @@ void in_hfs (string& dest, istream& stream) {
 		getline(stream, dest);
 		
 		while(1) {
-			if(dest.length() == 0)
+			if(!dest.length())
 				break;
 			if((dest[0] == ' ') || (dest[0] == '\t')) {
 				dest.erase(dest.begin());
-				if(dest.length() > 0)
-					continue;
-				else
-					break;
+				continue;
 			}
 			if(dest[0] == '#')
 				break;
