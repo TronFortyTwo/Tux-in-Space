@@ -18,7 +18,7 @@ objects = \
 		Parser.o\
 		shell.o\
 		OPSo.o\
-		menù.o\
+		menu.o\
 # like object but whit .h but without main.h and with generic.h
 libraries = \
 		debug.h\
@@ -37,7 +37,7 @@ libraries = \
 		Parser.h\
 		shell.h\
 		OPSo.h\
-		menù.h\
+		menu.h\
 
 cspace: $(objects) $(libraries)
 		g++ -o cspace $(CXXFLAGS) $(objects)

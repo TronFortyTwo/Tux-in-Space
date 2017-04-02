@@ -48,7 +48,6 @@ time_sim Parser(setting& set, system_c& sys) {
 	time_sim t = sys.stime;
 		
 	// Now for every possible command call the correct command's function or simply do it if is short.
-	// when you write a new command, you must add the corrispondent if and add it
 	in_s(input);
 	// continue
 	if ((!input.compare("step")) || (!input.compare("s"))) {
@@ -118,7 +117,7 @@ void parser_Distance(const setting& set, system_c& sys){
 	long double distance[2];
 	void *var[2];
 	
-	//ask which two object
+	// ask which two object
 	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:", nullptr);
 	in_s(name);
 	o = sys.SearchObj(name);

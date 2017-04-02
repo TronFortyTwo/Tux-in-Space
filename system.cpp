@@ -83,7 +83,7 @@ void system_c::Save(const setting& set){
 
 
 /***
- * InitSystemOPS is a function that initialize a new system
+ * Initialize a new system
  */
 system_c::system_c (const setting& set, typeSTR& s) {
 	
