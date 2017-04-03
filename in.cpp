@@ -31,8 +31,9 @@ using namespace std;
  * 
  */
 void in_s (string& d) {
-	
-	getline(cin, d);
+	char b[128];
+	scanf(" %127[^\n]", b);
+	d = b;
 }
 
 /***
@@ -42,6 +43,7 @@ void in_s (string& d) {
 void in_fs (string& dest, istream& stream) {
 	
 	getline(stream, dest);
+	
 }
 
 /***

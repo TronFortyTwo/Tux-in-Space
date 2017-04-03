@@ -116,9 +116,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			buf += phrase[chardone];
 			chardone++;
 		}
-		//end of string
+		// end of string
 		else {
-			//put in the buffer the END directive (&e) and exit
+			// put in the buffer the END directive (&e) and exit
 			buf += '&';
 			buf += 'e';
 			break;
