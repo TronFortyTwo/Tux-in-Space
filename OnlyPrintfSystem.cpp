@@ -55,25 +55,19 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 	// counter for columns
 	UWORD columndone;
 	// the number of character of phrase elaborated
-	QWORD chardone;
+	QWORD chardone = 0;
 	// the number of space to leave blank at the start of every line (max one digit)
 	BYTE indentation = 0;
 	// one if the buf is finished
 	BYTE bufend = 0;
 	// the position in the var array
 	QWORD pos = 0;
-	// the buffer to print, his size and position
-	DWORD size = (set.width-TWOFRAMELEN) * (set.height-5) +1;
-	char *buf = (char *) malloc (sizeof(char[size]));
-	while (buf == NULL) {
-		OPS_MemLack("OPS allocates buf");
-		buf = (char *) malloc (sizeof(char[size]));
-	}
-	DWORD bufpos = 0;
+	// the buffer to print, and his position
+	string buf;
 
 
-	//OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
-	for(chardone=0; bufpos!=size-1;) {
+	// OPS PART ONE: writing the buffer. Elaborate the input and write it in buf
+	while(1) {
 	
 		// dinamic printing! (character that mean other character, here translated)
 		if(phrase[chardone] == '%') {
@@ -81,36 +75,33 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			chardone++;
 			// an int value to print
 			if(phrase[chardone] == 'i') {
-				bufpos += sprintf(&buf[bufpos], "%d", *((int *)var[pos]) );
-				pos++;
+				buf +=  *((int *) var[pos]);
 			}
 			// an unsigned int value to print
 			if(phrase[chardone] == 'u') {
-				bufpos += sprintf(&buf[bufpos], "%u", *((unsigned int *)var[pos]) );
+				buf += *((unsigned int *)var[pos]);
 				pos++;
 			}
 			// a long double value to print
 			else if(phrase[chardone] == 'l') {
-				bufpos += sprintf(&buf[bufpos], "%.*Lf", set.numprecision, *((long double *)var[pos]) );
+				buf += *((long double *)var[pos]);
 				pos++;
 			}
 			// a string to print
 			else if(phrase[chardone] == 's') {
-				bufpos += sprintf(&buf[bufpos], "%s", (char *) var[pos]);
+				buf += (char *) var[pos];
 				pos++;
 			}
 			// a line to print , f mean '(f)inish line' | example: %f. => a line of '.' NOTE: whitout '\n'
 			else if(phrase[chardone] == 'f') {
 				chardone++;
 				for(unsigned int i=0; i!=set.width-TWOFRAMELEN; i++) {
-					buf[bufpos] = phrase[chardone];
-					bufpos++;
+					buf += phrase[chardone];
 				}
 			}
 			// the '%' character (%%)
 			else if(phrase[chardone] == '%' ){
-				buf[bufpos] = '%';
-				bufpos++;
+				buf += '%';
 			}
 			// advance to the next character
 			chardone++;
@@ -122,52 +113,50 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 		}
 		// a normal character
 		else if(phrase[chardone] != 0) {
-			buf[bufpos] = phrase[chardone];
+			buf += phrase[chardone];
 			chardone++;
-			bufpos++;
 		}
 		//end of string
 		else {
 			//put in the buffer the END directive (&e) and exit
-			buf[bufpos] = '&';
-			bufpos++;
-			buf[bufpos] = 'e';
+			buf += '&';
+			buf += 'e';
 			break;
 		}
 	}
 
 	//OPS PART TWO: print the buf
-	bufpos=0;
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	int i=0;
+	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	//the first two line of the frame
 	OPS_Line(set.width, FRAMESTART, 0);
-	printf("\n%s", FRAME);
+	cout << endl << FRAME;
 	OPS_Line(set.width, FRAMEEND, TWOFRAMELEN);
-	printf("%s\n", FRAMER);
+	cout << FRAMER << endl;
 	//printf the buf
 	for(linedone=0; linedone < set.height-5; linedone++) {
 		//the frame
-		printf("%s", FRAME);
+		cout << FRAME;
 		//print the buf
 		for(columndone=0; columndone < set.width-TWOFRAMELEN; columndone++) {
 			
 			// PART ONE: check for directives. a directive started whit '&'
-			if (buf[bufpos] == '&') {
-				bufpos++;
+			if (buf[i] == '&') {
+				i++;
 				//if is the '&' character
-				if(buf[bufpos] == '&') {
-					printf("&");
-					bufpos++;
+				if(buf[i] == '&') {
+					cout << "&";
+					i++;
 				}
 				//if is the (e)nd directive
-				else if(buf[bufpos] == 'e') {
+				else if(buf[i] == 'e') {
 					bufend = 1;
 				} 
 				//if is a (t)heet directive
-				else if(buf[bufpos] == 't') {
-					bufpos++;
+				else if(buf[i] == 't') {
+					i++;
 					// scan the new number
-					switch(buf[bufpos]) {
+					switch(buf[i]) {
 						case '0': indentation=0; break;
 						case '1': indentation=1; break;
 						case '2': indentation=2; break;
@@ -181,8 +170,8 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 						// or scan a letter whit a meaning
 						case 'd': indentation=THEETDESCR; break;		// for a description
 						case 'i': {								// for a indentation in the 10-19 range
-							bufpos++;
-							switch(buf[bufpos]) {
+							i++;
+							switch(buf[i]) {
 								case '0': indentation=10; break;
 								case '1': indentation=11; break;
 								case '2': indentation=12; break;
@@ -197,61 +186,59 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 						}
 					}
 				}
-				bufpos++;
+				i++;
 			}
 		
 			// PART TWO: print the buffer
 			// if the buffer is finished print only spaces
 			if (bufend == 1)
-				printf(" ");
+				cout << " ";
 			// print a space if we are behind the indentation
 			else if (columndone < indentation)
-				printf(" ");
+				cout << " ";
 			// a space in the first column is ignored
-			else if ((columndone == indentation) && (buf[bufpos] == ' ')) {
-				bufpos++;
+			else if ((columndone == indentation) && (buf[i] == ' ')) {
+				i++;
 				columndone--;
 			}
-			// a normal character
-			else if (buf[bufpos] != '\n') {
-				printf("%c", buf[bufpos]);
-				bufpos++;
+			// a not '\n' character
+			else if (buf[i] != '\n') {
+				cout << buf[i];
+				i++;
 			}
 			// a '\n' character
 			else {
 				// print the remaining space whit spaces
 				OPS_Line(set.width, " ", columndone+TWOFRAMELEN);
-				bufpos++;
+				i++;
 				// if there is space for more line print the new line
 				if(linedone < set.height-(+5)) {
-					printf("%s\n%s", FRAMER, FRAME);
+					cout << FRAMER << endl << FRAME;
 					linedone++;
 					columndone = -1;
 				}
 			}
 		}
 		//the frame
-		printf("%s\n", FRAMER);
+		cout << FRAMER << endl;
 	}
 	//last lines
-	printf("%s", FRAME);
+	cout << FRAME;
 	OPS_Line(set.width, FRAMEEND, TWOFRAMELEN);
-	printf("%s\n", FRAMER);
+	cout << FRAMER << endl;
 	OPS_Line(set.width, FRAMESTART, 0);
-	printf("\n%s: ", FRAME);
+	cout << endl << FRAME;
 
-	// finalize the function
-	free(buf);
 }
 	
 	
 /***
  * OPS_Error printf an error intestation before print
  */
-void OPS_Error(const setting& set, const std::string& message, const void *const* const var){
+void OPS_Error(const setting& set, const string& message, const void *const* const var){
 		
 	// the message
-	std::string buffer;
+	string buffer;
 	// set the buffer
 	buffer = "ERROR!\n\n";
 	buffer += message;
@@ -264,7 +251,7 @@ void OPS_Error(const setting& set, const std::string& message, const void *const
  */	
 void OPS_MemLack(const string& data) {
 		
-	std::cout << "\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while:" << data << "Probably the RAM is overload. Press something to retry\n\t";
+	cout << "\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while:" << data << "Probably the RAM is overload. Press something to retry\n\t";
 	#if DEBUG
 	debug_Printf("OPS_MemLack: the program has problem with memory allocation while:");
 	debug_Printf(data);
@@ -279,5 +266,5 @@ void OPS_MemLack(const string& data) {
 void OPS_Line (int width, const string& c, int num) {
 	int p;	//(p)rinted
 	for ( p=width-num; p!=0; p--)
-		std::cout << c;
+		cout << c;
 }
