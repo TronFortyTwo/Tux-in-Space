@@ -55,13 +55,13 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 	// counter for columns
 	UWORD columndone;
 	// the number of character of phrase elaborated
-	QWORD chardone = 0;
+	QWORD phrase_pos = 0;
 	// the number of space to leave blank at the start of every line (max one digit)
 	BYTE indentation = 0;
-	// one if the buf is finished
-	BYTE bufend = 0;
+	// YES if the buf is finished
+	BYTE bufend = NO;
 	// the position in the var array
-	QWORD pos = 0;
+	QWORD var_pos = 0;
 	// the buffer to print, and his position
 	stringstream buf;
 
@@ -70,58 +70,57 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 	while(1) {
 	
 		// dinamic printing! (character that mean other character, here translated)
-		if(phrase[chardone] == '%') {
+		if(phrase[phrase_pos] == '%') {
 			// advance to the next character
-			chardone++;
+			phrase_pos++;
 			// an int value to print
-			if(phrase[chardone] == 'i') {
-				buf << *((int *) var[pos]);
-				pos++;
+			if(phrase[phrase_pos] == 'i') {
+				buf << (int) *((int *) var[var_pos]);
+				var_pos++;
 			}
 			// an unsigned int value to print
-			if(phrase[chardone] == 'u') {
-				buf << *((unsigned int *)var[pos]);
-				pos++;
+			if(phrase[phrase_pos] == 'u') {
+				buf << (unsigned int) *((unsigned int *) var[var_pos]);
+				var_pos++;
 			}
 			// a long double value to print
-			else if(phrase[chardone] == 'l') {
-				buf << *((long double *)var[pos]);
-				pos++;
+			else if(phrase[phrase_pos] == 'l') {
+				buf << (long double) *((long double *)var[var_pos]);
+				var_pos++;
 			}
 			// a string to print
-			else if(phrase[chardone] == 's') {
-				buf << (char *) var[pos];
-				pos++;
+			else if(phrase[phrase_pos] == 's') {
+				buf << (string) *((string *) var[var_pos]);
+				var_pos++;
 			}
 			// a line to print , f mean '(f)ill line' | example: %f. => a line of '.' NOTE: whitout '\n'
-			else if(phrase[chardone] == 'f') {
-				chardone++;
+			else if(phrase[phrase_pos] == 'f') {
+				phrase_pos++;
 				for(unsigned int i=0; i!=set.width-TWOFRAMELEN; i++) {
-					buf << phrase[chardone];
+					buf << phrase[phrase_pos];
 				}
 			}
 			// the '%' character (%%)
-			else if(phrase[chardone] == '%' ){
+			else if(phrase[phrase_pos] == '%' ){
 				buf << '%';
 			}
 			// advance to the next character
-			chardone++;
+			phrase_pos++;
 		}
 		// the bip character
-		else if(phrase[chardone] == '\a') {
+		else if(phrase[phrase_pos] == '\a') {
 			printf("\a");	//bip the bip but don't transfer it to the second part
-			chardone++;
+			phrase_pos++;
 		}
 		// a normal character
-		else if(phrase[chardone] != 0) {
-			buf << phrase[chardone];
-			chardone++;
+		else if(phrase[phrase_pos] != 0) {
+			buf << phrase[phrase_pos];
+			phrase_pos++;
 		}
 		// end of string
 		else {
 			// put in the buffer the END directive (&e) and exit
-			buf << '&';
-			buf << 'e';
+			buf << "&e";
 			break;
 		}
 	}
