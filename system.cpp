@@ -32,10 +32,8 @@ void system_c::NewObj (const setting& set) {
 	
 	BYTE result;
 	object temp(set, *stype, result);
-	if(result == GOOD_SIG) {
+	if(result == GOOD_SIG)
 		o.push_back(temp);
-		nobj++;
-	}
 }
 
 /***
@@ -44,7 +42,6 @@ void system_c::NewObj (const setting& set) {
 void system_c::RemoveObj (object& rem) {
 	rem = o.back();
 	o.pop_back();
-	nobj--;
 }
 
 /***
@@ -72,11 +69,11 @@ void system_c::Save(const setting& set){
 	// open the file to write
 	ofstream odest(path);
 	// Write information about the system
-	odest << precision << endl << nobj << endl << G << endl << stime.year << endl << stime.day << endl << stime.hour << endl << stime.min << endl << stime.sec << endl << stime.millisec << endl;
+	odest << precision << endl << o.size() << endl << G << endl << stime.year << endl << stime.day << endl << stime.hour << endl << stime.min << endl << stime.sec << endl << stime.millisec << endl;
 	// write the system's object's datas
-	for(int i=0; i!=nobj; i++)
+	for(unsigned int i=0; i!=o.size(); i++)
 		o[i].WriteComplete(odest);
-
+	
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", nullptr);
 	sgetchar();
 }
@@ -105,9 +102,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	in_s(name);
 	// ask for the precision
 	OPS (set, "NEW SYSTEM INITIALIZATION\n\nprecision of the simulation:\n&tdIndicate how much the simulation is precise. A big value mean leess precision but lighter hardware use.\nrecommended values: < 2", nullptr);
-	scanf("%lf", &precision);
-
-	nobj = 0;
+	scanf(" %lf", &precision);
 }
 
 /**
@@ -117,6 +112,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 
 	std::string new_name;	// the name of the system
 	std::string path;		// the system file (path)
+	int num_obj;
 	
 	// ask which system
 	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", nullptr);
@@ -136,7 +132,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 	name = new_name;
 	// scanf system's informations
 	sysf >> precision;
-	sysf >> nobj;
+	sysf >> num_obj;
 	sysf >> G;
 	sysf >> stime.year;
 	sysf >> stime.day;
@@ -145,9 +141,9 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 	sysf >> stime.sec;
 	sysf >> stime.millisec;
 	// alloc memory
-	o.resize(nobj);
+	o.resize(num_obj);
 	// fscanf for objects datas
-	for(int i=0; i!=nobj; i++) {
+	for(int i=0; i!=num_obj; i++) {
 		if(o[i].ReadComplete(sysf, s) == CORRUPTED_SIG) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
@@ -162,7 +158,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
  * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
  */
 object *system_c::SearchObj(const string& tofind) {
-	for (int i=0; i != nobj; i++)
+	for (unsigned int i=0; i != o.size(); i++)
 		if(o[i].name.compare(tofind))
 			return &o[i];
 	return nullptr;
@@ -203,7 +199,7 @@ void system_c::Physic (time_sim& dest) {
  * Move the objects
  */
 void system_c::Physic_Inertia() {
-	for (int i=0; i!=nobj; i++)
+	for (unsigned int i=0; i!=o.size(); i++)
 		o[i].UpdateFast(precision);
 }
 
@@ -215,12 +211,12 @@ void system_c::Physic_Inertia() {
 void system_c::Physic_Gravity() {
 		
 	// counters
-	int i,l;
+	unsigned int i,l;
 	// the dist, and his ortogonal components, the force and a temporany variable
 	long double dist, distx, disty, distz, f, temp;
 	
-	for(i=0; i < nobj; i++) {
-		for (l=i+1; l < nobj; l++) {
+	for(i=0; i < o.size(); i++) {
+		for (l=i+1; l < o.size(); l++) {
 			// calculate the axis' distance
 			distx = o[i].posx - o[l].posx;
 			disty = o[i].posy - o[l].posy;
@@ -256,7 +252,7 @@ void system_c::Physic_Gravity() {
  */
 void system_c::Hunter_AI() {
 	// Search hunters
-	for(int i=0; i!=nobj; i++)
+	for(unsigned int i=0; i!=o.size(); i++)
 		if(o[i].typ->hunter == ON)
 			o[i].AI_Hunter(*this);
 }
@@ -274,14 +270,14 @@ void system_c::Hunter_AI() {
 void system_c::physic_Impacts() {
 		
 	// counter
-	int l;
+	unsigned int l;
 	// the distance
 	long double dist;
 	// if has been computed some impact
 	BYTE impacts = NO;
 	
-	for(int i=0; i < nobj; i++) {
-		for (l=0; l < nobj; l++) {
+	for(unsigned int i=0; i < o.size(); i++) {
+		for (l=0; l < o.size(); l++) {
 			// if are the same object continue
 			if(l == i)
 				continue;

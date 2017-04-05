@@ -38,7 +38,6 @@ class system_c {
 	public:
 		std::string name;
 		time_sim stime;			// the time of the simulation
-		int nobj;			// number of objects
 		std::vector<object> o;// the object vector
 		double G;			// the universal gravitation constant
 		typeSTR *stype;		// The pointer at the structure that contein all the types

@@ -26,7 +26,7 @@
 
 #include "time.h"
 #include "system.h"
-#include "menù.h"
+#include "menu.h"
 
 // functions that can called from everywhere
 time_sim Parser(setting& set, system_c&);

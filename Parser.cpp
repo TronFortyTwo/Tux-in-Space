@@ -199,10 +199,11 @@ void parser_Information(const setting& set, system_c& sys) {
 		
 	object *obj;	// The object to describe
 	void *var[13];	// The variables to give to OPS
+	unsigned int obs = sys.o.size();
 	string input;
 
 	var[0] = &sys.name;
-	var[1] = &sys.nobj;
+	var[1] = &obs;
 	// Generic informations about the system
 	OPS(set, "Informations\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object informations", var);
 	in_s(input);
@@ -212,7 +213,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	}
 	// information about a precise object
 	obj = sys.SearchObj(input);
-	if(obj == NULL){
+	if(obj == nullptr){
 		OPS_Error(set, "No object whit this name is been found. press a button to continue", NULL);
 		sgetchar();
 		return;
@@ -229,7 +230,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	var[9] = &obj->posz;
 	var[10] = &obj->velx;
 	var[11] = &obj->vely; 
-	var[12] = &obj->velz; 
+	var[12] = &obj->velz;
 	OPS(set, "Informations about %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
 	sgetchar();
 }

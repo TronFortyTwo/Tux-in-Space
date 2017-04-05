@@ -13,7 +13,7 @@
 # - there is no support yet for object that are both hunter AND hunted
 ########################################################################
 ########################################################################
-# the generic type is the base for all other types
+# the Object type is the base for all other types
 ########################################################################
 NAME: Object
 DESCRIPTION: An object is a bunch of matter whit a mass, examples are the Sun and a cellphone
