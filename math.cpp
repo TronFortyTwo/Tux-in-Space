@@ -21,8 +21,9 @@
  *
  */
 
-#include "math.h"
-#include "time.h"
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
 
 /***
  * This function return a "random" int in a range given, but the gap can't be greater than 100
