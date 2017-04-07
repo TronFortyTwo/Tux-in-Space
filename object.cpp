@@ -72,9 +72,10 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 	string comment;				// This is a buffer that contein comment of what is just been done
 	string mass_irregularity;	// assume the value IRREGULARITY if the mass is out of range
 	string color_irregularity;	// assume the value IRREGULARITY if the color is out of range
+	string name_irregularity;	// assume the value IRREGULARITY if there is no name
 	
 	// Initialize the object
-	name = "Choose a name for your new object";
+	name.clear();
 	typ = stype.Search("Object");
 	mass = 0;
 	radius = 0;
@@ -97,18 +98,21 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		}
 		else {
 			mass_irregularity = IRREGULARITY;
-			comment += "\n";
-			comment += IRREGULARITY;
-			comment += " mass out of range";
+			comment += "\n" IRREGULARITY " mass out of range";
 		}
 		// irregularity: COLOR
 		if (colour.CheckRange(typ->color_min, typ->color_max) == GOOD_SIG)
 			color_irregularity.clear();
 		else {
 			color_irregularity = IRREGULARITY;
-			comment += "\n";
-			comment += IRREGULARITY;
-			comment += " color out of range";
+			comment += "\n" IRREGULARITY " color out of range";
+		}
+		// irregularity: NAME
+		if (name.length())
+			name_irregularity.clear();
+		else {
+			name_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " name not given yet";
 		}
 		
 		// Print the actual state and scan the desire of the user
@@ -137,7 +141,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 	
 		// Name
 		if(input == 1) {
-			OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:\n&tdThe name can't contein spaces", nullptr);
+			OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:", nullptr);
 			in_s(name);
 			// apply the new name
 			comment += "\nNew name assigned succefully!";
@@ -145,12 +149,12 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// Type
 		else if(input == 2) {
 			typ = &stype.Browse(set, "Choose a new type for your new object");
-			comment = "\nNew type assigned succefully!";
+			comment += "\nNew type assigned succefully!";
 		}
 		// Color
 		else if(input == 3) {
 			colour.Scan(set, typ->color_min, typ->color_max);
-			comment = "\nNew color assigned succefully!";
+			comment += "\nNew color assigned succefully!";
 		}
 		// Mass
 		else if(input == 4) {
@@ -158,13 +162,13 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 			var[1] = & typ->mass_max;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
 			cin >> mass;
-			comment = "\nNew mass assigned succefully!";
+			comment += "\nNew mass assigned succefully!";
 		}
 		// Radius
 		else if(input == 5) {
 			OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)", nullptr);
 			cin >> radius;
-			comment = "\nNew radius assigned succefully!";
+			comment += "\nNew radius assigned succefully!";
 		}
 		// Coordiates
 		else if(input == 6) {
@@ -184,7 +188,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 			cin >> vely;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
 			cin >> velz;
-			comment = "\nNew velocity assigned succefully!";
+			comment += "\nNew velocity assigned succefully!";
 		}
 		// LOAD
 		else if(input == 8) {
@@ -200,8 +204,8 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 				temp.vely = vely;
 				temp.velz = velz;
 				// move the temp(the new) object in this
-				(*this)=temp;
-				// positive comment (resetting the previous)
+				(*this) = temp;
+				
 				comment += "New object loaded succefully!";
 			}
 			// negative comment if fail
@@ -212,7 +216,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 				else if (result == CORRUPTED_SIG)
 					comment += "File corrupted or outdated!";
 				else {
-					comment += "Unregognized error signal";
+					comment += "Unregognized error signal, i am a bug! signal me please :)";
 					#if DEBUG
 					debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
 					debug_Int(result);
@@ -223,14 +227,14 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// SAVE
 		else if(input == 9) {
 			Save(set);
-			comment = "\nNew object saved succefully!";
+			comment += "\nNew object saved succefully!";
 		}	
 		// DONE
 		else if(input == 10) {
 			if (!(!mass_irregularity.compare(IRREGULARITY)) || (!color_irregularity.compare(IRREGULARITY)))
 				break;
 			else
-				comment = "\nCannot exit! Fix irregularity first";
+				comment += "\nCannot exit! Fix irregularity first";
 		}
 		// EXIT WHITOUT SAVE
 		else if(input == 11) {

@@ -34,6 +34,14 @@ void system_c::NewObj (const setting& set) {
 	object temp(set, *stype, result);
 	if(result == GOOD_SIG)
 		o.push_back(temp);
+	#if DEBUG
+	else {
+		if(result == ABORTED_SIG)
+			return;
+		debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
+		debug_Int(result);
+	}
+	#endif
 }
 
 /***
@@ -63,7 +71,7 @@ void system_c::Save(const setting& set){
 	if(!idest) {
 		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", nullptr);
 		in_s(input);
-		if(input[0] != 'n')
+		if(input[0] == 'n')
 			return;
 	}
 	// open the file to write
@@ -97,7 +105,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	G = 6.67e-17;
 	
 	// Ask for the name of the new system
-	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:\n&tdThe name can't contein spaces", nullptr);
+	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:", nullptr);
 	// the name
 	in_s(name);
 	// ask for the precision

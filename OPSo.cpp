@@ -17,7 +17,7 @@
 #    Foundation, Inc.																		#
 #############################################################################################
  *
- * The purpose of this is to Create a friendly UI using only the OPS (OnlyPrintfSystem).
+ * The purpose of this is to Create a friendly UI using only OPS() (OnlyPrintfSystem).
  * 
  * print an intestation whit the current time and other stuff, then reserve some space for settingrmation about the objects
  * 
