@@ -29,10 +29,9 @@
 
 // The structure whit all the types
 
-class typeSTR{
+class typeSTR {
 	public:
-		int number;
-		std::vector<type> t;					// all the types
+		std::vector<type> t;					// the types
 		
 		type&	Browse	(const setting&, const std::string&);	// Browse and choose a type (give a title to the page)
 		type	*Search	(const std::string&);	// Search a type from the name

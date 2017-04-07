@@ -17,7 +17,7 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * In this file there are things correlated whit colors (very few)
+ * In this file there are things correlated whit colors
  */
 #include "color.h"
 

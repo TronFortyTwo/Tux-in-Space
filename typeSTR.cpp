@@ -30,16 +30,16 @@ using namespace std;
 typeSTR::typeSTR (BYTE& result) {
 	
 	string buf;
+	int num = 0;
 	
 	// count how many types there are in the file
-	{	
+	{
 		// the stream to use
 		ifstream stream(TYPE_DATABASE_FILE);
 		if(!stream) {
 			result = FILE_ERR_SIG;
 			return;
 		}
-		number = 0;
 		
 		while(1) {
 			// read the line (jumping blank ones)
@@ -48,21 +48,21 @@ typeSTR::typeSTR (BYTE& result) {
 				continue;
 			// if is a new object memorize that there is a new object
 			if (!buf.compare(0, 6, "NAME: "))
-				number++;
+				num++;
 			// if the file is finished exit
 			else if (!buf.compare(0, 3, "EOF"))
 				break;
 		}
 	}	
 	// alloc enought spaces for all the ttype structures
-	t.resize(number);
+	t.resize(num);
 	
 	// NAME. scan all the names
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
 		
-		for(int i=0; i!=number; i++) {
+		for(unsigned int i=0; i!=t.size(); i++) {
 			do
 				in_hfs(buf, stream);
 			while
@@ -75,7 +75,7 @@ typeSTR::typeSTR (BYTE& result) {
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
-		for(int i=0; i!=number; i++) {
+		for(unsigned int i=0; i!=t.size(); i++) {
 			do
 				in_hfs(buf, stream);
 			while
@@ -91,7 +91,7 @@ typeSTR::typeSTR (BYTE& result) {
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
 		// loop to scan all the types
-		for(int i=0; i!=number; i++) {
+		for(unsigned int i=0; i!=t.size(); i++) {
 			// start assigning some values
 			t[i].color_max = t[i].parent->color_max;
 			t[i].color_min = t[i].parent->color_min;
@@ -214,7 +214,7 @@ typeSTR::typeSTR (BYTE& result) {
 type *typeSTR::Search (const string& tofind) {
 	
 	// the loop that search the type whit the right name
-	for(int i=0; i!=number; ++i)
+	for(unsigned int i=0; i!=t.size(); ++i)
 		if (!t[i].name.compare(tofind))
 			 return &t[i];
 	
@@ -251,9 +251,9 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 	int input;
 	// stuff to give to OPS and its counter
 	vector<int> ivar;
-	ivar.reserve(number);
+	ivar.reserve(t.size());
 	vector<void *> var;
-	var.reserve(number);
+	var.reserve(t.size());
 
 	// the main loop
 	while(1) {
@@ -266,7 +266,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		buf += commonparent->name;
 		buf += ":\n";
 		// search for types that have as parent commonparent
-		for (int i=0; i!=number; i++) {
+		for (unsigned int i=0; i!=t.size(); i++) {
 			// if the type has commonparent as parent
 			if(t[i].parent == commonparent) {
 				// if the type and his parent are the same, go ahead, because
@@ -318,7 +318,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		if (input <= maxn) {
 			BYTE flag = NO;		// NO if the type haven't any child  
 			commonparent = types_listed[input];
-			for(int i=0; i!=number; i++) {
+			for(unsigned int i=0; i!=t.size(); i++) {
 				if(commonparent == t[i].parent)
 					flag = YES;
 			}

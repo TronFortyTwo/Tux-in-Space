@@ -45,9 +45,9 @@ void OPSo (const setting& set, system_c& sys) {
 	var[5] = & sys.stime.millisec;
 	
 	// if there isn't any object
-	if (sys.nobj) {
+	if (sys.o.size()) {
 		// A loop that tell to every object something
-		for (int i=0; i!=sys.nobj; i++) {
+		for (unsigned int i=0; i!=sys.o.size(); i++) {
 			// Tell the name, type and mass, the x, the y and the z. conclude whit a line of '-'
 			buffer += "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n%f-";
 			var.reserve(var.size()+8);

@@ -356,11 +356,11 @@ void object::AI_Hunter(system_c& sys) {
 	vector<object *> targets;
 	
 	// if there is only him, exit
-	if(sys.nobj == 1)
+	if(sys.o.size() == 1)
 		return;
 	// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
 	// search for huntable objects
-	for(int i=0; i!=sys.nobj; i++) {
+	for(unsigned int i=0; i!=sys.o.size(); i++) {
 		if(sys.o[i].typ->hunted == ON) {
 			targets.push_back(&sys.o[i]);
 		}

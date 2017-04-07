@@ -124,10 +124,10 @@ void debug_Stype(const typeSTR& stype) {
 	std::string buffer;
 		
 	debug_Printf("\n\nSTYPE PRINTING -- types found:");
-	debug_Int(stype.number);
+	debug_Int(stype.t.size());
 	debug_Printf("\n");
 	
-	for (int i=0; i!=stype.number; i++) {
+	for (unsigned int i=0; i!=stype.t.size(); i++) {
 		
 		buffer = "NAME:\t\t\t";
 		buffer += stype.t[i].name;

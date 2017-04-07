@@ -27,7 +27,7 @@
 
 #include "generic.h"
 #include "system.h"
-#include "menù.h"
+#include "menu.h"
 #include "OPSo.h"
 #include "Parser.h"
 
