@@ -23,6 +23,8 @@
 
 #include "shell.h"
 
+using namespace std;
+
 BYTE Shell (setting& set, typeSTR& stype) {
 	
 	// a pointer to the system-c
@@ -62,10 +64,12 @@ BYTE Shell (setting& set, typeSTR& stype) {
 			OPSo (set, *sys);
 			// call the instruction parser and ask him for destination time
 			stime = Parser(set, *sys);
+			// loading message
+			OPS(set, "Loading...", nullptr);
 		}
 	/*
 	else if (set.vmode == V_GL) {
-			some graphic stuff...
+			GUI implementation
 		}
 	*/
 

@@ -92,8 +92,6 @@ time_sim Parser(setting& set, system_c& sys) {
 		parser_Reask(set, input);
 		sgetchar();
 	}
-	// Print a loading message
-	OPS(set, "Loading...", nullptr);
 		 
 	return t;
 }

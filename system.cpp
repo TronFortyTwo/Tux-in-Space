@@ -186,16 +186,12 @@ void system_c::Physic (time_sim& dest) {
 		
 		// GRAVITY
 		Physic_Gravity();
-		
 		// HUNTER IA
 		Hunter_AI();
-		
 		// IMPACTS
 		physic_Impacts();
-		
 		// INERTIA
 		Physic_Inertia();
-		
 		// TIME
 		stime.millisec += precision * 1000;
 		stime.Update();

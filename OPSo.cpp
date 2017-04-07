@@ -30,40 +30,53 @@ using namespace std;
 void OPSo (const setting& set, system_c& sys) {
 		
 	// this array contein the screen to send to OPS for printing
-	string buffer;
-	// the array to give to OPS whit size. there are 6 long double for every object (x, y, z, velx, vely, velz)
-	vector<void *> var;
+	stringstream buffer;
 		
 	// Printf the line whit the time and two lines of '-'
-	buffer = "TIME: Year %i | Day %i | %i:%i:%i,%i\n%f-%f-";
-	var.reserve(6);
-	var[0] = & sys.stime.year;
-	var[1] = & sys.stime.day;
-	var[2] = & sys.stime.hour;
-	var[3] = & sys.stime.min;
-	var[4] = & sys.stime.sec;
-	var[5] = & sys.stime.millisec;
+	buffer << "TIME: Year" 
+		<< sys.stime.year
+		<< " | Day "
+		<< sys.stime.day
+		<< "| "
+		<< sys.stime.hour
+		<< ":"
+		<< sys.stime.min
+		<< ":"
+		<< sys.stime.sec
+		<< ","
+		<< sys.stime.millisec
+		// two lines of '-'
+		<< "\n%f-%f-";
 	
 	// if there isn't any object
 	if (sys.o.size()) {
 		// A loop that tell to every object something
 		for (unsigned int i=0; i!=sys.o.size(); i++) {
+			
+			object &t = sys.o[i];
+			
 			// Tell the name, type and mass, the x, the y and the z. conclude whit a line of '-'
-			buffer += "%s | %s\nX axis: %l Km whit fast of %l Km/s\nY axis: %l Km whit fast of %l Km/s\nZ axis: %l Km whit fast of %l Km/s\n%f-";
-			var.reserve(var.size()+8);
-			var.push_back(&sys.o[i].name);
-			var.push_back(&sys.o[i].typ->name);
-			var.push_back(&sys.o[i].posx);
-			var.push_back(&sys.o[i].velx);
-			var.push_back(&sys.o[i].posy);
-			var.push_back(&sys.o[i].vely);
-			var.push_back(&sys.o[i].posz);
-			var.push_back(&sys.o[i].velz);
+			buffer << t.name
+				<< " | "
+				<< t.typ->name
+				<< "X axis: "
+				<< t.posx
+				<< "Km with a velocity of "
+				<< t.velx
+				<< "Km/s\nY axis: "
+				<< t.posy
+				<< "Km with a velocity of "
+				<< t.vely
+				<< "Km/s\nZ axis: "
+				<< t.posz
+				<< "Km with a velocity of "
+				<< t.velz
+				<< "\n%f-";
 		}
 	}
 	else
-		buffer += "\n&t1The system is empty.&t2\nUse the 'create' command to create a new object\nUse the 'help' command for help";
+		buffer << "\n&t1The system is empty.&t2\nUse the 'create' command to create a new object\nUse the 'help' command for help";
 	
 	// Print all
-	OPS(set, buffer, &var[0]);
+	OPS(set, buffer.str(), nullptr);
 }

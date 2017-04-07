@@ -180,10 +180,11 @@ void debug_Stype(const typeSTR& stype) {
  */
 void debug_Printf(const string& txt) {
 	
-	// for now the debug support is a file
 	ofstream file(DEBUG_FILE, ios_base::app);
-	if(!file)
+	if(!file) {
+		cout << "\n DEBUG BROKEN!! \n";
 		return;
+	}
 	// write what is requested
 	file << txt << endl; 
 }
