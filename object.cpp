@@ -67,7 +67,7 @@ void object::GetBigger (object& obj, object *& ptr) {
 object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		
 	//variables
-	void *var[18];
+	void *var[19];
 	int input;
 	string comment;				// This is a buffer that contein comment of what is just been done
 	string mass_irregularity;	// assume the value IRREGULARITY if the mass is out of range
@@ -117,23 +117,24 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		
 		// Print the actual state and scan the desire of the user
 		var[0] = &name;
-		var[1] = &typ->name;
-		var[2] = &typ->description;
-		var[3] = &colour.red;
-		var[4] = &color_irregularity;
-		var[5] = &colour.green;
-		var[6] = &colour.blue;
-		var[7] = &mass;
-		var[8] = &mass_irregularity;
-		var[9] = &radius;
-		var[10] = &posx;
-		var[11] = &posy;
-		var[12] = &posz;
-		var[13] = &velx;
-		var[14] = &vely;
-		var[15] = &velz;
-		var[16] = &comment;
-		OPS(set, "CREATE A NEW OBJECT\n\n%f-1) name:         %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n11) EXIT whitout saving\n\n%s", var);
+		var[1] = &name_irregularity;
+		var[2] = &typ->name;
+		var[3] = &typ->description;
+		var[4] = &colour.red;
+		var[5] = &color_irregularity;
+		var[6] = &colour.green;
+		var[7] = &colour.blue;
+		var[8] = &mass;
+		var[9] = &mass_irregularity;
+		var[10] = &radius;
+		var[11] = &posx;
+		var[12] = &posy;
+		var[13] = &posz;
+		var[14] = &velx;
+		var[15] = &vely;
+		var[16] = &velz;
+		var[17] = &comment;
+		OPS(set, "CREATE A NEW OBJECT\n\n%f-1) name:         %s   %s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n11) EXIT whitout saving\n\n%s", var);
 		cin >> input;
 		
 		// reset previous comment
@@ -261,6 +262,14 @@ object::object(typeSTR& stype, const string& name, BYTE& result) {
 		
 	// open the file
 	ifstream file(path);
+	if(!file){
+		result = FILE_ERR_SIG;
+		#if DEBUG
+		debug_Printf(IRREGULARITY" Canno't read the object! File not found!");
+		debug_Printf(name);
+		#endif
+		return;
+	}
 		
 	// Read the object
 	result = Read(file, stype);
