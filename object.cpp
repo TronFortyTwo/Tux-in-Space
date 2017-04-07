@@ -133,7 +133,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		cin >> input;
 		
 		// reset previous comment
-		comment[0] = 0;
+		comment.clear();
 	
 		// Name
 		if(input == 1) {

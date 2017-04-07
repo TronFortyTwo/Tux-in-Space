@@ -63,7 +63,7 @@ void system_c::Save(const setting& set){
 	if(!idest) {
 		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", nullptr);
 		in_s(input);
-		if(input != "n")
+		if(input[0] != 'n')
 			return;
 	}
 	// open the file to write
