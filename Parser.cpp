@@ -90,7 +90,7 @@ time_sim Parser(setting& set, system_c& sys) {
 	// wrong command
 	else {
 		parser_Reask(set, input);
-		sgetchar();
+		in_s();
 	}
 		 
 	return t;

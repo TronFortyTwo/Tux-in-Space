@@ -36,6 +36,11 @@ void in_s (string& d) {
 	d = b;
 }
 
+void in_s () {
+	char b[128];
+	scanf(" %127[^\n]", b);
+}
+
 /***
  * Scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 

@@ -27,7 +27,8 @@
 
 #include "generic.h"
 
-void in_s	(std::string&);					// scan a string
+void in_s	(std::string&);					// scan a string with spaces
+void in_s	();								// clean the stdin reading a line but without save it anywhere
 void in_fs	(std::string&, std::istream&);	// scan as long as a '\n'
 void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines and commented lines
 
