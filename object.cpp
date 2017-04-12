@@ -50,7 +50,7 @@ void object::GetBigger (object& obj, object *& ptr) {
 		ptr = &obj;
 	// if no one is much bigger than the other, pick one randomly, but considering the mass
 	else {
-		srand(time(NULL));
+		srand(time(nullptr));
 		if 		( (rand()/RAND_MAX) > (mass/(mass+obj.mass)) )
 			ptr = &obj;
 		else
@@ -352,10 +352,28 @@ BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
 
 
 void object::Write (ofstream& stream) {
-	stream << name << endl << typ->name << endl << colour.red << endl << colour.green << endl << colour.blue << endl << radius << endl << mass << endl;
+	stream << name << endl;
+	stream << typ->name << endl;
+	stream << colour.red << endl;
+	stream << colour.green << endl;
+	stream << colour.blue << endl;
+	stream << radius << endl;
+	stream << mass << endl;
 }
 void object::WriteComplete (ofstream& stream) {
-	stream << name << endl << typ->name << endl << colour.red << endl << colour.green << endl << colour.blue << endl << radius << endl << mass << endl << posx << endl << posy << endl << posz << endl << velx << endl << vely << endl << velz << endl;
+	stream << name << endl;
+	stream << typ->name << endl;
+	stream << colour.red << endl;
+	stream << colour.green << endl;
+	stream << colour.blue << endl;
+	stream << radius << endl;
+	stream << mass << endl;
+	stream << posx << endl;
+	stream << posy << endl;
+	stream << posz << endl;
+	stream << velx << endl;
+	stream << vely << endl;
+	stream << velz << endl;
 }
 
 /***

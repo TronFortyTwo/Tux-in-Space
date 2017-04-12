@@ -163,7 +163,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 }
 
 /***
- * the function search object search a object in a system whit a name and return his pointer or NULL if there isn't any object whit that name
+ * the function search object search a object in a system whit a name and return his pointer or nullptr if there isn't any object whit that name
  */
 object *system_c::SearchObj(const string& tofind) {
 	for (unsigned int i=0; i != o.size(); i++)

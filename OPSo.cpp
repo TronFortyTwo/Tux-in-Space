@@ -59,19 +59,19 @@ void OPSo (const setting& set, system_c& sys) {
 			buffer << t.name
 				<< " | "
 				<< t.typ->name
-				<< "X axis: "
+				<< "\nX axis: "
 				<< t.posx
-				<< "Km with a velocity of "
+				<< " Km with a velocity of "
 				<< t.velx
-				<< "Km/s\nY axis: "
+				<< " Km/s\nY axis: "
 				<< t.posy
-				<< "Km with a velocity of "
+				<< " Km with a velocity of "
 				<< t.vely
-				<< "Km/s\nZ axis: "
+				<< " Km/s\nZ axis: "
 				<< t.posz
-				<< "Km with a velocity of "
+				<< " Km with a velocity of "
 				<< t.velz
-				<< "\n%f-";
+				<< " Km/s\n%f-";
 		}
 	}
 	else

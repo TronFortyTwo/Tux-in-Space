@@ -209,7 +209,7 @@ typeSTR::typeSTR (BYTE& result) {
 
 
 /***
- * Given a name, this function return the pointer to that type. If there isn't any type whit that name return NULL
+ * Given a name, this function return the pointer to that type. If there isn't any type whit that name return nullptr
  */
 type *typeSTR::Search (const string& tofind) {
 	
@@ -240,7 +240,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 	type *commonparent = Search("Object");
 	type& genobj = *Search("Object");
 	// the output buffer
-	std::string buf;
+	string buf;
 	// the last object number
 	int maxn;
 	// the number of the back and description buttons

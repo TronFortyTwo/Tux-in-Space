@@ -56,7 +56,7 @@ time_sim Parser(setting& set, system_c& sys) {
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
-		OPS(set, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", NULL);
+		OPS(set, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", nullptr);
 		in_s(input);
 	}
 	// parser_Jump
@@ -212,7 +212,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	// information about a precise object
 	obj = sys.SearchObj(input);
 	if(obj == nullptr){
-		OPS_Error(set, "No object whit this name is been found. press a button to continue", NULL);
+		OPS_Error(set, "No object whit this name is been found. press a button to continue", nullptr);
 		sgetchar();
 		return;
 	}	
