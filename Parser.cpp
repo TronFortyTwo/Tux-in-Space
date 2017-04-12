@@ -149,18 +149,18 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now){
 	// ask for confirm to parser_Quit
 	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", nullptr);
 	sgetchar();
-	//if doesn't want to parser_Quit return now
-	if (input[0] == 'n')
+	// if doesn't want to parser_Quit return now
+	if (input.front() == 'n')
 		return now;
-	if (input[0] == 's')
+	if (input.front() == 's')
 		sys.Save(set);
-	else if (input[0] != 'y') {
+	else if (input.front() != 'y') {
 		OPS(set, "Unrecognized input! please insert y/n/s\n\ninsert a new command:", nullptr);
 		return now;
 	}
 	// now we prepare the parser_Quit event
 	t = now;
-	t.year = QUIT_SIG;		// <------ THIS IS THE SIGNAL THAT WE WANT TO parser_Quit
+	t.year = QUIT_SIG;		// <------ THIS IS THE SIGNAL THAT WE WANT TO QUIT
 	return t;
 }
 	

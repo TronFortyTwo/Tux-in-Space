@@ -33,11 +33,11 @@ void OPSo (const setting& set, system_c& sys) {
 	stringstream buffer;
 		
 	// Printf the line whit the time and two lines of '-'
-	buffer << "TIME: Year" 
+	buffer << "TIME: Year " 
 		<< sys.stime.year
 		<< " | Day "
 		<< sys.stime.day
-		<< "| "
+		<< " | "
 		<< sys.stime.hour
 		<< ":"
 		<< sys.stime.min
