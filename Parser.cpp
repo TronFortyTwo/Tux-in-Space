@@ -132,11 +132,11 @@ void parser_Distance(const setting& set, system_c& sys){
 		return;
 	}
 	distance[0] = o->Distance(*u);
-	distance[1] = math_Pitagora3D(o->posx+o->velx-(u->posx+u->velx), o->posy+o->vely-(u->posy+u->vely), o->posz+o->velz-(u->posz+u->velz)) - distance[0];
+	distance[1] = (o->pos+o->vel-u->pos-u->vel).length() - distance[0];
 	var[0] = distance;
 	var[1] = &distance[1];
 	OPS(set, "DISTANCE\n\nThe distance between the two object is:\n&td%l Km\n&t0And, if the two object take constant velocity, the distance will change at a velocity of\n&td%l km/s\n\n&t0Press something to continue...", var);
-	sgetchar();
+	in_s();
 }
 	
 /***
@@ -223,12 +223,12 @@ void parser_Information(const setting& set, system_c& sys) {
 	var[4] = &obj->colour.blue;
 	var[5] = &obj->mass;
 	var[6] = &obj->radius;
-	var[7] = &obj->posx;
-	var[8] = &obj->posy;
-	var[9] = &obj->posz;
-	var[10] = &obj->velx;
-	var[11] = &obj->vely; 
-	var[12] = &obj->velz;
+	var[7] = &obj->pos.x;
+	var[8] = &obj->pos.y;
+	var[9] = &obj->pos.z;
+	var[10] = &obj->vel.x;
+	var[11] = &obj->vel.y; 
+	var[12] = &obj->vel.z;
 	OPS(set, "Informations about %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
 	sgetchar();
 }

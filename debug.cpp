@@ -106,12 +106,12 @@ void debug_Object(const object& o) {
 	debug_Printf(buffer);
 	// coordinates
 	buffer = "COORDINATES:\t";
-	ob << o.posx << ' ' << o.posy << ' ' << o.posz;
+	ob << o.pos.x << ' ' << o.pos.y << ' ' << o.pos.z;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// velocity
 	buffer = "VELOCITY:\t";
-	ob << o.velx << ' ' << o.vely << ' ' << o.velz;
+	ob << o.vel.x << ' ' << o.vel.y << ' ' << o.vel.z;
 	buffer += ob.str();
 	debug_Printf(buffer);
 }

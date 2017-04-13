@@ -50,13 +50,9 @@ class object {
 		type *typ;			// the type of object
 		long double	radius;	// the object for now are sphere
 		long double mass;
-		long double posx;	// position on x
-		long double posy;	// position on y
-		long double posz;	// position on z
-		long double velx;	// velocity on x
-		long double vely;	// velocity on y
-		long double velz;	// velocity on z
-		color colour;		// the color
+		vec3<long double> pos;	// position
+		vec3<long double> vel;	// velocity
+		color colour;
 
 		void 		GetBigger 		(object&, object *&);		// Put the address of the bigger of the two object in the third position
 		void 		Save			(const setting&);			// Save the object in a file

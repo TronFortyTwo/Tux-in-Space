@@ -31,7 +31,7 @@ using namespace std;
  * This function compute the distance between the center of two objects
  */
 double object::Distance(const object& obj) {
-	return math_Pitagora3D(posx-obj.posx, posy-obj.posy, posz-obj.posz);
+	return vec3<long double>(pos - obj.pos).length();
 }
 
 /***
@@ -82,12 +82,6 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 	colour.blue = 0;
 	colour.red = 0;
 	colour.green = 0;
-	posx = 0;
-	posy = 0;
-	posz = 0;
-	velx = 0;
-	vely = 0;
-	velz = 0;
 	
 	// the loop
 	while(1) {
@@ -127,12 +121,12 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		var[8] = &mass;
 		var[9] = &mass_irregularity;
 		var[10] = &radius;
-		var[11] = &posx;
-		var[12] = &posy;
-		var[13] = &posz;
-		var[14] = &velx;
-		var[15] = &vely;
-		var[16] = &velz;
+		var[11] = &pos.x;
+		var[12] = &pos.y;
+		var[13] = &pos.z;
+		var[14] = &vel.x;
+		var[15] = &vel.y;
+		var[16] = &vel.z;
 		var[17] = &comment;
 		OPS(set, "CREATE A NEW OBJECT\n\n%f-1) name:         %s%s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n11) EXIT whitout saving\n\n%s", var);
 		cin >> input;
@@ -174,21 +168,21 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// Coordiates
 		else if(input == 6) {
 			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", nullptr);
-			cin >> posx;
+			cin >> pos.x;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", nullptr);
-			cin >> posy;
+			cin >> pos.y;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", nullptr);
-			cin >> posz;
+			cin >> pos.z;
 			comment += "\nNew coordinates assigned succefully!";
 		}
 		// Velocity
 		else if(input == 7) {
 			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
-			cin >> velx;
+			cin >> vel.x;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
-			cin >> vely;
+			cin >> vel.y;
 			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
-			cin >> velz;
+			cin >> vel.z;
 			comment += "\nNew velocity assigned succefully!";
 		}
 		// LOAD
@@ -198,12 +192,12 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 			object temp(stype, name, result);
 			if (result == GOOD_SIG) {
 				// move cinematic stats
-				temp.posx = posx;
-				temp.posy = posy;
-				temp.posz = posz;
-				temp.velx = velx;
-				temp.vely = vely;
-				temp.velz = velz;
+				temp.pos.x = pos.x;
+				temp.pos.y = pos.y;
+				temp.pos.z = pos.z;
+				temp.vel.x = vel.x;
+				temp.vel.y = vel.y;
+				temp.vel.z = vel.z;
 				// move the temp(the new) object in this
 				(*this) = temp;
 				
@@ -340,12 +334,12 @@ BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	stream >> colour.blue;
 	stream >> radius;
 	stream >> mass;
-	stream >> posx;
-	stream >> posy;
-	stream >> posz;
-	stream >> velx;
-	stream >> vely;
-	stream >> velz;
+	stream >> pos.x;
+	stream >> pos.y;
+	stream >> pos.z;
+	stream >> vel.x;
+	stream >> vel.y;
+	stream >> vel.z;
 	
 	return GOOD_SIG;
 }
@@ -360,6 +354,7 @@ void object::Write (ofstream& stream) {
 	stream << radius << endl;
 	stream << mass << endl;
 }
+
 void object::WriteComplete (ofstream& stream) {
 	stream << name << endl;
 	stream << typ->name << endl;
@@ -368,12 +363,12 @@ void object::WriteComplete (ofstream& stream) {
 	stream << colour.blue << endl;
 	stream << radius << endl;
 	stream << mass << endl;
-	stream << posx << endl;
-	stream << posy << endl;
-	stream << posz << endl;
-	stream << velx << endl;
-	stream << vely << endl;
-	stream << velz << endl;
+	stream << pos.x << endl;
+	stream << pos.y << endl;
+	stream << pos.z << endl;
+	stream << vel.x << endl;
+	stream << vel.y << endl;
+	stream << vel.z << endl;
 }
 
 /***
@@ -410,9 +405,9 @@ void object::AI_Hunter(system_c& sys) {
 	// move the hunter in the direction of the closest
 	// velx : distance x = vel : distance
 	long double temp = HUNTER_ACCELERATION * sys.precision / Distance(*closest);
-	velx -= (posx - closest->posx) * temp;
-	vely -= (posy - closest->posy) * temp;
-	velz -= (posz - closest->posz) * temp;
+	vel.x -= (pos.x - closest->pos.x) * temp;
+	vel.y -= (pos.y - closest->pos.y) * temp;
+	vel.z -= (pos.z - closest->pos.z) * temp;
 }
 
 
@@ -460,13 +455,13 @@ void object::Impact_Anaelastic(object& obj) {
 	// the mass is the sum
 	mass = obj.mass + mass;
 	// the coordinates are the average
-	posx = ((posx * mass) + (obj.posx * obj.mass)) / (obj.mass + mass);
-	posy = ((posy * mass) + (obj.posy * obj.mass)) / (obj.mass + mass);
-	posz = ((posz * mass) + (obj.posz * obj.mass)) / (obj.mass + mass);
+	pos.x = ((pos.x * mass) + (obj.pos.x * obj.mass)) / (obj.mass + mass);
+	pos.y = ((pos.y * mass) + (obj.pos.y * obj.mass)) / (obj.mass + mass);
+	pos.z = ((pos.z * mass) + (obj.pos.z * obj.mass)) / (obj.mass + mass);
 	// the velocity
-	velx = ((velx * mass) + (obj.velx * obj.mass)) / (obj.mass + mass);
-	vely = ((vely * mass) + (obj.vely * obj.mass)) / (obj.mass + mass);
-	velz = ((velz * mass) + (obj.velz * obj.mass)) / (obj.mass + mass);
+	vel.x = ((vel.x * mass) + (obj.vel.x * obj.mass)) / (obj.mass + mass);
+	vel.y = ((vel.y * mass) + (obj.vel.y * obj.mass)) / (obj.mass + mass);
+	vel.z = ((vel.z * mass) + (obj.vel.z * obj.mass)) / (obj.mass + mass);
 	// to calculate the radius we calculate the volum of the two object,
 	radius = RadiusestoVolume(radius, obj.radius);
 	
@@ -496,7 +491,7 @@ void object::Impact_Hunting(object& hed) {
 	// indicate in which direction the hunter is faster
 	BYTE faster;
 	// the velocity of the hunter in three axis
-	long double vx, vy, vz;
+	vec3<long double> v;
 	
 	// set p (over 50, under 92)
 	// over 50 because elsewhere the hunter could collide in the hunted after this impact
@@ -526,68 +521,51 @@ void object::Impact_Hunting(object& hed) {
 	// move the hunted a bit away and give him some velocity from the hunter
 	// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
 	// We use the absolute value of the velocity
-	vx = velx;
-	if(vx < 0)
-		vx = -vx;
-	vy = vely;
-	if(vy < 0)
-		vy = -vy;
-	vz = velz;
-	if(vz < 0)
-		vz = -vz;
-	if (vx > vy) {
-		if(vx > vz)
-			faster = X_AXIS;
-		else
-			faster = Z_AXIS;
-	}
-	else {
-		if(vy > vz)
-			faster = Y_AXIS;
-		else
-			faster = Z_AXIS;
-	}
+	v = vel.absolute();
+	
+	faster = v.greatest();
+	
 	// if x is the fastest
 	if(faster == X_AXIS) {
 		// move the hunted away from the hunter enought to not touch it
-		if(hed.posx > posx)
-			hed.posx += hed.radius + radius + 0.01 + Distance(hed);
+		if(hed.pos.x > pos.x)
+			hed.pos.x += hed.radius + radius + 0.01 + Distance(hed);
 		else
-			hed.posx -= hed.radius + radius + 0.01 + Distance(hed);
+			hed.pos.x -= hed.radius + radius + 0.01 + Distance(hed);
 		// transimit half of the hunter fast on the hunted (f = m*a)
-		f = velx * mass /2;
-		hed.velx = f / hed.mass;
-		velx /= 2;
+		f = vel.x * mass /2;
+		hed.vel.x = f / hed.mass;
+		vel.x /= 2;
 		
 	}
 	// if y is the fastest
 	else if(faster == Y_AXIS) {
 		// move the hunted away from the hunter enought to not touch it
-		if(hed.posy > posy)
-			hed.posy += hed.radius + radius + 0.01 + Distance(hed);
+		if(hed.pos.y > pos.y)
+			hed.pos.y += hed.radius + radius + 0.01 + Distance(hed);
 		else
-			hed.posy -= hed.radius + radius + 0.01 + Distance(hed);
+			hed.pos.y -= hed.radius + radius + 0.01 + Distance(hed);
 		// transimit half of the hunter fast on the hunted (f = m*a)
-		f = vely * mass / 2;
-		hed.vely = f / hed.mass;
-		vely /= 2;
+		f = vel.y * mass / 2;
+		hed.vel.y = f / hed.mass;
+		vel.y /= 2;
 	}
 	// if z is the fastest
 	else {
 		// move the hunted away from the hunter enought to not touch it
-		if(hed.posz > posz)
-			hed.posz += hed.radius + radius + 0.01 + Distance(hed);
+		if(hed.pos.z > pos.z)
+			hed.pos.z += hed.radius + radius + 0.01 + Distance(hed);
 		else
-			hed.posz -= hed.radius + radius + 0.01 + Distance(hed);
+			hed.pos.z -= hed.radius + radius + 0.01 + Distance(hed);
 		// transimit half of the hunter fast on the hunted	(f = m*a)
-		f = velz * mass /2;
-		hed.velz = f / hed.mass;
-		velz /= 2;
+		f = vel.z * mass /2;
+		hed.vel.z = f / hed.mass;
+		vel.z /= 2;
 	}
 }
 
 void object::UpdateFast (double t){
-	posx += velx * t;
-	posx += velx * t;
-	posx += velx * t;
+	pos.x += vel.x * t;
+	pos.y += vel.y * t;
+	pos.z += vel.z * t;
 }

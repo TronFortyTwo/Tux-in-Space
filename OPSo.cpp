@@ -60,17 +60,17 @@ void OPSo (const setting& set, system_c& sys) {
 				<< " | "
 				<< t.typ->name
 				<< "\nX axis: "
-				<< t.posx
+				<< t.pos.x
 				<< " Km with a velocity of "
-				<< t.velx
+				<< t.vel.x
 				<< " Km/s\nY axis: "
-				<< t.posy
+				<< t.pos.y
 				<< " Km with a velocity of "
-				<< t.vely
+				<< t.vel.y
 				<< " Km/s\nZ axis: "
-				<< t.posz
+				<< t.pos.z
 				<< " Km with a velocity of "
-				<< t.velz
+				<< t.vel.z
 				<< " Km/s\n%f-";
 		}
 	}
