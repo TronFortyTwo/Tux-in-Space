@@ -68,6 +68,12 @@ template<class T> class vec3 {
 		inline vec3<T> operator- (const vec3<T>& s) {
 			return vec3<T>(s.x-x, s.y-y, s.z-z);
 		}
+		inline vec3<T> operator* (const long double& m) {
+			return vec3<T>(x*m, y*m, z*m);
+		}
+		inline vec3<T> operator/ (const long double& d) {
+			return vec3<T>(x/d, y/d, z/d);
+		}
 };
 
 // a vector in the plane
@@ -104,10 +110,16 @@ template<class T> class vec2{
 		inline vec2<T> operator- (vec2<T> s) {
 			return vec2<T>(s.x-x, s.y-y);
 		}
+		inline vec2<T> operator* (const long double m) {
+			return vec2<T>(x*m, y*m);
+		}
+		inline vec2<T> operator/ (const long double d) {
+			return vec2<T>(x/d, y/d);
+		}
 };
 
 
-
+// functions implementation
 template<class T> T vec3<T>::length() {
 	return sqrtl (z*z + pow(sqrtl(x*x + y*y), 2));
 }

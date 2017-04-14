@@ -48,7 +48,7 @@ class system_c {
 		void Save			(const setting& set);	// Save an object in a file
 		void NewObj			(const setting& set);	// Create a new object, put it in the system and initialize it
 		
-		// old pengine stuff
+		// old pengine
 		void Physic	(time_sim& dest);		// Apply the physic to the object
 		
 		// constructor

@@ -217,7 +217,8 @@ void system_c::Physic_Gravity() {
 	// counters
 	unsigned int i,l;
 	// the force and a temporany variable
-	long double f, temp;
+	long double f;
+	vec3<long double> temp;
 	// the distance
 	vec3<long double> dist;
 	
@@ -234,15 +235,19 @@ void system_c::Physic_Gravity() {
 			// fx : f = distx : dist
 			// the aceleration for i (F = m * a -> a = F / m)
 			// update the velocity of i and l(V += a * t)
-			temp = f * dist.x * precision / dist.length();
-			o[i].vel.x -= temp / o[i].mass;
-			o[l].vel.x += temp / o[l].mass;
-			temp = f * dist.y * precision / dist.length();
-			o[i].vel.y -= temp / o[i].mass;
-			o[l].vel.y += temp / o[l].mass;
-			temp = f * dist.z * precision / dist.length();
-			o[i].vel.z -= temp / o[i].mass;
-			o[l].vel.z += temp / o[l].mass;
+			temp = dist * f * precision / dist.length();
+			o[i].vel = o[i].vel - (temp / o[i].mass);
+			o[l].vel = o[l].vel + (temp / o[l].mass);
+			
+			//temp = f * dist.x * precision / dist.length();
+			//o[i].vel.x -= temp / o[i].mass;
+			//o[l].vel.x += temp / o[l].mass;
+			//temp = f * dist.y * precision / dist.length();
+			//o[i].vel.y -= temp / o[i].mass;
+			//o[l].vel.y += temp / o[l].mass;
+			//temp = f * dist.z * precision / dist.length();
+			//o[i].vel.z -= temp / o[i].mass;
+			//o[l].vel.z += temp / o[l].mass;
 		}
 	}
 }
