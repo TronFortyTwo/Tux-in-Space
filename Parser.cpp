@@ -128,7 +128,7 @@ void parser_Distance(const setting& set, system_c& sys){
 	u = sys.SearchObj(name);
 	if(u == nullptr) {
 		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command", nullptr);
-		sgetchar();
+		in_s();
 		return;
 	}
 	distance[0] = o->Distance(*u);
@@ -148,7 +148,7 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now){
 	string input;		
 	// ask for confirm to parser_Quit
 	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", nullptr);
-	sgetchar();
+	in_s();
 	// if doesn't want to parser_Quit return now
 	if (input.front() == 'n')
 		return now;
@@ -182,7 +182,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	obj = sys.SearchObj(name);
 	if (obj == nullptr) {	//if there isn't any object whit that name
 		OPS_Error(set, "There isn't any object whit that name!\nPress something to continue", nullptr);
-		sgetchar();
+		in_s();
 		return;
 	}
 		
@@ -213,7 +213,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	obj = sys.SearchObj(input);
 	if(obj == nullptr){
 		OPS_Error(set, "No object whit this name is been found. press a button to continue", nullptr);
-		sgetchar();
+		in_s();
 		return;
 	}	
 	var[0] = &obj->name;
@@ -230,7 +230,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	var[11] = &obj->vel.y; 
 	var[12] = &obj->vel.z;
 	OPS(set, "Informations about %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
-	sgetchar();
+	in_s();
 }
 	
 	

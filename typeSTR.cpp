@@ -354,7 +354,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 			// check that is a valid value
 			if ((n < 0) || (n > descrn)) {
 				OPS(set, "There is no object whit that number out there! press something to continue...", nullptr);
-				sgetchar();
+				in_s();
 				continue;
 			}
 			// set the type
@@ -386,7 +386,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 			OPS(set, buf, &var[0]);
 			var.resize(0);
 			ivar.resize(0);
-			sgetchar();
+			in_s();
 		}
 		// if is the back button return to the start
 		else if (input == backn)

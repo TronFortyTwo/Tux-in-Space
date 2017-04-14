@@ -511,43 +511,14 @@ void object::Impact_Hunting(object& hed) {
 	
 	faster = v.greatest();
 	
-	// if x is the fastest
-	if(faster == X_AXIS) {
-		// move the hunted away from the hunter enought to not touch it
-		if(hed.pos.x > pos.x)
-			hed.pos.x += hed.radius + radius + 0.01 + Distance(hed);
-		else
-			hed.pos.x -= hed.radius + radius + 0.01 + Distance(hed);
-		// transimit half of the hunter fast on the hunted (f = m*a)
-		f = vel.x * mass /2;
-		hed.vel.x = f / hed.mass;
-		vel.x /= 2;
-		
-	}
-	// if y is the fastest
-	else if(faster == Y_AXIS) {
-		// move the hunted away from the hunter enought to not touch it
-		if(hed.pos.y > pos.y)
-			hed.pos.y += hed.radius + radius + 0.01 + Distance(hed);
-		else
-			hed.pos.y -= hed.radius + radius + 0.01 + Distance(hed);
-		// transimit half of the hunter fast on the hunted (f = m*a)
-		f = vel.y * mass / 2;
-		hed.vel.y = f / hed.mass;
-		vel.y /= 2;
-	}
-	// if z is the fastest
-	else {
-		// move the hunted away from the hunter enought to not touch it
-		if(hed.pos.z > pos.z)
-			hed.pos.z += hed.radius + radius + 0.01 + Distance(hed);
-		else
-			hed.pos.z -= hed.radius + radius + 0.01 + Distance(hed);
-		// transimit half of the hunter fast on the hunted	(f = m*a)
-		f = vel.z * mass /2;
-		hed.vel.z = f / hed.mass;
-		vel.z /= 2;
-	}
+	if(hed.pos[faster] > pos[faster])
+		hed.pos[faster] += hed.radius + radius + 0.01 + Distance(hed);
+	else
+		hed.pos[faster] -= hed.radius + radius + 0.01 + Distance(hed);
+	
+	f = vel[faster] * mass /2;
+	hed.vel[faster] = f / hed.mass;
+	vel[faster] /= 2;
 }
 
 void object::UpdateFast (double t){

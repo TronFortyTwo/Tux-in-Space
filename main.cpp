@@ -45,7 +45,7 @@ int main () {
 	// initialize the program directories
 	if(set.InitDir() != GOOD_SIG) {
 		printf("\n\nCSpace:\n\nError: can't Create program directories!\nPress something to exit");
-		sgetchar();
+		in_s();
 		return EXIT_FAILURE;
 	}
 	

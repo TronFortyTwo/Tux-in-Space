@@ -25,6 +25,7 @@
 #define mathh
 
 #include "generic.h"
+#include "debug.h"
 
 // Pi
 #define PI M_PI
@@ -74,6 +75,19 @@ template<class T> class vec3 {
 		inline vec3<T> operator/ (const long double& d) {
 			return vec3<T>(x/d, y/d, z/d);
 		}
+		inline T& operator[] (const int n) {
+			if(n == X_AXIS)
+				return x;
+			if(n == Y_AXIS)
+				return y;
+			if(n == Z_AXIS)
+				return z;
+			
+			#if DEBUG
+			debug_Printf("Request for wrong element in the vec3 class using the operator[]");
+			#endif
+			return x;
+		}
 };
 
 // a vector in the plane
@@ -115,6 +129,17 @@ template<class T> class vec2{
 		}
 		inline vec2<T> operator/ (const long double d) {
 			return vec2<T>(x/d, y/d);
+		}
+		inline T& operator[] (const int n) {
+			if(n == X_AXIS)
+				return x;
+			if(n == Y_AXIS)
+				return y;
+			
+			#if DEBUG
+			debug_Printf("Request for wrong element in the vec2 class using the operator[]");
+			#endif
+			return x;
 		}
 };
 

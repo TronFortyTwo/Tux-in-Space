@@ -28,6 +28,7 @@
 #include "generic.h"
 #include "debug.h"
 #include "setting.h"
+#include "in.h"
 
 // global functions
 void OPS		(const setting&, const std::string&, const void *const* const);	// Use it to print things

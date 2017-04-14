@@ -256,7 +256,7 @@ void OPS_MemLack(const string& data) {
 	debug_Printf("OPS_MemLack: the program has problem with memory allocation while:");
 	debug_Printf(data);
 	#endif
-	sgetchar();
+	in_s();
 }
 
 	
