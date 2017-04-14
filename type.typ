@@ -16,7 +16,7 @@
 # the Object type is the base for all other types
 ########################################################################
 NAME: Object
-DESCRIPTION: An object is a bunch of matter whit a mass, examples are the Sun and a cellphone
+DESCRIPTION: An object is a bunch of matter with mass, examples are the Sun and a cellphone
 MASS MAX: INF
 MASS MIN: 0
 BLUE MAX: 255
@@ -31,21 +31,18 @@ PRODUCT: Object
 PARENT: Object
 
 ########################################################################
-# The information missing from the next types are taken 
-# from the default type
-########################################################################
 
 #############################
 # ARTIFICIAL OBJECTS
 #
 NAME: Artificial object
-DESCRIPTION: The product of an intentional human manifacture, often buildt whit metals
+DESCRIPTION: The product of an intentional human manifacture, often buildt with metals
 HUNTED: Y
 PRODUCT: Debris
 PARENT: Object
 
 	NAME: Spacecraft
-	DESCRIPTION: Is a veicle, often built by metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
+	DESCRIPTION: Is a veicle, often built with metals, designed to "fly" in the space for various motivations: communications, exploring, colonization and transport
 	HUNTED: Y
 	PRODUCT: Relict
 	PARENT: Artificial object
@@ -56,7 +53,7 @@ PARENT: Object
 		PARENT: Spacecraft
 
 		NAME: Spaceplane
-		DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned flight. For example the Space Shuttle is a spaceplane
+		DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned flight. An example is the Space Shuttle
 		HUNTED: Y
 		PRODUCT: Relict
 		PARENT: Spacecraft
@@ -75,13 +72,13 @@ DESCRIPTION: A celestial object is a natural object
 PARENT: Object
 
 	NAME: Brown Dwarf
-	DESCRIPTION: A brown dwarf is a particular type of celestial object that are more massive than planets, but doesn't have nuclear fusion in its core
+	DESCRIPTION: A brown dwarf is a particular type of celestial object that is more massive than a planet, but doesn't have nuclear fusion in its core
 	MASS MAX: 1.528552e26
 	MASS MIN: 2.467647e25
 	PARENT: Celestial object
 	
 		NAME: Sub-brown dwarf
-		DESCRIPTION: A particular type of Brown Dwarf that is smaller than a regular one
+		DESCRIPTION: A particular type of Brown Dwarf smaller than a regular one
 		PARENT: Brown Dwarf
 	
 	NAME: Small body
@@ -100,19 +97,19 @@ PARENT: Object
 		PARENT: Small body
 
 		NAME: Meteroid
-		DESCRIPTION: A meteroid is a rocky fragment. Them are usually generated from the asteroids impacts or from the comet cores
+		DESCRIPTION: A meteroid is a rocky fragment. Is usually generated from asteroid impacts or from comet cores
 		MASS MAX: 1e5
 		MASS MIN: 1e-11
 		PRODUCT: Micrometeroid
 		PARENT: Small body
 
 			NAME: Micrometeroid
-			DESCRIPTION: A very little little meteroid
+			DESCRIPTION: A very little meteroid
 			PRODUCT: Micrometeroid
 			PARENT: Meteroid
 
 	NAME: Star
-	DESCRIPTION: A star is a celestial body that have termonuclear reaction inside it, for that shine of its own light. Stars have a mass between 0.08 and 200 Sun Masses. Lighter objects are called brown dwarfs, and they don't produce energy via nuclear fusion
+	DESCRIPTION: A star is a celestial body that has termonuclear reaction in its core, for that shine of its own light. Stars have a mass between 0.08 and 200 Sun Masses. Lighter objects are called brown dwarfs, and they don't produce energy via nuclear fusion
 	MASS MAX: 3.97784e29
 	MASS MIN: 9241818
 	PARENT: Celestial object
@@ -133,7 +130,6 @@ PARENT: Object
 			PARENT: Compact star
 			
 		NAME: Neutron star
-		DESCRIPTION: Description coming soon
 		PARENT: Compact star
 
 			NAME: Pulsar
@@ -156,7 +152,7 @@ PARENT: Object
 		PARENT: Planet
 	
 		NAME: Helium planet
-		DESCRIPTION: An helium planet is a planet whit an atmosphere composly mainly by helium and a solid core
+		DESCRIPTION: An helium planet is a planet whit an atmosphere composed mainly by helium and a solid core
 		PARENT: Planet
 
 		NAME: Giant planet
@@ -174,7 +170,7 @@ PARENT: Object
 				PARENT: Planet
 
 		NAME: Iron planet
-		DESCRIPTION: An iron planet is a planet whit the core composed mainly of iron and whit mantle very little or whitout any mantle
+		DESCRIPTION: An iron planet is a planet whit the core composed mainly of iron and whit a very little mantle or whitout any mantle at all
 		PARENT: Planet
 		
 		NAME: Minor planet
@@ -182,7 +178,7 @@ PARENT: Object
 		PARENT: Celestial object
 
 			NAME: Asteroid
-			DESCRIPTION: An asteroid is a minor planet that have a composition very similar to a terrestrial planet. Asteroid composed meanly by ice are called comets, some asteroids are comets that have lose the ice
+			DESCRIPTION: An asteroid is a minor planet that has a composition very similar to a terrestrial planet. Asteroid composed meanly by ice are called comets, some asteroids are comets that have lose their ice
 			PRODUCT: Meteroid
 			PARENT: Minor planet
 		
@@ -191,7 +187,7 @@ PARENT: Object
 			PARENT: Minor planet
 	
 		NAME: Ocean planet
-		DESCRIPTION: A planet whit a surface nearly totally covered whit oceans
+		DESCRIPTION: A planet with a surface nearly totally covered by oceans
 		PARENT: Planet
 	
 		NAME: Terrestrial planet
@@ -199,11 +195,11 @@ PARENT: Object
 		PARENT: Planet
 
 			NAME: Earth analog
-			DESCRIPTION: An Earth analog is a terrestrial planet whit characteristich much similar to the Earth's characteristics
+			DESCRIPTION: An Earth analog is a terrestrial planet much similar to the Earth
 			PARENT: Terrestrial planet
 	
 			NAME: Lava planet
-			DESCRIPTION: A lava planet is a type of terrestrial planet whit the surface completely covered whit lava
+			DESCRIPTION: A lava planet is a type of terrestrial planet with the surface completely covered by lava
 			PARENT: Terrestrial planet
 	
 			NAME: Super Earth
@@ -222,12 +218,12 @@ PARENT: Object
 #	SPACE MONSTERS
 #
 NAME: Space Monster
-DESCRIPTION: As in the old times big and unknow creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
+DESCRIPTION: As in the old times big and unknown creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
 HUNTER: Y
 PARENT: Object
 
 	NAME: Deep Space Kraken
-	DESCRIPTION: Terrifying enormous creature that destroy anything what encouter. No one survived his attacks to confirm theyr existent
+	DESCRIPTION: Terrifying huge creature that destroy anything encouters
 	HUNTER: Y
 	PARENT: Space Monster
 	
