@@ -71,19 +71,26 @@ void system_c::Save(const setting& set){
 	if(!idest) {
 		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", nullptr);
 		in_s(input);
-		if(input[0] == 'n')
+		if(!input.compare("n"))
 			return;
 	}
 	// open the file to write
 	ofstream odest(path);
 	// Write information about the system
-	odest << precision << endl << o.size() << endl << G << endl << stime.year << endl << stime.day << endl << stime.hour << endl << stime.min << endl << stime.sec << endl << stime.millisec << endl;
+	odest << precision << endl;
+	odest << o.size() << endl;
+	odest << G << endl;
+	odest << stime.year << endl;
+	odest << stime.day << endl;
+	odest << stime.hour << endl;
+	odest << stime.min << endl;
+	odest << stime.sec << endl;
+	odest << stime.millisec << endl;
 	// write the system's object's datas
 	for(unsigned int i=0; i!=o.size(); i++)
 		o[i].WriteComplete(odest);
-	
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", nullptr);
-	sgetchar();
+	in_s();
 }
 
 
@@ -133,7 +140,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 	ifstream sysf(path);
 	if (!sysf) {
 		OPS_Error(set, "A system whit that name doesn't exist! Type something to continue and return to the main menu", nullptr);
-		sgetchar();
+		in_s();
 		result = FILE_ERR_SIG;
 	}
 	// set the name
@@ -151,7 +158,7 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 	// alloc memory
 	o.resize(num_obj);
 	// fscanf for objects datas
-	for(int i=0; i!=num_obj; i++) {
+	for(unsigned int i=0; i!=o.size(); i++) {
 		if(o[i].ReadComplete(sysf, s) == CORRUPTED_SIG) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");

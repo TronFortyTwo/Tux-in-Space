@@ -320,20 +320,10 @@ BYTE object::Read (ifstream& stream, typeSTR& stype) {
 }
 
 BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
-	// scan the name
-	in_fs(name, stream);
-	// scan the type
-	string buffer;
-	in_fs(buffer, stream);
-	typ = stype.Search(buffer);
-	if (typ == nullptr)
+	// read basic info
+	if(Read(stream, stype) == CORRUPTED_SIG)
 		return CORRUPTED_SIG;
-	// scan all the other things
-	stream >> colour.red;
-	stream >> colour.green;
-	stream >> colour.blue;
-	stream >> radius;
-	stream >> mass;
+	// read complete stuff
 	stream >> pos.x;
 	stream >> pos.y;
 	stream >> pos.z;
@@ -356,13 +346,9 @@ void object::Write (ofstream& stream) {
 }
 
 void object::WriteComplete (ofstream& stream) {
-	stream << name << endl;
-	stream << typ->name << endl;
-	stream << colour.red << endl;
-	stream << colour.green << endl;
-	stream << colour.blue << endl;
-	stream << radius << endl;
-	stream << mass << endl;
+	// write basic infos
+	Write(stream);
+	// write additional stuff
 	stream << pos.x << endl;
 	stream << pos.y << endl;
 	stream << pos.z << endl;
@@ -565,7 +551,5 @@ void object::Impact_Hunting(object& hed) {
 }
 
 void object::UpdateFast (double t){
-	pos.x += vel.x * t;
-	pos.y += vel.y * t;
-	pos.z += vel.z * t;
+	pos = pos + vel * t;
 }

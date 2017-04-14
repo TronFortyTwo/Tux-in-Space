@@ -78,10 +78,7 @@
 #define CONFIGURATION_FILE "cspace.conf"	// Where read configuration inormation
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
-	
-	
-// A two-in-one macro whitout argurment (safe getchar)
-#define sgetchar() (scanf(" "), getchar())
+
 
 // More precise data types
 typedef 	int8_t		BYTE;
