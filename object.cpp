@@ -134,111 +134,111 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// reset previous comment
 		comment.clear();
 	
-		// Name
-		if(input == 1) {
-			OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:", nullptr);
-			in_s(name);
-			// apply the new name
-			comment += "\nNew name assigned succefully!";
-		}
-		// Type
-		else if(input == 2) {
-			typ = &stype.Browse(set, "Choose a new type for your new object");
-			comment += "\nNew type assigned succefully!";
-		}
-		// Color
-		else if(input == 3) {
-			colour.Scan(set, typ->color_min, typ->color_max);
-			comment += "\nNew color assigned succefully!";
-		}
-		// Mass
-		else if(input == 4) {
-			var[0] = & typ->mass_min;
-			var[1] = & typ->mass_max;
-			OPS (set, "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
-			cin >> mass;
-			comment += "\nNew mass assigned succefully!";
-		}
-		// Radius
-		else if(input == 5) {
-			OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)", nullptr);
-			cin >> radius;
-			comment += "\nNew radius assigned succefully!";
-		}
-		// Coordiates
-		else if(input == 6) {
-			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", nullptr);
-			cin >> pos.x;
-			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", nullptr);
-			cin >> pos.y;
-			OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", nullptr);
-			cin >> pos.z;
-			comment += "\nNew coordinates assigned succefully!";
-		}
-		// Velocity
-		else if(input == 7) {
-			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
-			cin >> vel.x;
-			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
-			cin >> vel.y;
-			OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
-			cin >> vel.z;
-			comment += "\nNew velocity assigned succefully!";
-		}
-		// LOAD
-		else if(input == 8) {
-			// load the object in a temporany variable
-			BYTE result;
-			object temp(stype, name, result);
-			if (result == GOOD_SIG) {
-				// move cinematic stats
-				temp.pos.x = pos.x;
-				temp.pos.y = pos.y;
-				temp.pos.z = pos.z;
-				temp.vel.x = vel.x;
-				temp.vel.y = vel.y;
-				temp.vel.z = vel.z;
-				// move the temp(the new) object in this
-				(*this) = temp;
-				
-				comment += "New object loaded succefully!";
-			}
-			// negative comment if fail
-			else {
-				comment += "\nCan't load the object! ";
-				if (result == FILE_ERR_SIG)
-					comment += "No object whit that name found!";
-				else if (result == CORRUPTED_SIG)
-					comment += "File corrupted or outdated!";
-				else {
-					comment += "Unregognized error signal, i am a bug! signal me please :)";
-					#if DEBUG
-					debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
-					debug_Int(result);
-					#endif
-				}
-			}
-		}
-		// SAVE
-		else if(input == 9) {
-			Save(set);
-			comment += "\nNew object saved succefully!";
-		}	
-		// DONE
-		else if(input == 10) {
-			if (!(!mass_irregularity.compare(IRREGULARITY)) || (!color_irregularity.compare(IRREGULARITY)))
+		switch(input) {
+			// Name
+			case 1:
+				OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:", nullptr);
+				in_s(name);
+				// apply the new name
+				comment += "\nNew name assigned succefully!";
 				break;
-			else
-				comment += "\nCannot exit! Fix irregularity first";
-		}
+		// Type
+			case 2:
+				typ = &stype.Browse(set, "Choose a new type for your new object");
+				comment += "\nNew type assigned succefully!";
+				break;
+		// Color
+			case 3:
+				colour.Scan(set, typ->color_min, typ->color_max);
+				comment += "\nNew color assigned succefully!";
+				break;
+		// Mass
+			case 4:
+				var[0] = & typ->mass_min;
+				var[1] = & typ->mass_max;
+				OPS (set, "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
+				cin >> mass;
+				comment += "\nNew mass assigned succefully!";
+				break;
+		// Radius
+			case 5:
+				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)", nullptr);
+				cin >> radius;
+				comment += "\nNew radius assigned succefully!";
+				break;
+		// Coordiates
+			case 6:
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", nullptr);
+				cin >> pos.x;
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", nullptr);
+				cin >> pos.y;
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", nullptr);
+				cin >> pos.z;
+				comment += "\nNew coordinates assigned succefully!";
+				break;
+		// Velocity
+			case 7:
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
+				cin >> vel.x;
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
+				cin >> vel.y;
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
+				cin >> vel.z;
+				comment += "\nNew velocity assigned succefully!";
+				break;
+		// LOAD
+			case 8: {
+					// load the object in a temporany variable
+					BYTE result;
+					object temp(stype, name, result);
+					if (result == GOOD_SIG) {
+						// move cinematic stats
+						temp.pos = pos;
+						temp.vel = vel;
+						// move the temp(the new) object in this
+						(*this) = temp;
+						comment += "New object loaded succefully!";
+					}
+					// negative comment if fail
+					else {
+						comment += "\nCan't load the object! ";
+						if (result == FILE_ERR_SIG)
+							comment += "No object whit that name found!";
+						else if (result == CORRUPTED_SIG)
+							comment += "File corrupted or outdated!";
+						else {
+							comment += "Unregognized error signal, i am a bug! signal me please :)";
+							#if DEBUG
+							debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
+							debug_Int(result);
+							#endif
+						}
+					}
+				}
+				break;
+		// SAVE
+			case 9:
+				Save(set);
+				comment += "\nNew object saved succefully!";
+				break;
+		// DONE
+			case 10:
+				if (!(!mass_irregularity.compare(IRREGULARITY)) || (!color_irregularity.compare(IRREGULARITY)) || (!name_irregularity.compare(IRREGULARITY))) {
+					result = GOOD_SIG;
+					return;
+				}
+				else
+					comment += "\nCannot exit! Fix irregularity first";
+				break;
 		// EXIT WHITOUT SAVE
-		else if(input == 11) {
-			// quit
-			result = ABORTED_SIG;
-			return;
+			case 11:
+				// quit
+				result = ABORTED_SIG;
+				return;
 		}
 	}
-	result = GOOD_SIG;
+	
+	result = BAD_SIG;
 	return;
 }
 

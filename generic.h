@@ -61,12 +61,12 @@
 // Values returned by functions
 #define GOOD_SIG		1	// good
 #define BAD_SIG			2	// generic bad
-#define FILE_ERR_SIG	3
-#define CORRUPTED_SIG	4
-#define NEW_SIG			5
-#define LOAD_SIG		6
-#define ABORTED_SIG		7
-#define QUIT_SIG	   -1	// must be negative
+#define FILE_ERR_SIG	3	// file not found
+#define CORRUPTED_SIG	4	// file ureadable
+#define NEW_SIG			5	// new
+#define LOAD_SIG		6	// load
+#define ABORTED_SIG		7	// aborted action
+#define QUIT_SIG	   -1	// quit | must be negative!
 
 // The video mode
 #define V_OPS 0
