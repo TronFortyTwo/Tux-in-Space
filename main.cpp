@@ -69,7 +69,7 @@ int main () {
 	
 	// RUNNING
 	while
-		(Shell (set, stype) != QUIT_SIG);
+		(Shell (set, stype) != ABORTED_SIG);
 		
 	// EXITING THE PROGRAM
 		

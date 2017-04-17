@@ -66,7 +66,6 @@
 #define NEW_SIG			5	// new
 #define LOAD_SIG		6	// load
 #define ABORTED_SIG		7	// aborted action
-#define QUIT_SIG	   -1	// quit | must be negative!
 
 // The video mode
 #define V_OPS 0

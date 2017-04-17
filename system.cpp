@@ -36,10 +36,10 @@ void system_c::NewObj (const setting& set) {
 		o.push_back(temp);
 	#if DEBUG
 	else {
-		if(result == ABORTED_SIG)
-			return;
-		debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
-		debug_Int(result);
+		if(result != ABORTED_SIG){
+			debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
+			debug_Int(result);
+		}
 	}
 	#endif
 }
@@ -80,12 +80,11 @@ void system_c::Save(const setting& set){
 	odest << precision << endl;
 	odest << o.size() << endl;
 	odest << G << endl;
-	odest << stime.year << endl;
-	odest << stime.day << endl;
-	odest << stime.hour << endl;
-	odest << stime.min << endl;
-	odest << stime.sec << endl;
-	odest << stime.millisec << endl;
+	odest << stime.Year() << endl;
+	odest << stime.Day() << endl;
+	odest << stime.Hour() << endl;
+	odest << stime.Minute() << endl;
+	odest << stime.Second() << endl;
 	// write the system's object's datas
 	for(unsigned int i=0; i!=o.size(); i++)
 		o[i].WriteComplete(odest);
@@ -101,13 +100,6 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	
 	// set the type struct pointer
 	stype = &s;
-	// set the system's time
-	stime.year = 0;
-	stime.hour = 0;
-	stime.day = 0;
-	stime.min = 0;
-	stime.sec = 0;
-	stime.millisec = 0;
 	// set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
 	G = 6.67e-17;
 	
@@ -123,7 +115,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 /**
  * Load a system from a file
  */
-system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
+system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 
 	std::string new_name;	// the name of the system
 	std::string path;		// the system file (path)
@@ -149,24 +141,27 @@ system_c::system_c (const setting& set, typeSTR& s, BYTE& result) {
 	sysf >> precision;
 	sysf >> num_obj;
 	sysf >> G;
-	sysf >> stime.year;
-	sysf >> stime.day;
-	sysf >> stime.hour;
-	sysf >> stime.min;
-	sysf >> stime.sec;
-	sysf >> stime.millisec;
+	int y, d, h, m;
+	float s;
+	sysf >> y;
+	sysf >> d;
+	sysf >> h;
+	sysf >> m;
+	sysf >> s;
+	stime = time_sim(y, d, h, m, s);
+	
 	// alloc memory
 	o.resize(num_obj);
 	// fscanf for objects datas
 	for(unsigned int i=0; i!=o.size(); i++) {
-		if(o[i].ReadComplete(sysf, s) == CORRUPTED_SIG) {
+		if(o[i].ReadComplete(sysf, str) == CORRUPTED_SIG) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
 			debug_Printf(o[i].name);
 			#endif
 		}
 	}
-	stype = &s;
+	stype = &str;
 }
 
 /***
@@ -200,8 +195,7 @@ void system_c::Physic (time_sim& dest) {
 		// INERTIA
 		Physic_Inertia();
 		// TIME
-		stime.millisec += precision * 1000;
-		stime.Update();
+		stime.AddSec(precision);
 	}
 }
 	

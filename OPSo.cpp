@@ -34,17 +34,15 @@ void OPSo (const setting& set, system_c& sys) {
 		
 	// Printf the line whit the time and two lines of '-'
 	buffer << "TIME: Year " 
-		<< sys.stime.year
+		<< sys.stime.Year()
 		<< " | Day "
-		<< sys.stime.day
+		<< sys.stime.Day()
 		<< " | "
-		<< sys.stime.hour
+		<< sys.stime.Hour()
 		<< ":"
-		<< sys.stime.min
+		<< sys.stime.Minute()
 		<< ":"
-		<< sys.stime.sec
-		<< ","
-		<< sys.stime.millisec
+		<< sys.stime.Second()
 		// two lines of '-'
 		<< "\n%f-%f-";
 	

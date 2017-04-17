@@ -30,7 +30,7 @@ void parser_Reask(const setting&, const string&);
 void sys_Save(const setting&, system_c&);
 void parser_Create(const setting&, system_c&);
 void parser_Delete(const setting&, system_c&);
-time_sim parser_Quit (const setting& set, system_c&, time_sim&);
+time_sim parser_Quit (const setting& set, system_c&, time_sim&, BYTE& quit);
 void parser_Distance(const setting&, system_c&);
 time_sim parser_Jump(const setting& set, time_sim&, long double);
 time_sim parser_Wait(const setting& set, time_sim&, long double);
@@ -40,7 +40,7 @@ void parser_Information (const setting&, system_c&);
  * The main function
  * of the parser
  */
-time_sim Parser(setting& set, system_c& sys) {
+time_sim Parser(setting& set, system_c& sys, BYTE& quit) {
 		
 	// what is scanned
 	string input;
@@ -51,8 +51,7 @@ time_sim Parser(setting& set, system_c& sys) {
 	in_s(input);
 	// continue
 	if ((!input.compare("step")) || (!input.compare("s"))) {
-		t.millisec += 1000 * sys.precision;
-		t.Update();
+		t.AddSec(sys.precision);
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
@@ -74,7 +73,7 @@ time_sim Parser(setting& set, system_c& sys) {
 		sys.NewObj(set);
 	// parser_Quit / exit
 	else if (!(input.compare("quit")) || (!input.compare("exit")))
-		t = parser_Quit(set, sys, sys.stime);
+		t = parser_Quit(set, sys, sys.stime, quit);
 	// save
 	else if (!input.compare("save"))
 		sys.Save(set);
@@ -142,7 +141,7 @@ void parser_Distance(const setting& set, system_c& sys){
 /***
  * This function prepare the parser to parser_Quit
  */
-time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now){
+time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, BYTE& quit){
 		
 	time_sim t;	 	//this is the escape time
 	string input;		
@@ -160,7 +159,7 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now){
 	}
 	// now we prepare the parser_Quit event
 	t = now;
-	t.year = QUIT_SIG;		// <------ THIS IS THE SIGNAL THAT WE WANT TO QUIT
+	quit = YES;
 	return t;
 }
 	
@@ -205,10 +204,8 @@ void parser_Information(const setting& set, system_c& sys) {
 	// Generic informations about the system
 	OPS(set, "Informations\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object informations", var);
 	in_s(input);
-	if(!input.compare("n")){
-		OPS(set, "Insert a new command", nullptr);
+	if(!input.compare("n"))
 		return;
-	}
 	// information about a precise object
 	obj = sys.SearchObj(input);
 	if(obj == nullptr){
@@ -239,25 +236,22 @@ void parser_Information(const setting& set, system_c& sys) {
  */
 time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 		
-	time_sim t;
-		
-	OPS(set, "Wait\n\nInsert the settingrmation about how much simulation-time you want to wait\n<year> <day> <hour> <minute> <second> <millisecond>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
+	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
 	//scanf the time
-	scanf("%ld", &t.year);
-	scanf("%d", &t.day);
-	scanf("%d", &t.hour);
-	scanf("%d", &t.min);
-	scanf("%d", &t.sec);
-	scanf("%d", &t.millisec);
-	// elabore the new time and return
-	t.millisec += now.millisec;
-	t.sec += now.sec;
-	t.min += now.min;
-	t.hour += now.hour;
-	t.day += now.day;
-	t.year += now.year;
-	t.Update();
-	return t;
+	int y, d, h, m;
+	float s;
+	// year
+	cin >> y;
+	// day
+	cin >> d;
+	// hour
+	cin >> h;
+	// minute
+	cin >> m;
+	// second
+	cin >> s;
+	
+	return time_sim(y, d, h, m, s);
 }
 	
 /***
@@ -266,40 +260,39 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 
 	time_sim t;
-	void *var[7];
+	void const *var[7];
 	// set the var to give to OPS
-	var[0] = &now.year;
-	var[1] = &now.day;
-	var[2] = &now.hour;
-	var[3] = &now.min;
-	var[4] = &now.sec;
-	var[5] = &now.millisec;
+	var[0] = &now.Year();
+	var[1] = &now.Day();
+	var[2] = &now.Hour();
+	var[3] = &now.Minute();
+	var[4] = &now.Second();
 	var[6] = &precision;
 	
-	OPS(set, "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second> <millisecond>\nThe actual time is: YEAR %i DAY %i TIME %i:%i:%i.%i\nThe jump will be made whit an error of max %l seconds" , var);
+	OPS(set, "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds" , var);
 	while(1) {
+		int y, d, h, m;
+		float s;
 		// year
-		scanf("%ld", &t.year);
+		cin >> y;
 		// day
-		scanf("%d", &t.day);
+		cin >> d;
 		// hour
-		scanf("%d", &t.hour);
+		cin >> h;
 		// minute
-		scanf("%d", &t.min);
+		cin >> m;
 		// second
-		scanf("%d", &t.sec);
-		// millisecond
-		scanf("%d", &t.millisec);
-		// update the time
-		t.Update();
+		cin >> s;
+		
+		time_sim t(y, d, h, m, s);
+		
 		if(t.Compare(now) == 1)	{ // if the time given is 
 			// Error message if the time given isn't valid
 			t = now;
-			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%i.%i\nThe jump will be made whit an error of max %l seconds", var);
+			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds", var);
 		}
 		else
 			break;
 	}
-	t.Update();
 	return t;
 }

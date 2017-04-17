@@ -88,6 +88,11 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 				buf << (long double) *((long double *)var[var_pos]);
 				var_pos++;
 			}
+			// a float value to print
+			else if(phrase[phrase_pos] == 'f') {
+				buf << (float) *((float *)var[var_pos]);
+				var_pos++;
+			}
 			// a string to print
 			else if(phrase[phrase_pos] == 's') {
 				buf << (string) *((string *) var[var_pos]);

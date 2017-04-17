@@ -29,18 +29,64 @@
 
 // the time structure
 class time_sim {	// the time of a simulation
-	public:
-		QWORD year;
+	
+	private:
+		int year;
 		int day;
 		int hour;
 		int min;
-		int sec;
-		int millisec;
+		float sec;
 	
-		BYTE Compare(time_sim&);	// return 0 if the given is bigger
-								// 1 if is smaller and 2 are equal
-		void Update();			// format correctly 
-								// (for example from 61 sec make 1 min and 1 sec)
+		void Sync();
+	
+	public:
+	
+		inline const int& Year(){
+			return year;
+		}
+		inline const int& Day(){
+			return day;
+		}
+		inline const int& Hour(){
+			return hour;
+		}
+		inline const int& Minute(){
+			return min;
+		}
+		inline const float& Second(){
+			return sec;
+		}
+		
+		inline void AddSec(float s){
+			sec += s;
+			Sync();
+		}
+		
+		BYTE Compare(const time_sim&);	// return 0 if the given is bigger 1 if is smaller and 2 are equal
+		
+		time_sim operator+ (const time_sim& t);
+		
+		inline time_sim(const time_sim& t) {
+			*this = t;
+		}
+		
+		inline time_sim(int nyear, int nday, int nhour, int nmin, float nsec) {
+			year = nyear;
+			day = nday;
+			hour = nhour;
+			min = nmin;
+			sec = nsec;
+			
+			Sync();
+		}
+		
+		inline time_sim() {
+			year = 0;
+			day = 0;
+			hour = 0;
+			min = 0;
+			sec = 0.0;
+		}
 
 };
 #endif

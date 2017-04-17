@@ -43,8 +43,8 @@ BYTE Shell (setting& set, typeSTR& stype) {
 		case LOAD_SIG:
 			sys = new system_c(set, stype, result);
 			break;
-		case QUIT_SIG:
-			return QUIT_SIG;
+		case ABORTED_SIG:
+			return ABORTED_SIG;
 	}
 		
 		
@@ -57,13 +57,14 @@ BYTE Shell (setting& set, typeSTR& stype) {
 	/*
 	if (set.vmode == V_OPS)
 	*/
-		while(stime.year != QUIT_SIG) {
+		BYTE quit = NO;
+		while(quit == NO) {
 			// call the phisic engine
 			sys->Physic (stime);
 			// Output
 			OPSo (set, *sys);
 			// call the instruction parser and ask him for destination time
-			stime = Parser(set, *sys);
+			stime = Parser(set, *sys, quit);
 			// loading message
 			OPS(set, "Loading...", nullptr);
 		}

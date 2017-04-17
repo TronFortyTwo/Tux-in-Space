@@ -390,10 +390,7 @@ void object::AI_Hunter(system_c& sys) {
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
 	// velx : distance x = vel : distance
-	long double temp = HUNTER_ACCELERATION * sys.precision / Distance(*closest);
-	vel.x -= (pos.x - closest->pos.x) * temp;
-	vel.y -= (pos.y - closest->pos.y) * temp;
-	vel.z -= (pos.z - closest->pos.z) * temp;
+	vel = vel - (pos - closest->pos * HUNTER_ACCELERATION * sys.precision / Distance(*closest));
 }
 
 
@@ -441,13 +438,9 @@ void object::Impact_Anaelastic(object& obj) {
 	// the mass is the sum
 	mass = obj.mass + mass;
 	// the coordinates are the average
-	pos.x = ((pos.x * mass) + (obj.pos.x * obj.mass)) / (obj.mass + mass);
-	pos.y = ((pos.y * mass) + (obj.pos.y * obj.mass)) / (obj.mass + mass);
-	pos.z = ((pos.z * mass) + (obj.pos.z * obj.mass)) / (obj.mass + mass);
+	pos = ((pos * mass) + (obj.pos * obj.mass)) / (obj.mass + mass);
 	// the velocity
-	vel.x = ((vel.x * mass) + (obj.vel.x * obj.mass)) / (obj.mass + mass);
-	vel.y = ((vel.y * mass) + (obj.vel.y * obj.mass)) / (obj.mass + mass);
-	vel.z = ((vel.z * mass) + (obj.vel.z * obj.mass)) / (obj.mass + mass);
+	vel = ((vel * mass) + (obj.vel * obj.mass)) / (obj.mass + mass);
 	// to calculate the radius we calculate the volum of the two object,
 	radius = RadiusestoVolume(radius, obj.radius);
 	

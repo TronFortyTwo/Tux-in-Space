@@ -60,7 +60,7 @@ int menu_main(setting& set) {
 				in_s();
 				break;
 			case 5:
-				return QUIT_SIG;
+				return ABORTED_SIG;
 		}
 	}
 	return BAD_SIG;

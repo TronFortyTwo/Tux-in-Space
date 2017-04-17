@@ -23,18 +23,13 @@
 #include "time.h"
 
 /**
- * The function update time make the time right, for example whitout 72 mins(max mins are 59), -444 hours...
+ * The function sync time make the time right, for example whitout 72 mins(max mins are 59), -444 hours...
  * Fields that aren't in the range are corrected putting the extra in the next fields
  * Fields <0 are setted to 0
  */
-void time_sim::Update() {
+void time_sim::Sync() {
 	
-	// Over the range
-	while( millisec>=1000 ) {
-		sec++;
-		millisec -= 1000;
-	}
-	while( sec >= 60 ) {
+	while( sec >= 60.0 ) {
 		min++;
 		sec -= 60;
 	}
@@ -60,7 +55,7 @@ void time_sim::Update() {
  * NOTE:
  * the times must is written correctly (for example not 1024 hour and 71 minutes)
  */
-BYTE time_sim::Compare(time_sim& t) {
+BYTE time_sim::Compare(const time_sim& t) {
 	if (year > t.year)
 		return 0;
 	if (year < t.year)
@@ -81,9 +76,19 @@ BYTE time_sim::Compare(time_sim& t) {
 		return 0;
 	if (sec < t.sec)
 		return 1;
-	if (millisec > t.millisec)
-		return 0;
-	if (millisec < t.millisec)
-		return 1;
 	return 2;
+}
+
+// Sum operator
+time_sim time_sim::operator+ (const time_sim& t) {
+	
+	time_sim sum(t.year + year,
+				t.day + day,
+				t.hour + hour,
+				t.min + min,
+				t.sec + sec);
+
+	sum.Sync();
+
+	return sum;
 }
