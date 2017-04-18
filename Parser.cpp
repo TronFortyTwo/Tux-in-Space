@@ -251,7 +251,15 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	// second
 	cin >> s;
 	
-	return time_sim(y, d, h, m, s);
+	time_sim t (y, d, h, m, s);
+	
+	// check the time is future
+	if (now.Compare(t) == 1){
+		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...", nullptr);
+		in_s();
+	}
+	
+	return t;
 }
 	
 /***
