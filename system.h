@@ -54,6 +54,7 @@ class system_c {
 		// constructor
 		system_c (const setting&, typeSTR&);		// Init the system
 		system_c (const setting&, typeSTR&, BYTE&);	// Init the system loading it from a file
+		inline system_c () = default;
 	
 	private:
 		// internal functions

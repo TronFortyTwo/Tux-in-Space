@@ -131,9 +131,9 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 	// open the file
 	ifstream sysf(path);
 	if (!sysf) {
-		OPS_Error(set, "A system whit that name doesn't exist! Type something to continue and return to the main menu", nullptr);
-		in_s();
+		*this = system_c();
 		result = FILE_ERR_SIG;
+		return;
 	}
 	// set the name
 	name = new_name;
@@ -159,6 +159,8 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
 			debug_Printf(o[i].name);
 			#endif
+			result = CORRUPTED_SIG;
+			return;
 		}
 	}
 	stype = &str;
