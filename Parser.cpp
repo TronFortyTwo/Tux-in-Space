@@ -257,6 +257,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	if (now.Compare(t) == 1){
 		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...", nullptr);
 		in_s();
+		return now;
 	}
 	
 	return t;
