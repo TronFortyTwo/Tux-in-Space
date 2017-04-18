@@ -32,13 +32,13 @@ class object;
 class type;
 class typeSTR;
 
-void debug_Init(); 					// init the debug target
-void debug_Stype(const typeSTR&);			// Print in the debug target a structure tStype given
-void debug_Printf(const std::string&);// Print in the debug target a string
-void debug_Object(const object&);			// Print in the debug target an object
-void debug_Int(int);				// Print in the debug target an int number
-void debug_Double(double n);		// Print in the debug target a long double number
-void debug_Type(const type&);				// Print in the debug target a type
+void debug_Init(); 						// init the debug target
+void debug_Stype(const typeSTR&);		// Print in the debug target a structure tStype given
+void debug_Printf(const std::string&);	// Print in the debug target a string
+void debug_Object(const object&);		// Print in the debug target an object
+void debug_Int(int);					// Print in the debug target an int number
+void debug_Double(double n);			// Print in the debug target a long double number
+void debug_Type(const type&);			// Print in the debug target a type
 
 #endif
 #endif

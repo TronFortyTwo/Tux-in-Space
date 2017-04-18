@@ -50,7 +50,7 @@ int main () {
 	}
 	
 	// print loading and license banner
-	OPS(set, "LOADING CSPACE........\n\nCSpace - space simulator\n\nCopyright (C) 2016  emanuele.sorce@hotmail.com\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 or compatibles", nullptr);
+	OPS(set, "LOADING CSPACE........\n\n" BANNER, nullptr);
 	
 	// The big type STRucture
 	BYTE result;
