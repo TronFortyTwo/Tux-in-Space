@@ -271,11 +271,18 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 	time_sim t;
 	void const *var[7];
 	// set the var to give to OPS
-	var[0] = &now.Year();
-	var[1] = &now.Day();
-	var[2] = &now.Hour();
-	var[3] = &now.Minute();
-	var[4] = &now.Second();
+	int y, d, h, m;
+	float s;
+	y = now.Year();
+	d = now.Day();
+	h = now.Hour();
+	m = now.Minute();
+	s = now.Second();
+	var[0] = &y;
+	var[1] = &d;
+	var[2] = &h;
+	var[3] = &m;
+	var[4] = &s;
 	var[6] = &precision;
 	
 	OPS(set, "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds" , var);

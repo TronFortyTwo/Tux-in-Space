@@ -28,23 +28,14 @@
 using namespace std;
 
 void OPSo (const setting& set, system_c& sys) {
+	
+	string buffer;
 		
-	// this array contein the screen to send to OPS for printing
-	stringstream buffer;
-		
-	// Printf the line whit the time and two lines of '-'
-	buffer << "TIME: Year " 
-		<< sys.stime.Year()
-		<< " | Day "
-		<< sys.stime.Day()
-		<< " | "
-		<< sys.stime.Hour()
-		<< ":"
-		<< sys.stime.Minute()
-		<< ":"
-		<< sys.stime.Second()
-		// two lines of '-'
-		<< "\n%f-%f-";
+	// the line whit the time and two lines of '-'
+	buffer += "TIME: ";
+	buffer += sys.stime.String();
+	// two lines of '-'
+	buffer += "\n%r-%r-";
 	
 	// if there isn't any object
 	if (sys.o.size()) {
@@ -54,27 +45,27 @@ void OPSo (const setting& set, system_c& sys) {
 			object &t = sys.o[i];
 			
 			// Tell the name, type and mass, the x, the y and the z. conclude whit a line of '-'
-			buffer << t.name
-				<< " | "
-				<< t.typ->name
-				<< "\nX axis: "
-				<< t.pos.x
-				<< " Km with a velocity of "
-				<< t.vel.x
-				<< " Km/s\nY axis: "
-				<< t.pos.y
-				<< " Km with a velocity of "
-				<< t.vel.y
-				<< " Km/s\nZ axis: "
-				<< t.pos.z
-				<< " Km with a velocity of "
-				<< t.vel.z
-				<< " Km/s\n%f-";
+			buffer += t.name;
+			buffer += " | ";
+			buffer += t.typ->name;
+			buffer += "\nX axis: ";
+			buffer += t.pos.x;
+			buffer += " Km with a velocity of ";
+			buffer += t.vel.x;
+			buffer +=" Km/s\nY axis: ";
+			buffer += t.pos.y;
+			buffer += " Km with a velocity of ";
+			buffer += t.vel.y;
+			buffer += " Km/s\nZ axis: ";
+			buffer += t.pos.z;
+			buffer += " Km with a velocity of ";
+			buffer += t.vel.z;
+			buffer += " Km/s\n%r-";
 		}
 	}
 	else
-		buffer << "\n&t1The system is empty.&t2\nUse the 'create' command to create a new object\nUse the 'help' command for help";
+		buffer += "\n&t1The system is empty.&t2\nUse the 'create' command to create a new object\nUse the 'help' command for help";
 	
 	// Print all
-	OPS(set, buffer.str(), nullptr);
+	OPS(set, buffer, nullptr);
 }

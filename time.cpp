@@ -22,6 +22,8 @@
 
 #include "time.h"
 
+using namespace std;
+
 /**
  * The function sync time make the time right, for example whitout 72 mins(max mins are 59), -444 hours...
  * Fields that aren't in the range are corrected putting the extra in the next fields
@@ -91,4 +93,21 @@ time_sim time_sim::operator+ (const time_sim& t) {
 	sum.Sync();
 
 	return sum;
+}
+
+// Return a string with the current time
+string time_sim::String(){
+	
+	string time = "Year ";
+	time += to_string(year);
+	time += " day ";
+	time += to_string(day);
+	time += " | ";
+	time += to_string(hour);
+	time += ":";
+	time += to_string(min);
+	time += ":";
+	time += to_string(sec);
+	
+	return time;
 }

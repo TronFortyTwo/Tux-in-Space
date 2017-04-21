@@ -65,6 +65,10 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 	// the buffer to print, and his position
 	stringstream buf;
 
+	// Anti seg-fault
+	BYTE arg = NO;
+	if(var != nullptr)
+		arg = YES;
 
 	// PART ONE: writing the buffer. Elaborate the input and write it in buf
 	while(1) {
@@ -75,31 +79,76 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			phrase_pos++;
 			// an int value to print
 			if(phrase[phrase_pos] == 'i') {
-				buf << (int) *((int *) var[var_pos]);
-				var_pos++;
+				if(arg == YES) {
+					buf << (int) *((int *) var[var_pos]);
+					var_pos++;
+				}
+				else {
+					#if DEBUG
+					debug_Printf(IRREGULARITY" OPS: While trying to print:");
+					debug_Printf(phrase);
+					debug_Printf("An unexpected integer dinamic value has been requested.");
+					#endif
+				}
 			}
 			// an unsigned int value to print
 			if(phrase[phrase_pos] == 'u') {
-				buf << (unsigned int) *((unsigned int *) var[var_pos]);
-				var_pos++;
+				if(arg == YES){
+					buf << (unsigned int) *((unsigned int *) var[var_pos]);
+					var_pos++;
+				}
+				else{
+					#if DEBUG
+					debug_Printf(IRREGULARITY" OPS: While trying to print:");
+					debug_Printf(phrase);
+					debug_Printf("An unexpected unsigned integer dinamic value has been requested.");
+					#endif
+				}
 			}
 			// a long double value to print
 			else if(phrase[phrase_pos] == 'l') {
-				buf << (long double) *((long double *)var[var_pos]);
-				var_pos++;
+				if(arg == YES){
+					buf << (long double) *((long double *)var[var_pos]);
+					var_pos++;
+				}
+				else {
+					#if DEBUG
+					debug_Printf(IRREGULARITY" OPS: While trying to print:");
+					debug_Printf(phrase);
+					debug_Printf("An unexpected long double dinamic value has been requested.");
+					#endif
+				}
 			}
 			// a float value to print
 			else if(phrase[phrase_pos] == 'f') {
-				buf << (float) *((float *)var[var_pos]);
-				var_pos++;
+				if (arg == YES){
+					buf << (float) *((float *)var[var_pos]);
+					var_pos++;
+				}
+				else {
+					#if DEBUG
+					debug_Printf(IRREGULARITY" OPS: While trying to print:");
+					debug_Printf(phrase);
+					debug_Printf("An unexpected float dinamic value has been requested.");
+					#endif
+				}
 			}
 			// a string to print
 			else if(phrase[phrase_pos] == 's') {
-				buf << (string) *((string *) var[var_pos]);
-				var_pos++;
+				if (arg == YES){
+					buf << (string) *((string *) var[var_pos]);
+					var_pos++;
+				}
+				else {
+					#if DEBUG
+					debug_Printf(IRREGULARITY" OPS: While trying to print:");
+					debug_Printf(phrase);
+					debug_Printf("An unexpected string dinamic value has been requested.");
+					#endif
+				}
 			}
-			// a line to print , f mean '(f)ill line' | example: %f. => a line of '.' NOTE: whitout '\n'
-			else if(phrase[phrase_pos] == 'f') {
+			// a line to print , r means 'row' | example: %l. => a line of '.' NOTE: whitout '\n'
+			else if(phrase[phrase_pos] == 'r') {
 				phrase_pos++;
 				for(unsigned int i=0; i!=set.width-TWOFRAMELEN; i++) {
 					buf << phrase[phrase_pos];

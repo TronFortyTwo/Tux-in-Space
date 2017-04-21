@@ -41,19 +41,19 @@ class time_sim {	// the time of a simulation
 	
 	public:
 	
-		inline const int& Year(){
+		inline int Year(){
 			return year;
 		}
-		inline const int& Day(){
+		inline int Day(){
 			return day;
 		}
-		inline const int& Hour(){
+		inline int Hour(){
 			return hour;
 		}
-		inline const int& Minute(){
+		inline int Minute(){
 			return min;
 		}
-		inline const float& Second(){
+		inline float Second(){
 			return sec;
 		}
 		
@@ -61,6 +61,9 @@ class time_sim {	// the time of a simulation
 			sec += s;
 			Sync();
 		}
+		
+		// Return a string with the time
+		std::string String();
 		
 		BYTE Compare(const time_sim&);	// return 0 if the given is bigger 1 if is smaller and 2 if are equal
 		

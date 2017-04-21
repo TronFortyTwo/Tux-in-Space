@@ -74,7 +74,7 @@ int main () {
 	// EXITING THE PROGRAM
 		
 	// goodbye message
-	OPS (set, "CSPACE\n\n\n%f-&t5SEE YOU LATER!", nullptr);
+	OPS (set, "CSPACE\n\n\n%r-&t5SEE YOU LATER!", nullptr);
 	
 	return EXIT_SUCCESS;
 }

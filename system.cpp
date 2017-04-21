@@ -121,6 +121,8 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 	std::string path;		// the system file (path)
 	int num_obj;
 	
+	result = GOOD_SIG;
+	
 	// ask which system
 	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", nullptr);
 	in_s(new_name);
@@ -131,7 +133,6 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 	// open the file
 	ifstream sysf(path);
 	if (!sysf) {
-		*this = system_c();
 		result = FILE_ERR_SIG;
 		return;
 	}
@@ -160,7 +161,6 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 			debug_Printf(o[i].name);
 			#endif
 			result = CORRUPTED_SIG;
-			return;
 		}
 	}
 	stype = &str;
@@ -282,8 +282,6 @@ void system_c::physic_Impacts() {
 		
 	// counter
 	unsigned int l;
-	// the distance
-	long double dist;
 	// if has been computed some impact
 	BYTE impacts = NO;
 	
@@ -292,9 +290,8 @@ void system_c::physic_Impacts() {
 			// if are the same object continue
 			if(l == i)
 				continue;
-			dist = o[i].Distance(o[l]);
 			// if doesn't hit continue
-			if (o[i].radius + o[l].radius < dist)
+			if (o[i].radius + o[l].radius < o[i].Distance(o[l]))
 				continue;
 			impacts = YES;
 			
@@ -322,7 +319,7 @@ void system_c::physic_Impacts() {
 			}
 		}
 	}
-	// If some impacts happened, restart to recheck for impact from start
+	// If some impacts happened, restart rechecking for impact from start
 	if (impacts == YES)
 		physic_Impacts();
 }

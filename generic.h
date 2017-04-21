@@ -55,17 +55,17 @@
 #define Y_AXIS 1
 #define Z_AXIS 2
 
-// A three char string that represent a picture of ALLERT or ATTENCTION
+// A string that represents a picture of ALLERT or ATTENCTION
 #define IRREGULARITY "(!)"
 	
 // Values returned by functions
-#define GOOD_SIG		1	// good
-#define BAD_SIG			2	// generic bad
-#define FILE_ERR_SIG	3	// file not found
-#define CORRUPTED_SIG	4	// file ureadable
-#define NEW_SIG			5	// new
-#define LOAD_SIG		6	// load
-#define ABORTED_SIG		7	// aborted action
+#define GOOD_SIG		0	// good
+#define BAD_SIG			1	// generic bad
+#define FILE_ERR_SIG	2	// file not found
+#define CORRUPTED_SIG	3	// file ureadable
+#define NEW_SIG			4	// new
+#define LOAD_SIG		5	// load
+#define ABORTED_SIG		6	// aborted action
 
 // The video mode
 #define V_OPS 0
@@ -74,11 +74,11 @@
 // The files and directoryes
 #define DEBUG_FILE "debug.dbg"				// Where are printed debug information
 #define TYPE_DATABASE_FILE "type.typ"		// Where read type information
-#define CONFIGURATION_FILE "cspace.conf"	// Where read configuration inormation
+#define CONFIGURATION_FILE "cspace.conf"	// configuration file
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
 
-#define BANNER "Code hosted on GitHub: TronFourtyTwo/CSpace\n\nLICENSE: \
+#define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/CSpace\n\nLICENSE: \
 GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\
 \n\nThis program is free software; you can redistribute it and/or modify \
 it under the terms of the GNU General Public License as published by the \
