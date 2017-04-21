@@ -27,7 +27,7 @@
 
 class objdata{
 	public:
-		BYTE data_template;
+		signal data_template;
 	
 };
 

@@ -51,24 +51,27 @@ void OPS_Line(int, const string&, int);
 void OPS(const setting& set, const std::string& phrase, const void *const* const var) {
 	
 	// counter for lines
-	UWORD linedone;
+	unsigned int linedone;
 	// counter for columns
-	UWORD columndone;
+	unsigned int columndone;
 	// the number of character of phrase elaborated
-	QWORD phrase_pos = 0;
+	unsigned int phrase_pos = 0;
 	// the number of space to leave blank at the start of every line (max one digit)
-	BYTE indentation = 0;
-	// YES if the buf is finished
-	BYTE bufend = NO;
+	unsigned int indentation = 0;
+	// the buf is finished?
+	bool bufend = false;
 	// the position in the var array
-	QWORD var_pos = 0;
+	unsigned int var_pos = 0;
 	// the buffer to print, and his position
 	stringstream buf;
 
 	// Anti seg-fault
-	BYTE arg = NO;
+	bool arg;
 	if(var != nullptr)
-		arg = YES;
+		arg = true;
+	else
+		arg = false;
+	
 
 	// PART ONE: writing the buffer. Elaborate the input and write it in buf
 	while(1) {
@@ -79,7 +82,7 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			phrase_pos++;
 			// an int value to print
 			if(phrase[phrase_pos] == 'i') {
-				if(arg == YES) {
+				if(arg == true) {
 					buf << (int) *((int *) var[var_pos]);
 					var_pos++;
 				}
@@ -93,7 +96,7 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			}
 			// an unsigned int value to print
 			if(phrase[phrase_pos] == 'u') {
-				if(arg == YES){
+				if(arg == true){
 					buf << (unsigned int) *((unsigned int *) var[var_pos]);
 					var_pos++;
 				}
@@ -107,7 +110,7 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			}
 			// a long double value to print
 			else if(phrase[phrase_pos] == 'l') {
-				if(arg == YES){
+				if(arg == true){
 					buf << (long double) *((long double *)var[var_pos]);
 					var_pos++;
 				}
@@ -121,7 +124,7 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			}
 			// a float value to print
 			else if(phrase[phrase_pos] == 'f') {
-				if (arg == YES){
+				if (arg == true){
 					buf << (float) *((float *)var[var_pos]);
 					var_pos++;
 				}
@@ -135,7 +138,7 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 			}
 			// a string to print
 			else if(phrase[phrase_pos] == 's') {
-				if (arg == YES){
+				if (arg == true){
 					buf << (string) *((string *) var[var_pos]);
 					var_pos++;
 				}

@@ -24,17 +24,11 @@
 #ifndef generich
 #define generich
 
-// Is important the YES = ON and OFF = NO
-#define ON 1
-#define OFF 0
-#define NO OFF
-#define YES ON
-
 /////////////////////////////////////////////////////
 // This is the flag that active/deactive debug. (ON/OFF)
 // A debugless binary is lighter and faster
 
-#define DEBUG ON
+#define DEBUG true
 
 /////////////////////////////////////////////////////
 
@@ -51,25 +45,27 @@
 
 		
 // The three axis must have different codes
-#define X_AXIS 0
-#define Y_AXIS 1
-#define Z_AXIS 2
+enum class axis3 {x, y, z};
+enum class axis2 {x, y};
 
-// A string that represents a picture of ALLERT or ATTENCTION
+// A string that represents a picture of ALLERT, ATTENCTION, ERROR or similar
 #define IRREGULARITY "(!)"
 	
-// Values returned by functions
-#define GOOD_SIG		0	// good
-#define BAD_SIG			1	// generic bad
-#define FILE_ERR_SIG	2	// file not found
-#define CORRUPTED_SIG	3	// file ureadable
-#define NEW_SIG			4	// new
-#define LOAD_SIG		5	// load
-#define ABORTED_SIG		6	// aborted action
+// Value returned by functions
+
+enum class signal{
+	good,		// good
+	file_err,	// problem with file accessing or reading/writing
+	corrupted,
+	create,
+	load,
+	aborted		// aborted action
+};
+
+enum class comparison{ major, minor, equal };
 
 // The video mode
-#define V_OPS 0
-#define V_GL 1
+enum class videomode{OPS, GL};
 
 // The files and directoryes
 #define DEBUG_FILE "debug.dbg"				// Where are printed debug information
@@ -88,15 +84,5 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  \
 See the GNU General Public License version 3 for more details.\n\nYou should \
 have received a copy of the GNU General Public License version 3 along with this program; \
 if not, write to the Free Software Foundation, Inc."
-
-// More precise data types
-typedef 	int8_t		BYTE;
-typedef 	int16_t 	WORD;
-typedef		int32_t		DWORD;
-typedef		int64_t		QWORD;
-typedef 	uint8_t		UBYTE;
-typedef 	uint16_t 	UWORD;
-typedef		uint32_t	UDWORD;
-typedef		uint64_t	UQWORD;
 
 #endif

@@ -27,7 +27,7 @@ using namespace std;
 /***
  * Build the type structure reading it from a file
  */
-typeSTR::typeSTR (BYTE& result) {
+typeSTR::typeSTR (signal& result) {
 	
 	string buf;
 	int num = 0;
@@ -37,7 +37,7 @@ typeSTR::typeSTR (BYTE& result) {
 		// the stream to use
 		ifstream stream(TYPE_DATABASE_FILE);
 		if(!stream) {
-			result = FILE_ERR_SIG;
+			result = signal::file_err;
 			return;
 		}
 		
@@ -163,17 +163,17 @@ typeSTR::typeSTR (BYTE& result) {
 			// HUNTED:
 			if(!buf.compare(0, 8,"HUNTED: ")) {
 				if(buf[8] == 'N')
-					t[i].hunted = NO;
+					t[i].hunted = false;
 				else
-					t[i].hunted = YES;
+					t[i].hunted = true;
 				in_hfs(buf, stream);
 			}
 			// HUNTER:
 			if(!buf.compare(0, 8,"HUNTER: ")) {
 				if(buf[8] == 'N')
-					t[i].hunter = NO;
+					t[i].hunter = false;
 				else
-					t[i].hunter = YES;
+					t[i].hunter = true;
 				in_hfs(buf, stream);
 			}
 			// PRODUCT:
@@ -316,13 +316,13 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		
 		// if the value point to a type, set this type as pointer and continue if the type is parent of some type, else exit the loop
 		if (input <= maxn) {
-			BYTE flag = NO;		// NO if the type haven't any child  
+			bool child = false;		// NO if the type haven't any child  
 			commonparent = types_listed[input];
 			for(unsigned int i=0; i!=t.size(); i++) {
 				if(commonparent == t[i].parent)
-					flag = YES;
+					child = true;
 			}
-			if(flag == NO) 
+			if(child == false) 
 				return *types_listed[input];
 		}
 		// if is the generic xxx button

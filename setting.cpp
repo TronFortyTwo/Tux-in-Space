@@ -28,7 +28,7 @@
 #define DEFAULT_OPS_WIDTH 			88
 #define DEFAULT_DEBUG 				OFF
 #define DEFAULT_OPS_NUMPRECISION 	6
-#define DEFAULT_V_MODE 				V_OPS
+#define DEFAULT_VIDEO 				videomode::OPS
 
 using namespace std;
 
@@ -43,7 +43,11 @@ void setting::Save() {
 		debug_Printf(IRREGULARITY" setting::Save() Can't open the - " CONFIGURATION_FILE " - file");
 	}
 	#endif
-	cf << vmode << endl << height << endl << width << endl << numprecision << endl;
+	if (vmode == videomode::OPS)
+		cf << "O";	// OPS
+	else
+		cf << "G";	// Graphic
+	cf << endl << height << endl << width << endl << numprecision << endl;
 }
 	
 /***
@@ -54,8 +58,13 @@ setting::setting() {
 	ifstream cf(CONFIGURATION_FILE);
 	// If there is a file
 	if(cf) {
+		char _vmode;
 		// scan the vmode
-		cf >> vmode;
+		cf >> _vmode;
+		if (_vmode == 'O')
+			vmode = videomode::OPS;
+		else
+			vmode = videomode::GL;
 		// scan OPS settings
 		cf >> height;
 		cf >> width;
@@ -74,7 +83,7 @@ void setting::Defaults(){
 	height = DEFAULT_OPS_HEIGHT;
 	width = DEFAULT_OPS_WIDTH;
 	numprecision = DEFAULT_OPS_NUMPRECISION;
-	vmode = DEFAULT_V_MODE;
+	vmode = DEFAULT_VIDEO;
 }
 
 /***
@@ -82,7 +91,7 @@ void setting::Defaults(){
  * NOTE:
  * 	This function works only in *nix! Is not portable!
  */
-BYTE setting::InitDir() {
+signal setting::InitDir() {
 	// The state of the directories
 	struct stat st = {0};
 	// Check for the object directory and Create it if not present
@@ -90,16 +99,15 @@ BYTE setting::InitDir() {
 		mkdir(OBJECT_PATH, 0700);
 		// Check that the directories has been created succefully
 		if (stat(OBJECT_PATH, &st) == -1)
-			return FILE_ERR_SIG;
+			return signal::file_err;
 	}
 	// Check for the system directory and Create it if not present
 	if (stat(SYSTEM_PATH, &st) == -1) { 
 		mkdir(SYSTEM_PATH, 0700);	
 		// Check that the directories has been created succefully
 		if (stat(SYSTEM_PATH, &st) == -1)
-			return FILE_ERR_SIG;
+			return signal::file_err;
 	}
-	
 		
-	return GOOD_SIG;
+	return signal::good;
 }

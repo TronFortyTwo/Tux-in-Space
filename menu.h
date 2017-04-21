@@ -32,7 +32,7 @@
 class typeSTR;
 
 // Global functions
-int menu_main(setting& set);
+signal menu_main(setting& set);
 void menu_Settings(setting& set);
 
 #endif

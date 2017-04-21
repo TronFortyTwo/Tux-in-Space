@@ -33,6 +33,6 @@
 
 class typeSTR;
 
-BYTE Shell (setting&, typeSTR&);
+bool Shell (setting&, typeSTR&);
 
 #endif

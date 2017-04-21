@@ -57,8 +57,8 @@ class object {
 		void 		GetBigger 		(object&, object *&);		// Put the address of the bigger of the two object in the third position
 		void 		Save			(const setting&);			// Save the object in a file
 		double 		Distance		(const object&);			// Compute the distance between this objects and another one
-		BYTE 		Read 			(std::ifstream&, typeSTR&);	// Read from a file an object
-		BYTE 		ReadComplete 	(std::ifstream&, typeSTR&);	// Read from a file an object whit coordinates
+		signal 		Read 			(std::ifstream&, typeSTR&);	// Read from a file an object
+		signal 		ReadComplete 	(std::ifstream&, typeSTR&);	// Read from a file an object whit coordinates
 		void 		Write 			(std::ofstream&);			// Write in a file an object already opened
 		void 		WriteComplete	(std::ofstream&);			// Write in a file an object already opened whit coordinates
 		void		UpdateFast		(double);					// Update x, y, z of an object accordingly to his fast and the simulation precision
@@ -69,8 +69,8 @@ class object {
 		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
 		
 		// CONSTRUCTOR:
-		object (typeSTR&, const std::string&, BYTE&);	// Load from a file (UI)
-		object (const setting&, typeSTR&, BYTE&);		// Init using an UI
+		object (typeSTR&, const std::string&, signal&);	// Load from a file (UI)
+		object (const setting&, typeSTR&, signal&);		// Init using an UI
 		object () {;}									// init a free object
 };
 

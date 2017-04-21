@@ -31,7 +31,7 @@ using namespace std;
 void menu_Settings_G(setting&);
 void menu_Settings_OPS(setting&);
 
-int menu_main(setting& set) {
+signal menu_main(setting& set) {
 		
 	// input variable
 	int i;
@@ -46,9 +46,9 @@ int menu_main(setting& set) {
 		// If "new simulation" tell the Shell 0; (uninitialized obj)
 		switch (i) {
 			case 1:
-				return NEW_SIG;
+				return signal::create;
 			case 2:
-				return LOAD_SIG;
+				return signal::load;
 			case 3:
 				menu_Settings(set);
 				break;
@@ -57,10 +57,9 @@ int menu_main(setting& set) {
 				in_s();
 				break;
 			case 5:
-				return ABORTED_SIG;
+				return signal::aborted;
 		}
 	}
-	return BAD_SIG;
 }
 
 /***
@@ -108,6 +107,7 @@ void menu_Settings_G(setting& set) {
 void menu_Settings(setting& set) {
 	
 	int i;
+	string input;
 	void *var[3];
 		
 	while(1) {
@@ -117,17 +117,17 @@ void menu_Settings(setting& set) {
 		// V_MODE
 		if(i == 1){
 			std::string mode;
-			if (set.vmode == V_OPS)
+			if (set.vmode == videomode::OPS)
 				mode = "OPS";
 			else
 				mode = "Graphic";
 			var[0] = &mode;
 			OPS(set, "SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) GRAPHIC --EXPERIMENTAL--", var);
-			cin >> set.vmode;
-			if(set.vmode == 2)
-				set.vmode = V_GL;
+			cin >> input;
+			if (input[0] == 2)
+				set.vmode = videomode::GL;
 			else
-				set.vmode = V_OPS;
+				set.vmode = videomode::OPS;
 		}
 		// OPS settings
 		else if(i == 2)

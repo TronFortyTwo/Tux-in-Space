@@ -45,7 +45,7 @@ template<class T> class vec3 {
 		}
 		
 		// return the greatest axis
-		BYTE greatest();
+		axis3 greatest();
 		
 		// constructors
 		inline vec3(const T& nx, const T& ny, const T& nz){
@@ -75,22 +75,16 @@ template<class T> class vec3 {
 		inline vec3<T> operator/ (const long double& d) {
 			return vec3<T>(x/d, y/d, z/d);
 		}
-		inline T& operator[] (const int n) {
-			if(n == X_AXIS)
+		inline T& operator[] (axis3 n) {
+			if(n == axis3::x)
 				return x;
-			if(n == Y_AXIS)
+			if(n == axis3::y)
 				return y;
-			if(n == Z_AXIS)
-				return z;
-			
-			#if DEBUG
-			debug_Printf("Request for wrong element in the vec3 class using the operator[]");
-			#endif
-			return x;
+			return z;
 		}
 };
 
-// a vector in the plane
+/* a vector in the plane
 template<class T> class vec2{
 	public:
 		T x, y;
@@ -102,7 +96,7 @@ template<class T> class vec2{
 			return vec2<T>(abs(x), abs(y));
 		}
 		// return the greatest axis
-		BYTE greatest();
+		signal greatest();
 		
 		// constructors
 		inline vec2(const T& nx, const T& ny){
@@ -130,10 +124,10 @@ template<class T> class vec2{
 		inline vec2<T> operator/ (const long double d) {
 			return vec2<T>(x/d, y/d);
 		}
-		inline T& operator[] (const int n) {
-			if(n == X_AXIS)
+		inline T& operator[] (axis n) {
+			if(n == x)
 				return x;
-			if(n == Y_AXIS)
+			if(n == y)
 				return y;
 			
 			#if DEBUG
@@ -142,37 +136,38 @@ template<class T> class vec2{
 			return x;
 		}
 };
-
+*/
 
 // functions implementation
 template<class T> T vec3<T>::length() {
 	return sqrtl (z*z + pow(sqrtl(x*x + y*y), 2));
 }
-
+/*
 template<class T> T vec2<T>::length() {
 	return sqrtl (x*x + y*y);
 }
-
-template<class T> BYTE vec3<T>::greatest(){
+*/
+template<class T> axis3 vec3<T>::greatest(){
 	if (x > y) {
 		if(x > z)
-			return X_AXIS;
+			return axis3::x;
 		else
-			return Z_AXIS;
+			return axis3::y;
 	}
 	else {
 		if(y > z)
-			return Y_AXIS;
+			return axis3::y;
 		else
-			return Z_AXIS;
+			return axis3::z;
 	}
 }
-
-template<class T> BYTE vec2<T>::greatest(){
+/*
+template<class T> axis vec2<T>::greatest(){
 	if (x > y)
 		return X_AXIS;
 	else
 		return Y_AXIS;
 }
+*/
 
 #endif

@@ -43,7 +43,7 @@ int main () {
 	#endif
 	
 	// initialize the program directories
-	if(set.InitDir() != GOOD_SIG) {
+	if(set.InitDir() != signal::good) {
 		printf("\n\nCSpace:\n\nError: can't Create program directories!\nPress something to exit");
 		in_s();
 		return EXIT_FAILURE;
@@ -53,15 +53,14 @@ int main () {
 	OPS(set, "LOADING CSPACE........\n\n" BANNER, nullptr);
 	
 	// The big type STRucture
-	BYTE result;
+	signal result;
 	typeSTR stype(result);
 	// error handling
-	if(result != GOOD_SIG){
-		if(result == FILE_ERR_SIG) {
+	if(result != signal::good){
+		if(result == signal::file_err) {
 			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.", nullptr);
 			#if DEBUG
-			debug_Printf("Stype initialization failed! exiting with:");
-			debug_Int(FILE_ERR_SIG);
+			debug_Printf("Stype initialization failed! exiting with file error signal");
 			#endif
 			return EXIT_FAILURE;
 		}
@@ -69,7 +68,7 @@ int main () {
 	
 	// RUNNING
 	while
-		(Shell (set, stype) != ABORTED_SIG);
+		(Shell (set, stype) != false);
 		
 	// EXITING THE PROGRAM
 		

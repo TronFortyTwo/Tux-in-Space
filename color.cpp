@@ -78,20 +78,20 @@ void color::Scan(const setting& set, const color& range_min, const color& range_
 /***
  * This function check if the color is in/out the color range given
  */
-BYTE color::CheckRange(const color& min, const color& max) {
+bool color::CheckRange(const color& min, const color& max) {
 
 	if(red < min.red)
-		return BAD_SIG;
+		return false;
 	if(green < min.green)
-		return BAD_SIG;
+		return false;
 	if(blue < min.blue)
-		return BAD_SIG;
+		return false;
 	if(red > max.red)
-		return BAD_SIG;
+		return false;
 	if(green > max.green)
-		return BAD_SIG;
+		return false;
 	if(blue > max.blue)
-		return BAD_SIG;
+		return false;
 	
-	return GOOD_SIG;
+	return true;
 }

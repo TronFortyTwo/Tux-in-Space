@@ -64,7 +64,7 @@ void object::GetBigger (object& obj, object *& ptr) {
  * 	n is the number of the object to initialize, if in a list
  * 	return ABORTED_SIG if the new object isn't initialized
  */
-object::object (const setting& set, typeSTR& stype, BYTE& result) {
+object::object (const setting& set, typeSTR& stype, signal& result) {
 		
 	//variables
 	void *var[19];
@@ -95,7 +95,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 			comment += "\n" IRREGULARITY " mass out of range";
 		}
 		// irregularity: COLOR
-		if (colour.CheckRange(typ->color_min, typ->color_max) == GOOD_SIG)
+		if (colour.CheckRange(typ->color_min, typ->color_max) == true)
 			color_irregularity.clear();
 		else {
 			color_irregularity = IRREGULARITY;
@@ -189,9 +189,9 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// LOAD
 			case 8: {
 					// load the object in a temporany variable
-					BYTE result;
+					signal result;
 					object temp(stype, name, result);
-					if (result == GOOD_SIG) {
+					if (result == signal::good) {
 						// move cinematic stats
 						temp.pos = pos;
 						temp.vel = vel;
@@ -202,17 +202,10 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 					// negative comment if fail
 					else {
 						comment += "\nCan't load the object! ";
-						if (result == FILE_ERR_SIG)
+						if (result == signal::file_err)
 							comment += "No object whit that name found!";
-						else if (result == CORRUPTED_SIG)
+						else if (result == signal::corrupted)
 							comment += "File corrupted or outdated!";
-						else {
-							comment += "Unregognized error signal, i am a bug! signal me please :)";
-							#if DEBUG
-							debug_Printf("obj_Init: obj_Load returned a signal not parsable. Update the error parser!");
-							debug_Int(result);
-							#endif
-						}
 					}
 				}
 				break;
@@ -224,7 +217,7 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// DONE
 			case 10:
 				if (!(!mass_irregularity.compare(IRREGULARITY)) || (!color_irregularity.compare(IRREGULARITY)) || (!name_irregularity.compare(IRREGULARITY))) {
-					result = GOOD_SIG;
+					result = signal::good;
 					return;
 				}
 				else
@@ -233,19 +226,17 @@ object::object (const setting& set, typeSTR& stype, BYTE& result) {
 		// EXIT WHITOUT SAVE
 			case 11:
 				// quit
-				result = ABORTED_SIG;
+				result = signal::aborted;
 				return;
 		}
 	}
-	
-	result = BAD_SIG;
 	return;
 }
 
 /***
  * This constructor loads from a file the object
  */
-object::object(typeSTR& stype, const string& name, BYTE& result) {
+object::object(typeSTR& stype, const string& name, signal& result) {
 		
 	// From the name, get the file address
 	string path;
@@ -257,7 +248,7 @@ object::object(typeSTR& stype, const string& name, BYTE& result) {
 	// open the file
 	ifstream file(path);
 	if(!file){
-		result = FILE_ERR_SIG;
+		result = signal::file_err;
 		#if DEBUG
 		debug_Printf(IRREGULARITY" Canno't read the object! File not found!");
 		debug_Printf(name);
@@ -300,7 +291,7 @@ void object::Save(const setting& set) {
 
 
 
-BYTE object::Read (ifstream& stream, typeSTR& stype) {
+signal object::Read (ifstream& stream, typeSTR& stype) {
 	// scan the name
 	in_fs(name, stream);
 	// scan the type
@@ -308,7 +299,7 @@ BYTE object::Read (ifstream& stream, typeSTR& stype) {
 	in_fs(buffer, stream);
 	typ = stype.Search(buffer);
 	if (typ == nullptr)
-		return CORRUPTED_SIG;
+		return signal::corrupted;
 	// scan all the other things
 	stream >> colour.red;
 	stream >> colour.green;
@@ -316,13 +307,13 @@ BYTE object::Read (ifstream& stream, typeSTR& stype) {
 	stream >> radius;
 	stream >> mass;
 	
-	return GOOD_SIG;
+	return signal::good;
 }
 
-BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
+signal object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	// read basic info
-	if(Read(stream, stype) == CORRUPTED_SIG)
-		return CORRUPTED_SIG;
+	if(Read(stream, stype) == signal::corrupted)
+		return signal::corrupted;
 	// read complete stuff
 	stream >> pos.x;
 	stream >> pos.y;
@@ -331,7 +322,7 @@ BYTE object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	stream >> vel.y;
 	stream >> vel.z;
 	
-	return GOOD_SIG;
+	return signal::good;
 }
 
 
@@ -373,7 +364,7 @@ void object::AI_Hunter(system_c& sys) {
 	// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
 	// search for huntable objects
 	for(unsigned int i=0; i!=sys.o.size(); i++) {
-		if(sys.o[i].typ->hunted == ON) {
+		if(sys.o[i].typ->hunted == true) {
 			targets.push_back(&sys.o[i]);
 		}
 	}
@@ -468,7 +459,7 @@ void object::Impact_Hunting(object& hed) {
 	// a force variable
 	long double f;
 	// indicate in which direction the hunter is faster
-	BYTE faster;
+	axis3 faster;
 	// the velocity of the hunter in three axis
 	vec3<long double> v;
 	

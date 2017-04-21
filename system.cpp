@@ -30,15 +30,15 @@ using namespace std;
  */
 void system_c::NewObj (const setting& set) {
 	
-	BYTE result;
+	signal result;
 	object temp(set, *stype, result);
-	if(result == GOOD_SIG)
+	if(result == signal::good)
 		o.push_back(temp);
 	#if DEBUG
 	else {
-		if(result != ABORTED_SIG){
+		if(result != signal::aborted){
 			debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
-			debug_Int(result);
+			debug_Signal(result);
 		}
 	}
 	#endif
@@ -115,13 +115,13 @@ system_c::system_c (const setting& set, typeSTR& s) {
 /**
  * Load a system from a file
  */
-system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
+system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 
 	std::string new_name;	// the name of the system
 	std::string path;		// the system file (path)
 	int num_obj;
 	
-	result = GOOD_SIG;
+	result = signal::good;
 	
 	// ask which system
 	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", nullptr);
@@ -133,7 +133,7 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 	// open the file
 	ifstream sysf(path);
 	if (!sysf) {
-		result = FILE_ERR_SIG;
+		result = signal::file_err;
 		return;
 	}
 	// set the name
@@ -155,12 +155,12 @@ system_c::system_c (const setting& set, typeSTR& str, BYTE& result) {
 	o.resize(num_obj);
 	// fscanf for objects datas
 	for(unsigned int i=0; i!=o.size(); i++) {
-		if(o[i].ReadComplete(sysf, str) == CORRUPTED_SIG) {
+		if(o[i].ReadComplete(sysf, str) == signal::corrupted) {
 			#if DEBUG
 			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
 			debug_Printf(o[i].name);
 			#endif
-			result = CORRUPTED_SIG;
+			result = signal::corrupted;
 		}
 	}
 	stype = &str;
@@ -186,7 +186,7 @@ object *system_c::SearchObj(const string& tofind) {
  */
 void system_c::Physic (time_sim& dest) {
 	
-	while (!dest.Compare (stime)) {
+	while (dest.Compare (stime) != comparison::minor) {
 		
 		// GRAVITY
 		Physic_Gravity();
@@ -264,7 +264,7 @@ void system_c::Physic_Gravity() {
 void system_c::Hunter_AI() {
 	// Search hunters
 	for(unsigned int i=0; i!=o.size(); i++)
-		if(o[i].typ->hunter == ON)
+		if(o[i].typ->hunter == true)
 			o[i].AI_Hunter(*this);
 }
 
@@ -283,7 +283,7 @@ void system_c::physic_Impacts() {
 	// counter
 	unsigned int l;
 	// if has been computed some impact
-	BYTE impacts = NO;
+	bool impacts = false;
 	
 	for(unsigned int i=0; i < o.size(); i++) {
 		for (l=0; l < o.size(); l++) {
@@ -293,14 +293,14 @@ void system_c::physic_Impacts() {
 			// if doesn't hit continue
 			if (o[i].radius + o[l].radius < o[i].Distance(o[l]))
 				continue;
-			impacts = YES;
+			impacts = true;
 			
 			// Call the appropriate impact simulator
 			// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
 			
-			if((o[i].typ->hunter == YES) && (o[l].typ->hunted == YES))
+			if((o[i].typ->hunter == true) && (o[l].typ->hunted == true))
 				o[i].Impact_Hunting(o[l]);
-			else if((o[i].typ->hunted == YES) && (o[l].typ->hunter == YES))
+			else if((o[i].typ->hunted == true) && (o[l].typ->hunter == true))
 				o[l].Impact_Hunting(o[i]);
 				
 			// anaelastic impact
@@ -320,6 +320,6 @@ void system_c::physic_Impacts() {
 		}
 	}
 	// If some impacts happened, restart rechecking for impact from start
-	if (impacts == YES)
+	if (impacts == true)
 		physic_Impacts();
 }

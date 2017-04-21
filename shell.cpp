@@ -25,7 +25,7 @@
 
 using namespace std;
 
-BYTE Shell (setting& set, typeSTR& stype) {
+bool Shell (setting& set, typeSTR& stype) {
 	
 	// a pointer to the system-c
 	system_c *sys;
@@ -33,31 +33,34 @@ BYTE Shell (setting& set, typeSTR& stype) {
 	//////////////////////////////////////////
 	// MENU AND SYSTEM INITIALIZATION
 	
-	BYTE result;
+	signal result;
 	
 	// Call the mean menù, it tell what to do.
 	
 	switch (menu_main(set)) {
-		case NEW_SIG:
+		case signal::create:
 			sys = new system_c(set, stype);
 			break;
-		case LOAD_SIG:
+		case signal::load:
 			sys = new system_c(set, stype, result);
-			if(result != GOOD_SIG) {
+			if(result != signal::good) {
 				delete sys;
-				if(result == FILE_ERR_SIG) {
+				if(result == signal::file_err) {
 					OPS_Error(set, "A system with that name doesn't exist! Type something to continue and return to the main menu", nullptr);
 					in_s();
 				}
-				else if(result == CORRUPTED_SIG) {
+				else if(result == signal::corrupted) {
 					OPS_Error(set, "The system can't be loaded. It is from an incompatible previous version or has been corrupted. Type something to continue and return to the main menu", nullptr);
 					in_s();
 				}
-				return GOOD_SIG;
+				return true;
 			}
 			break;
-		case ABORTED_SIG:
-			return ABORTED_SIG;
+		case signal::aborted:
+			return false;
+		
+		default:
+			return true;
 	}
 	
 	////////////////////////////////
@@ -70,8 +73,8 @@ BYTE Shell (setting& set, typeSTR& stype) {
 	/*
 	if (set.vmode == V_OPS)
 	*/
-		BYTE quit = NO;
-		while(quit == NO) {
+		bool quit = false;
+		while(quit == false) {
 			// call the phisic engine
 			sys->Physic (stime);
 			// Output
@@ -88,5 +91,5 @@ BYTE Shell (setting& set, typeSTR& stype) {
 	*/
 
 	delete sys;
-	return GOOD_SIG;
+	return true;
 }

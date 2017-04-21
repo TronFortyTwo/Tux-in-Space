@@ -65,7 +65,7 @@ class time_sim {	// the time of a simulation
 		// Return a string with the time
 		std::string String();
 		
-		BYTE Compare(const time_sim&);	// return 0 if the given is bigger 1 if is smaller and 2 if are equal
+		comparison Compare(const time_sim&);
 		
 		time_sim operator+ (const time_sim& t);
 		

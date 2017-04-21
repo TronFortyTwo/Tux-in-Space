@@ -30,7 +30,7 @@ void parser_Reask(const setting&, const string&);
 void sys_Save(const setting&, system_c&);
 void parser_Create(const setting&, system_c&);
 void parser_Delete(const setting&, system_c&);
-time_sim parser_Quit (const setting& set, system_c&, time_sim&, BYTE& quit);
+time_sim parser_Quit (const setting& set, system_c&, time_sim&, bool& quit);
 void parser_Distance(const setting&, system_c&);
 time_sim parser_Jump(const setting& set, time_sim&, long double);
 time_sim parser_Wait(const setting& set, time_sim&, long double);
@@ -40,7 +40,7 @@ void parser_Information (const setting&, system_c&);
  * The main function
  * of the parser
  */
-time_sim Parser(setting& set, system_c& sys, BYTE& quit) {
+time_sim Parser(setting& set, system_c& sys, bool& quit) {
 		
 	// what is scanned
 	string input;
@@ -141,7 +141,7 @@ void parser_Distance(const setting& set, system_c& sys){
 /***
  * This function prepare the parser to parser_Quit
  */
-time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, BYTE& quit){
+time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, bool& quit){
 		
 	time_sim t;	 	//this is the escape time
 	string input;		
@@ -159,7 +159,7 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, BYTE& qu
 	}
 	// now we prepare the parser_Quit event
 	t = now;
-	quit = YES;
+	quit = true;
 	return t;
 }
 	
@@ -254,7 +254,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	time_sim t (y, d, h, m, s);
 	
 	// check the time is future
-	if (now.Compare(t) == 1){
+	if (now.Compare(t) == comparison::minor){
 		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...", nullptr);
 		in_s();
 		return now;
@@ -302,7 +302,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		
 		time_sim t(y, d, h, m, s);
 		
-		if(t.Compare(now) == 1)	{ // if the time given is 
+		if(t.Compare(now) != comparison::major)	{
 			// Error message if the time given isn't valid
 			t = now;
 			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds", var);

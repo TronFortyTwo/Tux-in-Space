@@ -37,7 +37,7 @@ class typeSTR {
 		type	*Search	(const std::string&);	// Search a type from the name
 		
 		// constructor
-		typeSTR(BYTE& result);
+		typeSTR(signal& result);
 };
 
 #endif

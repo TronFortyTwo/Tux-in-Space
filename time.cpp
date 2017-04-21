@@ -57,28 +57,28 @@ void time_sim::Sync() {
  * NOTE:
  * the times must is written correctly (for example not 1024 hour and 71 minutes)
  */
-BYTE time_sim::Compare(const time_sim& t) {
+comparison time_sim::Compare(const time_sim& t) {
 	if (year > t.year)
-		return 0;
+		return comparison::major;
 	if (year < t.year)
-		return 1;
+		return comparison::minor;
 	if (day > t.day)
-		return 0;
+		return comparison::major;
 	if (day < t.day)
-		return 1;
+		return comparison::minor;
 	if (hour > t.hour)
-		return 0;
+		return comparison::major;
 	if (hour < t.hour)
-		return 1;
+		return comparison::minor;
 	if (min > t.min)
-		return 0;
+		return comparison::major;
 	if (min < t.min)
-		return 1;
+		return comparison::minor;
 	if (sec > t.sec)
-		return 0;
+		return comparison::major;
 	if (sec < t.sec)
-		return 1;
-	return 2;
+		return comparison::minor;
+	return comparison::equal;
 }
 
 // Sum operator

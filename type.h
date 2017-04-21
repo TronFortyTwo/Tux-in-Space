@@ -47,8 +47,8 @@ class type {
 		color color_max;		// Color range
 		color color_min;
 		
-		BYTE hunted;			// if is hunted (ON/OFF)
-		BYTE hunter;			// if hunts (ON/OFF)
+		bool hunted;			// if is hunted (ON/OFF)
+		bool hunter;			// if hunts (ON/OFF)
 		// BYTE datatype;		// the type of the data the type has (coming  soon)
 		// void *data;			// the pointer to the data, his type is defined in datatype
 };
