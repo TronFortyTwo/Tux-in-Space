@@ -186,7 +186,7 @@ object *system_c::SearchObj(const string& tofind) {
  */
 void system_c::Physic (time_sim& dest) {
 	
-	while (dest.Compare (stime) != comparison::minor) {
+	while (dest.Compare (stime) == comparison::major) {
 		
 		// GRAVITY
 		Physic_Gravity();

@@ -51,32 +51,30 @@ void time_sim::Sync() {
 	
 /***
  * this function chek which of the time structure given is the farest ( 1 january 2015 is farest than 12 december 1942)
- * return 0 if is the first
- * 		  1 if is the second
- * 		  2 if are =
- * NOTE:
- * the times must is written correctly (for example not 1024 hour and 71 minutes)
+ * return major if t is minor
+ * 		  minor if t is major
+ * 		  else equal
  */
 comparison time_sim::Compare(const time_sim& t) {
 	if (year > t.year)
 		return comparison::major;
-	if (year < t.year)
+	else if (year < t.year)
 		return comparison::minor;
 	if (day > t.day)
 		return comparison::major;
-	if (day < t.day)
+	else if (day < t.day)
 		return comparison::minor;
 	if (hour > t.hour)
 		return comparison::major;
-	if (hour < t.hour)
+	else if (hour < t.hour)
 		return comparison::minor;
 	if (min > t.min)
 		return comparison::major;
-	if (min < t.min)
+	else if (min < t.min)
 		return comparison::minor;
 	if (sec > t.sec)
 		return comparison::major;
-	if (sec < t.sec)
+	else if (sec < t.sec)
 		return comparison::minor;
 	return comparison::equal;
 }

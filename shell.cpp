@@ -76,7 +76,7 @@ bool Shell (setting& set, typeSTR& stype) {
 		bool quit = false;
 		while(quit == false) {
 			// call the phisic engine
-			sys->Physic (stime);
+			sys->Physic(stime);
 			// Output
 			OPSo (set, *sys);
 			// call the instruction parser and ask him for destination time

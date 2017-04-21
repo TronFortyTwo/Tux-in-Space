@@ -149,15 +149,14 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, bool& qu
 	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", nullptr);
 	in_s();
 	// if doesn't want to parser_Quit return now
-	if (input.front() == 'n')
-		return now;
-	if (input.front() == 's')
+	if (input[0] == 's') {
 		sys.Save(set);
-	else if (input.front() != 'y') {
-		OPS(set, "Unrecognized input! please insert y/n/s\n\ninsert a new command:", nullptr);
 		return now;
 	}
-	// now we prepare the parser_Quit event
+	else if (input[0] != 'y') {
+		return now;
+	}
+	// now we prepare the quit event
 	t = now;
 	quit = true;
 	return t;
@@ -254,7 +253,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	time_sim t (y, d, h, m, s);
 	
 	// check the time is future
-	if (now.Compare(t) == comparison::minor){
+	if (now.Compare(t) == comparison::major){
 		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...", nullptr);
 		in_s();
 		return now;
@@ -302,7 +301,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		
 		time_sim t(y, d, h, m, s);
 		
-		if(t.Compare(now) != comparison::major)	{
+		if(t.Compare(now) == comparison::major)	{
 			// Error message if the time given isn't valid
 			t = now;
 			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds", var);

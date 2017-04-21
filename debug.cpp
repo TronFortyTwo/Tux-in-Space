@@ -157,13 +157,13 @@ void debug_Stype(const typeSTR& stype) {
 		debug_Int(stype.t[i].color_max.red);
 		
 		buffer = "HUNTED:\t\t\t";
-		if (stype.t[i].hunted == YES)
+		if (stype.t[i].hunted == true)
 			buffer += "YES";
 		else
 			buffer += "NO";
 		
 		buffer += "\nHUNTER:\t\t\t";
-		if (stype.t[i].hunter == YES)
+		if (stype.t[i].hunter == false)
 			buffer += "YES";
 		else
 			buffer += "NO";
@@ -182,11 +182,34 @@ void debug_Printf(const string& txt) {
 	
 	ofstream file(DEBUG_FILE, ios_base::app);
 	if(!file) {
-		cout << "\n DEBUG BROKEN!! \n";
+		cout << "\n " IRREGULARITY "  DEBUG BROKEN!! \n";
 		return;
 	}
 	// write what is requested
 	file << txt << endl; 
+}
+
+void debug_Signal(const signal& sig){
+	
+	switch(sig){
+		case signal::aborted:
+			debug_Printf("aborted");
+
+		case signal::corrupted:
+			debug_Printf("corrupted");
+
+		case signal::create:
+			debug_Printf("create");
+
+		case signal::file_err:
+			debug_Printf("file error");
+
+		case signal::good:
+			debug_Printf("good");
+		
+		case signal::load:
+			debug_Printf("load");
+	}
 }
 
 #endif
