@@ -38,7 +38,11 @@ using namespace std;
 void setting::Save() {
 	
 	ofstream cf(CONFIGURATION_FILE);
-	
+	#if DEBUG
+	if(!cf){
+		debug_Printf(IRREGULARITY" setting::Save() Can't open the - " CONFIGURATION_FILE " - file");
+	}
+	#endif
 	cf << vmode << endl << height << endl << width << endl << numprecision << endl;
 }
 	
@@ -49,7 +53,7 @@ setting::setting() {
 	
 	ifstream cf(CONFIGURATION_FILE);
 	// If there is a file
-	if(!cf) {
+	if(cf) {
 		// scan the vmode
 		cf >> vmode;
 		// scan OPS settings

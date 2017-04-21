@@ -26,6 +26,7 @@
 #define settingh
 
 #include "generic.h"
+#include "debug.h"
 
 // Other libraries for unix-like
 #include <sys/stat.h>
