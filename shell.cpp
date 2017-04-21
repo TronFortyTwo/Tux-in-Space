@@ -46,14 +46,14 @@ BYTE Shell (setting& set, typeSTR& stype) {
 			if(result != GOOD_SIG) {
 				delete sys;
 				if(result == FILE_ERR_SIG) {
-					OPS_Error(set, "A system whit that name doesn't exist! Type something to continue and return to the main menu", nullptr);
+					OPS_Error(set, "A system with that name doesn't exist! Type something to continue and return to the main menu", nullptr);
 					in_s();
 				}
 				else if(result == CORRUPTED_SIG) {
 					OPS_Error(set, "The system can't be loaded. It is from an incompatible previous version or has been corrupted. Type something to continue and return to the main menu", nullptr);
 					in_s();
 				}
-				return ABORTED_SIG;
+				return GOOD_SIG;
 			}
 			break;
 		case ABORTED_SIG:
@@ -83,7 +83,7 @@ BYTE Shell (setting& set, typeSTR& stype) {
 		}
 	/*
 	else if (set.vmode == V_GL) {
-			GUI implementation
+			GUI implementation (coming soon)
 		}
 	*/
 
