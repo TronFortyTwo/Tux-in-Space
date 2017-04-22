@@ -28,10 +28,6 @@
 #include "color.h"
 #include "stdio.h"
 
-// The different types of data (coming soon...)
-#define DATA_SPACESHIP 0
-#define DATA_GENERIC 1
-
 // The structure that represent a type of a object
 class type {
 	public:

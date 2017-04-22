@@ -128,7 +128,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		var[15] = &vel.y;
 		var[16] = &vel.z;
 		var[17] = &comment;
-		OPS(set, "CREATE A NEW OBJECT\n\n%f-1) name:         %s%s\n%f-2) type:         %s\n&ti7%s&t0\n%f-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%f-4) mass:         %l   %s\n%f-5) radius:       %l\n%f-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%f-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%f-8) LOAD  the object from a file\n%f-9) SAVE  this object to a file\n%f-10) DONE\n11) EXIT whitout saving\n\n%s", var);
+		OPS(set, "CREATE A NEW OBJECT\n\n%r-1) name:         %s%s\n%r-2) type:         %s\n&ti7%s&t0\n%r-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%r-4) mass:         %l   %s\n%r-5) radius:       %l\n%r-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%r-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n%s", var);
 		cin >> input;
 		
 		// reset previous comment
