@@ -295,9 +295,9 @@ signal object::Read (ifstream& stream, typeSTR& stype) {
 	// scan the name
 	in_fs(name, stream);
 	// scan the type
-	string buffer;
-	in_fs(buffer, stream);
-	typ = stype.Search(buffer);
+	string t_name;
+	in_fs(t_name, stream);
+	typ = stype.Search(t_name);
 	if (typ == nullptr)
 		return signal::corrupted;
 	// scan all the other things
@@ -327,25 +327,25 @@ signal object::ReadComplete (ifstream& stream, typeSTR& stype) {
 
 
 void object::Write (ofstream& stream) {
-	stream << name << endl;
-	stream << typ->name << endl;
-	stream << colour.red << endl;
-	stream << colour.green << endl;
-	stream << colour.blue << endl;
-	stream << radius << endl;
-	stream << mass << endl;
+	stream << name << "\n";
+	stream << typ->name << "\n";
+	stream << colour.red << "\n";
+	stream << colour.green << "\n";
+	stream << colour.blue << "\n";
+	stream << radius << "\n";
+	stream << mass << "\n";
 }
 
 void object::WriteComplete (ofstream& stream) {
 	// write basic infos
 	Write(stream);
 	// write additional stuff
-	stream << pos.x << endl;
-	stream << pos.y << endl;
-	stream << pos.z << endl;
-	stream << vel.x << endl;
-	stream << vel.y << endl;
-	stream << vel.z << endl;
+	stream << pos.x << "\n";
+	stream << pos.y << "\n";
+	stream << pos.z << "\n";
+	stream << vel.x << "\n";
+	stream << vel.y << "\n";
+	stream << vel.z << "\n";
 }
 
 /***
@@ -363,11 +363,9 @@ void object::AI_Hunter(system_c& sys) {
 		return;
 	// PART ONE: SEARCH FOR THE CLOSER HUNTABLE OBJECT
 	// search for huntable objects
-	for(unsigned int i=0; i!=sys.o.size(); i++) {
-		if(sys.o[i].typ->hunted == true) {
+	for(unsigned int i=0; i!=sys.o.size(); i++)
+		if(sys.o[i].typ->hunted == true)
 			targets.push_back(&sys.o[i]);
-		}
-	}
 	// if there isn't any target, return
 	int targets_num = targets.size();
 	if (!targets_num)
@@ -380,8 +378,8 @@ void object::AI_Hunter(system_c& sys) {
 	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
-	// velx : distance x = vel : distance
-	vel = vel - (pos - closest->pos * HUNTER_ACCELERATION * sys.precision / Distance(*closest));
+	// TODO
+	pos = pos - (pos - closest->pos) * sys.precision * HUNTER_ACCELERATION;
 }
 
 

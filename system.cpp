@@ -53,6 +53,24 @@ void system_c::RemoveObj (object& rem) {
 }
 
 /***
+ * Initialize a new system
+ */
+system_c::system_c (const setting& set, typeSTR& s) {
+	
+	// set the type struct pointer
+	stype = &s;
+	// set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
+	G = 6.67e-17;
+	
+	// Ask for the name of the new system
+	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:", nullptr);
+	// the name
+	in_s(name);
+	// ask for the precision
+	precision = 1;
+}
+
+/***
  * Save a system in the directory Systems/
  */
 void system_c::Save(const setting& set){
@@ -77,39 +95,19 @@ void system_c::Save(const setting& set){
 	// open the file to write
 	ofstream odest(path);
 	// Write information about the system
-	odest << precision << endl;
-	odest << o.size() << endl;
-	odest << G << endl;
-	odest << stime.Year() << endl;
-	odest << stime.Day() << endl;
-	odest << stime.Hour() << endl;
-	odest << stime.Minute() << endl;
-	odest << stime.Second() << endl;
+	odest << precision << "\n";
+	odest << o.size() << "\n";
+	odest << G << "\n";
+	odest << stime.Year() << "\n";
+	odest << stime.Day() << "\n";
+	odest << stime.Hour() << "\n";
+	odest << stime.Minute() << "\n";
+	odest << stime.Second() << "\n";
 	// write the system's object's datas
 	for(unsigned int i=0; i!=o.size(); i++)
 		o[i].WriteComplete(odest);
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", nullptr);
 	in_s();
-}
-
-
-/***
- * Initialize a new system
- */
-system_c::system_c (const setting& set, typeSTR& s) {
-	
-	// set the type struct pointer
-	stype = &s;
-	// set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
-	G = 6.67e-17;
-	
-	// Ask for the name of the new system
-	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:", nullptr);
-	// the name
-	in_s(name);
-	// ask for the precision
-	OPS (set, "NEW SYSTEM INITIALIZATION\n\nprecision of the simulation:\n&tdIndicate how much the simulation is precise. A big value mean leess precision but lighter hardware use.\nrecommended values: < 2", nullptr);
-	scanf(" %lf", &precision);
 }
 
 /**
@@ -157,10 +155,11 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 	for(unsigned int i=0; i!=o.size(); i++) {
 		if(o[i].ReadComplete(sysf, str) == signal::corrupted) {
 			#if DEBUG
-			debug_Printf("(!) the system to load seem corrupted or outdated! While loading the object (read below):");
+			debug_Printf("(!) the system to load seems corrupted or outdated! While loading the object (read below):");
 			debug_Printf(o[i].name);
 			#endif
 			result = signal::corrupted;
+			break;
 		}
 	}
 	stype = &str;

@@ -48,7 +48,6 @@ void in_s () {
 void in_fs (string& dest, istream& stream) {
 	
 	getline(stream, dest);
-	
 }
 
 /***

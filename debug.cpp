@@ -186,7 +186,7 @@ void debug_Printf(const string& txt) {
 		return;
 	}
 	// write what is requested
-	file << txt << endl; 
+	file << txt << "\n"; 
 }
 
 void debug_Signal(const signal& sig){

@@ -187,9 +187,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	//the first two line of the frame
 	OPS_Line(set.width, FRAMESTART, 0);
-	cout << endl << FRAME;
+	cout << "\n" << FRAME;
 	OPS_Line(set.width, FRAMEEND, TWOFRAMELEN);
-	cout << FRAMER << endl;
+	cout << FRAMER << "\n";
 	//printf the buf
 	for(linedone=0; linedone < set.height-5; linedone++) {
 		//the frame
@@ -270,21 +270,21 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 				p++;
 				// if there is space for more line print the new line
 				if(linedone < set.height-(+5)) {
-					cout << FRAMER << endl << FRAME;
+					cout << FRAMER << "\n" << FRAME;
 					linedone++;
 					columndone = -1;
 				}
 			}
 		}
 		// the frame
-		cout << FRAMER << endl;
+		cout << FRAMER << "\n";
 	}
 	// last lines
 	cout << FRAME;
 	OPS_Line(set.width, FRAMEEND, TWOFRAMELEN);
-	cout << FRAMER << endl;
+	cout << FRAMER << "\n";
 	OPS_Line(set.width, FRAMESTART, 0);
-	cout << endl << FRAME;
+	cout << "\n" << FRAME;
 
 }
 	

@@ -47,7 +47,7 @@ void setting::Save() {
 		cf << "O";	// OPS
 	else
 		cf << "G";	// Graphic
-	cf << endl << height << endl << width << endl << numprecision << endl;
+	cf << "\n" << height << "\n" << width << "\n" << numprecision << "\n";
 }
 	
 /***
