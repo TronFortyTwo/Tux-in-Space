@@ -27,7 +27,7 @@
 
 class objdata{
 	public:
-		signal data_template;
+		enum class data_template{};
 	
 };
 

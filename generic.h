@@ -27,17 +27,16 @@
 /////////////////////////////////////////////////////
 // This is the flag that active/deactive debug. (ON/OFF)
 // A debugless binary is lighter and faster
+// TODO: consider if is worth to enable possibillity to compile without debug
 
 #define DEBUG true
 
 /////////////////////////////////////////////////////
 
 #include <limits>
-#include <cstdint>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <cstdlib>
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -52,8 +51,8 @@ enum class axis2 {x, y};
 #define IRREGULARITY "(!)"
 	
 // Value returned by functions
-
-enum class signal{
+// TODO: add more signal types for more precise use cases
+enum class signal {
 	good,		// good
 	file_err,	// problem with file accessing or reading/writing
 	corrupted,

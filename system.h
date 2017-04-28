@@ -52,7 +52,7 @@ class system_c {
 		void Physic	(time_sim& dest);		// Apply the physic to the object
 		
 		// constructor
-		system_c (const setting&, typeSTR&);		// Init the system
+		system_c (const setting&, typeSTR&);			// Init the system
 		system_c (const setting&, typeSTR&, signal&);	// Init the system loading it from a file
 		system_c () = default;
 	
@@ -62,6 +62,8 @@ class system_c {
 		void Physic_Gravity();	// "     "    " : gravity
 		void Hunter_AI	   ();	// activate the hunter AIs and make them influence the system
 		void physic_Impacts();	// Compute impacts between objects
+		
+		void Write(std::ofstream&);		// Write in an already opened ofstream the system
 };
 
 

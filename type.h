@@ -26,7 +26,6 @@
 
 #include "generic.h"
 #include "color.h"
-#include "stdio.h"
 
 // The structure that represent a type of a object
 class type {

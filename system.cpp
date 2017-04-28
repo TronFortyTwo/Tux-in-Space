@@ -94,21 +94,32 @@ void system_c::Save(const setting& set){
 	}
 	// open the file to write
 	ofstream odest(path);
+	if(!odest) {
+		OPS(set, "FAILED TO SAVE THE SYSTEM!\n\nCan't access file to write on\nPress something to continue", nullptr);
+		in_s();
+	}
+	
 	// Write information about the system
-	odest << precision << "\n";
-	odest << o.size() << "\n";
-	odest << G << "\n";
-	odest << stime.Year() << "\n";
-	odest << stime.Day() << "\n";
-	odest << stime.Hour() << "\n";
-	odest << stime.Minute() << "\n";
-	odest << stime.Second() << "\n";
-	// write the system's object's datas
-	for(unsigned int i=0; i!=o.size(); i++)
-		o[i].WriteComplete(odest);
+	Write(odest);
+	
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", nullptr);
 	in_s();
 }
+
+void system_c::Write(ofstream& dest){
+	dest << precision << "\n";
+	dest << o.size() << "\n";
+	dest << G << "\n";
+	dest << stime.Year() << "\n";
+	dest << stime.Day() << "\n";
+	dest << stime.Hour() << "\n";
+	dest << stime.Minute() << "\n";
+	dest << stime.Second() << "\n";
+	// write the system objects
+	for(unsigned int i=0; i!=o.size(); i++)
+		o[i].WriteComplete(dest);
+}
+
 
 /**
  * Load a system from a file
