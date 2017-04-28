@@ -124,16 +124,16 @@ signal system_c::Read(ifstream& file, string& _name) {
 	
 	name = _name;
 	
-	file >> precision;
-	file >> num_obj;
-	file >> G;
+	precision = in_ff(file);
+	num_obj = in_fi(file);
+	G = in_ff(file);
 	int y, d, h, m;
 	float s;
-	file >> y;
-	file >> d;
-	file >> h;
-	file >> m;
-	file >> s;
+	y = in_fi(file);
+	d = in_fi(file);
+	h = in_fi(file);
+	m = in_fi(file);
+	s = in_ff(file);
 	stime = time_sim(y, d, h, m, s);
 	
 	// alloc memory

@@ -39,24 +39,24 @@ void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines a
 int in_i();
 
 // int in a file
-int in_fi();
+int in_fi(std::istream&);
 
 // float
 float in_f();
 
 // float in a file
-float in_ff();
+float in_ff(std::istream&);
 
 // double
 double in_d();
 
 // double in a file
-double in_fd();
+double in_fd(std::istream&);
 
 // long double
 long double in_ld();
 
 // long double in a file
-long double in_fld();
+long double in_fld(std::istream&);
 
 #endif

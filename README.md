@@ -4,12 +4,13 @@ CSpace: the space simulator
 This program is a simulation game. The program simulates the moving, under
 the phisic's law, of planets, spaceships, suns, and everything else in 
 the deep space.
+
 Now have:
 - An wide gerarchic collection of various object types whit different
 behavior
 - Phisic engine that simulate the gravity force and different types of 
 impacts between the objects
-- Space Monsters whit a basic AI
+- Space Monsters with basic AI
 
 for test/use the program:
 -------------------------
@@ -18,9 +19,9 @@ in other computers as well, but you can easily compile the program whit
 the makefile.
 
 The program is programmed for linux only, but whit very few work can also
-run on other operative systems. (See information file) Before compiling,
-go to the "generic.h" file to choose to active or shut down debug. (default
-is ON). For developers is suggested to use the latest version in the 
+run on other operative systems. (See information file)
+
+For developers is suggested to use the latest version in the 
 master branch, for normal users the latest release.
 
 Status

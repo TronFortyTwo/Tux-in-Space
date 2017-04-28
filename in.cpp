@@ -82,6 +82,14 @@ int in_i() {
 	return stoi(s);
 }
 
+int in_fi(istream& f) {
+	
+	string s;
+	
+	in_fs(s, f);
+	
+	return stoi(s);
+}
 
 float in_f() {
 	
@@ -92,6 +100,14 @@ float in_f() {
 	return stof(s);
 }
 
+float in_ff(istream& f) {
+	
+	string s;
+	
+	in_fs(s, f);
+	
+	return stof(s);
+}
 
 double in_d() {
 	
@@ -108,6 +124,15 @@ long double in_ld() {
 	string s;
 	
 	in_s(s);
+	
+	return stold(s);
+}
+
+long double in_fld(istream& f) {
+	
+	string s;
+	
+	in_fs(s, f);
 	
 	return stold(s);
 }

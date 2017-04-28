@@ -41,8 +41,6 @@ class type;
 class system_c;
 
 class object {
-	private:
-		void 		WipeData		();							// Wipe the data struct of an object
 			
 	public:
 		objdata data;		// the data about the object

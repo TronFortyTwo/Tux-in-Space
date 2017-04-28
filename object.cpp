@@ -299,11 +299,11 @@ signal object::Read (ifstream& stream, typeSTR& stype) {
 	if (typ == nullptr)
 		return signal::corrupted;
 	// scan all the other things
-	stream >> colour.red;
-	stream >> colour.green;
-	stream >> colour.blue;
-	stream >> radius;
-	stream >> mass;
+	colour.red = in_fi(stream);
+	colour.green = in_fi(stream);
+	colour.blue = in_fi(stream);
+	radius = in_fld(stream);
+	mass = in_fld(stream);
 	
 	return signal::good;
 }
@@ -313,12 +313,12 @@ signal object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	if(Read(stream, stype) == signal::corrupted)
 		return signal::corrupted;
 	// read complete stuff
-	stream >> pos.x;
-	stream >> pos.y;
-	stream >> pos.z;
-	stream >> vel.x;
-	stream >> vel.y;
-	stream >> vel.z;
+	pos.x = in_fld(stream);
+	pos.y = in_fld(stream);
+	pos.z = in_fld(stream);
+	vel.x = in_fld(stream);
+	vel.y = in_fld(stream);
+	vel.z = in_fld(stream);
 	
 	return signal::good;
 }
