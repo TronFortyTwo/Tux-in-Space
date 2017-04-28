@@ -24,19 +24,10 @@
 #ifndef generich
 #define generich
 
-/////////////////////////////////////////////////////
-// This is the flag that active/deactive debug. (ON/OFF)
-// A debugless binary is lighter and faster
-// TODO: consider if is worth to enable possibillity to compile without debug
-
-#define DEBUG true
-
-/////////////////////////////////////////////////////
-
 #include <limits>
 #include <string>
-#include <iostream>
 #include <sstream>
+#include <iostream>
 #include <ctime>
 #include <cmath>
 #include <vector>

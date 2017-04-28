@@ -30,7 +30,7 @@ void parser_Reask(const setting&, const string&);
 void sys_Save(const setting&, system_c&);
 void parser_Create(const setting&, system_c&);
 void parser_Delete(const setting&, system_c&);
-time_sim parser_Quit (const setting& set, system_c&, time_sim&, bool& quit);
+bool parser_Quit (const setting& set, system_c&);
 void parser_Distance(const setting&, system_c&);
 time_sim parser_Jump(const setting& set, time_sim&, long double);
 time_sim parser_Wait(const setting& set, time_sim&, long double);
@@ -73,7 +73,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 		sys.NewObj(set);
 	// parser_Quit / exit
 	else if (!(input.compare("quit")) || (!input.compare("exit")))
-		t = parser_Quit(set, sys, sys.stime, quit);
+		quit = parser_Quit(set, sys);
 	// save
 	else if (!input.compare("save"))
 		sys.Save(set);
@@ -141,7 +141,7 @@ void parser_Distance(const setting& set, system_c& sys){
 /***
  * This function prepare the parser to parser_Quit
  */
-time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, bool& quit){
+bool parser_Quit (const setting& set, system_c& sys){
 		
 	string input;		
 	// ask for confirm to quit
@@ -149,18 +149,14 @@ time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, bool& qu
 	in_s(input);
 	
 	if (input[0] == 's') {
-		quit = true;
 		sys.Save(set);
-		return now;
+		return true;
 	}
 	
-	else if (input[0] != 'y') {
-		quit = false;
-		return now;
-	}
+	else if (input[0] != 'y')
+		return false;
 	
-	quit = true;
-	return now;
+	return true;
 }
 	
 /***
@@ -241,15 +237,15 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	int y, d, h, m;
 	float s;
 	// year
-	cin >> y;
+	y = in_i();
 	// day
-	cin >> d;
+	d = in_i();
 	// hour
-	cin >> h;
+	h = in_i();
 	// minute
-	cin >> m;
+	m = in_i();
 	// second
-	cin >> s;
+	s = in_f();
 	
 	time_sim t (y, d, h, m, s);
 	
@@ -290,15 +286,15 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		int y, d, h, m;
 		float s;
 		// year
-		cin >> y;
+		y = in_i();
 		// day
-		cin >> d;
+		d = in_i();
 		// hour
-		cin >> h;
+		h = in_i();
 		// minute
-		cin >> m;
+		m = in_i();
 		// second
-		cin >> s;
+		s = in_f();
 		
 		time_sim t(y, d, h, m, s);
 		

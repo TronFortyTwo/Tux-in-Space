@@ -183,26 +183,19 @@ typeSTR::typeSTR (signal& result) {
 				in_hfs(buf, stream);
 			}
 			
-			#if DEBUG
 			if(buf.compare(0, 8, "PARENT: ")) {
 				debug_Printf("(!) typeSTR::typeSTR! Unparsable line");
 				debug_Printf(buf);
 				debug_Printf("while object");
 				debug_Printf(t[i].name);
 			}
-			#endif
 			
 			// assign the description if none has been set
 			if(!t[i].description.length())
 				t[i].description =  "No description is available yet for this type";
 		}
 	}
-	
-	
-	
-	#if DEBUG
 	debug_Stype(*this);
-	#endif
 	
 }
 
@@ -218,10 +211,8 @@ type *typeSTR::Search (const string& tofind) {
 		if (!t[i].name.compare(tofind))
 			 return &t[i];
 	
-	#if DEBUG
 	debug_Printf("(!) typeSTR::Search: No type with this name has been found!");
 	debug_Printf(tofind);
-	#endif
 	
 	return nullptr;
 }
@@ -308,10 +299,8 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		backn--;
 		
 		// scan the input as long as a valid number is given
-		do {
-			cin >> input;
-			input--;
-		}
+		do
+			input = in_i() - 1;
 		while ((input < 0) || (input > descrn));
 		
 		// if the value point to a type, set this type as pointer and continue if the type is parent of some type, else exit the loop
@@ -349,7 +338,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 			var.resize(0);
 			ivar.resize(0);
 			// input
-			cin >> n;
+			n = in_i();
 			n--;
 			// check that is a valid value
 			if ((n < 0) || (n > descrn)) {

@@ -22,15 +22,16 @@
  *	HEADER FILE
  */
 
-#include "generic.h"
 
-#if DEBUG
 #ifndef debugh
 #define debugh
 
-class object;
-class type;
+
+#include "generic.h"
+
 class typeSTR;
+class type;
+class object;
 
 void debug_Init(); 						// init the debug target
 void debug_Stype(const typeSTR&);		// Print in the debug target a structure tStype given
@@ -41,5 +42,8 @@ void debug_Double(double n);			// Print in the debug target a long double number
 void debug_Type(const type&);			// Print in the debug target a type
 void debug_Signal(const signal&);		// Print in the debug target the signal value
 
-#endif
+
+#include "typeSTR.h"
+#include "object.h"
+
 #endif

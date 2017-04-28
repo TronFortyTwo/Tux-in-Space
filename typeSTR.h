@@ -27,6 +27,9 @@
 #include "generic.h"
 #include "type.h"
 
+class type;
+class setting;
+
 // The structure whit all the types
 
 class typeSTR {

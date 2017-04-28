@@ -27,9 +27,36 @@
 
 #include "generic.h"
 
+// line
 void in_s	(std::string&);					// scan a string with spaces
 void in_s	();								// clean the stdin reading a line but without save it anywhere
-void in_fs	(std::string&, std::istream&);	// scan as long as a '\n'
+
+// line in a file
+void in_fs	(std::string&, std::istream&);	// scan a line in a file
 void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines and commented lines
+
+// int
+int in_i();
+
+// int in a file
+int in_fi();
+
+// float
+float in_f();
+
+// float in a file
+float in_ff();
+
+// double
+double in_d();
+
+// double in a file
+double in_fd();
+
+// long double
+long double in_ld();
+
+// long double in a file
+long double in_fld();
 
 #endif

@@ -87,11 +87,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 					var_pos++;
 				}
 				else {
-					#if DEBUG
 					debug_Printf(IRREGULARITY" OPS: While trying to print:");
 					debug_Printf(phrase);
 					debug_Printf("An unexpected integer dinamic value has been requested.");
-					#endif
 				}
 			}
 			// an unsigned int value to print
@@ -101,11 +99,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 					var_pos++;
 				}
 				else{
-					#if DEBUG
 					debug_Printf(IRREGULARITY" OPS: While trying to print:");
 					debug_Printf(phrase);
 					debug_Printf("An unexpected unsigned integer dinamic value has been requested.");
-					#endif
 				}
 			}
 			// a long double value to print
@@ -115,11 +111,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 					var_pos++;
 				}
 				else {
-					#if DEBUG
 					debug_Printf(IRREGULARITY" OPS: While trying to print:");
 					debug_Printf(phrase);
 					debug_Printf("An unexpected long double dinamic value has been requested.");
-					#endif
 				}
 			}
 			// a float value to print
@@ -129,11 +123,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 					var_pos++;
 				}
 				else {
-					#if DEBUG
 					debug_Printf(IRREGULARITY" OPS: While trying to print:");
 					debug_Printf(phrase);
 					debug_Printf("An unexpected float dinamic value has been requested.");
-					#endif
 				}
 			}
 			// a string to print
@@ -143,11 +135,9 @@ void OPS(const setting& set, const std::string& phrase, const void *const* const
 					var_pos++;
 				}
 				else {
-					#if DEBUG
 					debug_Printf(IRREGULARITY" OPS: While trying to print:");
 					debug_Printf(phrase);
 					debug_Printf("An unexpected string dinamic value has been requested.");
-					#endif
 				}
 			}
 			// a line to print , r means 'row' | example: %l. => a line of '.' NOTE: whitout '\n'
@@ -309,10 +299,8 @@ void OPS_Error(const setting& set, const string& message, const void *const* con
 void OPS_MemLack(const string& data) {
 		
 	cout << "\n\n\n\n\n\n\n\n\n\n\aThe program has a problem whit memory allocation while:" << data << "Probably the RAM is overload. Press something to retry\n\t";
-	#if DEBUG
 	debug_Printf("OPS_MemLack: the program has problem with memory allocation while:");
 	debug_Printf(data);
-	#endif
 	in_s();
 }
 

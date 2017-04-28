@@ -31,6 +31,7 @@
 #include "time.h"
 #include "debug.h"
 
+class typeSTR;
 class object;
 
 // system structure

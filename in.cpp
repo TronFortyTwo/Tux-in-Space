@@ -71,3 +71,43 @@ void in_hfs (string& dest, istream& stream) {
 		}
 	}
 }
+
+
+int in_i() {
+	
+	string s;
+	
+	in_s(s);
+	
+	return stoi(s);
+}
+
+
+float in_f() {
+	
+	string s;
+	
+	in_s(s);
+	
+	return stof(s);
+}
+
+
+double in_d() {
+	
+	string s;
+	
+	in_s(s);
+	
+	return stod(s);
+}
+
+
+long double in_ld() {
+	
+	string s;
+	
+	in_s(s);
+	
+	return stold(s);
+}

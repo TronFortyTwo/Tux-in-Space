@@ -129,7 +129,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		var[16] = &vel.z;
 		var[17] = &comment;
 		OPS(set, "CREATE A NEW OBJECT\n\n%r-1) name:         %s%s\n%r-2) type:         %s\n&ti7%s&t0\n%r-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%r-4) mass:         %l   %s\n%r-5) radius:       %l\n%r-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%r-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n%s", var);
-		cin >> input;
+		input = in_i();
 		
 		// reset previous comment
 		comment.clear();
@@ -157,33 +157,33 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 				var[0] = & typ->mass_min;
 				var[1] = & typ->mass_max;
 				OPS (set, "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
-				cin >> mass;
+				mass = in_ld();
 				comment += "\nNew mass assigned succefully!";
 				break;
 		// Radius
 			case 5:
 				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)", nullptr);
-				cin >> radius;
+				radius = in_ld();
 				comment += "\nNew radius assigned succefully!";
 				break;
 		// Coordiates
 			case 6:
 				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", nullptr);
-				cin >> pos.x;
+				pos.x = in_ld();
 				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", nullptr);
-				cin >> pos.y;
+				pos.y = in_ld();
 				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", nullptr);
-				cin >> pos.z;
+				pos.z = in_ld();
 				comment += "\nNew coordinates assigned succefully!";
 				break;
 		// Velocity
 			case 7:
 				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
-				cin >> vel.x;
+				vel.x = in_ld();
 				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
-				cin >> vel.y;
+				vel.y = in_ld();
 				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
-				cin >> vel.z;
+				vel.z = in_ld();
 				comment += "\nNew velocity assigned succefully!";
 				break;
 		// LOAD
@@ -249,10 +249,8 @@ object::object(typeSTR& stype, const string& name, signal& result) {
 	ifstream file(path);
 	if(!file){
 		result = signal::file_err;
-		#if DEBUG
 		debug_Printf(IRREGULARITY" Canno't read the object! File not found!");
 		debug_Printf(name);
-		#endif
 		return;
 	}
 		
@@ -433,10 +431,8 @@ void object::Impact_Anaelastic(object& obj) {
 	// to calculate the radius we calculate the volum of the two object,
 	radius = RadiusestoVolume(radius, obj.radius);
 	
-	#if DEBUG
 	debug_Printf("Anaelastic Impact: Created this new object:");
 	debug_Object(newobj);
-	#endif
 	
 	*this = newobj;
 }

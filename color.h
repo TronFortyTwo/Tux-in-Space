@@ -26,8 +26,8 @@
 #define colorh
 
 #include "generic.h"
-#include "OnlyPrintfSystem.h"
 #include "in.h"
+class setting;
 
 class color {
 	public:
@@ -39,7 +39,6 @@ class color {
 		bool CheckRange(const color&, const color&);			// Check if the color is in a range of colours given (a color max and a color min)
 };
 
-// prototypes
-
+#include "OnlyPrintfSystem.h"
 
 #endif

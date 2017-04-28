@@ -25,7 +25,6 @@
 #define mathh
 
 #include "generic.h"
-#include "debug.h"
 
 // Pi
 #define PI M_PI
@@ -130,9 +129,7 @@ template<class T> class vec2{
 			if(n == y)
 				return y;
 			
-			#if DEBUG
 			debug_Printf("Request for wrong element in the vec2 class using the operator[]");
-			#endif
 			return x;
 		}
 };

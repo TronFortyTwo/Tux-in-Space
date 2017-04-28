@@ -30,6 +30,8 @@
 #include "setting.h"
 #include "in.h"
 
+class setting;
+
 // global functions
 void OPS		(const setting&, const std::string&, const void *const* const);	// Use it to print things
 void OPS_Error	(const setting&, const std::string&, const void *const* const);	// Use it to signal errors

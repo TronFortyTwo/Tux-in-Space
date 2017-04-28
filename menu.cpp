@@ -41,7 +41,7 @@ signal menu_main(setting& set) {
 		
 		//Principal menù, first screen	
 		OPS(set, "&t5CSPACE: The space simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) informations\n\n5) Quit", nullptr);
-		cin >> i;
+		i = in_i();
 			
 		// If "new simulation" tell the Shell 0; (uninitialized obj)
 		switch (i) {
@@ -70,24 +70,24 @@ void menu_Settings_OPS(setting& set) {
 	void *var[1];
 	while(1) {
 		OPS(set, "SETTINGS/OPS\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Back", nullptr);
-		cin >> i;
+		i = in_i();
 		// WIDTH
 		if(i == 1) {
 			var[0] = &set.width;
 			OPS(set, "SETTINGS/OPS\n\nInsert the new number of columns:\n&tdnow %i", var);
-			cin >> set.width;
+			set.width = in_i();
 		}
 		// HEIGHT
 		else if(i == 2){
 			var[0] = &set.height;
 			OPS(set, "SETTINGS/OPS\n\nInsert the new number of lines:\n&tdnow %i", var);
-			cin >> set.height;
+			set.height = in_i();
 		}
 		// NUMBER PRECISION
 		else if(i == 3){
 			var[0] = &set.numprecision;
 			OPS(set, "SETTINGS/OPS\n\nInsert the new number of deciaml digits printed:\n&tdnow %i", var);
-			cin >> i;
+			i = in_i();
 			set.numprecision = i;
 		}
 		else if(i == 4)
@@ -98,7 +98,7 @@ void menu_Settings_G(setting& set) {
 	int i;		 // input variable
 	while(1) {
 		OPS(set, "SETTINGS/VIDEO\n\n1) Back", nullptr);
-		cin >> i;
+		i = in_i();
 		if(i == 1)
 			return;
 	}
@@ -112,7 +112,7 @@ void menu_Settings(setting& set) {
 		
 	while(1) {
 		OPS (set, "SETTINGS\n\n1) Select video mode\n2) OPS settings\n3) Video settings\n\n4) Done\n5) Restore defaults", nullptr);
-		cin >> i;
+		i = in_i();
 
 		// V_MODE
 		if(i == 1){
@@ -123,7 +123,7 @@ void menu_Settings(setting& set) {
 				mode = "Graphic";
 			var[0] = &mode;
 			OPS(set, "SETTINGS\n\nNow the video mode is %s. Select the video mode:\n1) OPS\n2) GRAPHIC --EXPERIMENTAL--", var);
-			cin >> input;
+			input = in_i();
 			if (input[0] == 2)
 				set.vmode = videomode::GL;
 			else

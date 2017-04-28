@@ -24,16 +24,14 @@
  */
 
 #include "debug.h"
-#include "object.h"
-#include "type.h"
-#include "typeSTR.h"
+#include <iostream>
 
 using namespace std;
 
-#if DEBUG
-
 void debug_Init(){
 	ofstream file(DEBUG_FILE);
+	if(!file)
+		cout << IRREGULARITY "DEBUG BROKEN!\n\nCan't open debug file";
 }
 
 /***
@@ -211,5 +209,3 @@ void debug_Signal(const signal& sig){
 			debug_Printf("load");
 	}
 }
-
-#endif

@@ -38,9 +38,7 @@ int main () {
 	setting set;
 	
 	// Initialize the debug
-	#if DEBUG
 	debug_Init();
-	#endif
 	
 	// initialize the program directories
 	if(set.InitDir() != signal::good) {
@@ -59,9 +57,7 @@ int main () {
 	if(result != signal::good){
 		if(result == signal::file_err) {
 			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.", nullptr);
-			#if DEBUG
 			debug_Printf("Stype initialization failed! exiting with file error signal");
-			#endif
 			return EXIT_FAILURE;
 		}
 	}

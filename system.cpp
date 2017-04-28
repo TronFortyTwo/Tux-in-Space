@@ -34,14 +34,12 @@ void system_c::NewObj (const setting& set) {
 	object temp(set, *stype, result);
 	if(result == signal::good)
 		o.push_back(temp);
-	#if DEBUG
 	else {
 		if(result != signal::aborted){
 			debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
 			debug_Signal(result);
 		}
 	}
-	#endif
 }
 
 /***
@@ -143,10 +141,8 @@ signal system_c::Read(ifstream& file, string& _name) {
 	// fscanf for objects datas
 	for(unsigned int i=0; i!=o.size(); i++) {
 		if(o[i].ReadComplete(file, *stype) == signal::corrupted) {
-			#if DEBUG
 			debug_Printf("(!) system::Read: the system to load seems corrupted or outdated! While loading the object (read below):");
 			debug_Printf(o[i].name);
-			#endif
 			return signal::corrupted;
 		}
 	}

@@ -21,6 +21,7 @@
  * 
  *	(header file)
  */
+ 
 #ifndef typeh
 #define typeh
 
@@ -42,10 +43,8 @@ class type {
 		color color_max;		// Color range
 		color color_min;
 		
-		bool hunted;			// if is hunted (ON/OFF)
-		bool hunter;			// if hunts (ON/OFF)
-		// BYTE datatype;		// the type of the data the type has (coming  soon)
-		// void *data;			// the pointer to the data, his type is defined in datatype
+		bool hunted;			// if is hunted
+		bool hunter;			// if hunts
 };
 
 #endif

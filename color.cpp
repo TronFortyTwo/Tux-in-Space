@@ -35,7 +35,7 @@ void color::Scan(const setting& set, const color& range_min, const color& range_
 	var[0] = &range_min.red;
 	var[1] = &range_max.red;
 	OPS(set, "Put the value of the red:\n&tdThe value must be between %i and %i", var);
-	cin >> red;
+	red = in_i();
 	while(1) {
 		if((red <= range_max.red) && (red >= range_min.red))
 			break;
@@ -49,7 +49,7 @@ void color::Scan(const setting& set, const color& range_min, const color& range_
 	var[0] = &range_min.green;
 	var[1] = &range_max.green;
 	OPS(set, "Put the value of the green:\n&tdThe value must be between %i and %i", var);
-	cin >> green;
+	green = in_i();
 	while(1) {
 		if((green <= range_max.green) && (green >= range_min.green))
 			break;
@@ -63,7 +63,7 @@ void color::Scan(const setting& set, const color& range_min, const color& range_
 	var[0] = &range_min.blue;
 	var[1] = &range_max.blue;
 	OPS(set, "Put the value of the blue:\n&tdThe value must be between %i and %i", var);
-	cin >> blue;
+	blue = in_i();
 	while(1) {
 		if((blue <= range_max.blue) && (blue >= range_min.blue))
 			break;

@@ -32,10 +32,10 @@
 #include "generic.h"
 #include "color.h"
 #include "object_data.h"
-#include "math.h"
 #include "typeSTR.h"
 #include "in.h"
 #include "system.h"
+#include "math.h"
 
 class type;
 class system_c;
