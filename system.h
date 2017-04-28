@@ -63,7 +63,8 @@ class system_c {
 		void Hunter_AI	   ();	// activate the hunter AIs and make them influence the system
 		void physic_Impacts();	// Compute impacts between objects
 		
-		void Write(std::ofstream&);		// Write in an already opened ofstream the system
+		void Write(std::ofstream&);					// Write in an already opened ofstream the system
+		signal Read(std::ifstream&, std::string&);	// Read in an already opened ofstream the system
 };
 
 

@@ -120,24 +120,55 @@ void system_c::Write(ofstream& dest){
 		o[i].WriteComplete(dest);
 }
 
+signal system_c::Read(ifstream& file, string& _name) {
+	
+	unsigned int num_obj;
+	
+	name = _name;
+	
+	file >> precision;
+	file >> num_obj;
+	file >> G;
+	int y, d, h, m;
+	float s;
+	file >> y;
+	file >> d;
+	file >> h;
+	file >> m;
+	file >> s;
+	stime = time_sim(y, d, h, m, s);
+	
+	// alloc memory
+	o.resize(num_obj);
+	// fscanf for objects datas
+	for(unsigned int i=0; i!=o.size(); i++) {
+		if(o[i].ReadComplete(file, *stype) == signal::corrupted) {
+			#if DEBUG
+			debug_Printf("(!) system::Read: the system to load seems corrupted or outdated! While loading the object (read below):");
+			debug_Printf(o[i].name);
+			#endif
+			return signal::corrupted;
+		}
+	}
+	return signal::good;
+}
 
 /**
  * Load a system from a file
  */
 system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 
-	std::string new_name;	// the name of the system
-	std::string path;		// the system file (path)
-	int num_obj;
+	std::string _name;	// the name of the system
+	std::string path;	// the system file (path)
 	
 	result = signal::good;
 	
 	// ask which system
 	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", nullptr);
-	in_s(new_name);
+	in_s(_name);
 	// write the path
 	path = SYSTEM_PATH;
-	path += new_name;
+	path += _name;
 	path += ".sys";
 	// open the file
 	ifstream sysf(path);
@@ -145,35 +176,12 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 		result = signal::file_err;
 		return;
 	}
-	// set the name
-	name = new_name;
-	// scanf system's informations
-	sysf >> precision;
-	sysf >> num_obj;
-	sysf >> G;
-	int y, d, h, m;
-	float s;
-	sysf >> y;
-	sysf >> d;
-	sysf >> h;
-	sysf >> m;
-	sysf >> s;
-	stime = time_sim(y, d, h, m, s);
 	
-	// alloc memory
-	o.resize(num_obj);
-	// fscanf for objects datas
-	for(unsigned int i=0; i!=o.size(); i++) {
-		if(o[i].ReadComplete(sysf, str) == signal::corrupted) {
-			#if DEBUG
-			debug_Printf("(!) the system to load seems corrupted or outdated! While loading the object (read below):");
-			debug_Printf(o[i].name);
-			#endif
-			result = signal::corrupted;
-			break;
-		}
-	}
+	// set the type structure
 	stype = &str;
+	
+	// Read the system
+	result = Read(sysf, _name);
 }
 
 /***

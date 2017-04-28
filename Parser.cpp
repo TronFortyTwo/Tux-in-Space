@@ -143,23 +143,24 @@ void parser_Distance(const setting& set, system_c& sys){
  */
 time_sim parser_Quit (const setting& set, system_c& sys, time_sim& now, bool& quit){
 		
-	time_sim t;	 	//this is the escape time
 	string input;		
-	// ask for confirm to parser_Quit
+	// ask for confirm to quit
 	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", nullptr);
-	in_s();
-	// if doesn't want to parser_Quit return now
+	in_s(input);
+	
 	if (input[0] == 's') {
+		quit = true;
 		sys.Save(set);
 		return now;
 	}
+	
 	else if (input[0] != 'y') {
+		quit = false;
 		return now;
 	}
-	// now we prepare the quit event
-	t = now;
+	
 	quit = true;
-	return t;
+	return now;
 }
 	
 /***
