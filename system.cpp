@@ -64,7 +64,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:", nullptr);
 	// the name
 	in_s(name);
-	// ask for the precision
+	
 	precision = 1;
 }
 
@@ -185,7 +185,7 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
  */
 object *system_c::SearchObj(const string& tofind) {
 	for (unsigned int i=0; i != o.size(); i++)
-		if(o[i].name.compare(tofind))
+		if(!o[i].name.compare(tofind))
 			return &o[i];
 	return nullptr;
 }

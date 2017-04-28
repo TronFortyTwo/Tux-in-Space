@@ -168,7 +168,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	object *obj;	//the pointer to the object
 		
 	// ask the user for the name
-	OPS(set, "DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to Quit", nullptr);
+	OPS(set, "DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to go back", nullptr);
 	in_s(name);
 	if (!name.compare("n"))
 		return;

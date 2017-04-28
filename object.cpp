@@ -376,8 +376,8 @@ void object::AI_Hunter(system_c& sys) {
 	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
-	// TODO
-	pos = pos - (pos - closest->pos) * sys.precision * HUNTER_ACCELERATION;
+	vel = pos - (pos - closest->pos) * sys.precision * HUNTER_ACCELERATION;
+	cout << "gfese\n";
 }
 
 
