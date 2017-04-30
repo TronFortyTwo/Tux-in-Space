@@ -48,7 +48,7 @@ int main () {
 	}
 	
 	// print loading and license banner
-	OPS(set, "LOADING CSPACE........\n\n" BANNER, nullptr);
+	OPS(set, "LOADING CSPACE........\n\n" BANNER);
 	
 	// The big type STRucture
 	signal result;
@@ -56,7 +56,7 @@ int main () {
 	// error handling
 	if(result != signal::good){
 		if(result == signal::file_err) {
-			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.", nullptr);
+			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.");
 			debug_Printf("Stype initialization failed! exiting with file error signal");
 			return EXIT_FAILURE;
 		}
@@ -69,7 +69,7 @@ int main () {
 	// EXITING THE PROGRAM
 		
 	// goodbye message
-	OPS (set, "CSPACE\n\n\n%r-&t5SEE YOU LATER!", nullptr);
+	OPS (set, "CSPACE\n\n\n%r-&t5SEE YOU LATER!");
 	
 	return EXIT_SUCCESS;
 }

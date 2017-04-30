@@ -46,11 +46,11 @@ bool Shell (setting& set, typeSTR& stype) {
 			if(result != signal::good) {
 				delete sys;
 				if(result == signal::file_err) {
-					OPS_Error(set, "A system with that name doesn't exist! Type something to continue and return to the main menu", nullptr);
+					OPS_Error(set, "A system with that name doesn't exist! Type something to continue and return to the main menu");
 					in_s();
 				}
 				else if(result == signal::corrupted) {
-					OPS_Error(set, "The system can't be loaded. It is from an incompatible previous version or has been corrupted. Type something to continue and return to the main menu", nullptr);
+					OPS_Error(set, "The system can't be loaded. It is from an incompatible previous version or has been corrupted. Type something to continue and return to the main menu");
 					in_s();
 				}
 				return true;
@@ -82,7 +82,7 @@ bool Shell (setting& set, typeSTR& stype) {
 			// call the instruction parser and ask him for destination time
 			stime = Parser(set, *sys, quit);
 			// loading message
-			OPS(set, "Loading...", nullptr);
+			OPS(set, "Loading...");
 		}
 	/*
 	else if (set.vmode == V_GL) {

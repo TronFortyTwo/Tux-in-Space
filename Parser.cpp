@@ -55,7 +55,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
-		OPS(set, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...", nullptr);
+		OPS(set, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
 		in_s(input);
 	}
 	// parser_Jump
@@ -99,8 +99,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
  * The parser_Reask function. parser_Reask the input
  */
 void parser_Reask(const setting& set, const string& command){
-	void const *const var = &command;
-	OPS_Error(set, "Sorry. But the command %s that you wrote is unknown. Press something to continue:", &var);
+	OPS_Error(set, "Sorry. But the command " + command + " that you wrote is unknown. Press something to continue:");
 }
 	
 /***
@@ -112,29 +111,28 @@ void parser_Distance(const setting& set, system_c& sys){
 	object *o;
 	object *u;
 	long double distance[2];
-	void *var[2];
 	
 	// ask which two object
-	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:", nullptr);
+	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:");
 	in_s(name);
 	o = sys.SearchObj(name);
 	if(o == nullptr) {
-		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command", nullptr);
+		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command");
 		return;
 	}
-	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:", nullptr);
+	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:");
 	in_s(name);
 	u = sys.SearchObj(name);
 	if(u == nullptr) {
-		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command", nullptr);
+		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command");
 		in_s();
 		return;
 	}
 	distance[0] = o->Distance(*u);
 	distance[1] = (o->pos+o->vel-u->pos-u->vel).length() - distance[0];
-	var[0] = distance;
-	var[1] = &distance[1];
-	OPS(set, "DISTANCE\n\nThe distance between the two object is:\n&td%l Km\n&t0And, if the two object take constant velocity, the distance will change at a velocity of\n&td%l km/s\n\n&t0Press something to continue...", var);
+	stringstream ss;
+	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance[0] <<" Km\n&t0And, if the two object keep constant velocity, the distance will change at a velocity of\n&td" << distance[1] << " km/s\n\n&t0Press something to continue...";
+	OPS(set, ss.str());
 	in_s();
 }
 	
@@ -145,7 +143,7 @@ bool parser_Quit (const setting& set, system_c& sys){
 		
 	string input;		
 	// ask for confirm to quit
-	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]", nullptr);
+	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]");
 	in_s(input);
 	
 	if (input[0] == 's') {
@@ -168,7 +166,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	object *obj;	//the pointer to the object
 		
 	// ask the user for the name
-	OPS(set, "DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to go back", nullptr);
+	OPS(set, "DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to go back");
 	in_s(name);
 	if (!name.compare("n"))
 		return;
@@ -176,7 +174,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	// search the object
 	obj = sys.SearchObj(name);
 	if (obj == nullptr) {	//if there isn't any object whit that name
-		OPS_Error(set, "DELETE\n\nThere isn't any object whit that name!\nPress something to continue", nullptr);
+		OPS_Error(set, "DELETE\n\nThere isn't any object whit that name!\nPress something to continue");
 		in_s();
 		return;
 	}
@@ -191,38 +189,35 @@ void parser_Delete(const setting& set, system_c& sys) {
 void parser_Information(const setting& set, system_c& sys) {
 		
 	object *obj;	// The object to describe
-	void *var[13];	// The variables to give to OPS
-	unsigned int obs = sys.o.size();
 	string input;
-
-	var[0] = &sys.name;
-	var[1] = &obs;
+	stringstream ss;
+	
 	// Generic informations about the system
-	OPS(set, "Informations\n\nSystem %s whit %i objects\n\nOf which object do you want informations? press 'n' to not display any object informations", var);
+	ss << "Informations\n\nSystem " << sys.name << " with " << sys.o.size() 
+		<< " objects\n\nOf which object do you want informations? press 'n' to not display any object informations";
+	OPS(set, ss.str());
 	in_s(input);
 	if(!input.compare("n"))
 		return;
 	// information about a precise object
 	obj = sys.SearchObj(input);
 	if(obj == nullptr){
-		OPS_Error(set, "No object whit this name is been found. press a button to continue", nullptr);
+		OPS_Error(set, "No object whit this name is been found. press a button to continue");
 		in_s();
 		return;
-	}	
-	var[0] = &obj->name;
-	var[1] = &obj->typ->name;
-	var[2] = &obj->colour.red;
-	var[3] = &obj->colour.green;
-	var[4] = &obj->colour.blue;
-	var[5] = &obj->mass;
-	var[6] = &obj->radius;
-	var[7] = &obj->pos.x;
-	var[8] = &obj->pos.y;
-	var[9] = &obj->pos.z;
-	var[10] = &obj->vel.x;
-	var[11] = &obj->vel.y; 
-	var[12] = &obj->vel.z;
-	OPS(set, "Informations about %s\n%f-type: %s\n%f-color: &td \nred: %i\ngreen: %i\nblue: %i &t0 \n%f-mass: %l\n%f-radius: %l\n%f-x: %l\n\ny: %l\n\nz: %l\n%f-velocity in x: %l\n\nvelocity in y: %l\n\nvelocity in z: %l\n%f-\n\nPress somthing to continue...", var);
+	}
+	
+	ss.clear();
+	ss.str("");
+	ss << "Informations about " << obj->name << "%s\n%r-type: " << obj->typ->name 
+		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
+		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->mass 
+		<< "\n%r-radius: " << obj->radius << "\n%r-x: " << obj->pos.x << "\n\ny: "
+		<< obj->pos.y << "\n\nz: " << obj->pos.z << "\n%r-velocity in x: "
+		<< obj->vel.x << "\n\nvelocity in y: " << obj->vel.y << "\n\nvelocity in z: "
+		<< obj->vel.z << "\n%r-\n\nPress somthing to continue...";
+	
+	OPS(set, ss.str());
 	in_s();
 }
 	
@@ -232,7 +227,7 @@ void parser_Information(const setting& set, system_c& sys) {
  */
 time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 		
-	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max %l seconds", (void **)&precision);
+	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision) + " seconds");
 	//scanf the time
 	int y, d, h, m;
 	float s;
@@ -251,7 +246,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	
 	// check the time is future
 	if (now.Compare(t) == comparison::major){
-		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...", nullptr);
+		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...");
 		in_s();
 		return now;
 	}
@@ -265,23 +260,14 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 
 	time_sim t;
-	void const *var[7];
-	// set the var to give to OPS
-	int y, d, h, m;
-	float s;
-	y = now.Year();
-	d = now.Day();
-	h = now.Hour();
-	m = now.Minute();
-	s = now.Second();
-	var[0] = &y;
-	var[1] = &d;
-	var[2] = &h;
-	var[3] = &m;
-	var[4] = &s;
-	var[6] = &precision;
 	
-	OPS(set, "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds" , var);
+	stringstream ss;
+	ss << "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR "
+		<< now.Year() << " DAY " << now.Day() << " TIME " << now.Hour() << ":"
+		<< now.Minute() << ":" << now.Second() << "\nThe jump will be made whit an error of max "
+		<< precision << " seconds";
+	
+	OPS(set, ss.str());
 	while(1) {
 		int y, d, h, m;
 		float s;
@@ -301,7 +287,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		if(t.Compare(now) == comparison::major)	{
 			// Error message if the time given isn't valid
 			t = now;
-			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR %i DAY %i TIME %i:%i:%f\nThe jump will be made whit an error of max %l seconds", var);
+			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR " + to_string(t.Year()) + " DAY " + to_string(t.Day()) + " TIME " + to_string(t.Hour()) + ":" + to_string(t.Minute()) + ":" + to_string(t.Second()) + "\nThe jump will be made whit an error of max " + to_string(precision) + " seconds");
 		}
 		else
 			break;

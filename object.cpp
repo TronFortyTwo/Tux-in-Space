@@ -65,9 +65,7 @@ void object::GetBigger (object& obj, object *& ptr) {
  * 	return ABORTED_SIG if the new object isn't initialized
  */
 object::object (const setting& set, typeSTR& stype, signal& result) {
-		
-	//variables
-	void *var[19];
+	
 	int input;
 	string comment;				// This is a buffer that contein comment of what is just been done
 	string mass_irregularity;	// assume the value IRREGULARITY if the mass is out of range
@@ -110,25 +108,25 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		}
 		
 		// Print the actual state and scan the desire of the user
-		var[0] = &name;
-		var[1] = &name_irregularity;
-		var[2] = &typ->name;
-		var[3] = &typ->description;
-		var[4] = &colour.red;
-		var[5] = &color_irregularity;
-		var[6] = &colour.green;
-		var[7] = &colour.blue;
-		var[8] = &mass;
-		var[9] = &mass_irregularity;
-		var[10] = &radius;
-		var[11] = &pos.x;
-		var[12] = &pos.y;
-		var[13] = &pos.z;
-		var[14] = &vel.x;
-		var[15] = &vel.y;
-		var[16] = &vel.z;
-		var[17] = &comment;
-		OPS(set, "CREATE A NEW OBJECT\n\n%r-1) name:         %s%s\n%r-2) type:         %s\n&ti7%s&t0\n%r-3) color:        red: %i   %s&ti7\ngreen: %i\nblue: %i&t0\n%r-4) mass:         %l   %s\n%r-5) radius:       %l\n%r-6) coordinates:  x: %l&ti7\ny: %l\nz: %l&t0\n%r-7) velocity:     x: %l&ti7\ny: %l\nz: %l&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n%s", var);
+		stringstream ss;
+		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
+			<< name << name_irregularity
+			<< "\n%r-2) type:         " << typ->name
+			<< "\n&ti7" << typ->description
+			<< "&t0\n%r-3) color:        red: " << colour.red
+			<< "   " << color_irregularity << "&ti7\ngreen: "
+			<< colour.green << "\nblue: " << colour.blue
+			<< "&t0\n%r-4) mass:         " << mass << "   "
+			<< mass_irregularity << "\n%r-5) radius:       "
+			<< radius << "\n%r-6) coordinates:  x: "
+			<< pos.x << "&ti7\ny: " << pos.y << "\nz: " << pos.z
+			<< "&t0\n%r-7) velocity:     x: " << vel.x
+			<< "&ti7\ny: " << vel.y << "\nz: " << vel.z
+			<< "&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  "
+			<< "this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n"
+			<< comment;
+			
+		OPS(set, ss.str());
 		input = in_i();
 		
 		// reset previous comment
@@ -137,7 +135,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		switch(input) {
 			// Name
 			case 1:
-				OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:", nullptr);
+				OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:");
 				in_s(name);
 				// apply the new name
 				comment += "\nNew name assigned succefully!";
@@ -154,35 +152,36 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 				break;
 		// Mass
 			case 4:
-				var[0] = & typ->mass_min;
-				var[1] = & typ->mass_max;
-				OPS (set, "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between %l and %l", var);
+				ss.clear();
+				ss.str("");
+				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between " << typ->mass_min << " and " << typ->mass_max;
+				OPS (set, ss.str());
 				mass = in_ld();
 				comment += "\nNew mass assigned succefully!";
 				break;
 		// Radius
 			case 5:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)", nullptr);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)");
 				radius = in_ld();
 				comment += "\nNew radius assigned succefully!";
 				break;
 		// Coordiates
 			case 6:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)", nullptr);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)");
 				pos.x = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)", nullptr);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)");
 				pos.y = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)", nullptr);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)");
 				pos.z = in_ld();
 				comment += "\nNew coordinates assigned succefully!";
 				break;
 		// Velocity
 			case 7:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)", var);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)");
 				vel.x = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)", var);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)");
 				vel.y = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)", var);
+				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)");
 				vel.z = in_ld();
 				comment += "\nNew velocity assigned succefully!";
 				break;
@@ -277,7 +276,7 @@ void object::Save(const setting& set) {
 	
 	// if the file doesn't exist
 	if(!file){
-		OPS(set, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]", nullptr);
+		OPS(set, "While saving: The object you want to save alredy exist.\nDo you want to delete the previous object and save this? [n = no | something else = y]");
 		in_s(input);
 		if(!input.compare("n"))
 			return;

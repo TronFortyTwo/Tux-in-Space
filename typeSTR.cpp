@@ -61,6 +61,10 @@ typeSTR::typeSTR (signal& result) {
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
+		if(!stream) {
+			result = signal::file_err;
+			return;
+		}
 		
 		for(unsigned int i=0; i!=t.size(); i++) {
 			do
@@ -75,6 +79,11 @@ typeSTR::typeSTR (signal& result) {
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
+		if(!stream) {
+			result = signal::file_err;
+			return;
+		}
+		
 		for(unsigned int i=0; i!=t.size(); i++) {
 			do
 				in_hfs(buf, stream);
@@ -90,6 +99,11 @@ typeSTR::typeSTR (signal& result) {
 	{
 		// the stream
 		ifstream stream(TYPE_DATABASE_FILE);
+		if(!stream) {
+			result = signal::file_err;
+			return;
+		}
+		
 		// loop to scan all the types
 		for(unsigned int i=0; i!=t.size(); i++) {
 			// start assigning some values
@@ -276,7 +290,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		buf << types_listed.size() + 3;
 		buf << ") back to the top";
 		// print
-		OPS(set, buf.str(), nullptr);
+		OPS(set, buf.str());
 		
 		// scan the input as long as a valid number is given
 		do
@@ -315,13 +329,13 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 			buf << types_listed.size() + 1;
 			buf << ") Generic ";
 			buf << commonparent->name;
-			OPS(set, buf.str(), nullptr);
+			OPS(set, buf.str());
 			// input
 			unsigned int n = in_i();
 			
 			// check that is a valid value
 			if ((n < 1) || (n > types_listed.size() + 1)) {
-				OPS(set, "There is no type with that number!\n\nPress something to continue...", nullptr);
+				OPS(set, "There is no type with that number!\n\nPress something to continue...");
 				in_s();
 				continue;
 			}
@@ -364,7 +378,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 
 			// finalizing the description page
 			buf << "\n\nPress something to continue...";
-			OPS(set, buf.str(), nullptr);
+			OPS(set, buf.str());
 			in_s();
 		}
 		// if is the back button return to the start

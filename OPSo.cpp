@@ -67,5 +67,5 @@ void OPSo (const setting& set, system_c& sys) {
 		buffer += "\n&t1The system is empty.&t2\nUse the 'create' command to create a new object\nUse the 'help' command for help";
 	
 	// Print all
-	OPS(set, buffer, nullptr);
+	OPS(set, buffer);
 }

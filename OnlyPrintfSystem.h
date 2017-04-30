@@ -33,8 +33,8 @@
 class setting;
 
 // global functions
-void OPS		(const setting&, const std::string&, const void *const* const);	// Use it to print things
-void OPS_Error	(const setting&, const std::string&, const void *const* const);	// Use it to signal errors
-void OPS_MemLack(const std::string&);			// Call it when you can't alloc more RAM (for example when a malloc return nullptr)
+void OPS		(const setting&, const std::string&);	// Use it to print things
+void OPS_Error	(const setting&, const std::string&);	// Use it to signal errors
+void OPS_MemLack(const std::string&);					// Call it when you can't alloc more RAM (for example when a malloc return nullptr)
 
 #endif

@@ -61,7 +61,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	G = 6.67e-17;
 	
 	// Ask for the name of the new system
-	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:", nullptr);
+	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:");
 	// the name
 	in_s(name);
 	
@@ -85,7 +85,7 @@ void system_c::Save(const setting& set){
 	// open the file to read
 	ifstream idest(path);
 	if(!idest) {
-		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]", nullptr);
+		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]");
 		in_s(input);
 		if(!input.compare("n"))
 			return;
@@ -93,14 +93,14 @@ void system_c::Save(const setting& set){
 	// open the file to write
 	ofstream odest(path);
 	if(!odest) {
-		OPS(set, "FAILED TO SAVE THE SYSTEM!\n\nCan't access file to write on\nPress something to continue", nullptr);
+		OPS(set, "FAILED TO SAVE THE SYSTEM!\n\nCan't access file to write on\nPress something to continue");
 		in_s();
 	}
 	
 	// Write information about the system
 	Write(odest);
 	
-	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue", nullptr);
+	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue");
 	in_s();
 }
 
@@ -160,7 +160,7 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 	result = signal::good;
 	
 	// ask which system
-	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?", nullptr);
+	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?");
 	in_s(_name);
 	// write the path
 	path = SYSTEM_PATH;

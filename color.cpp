@@ -27,51 +27,54 @@ using namespace std;
  * The color_Scan function get a color and return it
  */
 void color::Scan(const setting& set, const color& range_min, const color& range_max) {
-	
-	const void *var[3];	// the vars to give to OPS
 		
 	// scan them and chek if the value given are true
 	// red
-	var[0] = &range_min.red;
-	var[1] = &range_max.red;
-	OPS(set, "Put the value of the red:\n&tdThe value must be between %i and %i", var);
+	
+	stringstream ss;
+	ss << "Put the value of the red:\n&tdThe value must be between " << range_min.red << " and " << range_max.red;
+	
+	OPS(set, ss.str());
 	red = in_i();
 	while(1) {
+		ss.clear();
+		ss.str("");
 		if((red <= range_max.red) && (red >= range_min.red))
 			break;
-		var[0] = &red;
-		var[1] = &range_min.red;
-		var[2] = &range_max.red;
-		OPS_Error(set, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the red component of the color", var);
-		scanf("%d", &red);
+		ss << "The value " << red << "you put is wrong. Correct values areee between ";
+		ss << range_min.red << " and " << range_max.red << ". Type another value for the red component of the color";
+		OPS_Error(set, ss.str());
+		red = in_i();
 	}
 	// green
-	var[0] = &range_min.green;
-	var[1] = &range_max.green;
-	OPS(set, "Put the value of the green:\n&tdThe value must be between %i and %i", var);
+	ss.clear();
+	ss.str("");
+	ss << "Put the value of the green:\n&tdThe value must be between " << range_min.green << " and " << range_max.green;
+	OPS(set, ss.str());
 	green = in_i();
+	
 	while(1) {
 		if((green <= range_max.green) && (green >= range_min.green))
 			break;
-		var[0] = &green;
-		var[1] = &range_min.green;
-		var[2] = &range_max.green;
-		OPS_Error(set, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", var);
-		scanf("%d", &green);
+		ss << "The value " << green << "you put is wrong. Correct values areee between ";
+		ss << range_min.green << " and " << range_max.green << ". Type another value for the green component of the color";
+		OPS_Error(set, ss.str());
+		green = in_i();
 	}
 	// blue
-	var[0] = &range_min.blue;
-	var[1] = &range_max.blue;
-	OPS(set, "Put the value of the blue:\n&tdThe value must be between %i and %i", var);
+	ss.clear();
+	ss.str("");
+	ss << "Put the value of the blue:\n&tdThe value must be between " << range_min.blue << " and " << range_max.blue;
+	OPS(set, ss.str());
 	blue = in_i();
+	
 	while(1) {
 		if((blue <= range_max.blue) && (blue >= range_min.blue))
 			break;
-		var[0] = &blue;
-		var[1] = &range_min.blue;
-		var[2] = &range_max.blue;
-		OPS_Error(set, "The value %i that you have put is wrong. Correct values are between %i and %i. Type another value for the green component of the color", var);
-		scanf("%d", &blue);
+		ss << "The value " << blue << "you put is wrong. Correct values areee between ";
+		ss << range_min.blue << " and " << range_max.blue << ". Type another value for the blue component of the color";
+		OPS_Error(set, ss.str());
+		blue = in_i();
 	}
 }
 	
