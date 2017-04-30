@@ -84,7 +84,7 @@ void system_c::Save(const setting& set){
 	
 	// open the file to read
 	ifstream idest(path);
-	if(!idest) {
+	if(idest) {
 		OPS(set, "While saving: The system you want to save alredy exist.\nDo you want to delete the previous system and save this? [n = no | something else = y]");
 		in_s(input);
 		if(!input.compare("n"))
