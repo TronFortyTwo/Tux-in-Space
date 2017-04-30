@@ -176,7 +176,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	// search the object
 	obj = sys.SearchObj(name);
 	if (obj == nullptr) {	//if there isn't any object whit that name
-		OPS_Error(set, "There isn't any object whit that name!\nPress something to continue", nullptr);
+		OPS_Error(set, "DELETE\n\nThere isn't any object whit that name!\nPress something to continue", nullptr);
 		in_s();
 		return;
 	}

@@ -231,31 +231,22 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 	type *commonparent = Search("Object");
 	type& genobj = *Search("Object");
 	// the output buffer
-	string buf;
-	// the last object number
-	int maxn;
-	// the number of the back and description buttons
-	int backn, descrn, genericn;
+	stringstream buf;
 	// The pointers to the types listed
 	vector<type *> types_listed;
 	// input
-	int input;
-	// stuff to give to OPS and its counter
-	vector<int> ivar;
-	ivar.reserve(t.size());
-	vector<void *> var;
-	var.reserve(t.size());
+	unsigned int input;
 
 	// the main loop
 	while(1) {
-		// restart elaborate the output
-		maxn = 0;
+		types_listed.clear();
+		buf.clear();
+		buf.str("");
 		// the title
-		buf = title;
-		buf += "\n";
+		buf << title << "\n";
 		// write in the dbuf the parent
-		buf += commonparent->name;
-		buf += ":\n";
+		buf << commonparent->name;
+		buf << ":\n";
 		// search for types that have as parent commonparent
 		for (unsigned int i=0; i!=t.size(); i++) {
 			// if the type has commonparent as parent
@@ -264,121 +255,120 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 				// it will be printed in the generic
 				if(&t[i] == t[i].parent)
 					continue;
-				// write its number
-				buf += "\n%i) %s";	// Write the object in the buffer
 				types_listed.push_back(&t[i]);
-				maxn++;
-				ivar.push_back(maxn);
-				var.push_back(&ivar.back());
-				var.push_back(&t[i].name);
+				buf << "\n";
+				buf << types_listed.size();
+				buf << ") ";
+				buf << t[i].name;
 			}
 		}
 		// add the generic button
-		genericn = maxn+1;
-		var.push_back(&genericn);
-		buf += "\n%i) Generic ";
-		buf += commonparent->name;
+		buf << "\n";
+		buf << types_listed.size() + 1;
+		buf << ") Generic ";
+		buf << commonparent->name;
 		// add the description button
-		descrn = maxn+2;
-		var.push_back(&descrn);
-		buf += "\n\n%i) description of an object";
+		buf << "\n\n";
+		buf << types_listed.size() + 2;
+		buf << ") description of an object";
 		// add the back button
-		backn = maxn+3;
-		var.push_back(&backn);
-		buf += "\n%i) back to the top";
-		types_listed.push_back(&genobj);
-		// print and reset some vectors
-		OPS(set, buf, &var[0]);
-		ivar.resize(0);		// capacity is still = number!
-		var.resize(0);
-		
-		// make indexes start from 0
-		maxn--;
-		genericn--;
-		descrn--;
-		backn--;
+		buf << "\n";
+		buf << types_listed.size() + 3;
+		buf << ") back to the top";
+		// print
+		OPS(set, buf.str(), nullptr);
 		
 		// scan the input as long as a valid number is given
 		do
-			input = in_i() - 1;
-		while ((input < 0) || (input > descrn));
+			input = in_i();
+		while ((input < 1) || (input > types_listed.size() + 3));
 		
 		// if the value point to a type, set this type as pointer and continue if the type is parent of some type, else exit the loop
-		if (input <= maxn) {
-			bool child = false;		// NO if the type haven't any child  
-			commonparent = types_listed[input];
+		if (input <= types_listed.size()) {
+			bool child = false;
+			commonparent = types_listed[input-1];
 			for(unsigned int i=0; i!=t.size(); i++) {
 				if(commonparent == t[i].parent)
 					child = true;
 			}
 			if(child == false) 
-				return *types_listed[input];
+				return *commonparent;
 		}
 		// if is the generic xxx button
-		else if (input == genericn)
+		else if (input == types_listed.size() + 1)
 			return *commonparent;
 		// if is the description button
-		else if (input == descrn) {
-			int n;
-			type *type_descr;	// the type described
+		else if (input == types_listed.size() + 2) {
+			
 			// output
-			buf = "Of which type of object do you want an explaination?\n";
-			for(int i=0; i <= maxn; i++){
-				buf += "\n%i) %s";
-				ivar.push_back(i+1);
-				var.push_back(&ivar[i]);
-				var.push_back(&types_listed[i]->name);
+			buf.clear();
+			buf.str("");
+			buf << "Of which type of object do you want an explaination?\n";
+			for(unsigned int i=0; i < types_listed.size(); i++){
+				buf << "\n";
+				buf << i+1;
+				buf << ") ";
+				buf << types_listed[i]->name;
 			}
 			// generic
-			buf += "\n%i) %s";
-			ivar.push_back(descrn);				// descrn = genericn+1
-			var.push_back(&ivar.back());
-			var.push_back(&commonparent->name);
-			OPS(set, buf, &var[0]);
-			var.resize(0);
-			ivar.resize(0);
+			buf << "\n";
+			buf << types_listed.size() + 1;
+			buf << ") Generic ";
+			buf << commonparent->name;
+			OPS(set, buf.str(), nullptr);
 			// input
-			n = in_i();
-			n--;
+			unsigned int n = in_i();
+			
 			// check that is a valid value
-			if ((n < 0) || (n > descrn)) {
-				OPS(set, "There is no object whit that number out there! press something to continue...", nullptr);
+			if ((n < 1) || (n > types_listed.size() + 1)) {
+				OPS(set, "There is no type with that number!\n\nPress something to continue...", nullptr);
 				in_s();
 				continue;
 			}
+			
 			// set the type
-			type_descr = types_listed[n];
-			buf = "Info about:  ";
-			buf += type_descr->name;
-			buf += "\n\nDescription: &ti3";
-			buf += type_descr->description;
-			buf += "&t0";
-			buf += "\nUnder the category:&t9 ";
-			buf += type_descr->parent->name;
-			buf += "&t0";
+			type* type_descr;
+			if(n == types_listed.size()+1)
+				type_descr = commonparent;
+			else
+				type_descr = types_listed[n-1];
+			buf.clear();
+			buf.str("");
+			buf << "Info about:  ";
+			buf << type_descr->name;
+			buf << "\n\nDescription: &ti3";
+			buf << type_descr->description;
+			buf << "&t0";
+			buf << "\nUnder the category:&t9 ";
+			buf << type_descr->parent->name;
+			buf << "&t0";
 			// the mass range
-			buf += "\nMinimum mass: %l";
-			buf += "\nMaximum mass: ";
-			var[0] = &type_descr->mass_min;
-			buf += "%l";
-			var.push_back(&type_descr->mass_max);
+			buf << "\nMinimum mass: ";
+			buf << type_descr->mass_min;
+			buf << "\nMaximum mass: ";
+			buf << type_descr->mass_max;
 			// the color range
-			buf += "\nColor range:\n&t9red: %i - %i\ngreen: %i - %i\nblue: %i - %i&t0";
-			var.push_back(&type_descr->color_min.red);
-			var.push_back(&type_descr->color_max.red);
-			var.push_back(&type_descr->color_min.green);
-			var.push_back(&type_descr->color_max.green);
-			var.push_back(&type_descr->color_min.blue);
-			var.push_back(&type_descr->color_max.blue);
+			buf << "\nColor range:\n&t9red: ";
+			buf << type_descr->color_min.red;
+			buf << " - ";
+			buf << type_descr->color_max.red;
+			buf << "\ngreen: ";
+			buf << type_descr->color_min.green;
+			buf << " - ";
+			buf << type_descr->color_max.green;
+			buf << "\nblue: ";
+			buf << type_descr->color_min.blue;
+			buf << " - ";
+			buf << type_descr->color_max.blue;
+			buf << "&t0";
+
 			// finalizing the description page
-			buf += "\n\nPress something to continue...";
-			OPS(set, buf, &var[0]);
-			var.resize(0);
-			ivar.resize(0);
+			buf << "\n\nPress something to continue...";
+			OPS(set, buf.str(), nullptr);
 			in_s();
 		}
 		// if is the back button return to the start
-		else if (input == backn)
+		else if (input == types_listed.size() + 3)
 			commonparent = &genobj;
 	}
 }

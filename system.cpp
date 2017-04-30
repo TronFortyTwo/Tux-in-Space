@@ -290,7 +290,7 @@ void system_c::Hunter_AI() {
  * 	- hit that take time
  * 	- partial hit
  * 	- creation of moon, asteroids, debris and other objects from hits
- * 	- special hit mechanics depending on the types of the objects (Partial)
+ * 	- special hit mechanics depending on the types of the objects (WIP)
  */
 void system_c::physic_Impacts() {
 		
