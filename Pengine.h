@@ -17,30 +17,60 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * the big type class
- *  header file
+ * phisic engine implementation
+ * see information file for more info
  */
 
-#ifndef typeSTRh
-#define typeSTRh
+#ifndef PENGINEH
+#define PENGINEH
 
 #include "generic.h"
-#include "type.h"
+#include "math.h"
 
-class type;
-class setting;
+// The physic entity
+// TODO: add orientation, torque and other angular datas
 
-// The structure whit all the types
-
-class typeSTR {
+class PEntity {
+	
+	private:
+	
+		vec3<long double> pos;	// position
+	
+		vec3<long double> vel;	// velocity
+		
+		vec3<long double> acc_force;	// force accumuled in the simulation slice [T/s^2]
+		
 	public:
-		std::vector<type> t;					// the types
 		
-		type&	Browse	(const setting&, const std::string&);	// Browse and choose a type (give a title to the page)
-		type	*Search	(const std::string&);	// Search a type from the name
+		double mass;
+	
+		double radius;
 		
-		// constructor
-		typeSTR(signal& result);
+		// add a force to the entity
+		inline void AddForce(const vec3<long double>& force){
+			acc_force += force;
+		}
+		
+		// Do the simulation for the time slice given
+		void Simulation(const float delta);
+		
+		inline PEntity(const vec3<long double>& _pos, const vec3<long double>& _vel){
+			mass = 0;
+			radius = 0;
+			pos = _pos;
+			vel = _vel;
+		}
+		
+		PEntity(const vec3<long double>& _pos,
+			const vec3<long double>& _vel,
+			const double& _mass,
+			const double& _radius)
+		{
+			mass = _mass;
+			radius = _radius;
+			pos = _pos;
+			vel = _vel;
+		}
 };
 
 #endif

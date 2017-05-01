@@ -376,10 +376,9 @@ void object::AI_Hunter(system_c& sys) {
 	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
-	long double temp = HUNTER_ACCELERATION * sys.precision / Distance(*closest);
-	vel.x -= (pos.x - closest->pos.x) * temp;
-	vel.y -= (pos.y - closest->pos.y) * temp;
-	vel.z -= (pos.z - closest->pos.z) * temp;
+	vel.x -= (pos.x - closest->pos.x) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
+	vel.y -= (pos.y - closest->pos.y) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
+	vel.z -= (pos.z - closest->pos.z) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
 }
 
 

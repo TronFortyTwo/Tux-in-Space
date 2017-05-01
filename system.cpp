@@ -248,7 +248,7 @@ void system_c::Physic_Gravity() {
 				dist = vec3<long double>(0.000001, 0.000001, 0.000001);
 			}	
 			// the force is f = G * m1 * m2 / dist^2
-			f = G * o[i].mass * o[l].mass / (pow(dist.length(), 2) );
+			f = G * o[i].mass * o[l].mass / pow(dist.length(), 2);
 			// fx : f = distx : dist
 			// the aceleration for i (F = m * a -> a = F / m)
 			// update the velocity of i and l(V += a * t)

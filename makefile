@@ -19,6 +19,7 @@ objects = \
 		shell.o\
 		OPSo.o\
 		menu.o\
+		Pengine.o
 # like object but whit .h but without main.h and with generic.h
 libraries = \
 		debug.h\
@@ -38,6 +39,7 @@ libraries = \
 		shell.h\
 		OPSo.h\
 		menu.h\
+		Pengine.h
 
 cspace: $(objects) $(libraries)
 		g++ -o cspace $(CXXFLAGS) $(objects)

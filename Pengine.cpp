@@ -17,30 +17,17 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * the big type class
- *  header file
+ * phisic engine implementation
  */
 
-#ifndef typeSTRh
-#define typeSTRh
+#include "Pengine.h"
 
-#include "generic.h"
-#include "type.h"
-
-class type;
-class setting;
-
-// The structure whit all the types
-
-class typeSTR {
-	public:
-		std::vector<type> t;					// the types
-		
-		type&	Browse	(const setting&, const std::string&);	// Browse and choose a type (give a title to the page)
-		type	*Search	(const std::string&);	// Search a type from the name
-		
-		// constructor
-		typeSTR(signal& result);
-};
-
-#endif
+void PEntity::Simulation(float delta) {
+	
+	// apply the force
+	vel += acc_force * delta / mass;
+	acc_force.zero();
+	
+	// move the entity
+	pos += vel * delta;
+}

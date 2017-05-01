@@ -43,6 +43,12 @@ template<class T> class vec3 {
 			return vec3<T>(abs(x), abs(y), abs(z));
 		}
 		
+		inline void zero() {
+			x = 0;
+			y = 0;
+			z = 0;
+		}
+		
 		// return the greatest axis
 		axis3 greatest();
 		
@@ -80,6 +86,11 @@ template<class T> class vec3 {
 			if(n == axis3::y)
 				return y;
 			return z;
+		}
+		inline void operator+= (const vec3<T>& s){
+			x += s.x;
+			y += s.y;
+			z += s.z;
 		}
 };
 
