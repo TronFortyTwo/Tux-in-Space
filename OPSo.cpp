@@ -49,17 +49,17 @@ void OPSo (const setting& set, system_c& sys) {
 			buffer += " | ";
 			buffer += t.typ->name;
 			buffer += "\nX axis: ";
-			buffer += to_string(t.pos.x);
+			buffer += to_string(t.Pos().x);
 			buffer += " Km with a velocity of ";
-			buffer += to_string(t.vel.x);
+			buffer += to_string(t.Vel().x);
 			buffer +=" Km/s\nY axis: ";
-			buffer += to_string(t.pos.y);
+			buffer += to_string(t.Pos().y);
 			buffer += " Km with a velocity of ";
-			buffer += to_string(t.vel.y);
+			buffer += to_string(t.Vel().y);
 			buffer += " Km/s\nZ axis: ";
-			buffer += to_string(t.pos.z);
+			buffer += to_string(t.Pos().z);
 			buffer += " Km with a velocity of ";
-			buffer += to_string(t.vel.z);
+			buffer += to_string(t.Vel().z);
 			buffer += " Km/s\n%r-";
 		}
 	}

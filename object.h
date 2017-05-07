@@ -31,40 +31,50 @@
 
 #include "generic.h"
 #include "color.h"
-#include "object_data.h"
 #include "typeSTR.h"
 #include "in.h"
 #include "system.h"
 #include "math.h"
+#include "Pengine.h"
 
 class type;
 class system_c;
 
-class object {
+class object : public PEntity {
 			
 	public:
-		objdata data;		// the data about the object
 		std::string name;	// the name
 		type *typ;			// the type of object
-		long double	radius;	// the object for now are sphere
-		long double mass;
-		vec3<long double> pos;	// position
-		vec3<long double> vel;	// velocity
 		color colour;
 
 		void 		GetBigger 		(object&, object *&);		// Put the address of the bigger of the two object in the third position
 		void 		Save			(const setting&);			// Save the object in a file
-		double 		Distance		(const object&);			// Compute the distance between this objects and another one
 		signal 		Read 			(std::ifstream&, typeSTR&);	// Read from a file an object
 		signal 		ReadComplete 	(std::ifstream&, typeSTR&);	// Read from a file an object whit coordinates
 		void 		Write 			(std::ofstream&);			// Write in a file an object already opened
 		void 		WriteComplete	(std::ofstream&);			// Write in a file an object already opened whit coordinates
-		void		UpdateFast		(double);					// Update x, y, z of an object accordingly to his fast and the simulation precision
 		
 		void 	AI_Hunter 	(system_c&);		// the hunter object will behaviour in the system given
 		
 		void	Impact_Anaelastic(object&);	// create a new object from an impact with another one
 		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
+		
+		inline double Mass() const {
+			return GetMass();
+		}
+		inline double Radius() const {
+			return GetRadius();
+		}
+		inline vec3<long double> Pos() const {
+			return GetPos();
+		}
+		inline vec3<long double> Vel() const {
+			return GetVel();
+		}
+		inline void Sim (float delta){
+			Simulation(delta);
+		}
+		
 		
 		// CONSTRUCTOR:
 		object (typeSTR&, const std::string&, signal&);	// Load from a file (UI)

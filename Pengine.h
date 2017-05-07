@@ -39,16 +39,62 @@ class PEntity {
 		vec3<long double> vel;	// velocity
 		
 		vec3<long double> acc_force;	// force accumuled in the simulation slice [T/s^2]
-		
-	public:
-		
+	
 		double mass;
 	
 		double radius;
+	
+	protected:
+		
+		inline void SetMass(double m) {
+			mass = m;
+		}
+	
+		inline void SetRadius(double r) {
+			radius = r;
+		}
+	
+		inline void SetPos(const vec3<long double>& _pos){
+			pos = _pos;
+		}
+		
+		inline void SetVel(const vec3<long double>& _vel){
+			vel = _vel;
+		}
+	
+	public:
+	
+		inline double GetMass() const {
+			return mass;
+		}
+		
+		inline double GetRadius() const {
+			return radius;
+		}
+		
+		inline vec3<long double> GetPos() const {
+			return pos;
+		}
+		
+		inline vec3<long double> GetVel() const {
+			return vel;
+		}
 		
 		// add a force to the entity
 		inline void AddForce(const vec3<long double>& force){
 			acc_force += force;
+		}
+		
+		// Move all the stats about position and kinematic elements to a dest PEntity
+		inline void MoveKinematic(PEntity& destination){
+			destination.pos = pos;
+			destination.vel = vel;
+			destination.acc_force = acc_force;
+		}
+		
+					
+		inline vec3<long double> Distance(const PEntity& obj) {
+			return vec3<long double>(pos - obj.pos);
 		}
 		
 		// Do the simulation for the time slice given
@@ -61,7 +107,7 @@ class PEntity {
 			vel = _vel;
 		}
 		
-		PEntity(const vec3<long double>& _pos,
+		inline PEntity(const vec3<long double>& _pos,
 			const vec3<long double>& _vel,
 			const double& _mass,
 			const double& _radius)
@@ -71,6 +117,8 @@ class PEntity {
 			pos = _pos;
 			vel = _vel;
 		}
+		
+		inline PEntity() = default;
 };
 
 #endif

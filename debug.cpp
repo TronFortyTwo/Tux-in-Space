@@ -85,12 +85,12 @@ void debug_Object(const object& o) {
 	debug_Printf(buffer);
 	// the mass
 	buffer = "MASS:\t\t\t";
-	ob << o.mass;
+	ob << o.Mass();
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// the radius
 	buffer = "RADIUS:\t\t\t";
-	ob << o.radius;
+	ob << o.Radius();
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// the color
@@ -103,13 +103,15 @@ void debug_Object(const object& o) {
 	buffer += o.typ->name;
 	debug_Printf(buffer);
 	// coordinates
+	vec3<long double> t = o.Pos();
 	buffer = "COORDINATES:\t";
-	ob << o.pos.x << ' ' << o.pos.y << ' ' << o.pos.z;
+	ob << t.x << ' ' << t.y << ' ' << t.z;
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// velocity
+	t = o.Vel();
 	buffer = "VELOCITY:\t";
-	ob << o.vel.x << ' ' << o.vel.y << ' ' << o.vel.z;
+	ob << t.x << ' ' << t.y << ' ' << t.z;
 	buffer += ob.str();
 	debug_Printf(buffer);
 }

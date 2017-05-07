@@ -208,20 +208,12 @@ void system_c::Physic (time_sim& dest) {
 		Hunter_AI();
 		// IMPACTS
 		physic_Impacts();
-		// INERTIA
-		Physic_Inertia();
+		//
+		for (unsigned int i=0; i!=o.size(); i++)
+			o[i].Sim(precision);
 		// TIME
 		stime.AddSec(precision);
 	}
-}
-	
-/***
- * INERTIA
- * Move the objects
- */
-void system_c::Physic_Inertia() {
-	for (unsigned int i=0; i!=o.size(); i++)
-		o[i].UpdateFast(precision);
 }
 
 /***
@@ -233,38 +225,27 @@ void system_c::Physic_Gravity() {
 		
 	// counters
 	unsigned int i,l;
-	// the force and a temporany variable
-	long double f;
-	vec3<long double> temp;
+	// the force
+	long double f_scalar;
+	vec3<long double> f_vec;
 	// the distance
 	vec3<long double> dist;
 	
 	for(i=0; i < o.size(); i++) {
 		for (l=i+1; l < o.size(); l++) {
 			// calculate the axis' distance
-			dist = o[i].pos - o[l].pos;
+			dist = o[i].Distance(o[l]);
 			// if dist = 0, is bad. so
 			if(!dist.length()){
 				dist = vec3<long double>(0.000001, 0.000001, 0.000001);
 			}	
 			// the force is f = G * m1 * m2 / dist^2
-			f = G * o[i].mass * o[l].mass / pow(dist.length(), 2);
-			// fx : f = distx : dist
-			// the aceleration for i (F = m * a -> a = F / m)
-			// update the velocity of i and l(V += a * t)
-			temp = dist * f * precision / dist.length();
-			o[i].vel = o[i].vel - (temp / o[i].mass);
-			o[l].vel = o[l].vel + (temp / o[l].mass);
+			f_scalar = G * o[i].Mass() * o[l].Mass() / (dist.length() * dist.length());
 			
-			//temp = f * dist.x * precision / dist.length();
-			//o[i].vel.x -= temp / o[i].mass;
-			//o[l].vel.x += temp / o[l].mass;
-			//temp = f * dist.y * precision / dist.length();
-			//o[i].vel.y -= temp / o[i].mass;
-			//o[l].vel.y += temp / o[l].mass;
-			//temp = f * dist.z * precision / dist.length();
-			//o[i].vel.z -= temp / o[i].mass;
-			//o[l].vel.z += temp / o[l].mass;
+			f_vec = dist.direction() * f_scalar;
+			
+			o[i].AddForce(f_vec);
+			o[l].AddForce(-f_vec);
 		}
 	}
 }
@@ -305,7 +286,7 @@ void system_c::physic_Impacts() {
 			if(l == i)
 				continue;
 			// if doesn't hit continue
-			if (o[i].radius + o[l].radius < o[i].Distance(o[l]))
+			if (o[i].Radius() + o[l].Radius() < o[i].Distance(o[l]).length())
 				continue;
 			impacts = true;
 			

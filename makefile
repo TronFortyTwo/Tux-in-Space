@@ -13,13 +13,13 @@ objects = \
 		type.o\
 		typeSTR.o\
 		time.o\
+		Pengine.o\
 		object.o\
 		system.o\
 		Parser.o\
 		shell.o\
 		OPSo.o\
-		menu.o\
-		Pengine.o
+		menu.o
 # like object but whit .h but without main.h and with generic.h
 libraries = \
 		debug.h\
@@ -32,14 +32,13 @@ libraries = \
 		type.h\
 		typeSTR.h\
 		time.h\
-		object_data.h\
+		Pengine.h\
 		object.h\
 		system.h\
 		Parser.h\
 		shell.h\
 		OPSo.h\
-		menu.h\
-		Pengine.h
+		menu.h
 
 cspace: $(objects) $(libraries)
 		g++ -o cspace $(CXXFLAGS) $(objects)

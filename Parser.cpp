@@ -110,7 +110,7 @@ void parser_Distance(const setting& set, system_c& sys){
 	string name;
 	object *o;
 	object *u;
-	long double distance[2];
+	long double distance;
 	
 	// ask which two object
 	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:");
@@ -128,10 +128,9 @@ void parser_Distance(const setting& set, system_c& sys){
 		in_s();
 		return;
 	}
-	distance[0] = o->Distance(*u);
-	distance[1] = (o->pos+o->vel-u->pos-u->vel).length() - distance[0];
+	distance = o->Distance(*u).length();
 	stringstream ss;
-	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance[0] <<" Km\n&t0And, if the two object keep constant velocity, the distance will change at a velocity of\n&td" << distance[1] << " km/s\n\n&t0Press something to continue...";
+	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance << " km/s\n\n&t0Press something to continue...";
 	OPS(set, ss.str());
 	in_s();
 }
@@ -211,11 +210,11 @@ void parser_Information(const setting& set, system_c& sys) {
 	ss.str("");
 	ss << "Informations about " << obj->name << "%s\n%r-type: " << obj->typ->name 
 		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
-		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->mass 
-		<< "\n%r-radius: " << obj->radius << "\n%r-x: " << obj->pos.x << "\n\ny: "
-		<< obj->pos.y << "\n\nz: " << obj->pos.z << "\n%r-velocity in x: "
-		<< obj->vel.x << "\n\nvelocity in y: " << obj->vel.y << "\n\nvelocity in z: "
-		<< obj->vel.z << "\n%r-\n\nPress somthing to continue...";
+		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass() 
+		<< "\n%r-radius: " << obj->Radius() << "\n%r-x: " << obj->Pos().x << "\n\ny: "
+		<< obj->Pos().y << "\n\nz: " << obj->Pos().z << "\n%r-velocity in x: "
+		<< obj->Vel().x << "\n\nvelocity in y: " << obj->Vel().y << "\n\nvelocity in z: "
+		<< obj->Vel().z << "\n%r-\n\nPress somthing to continue...";
 	
 	OPS(set, ss.str());
 	in_s();

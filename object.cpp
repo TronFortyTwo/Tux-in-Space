@@ -28,13 +28,6 @@
 using namespace std;
 
 /***
- * This function compute the distance between the center of two objects
- */
-double object::Distance(const object& obj) {
-	return vec3<long double>(pos - obj.pos).length();
-}
-
-/***
  * Put in *b the address of the biggest object
  * i and l are the two objects,
  */
@@ -44,14 +37,14 @@ double object::Distance(const object& obj) {
 void object::GetBigger (object& obj, object *& ptr) {
 	
 	// an object is bigger if has mass much bigger
-	if (mass > obj.mass*BIGGER_TOLERANCE)
+	if (Mass() > obj.Mass()*BIGGER_TOLERANCE)
 		ptr = this;
-	else if (mass > obj.mass*BIGGER_TOLERANCE)
+	else if (Mass() > obj.Mass()*BIGGER_TOLERANCE)
 		ptr = &obj;
 	// if no one is much bigger than the other, pick one randomly, but considering the mass
 	else {
 		srand(time(nullptr));
-		if 		( (rand()/RAND_MAX) > (mass/(mass+obj.mass)) )
+		if 		( (rand()/RAND_MAX) > (Mass()/(Mass()+obj.Mass())) )
 			ptr = &obj;
 		else
 			ptr = this;
@@ -75,8 +68,6 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 	// Initialize the object
 	name.clear();
 	typ = stype.Search("Object");
-	mass = 0;
-	radius = 0;
 	colour.blue = 0;
 	colour.red = 0;
 	colour.green = 0;
@@ -85,7 +76,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 	while(1) {
 		// check for IRREGALARITY
 		// irregularity: MASS
-		if ((mass > typ->mass_min) && (mass < typ->mass_max)) {
+		if ((Mass() > typ->mass_min) && (Mass() < typ->mass_max)) {
 			mass_irregularity.clear();
 		}
 		else {
@@ -108,6 +99,8 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		}
 		
 		// Print the actual state and scan the desire of the user
+		vec3<long double> p (Pos());
+		vec3<long double> v (Vel());
 		stringstream ss;
 		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
 			<< name << name_irregularity
@@ -116,12 +109,12 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 			<< "&t0\n%r-3) color:        red: " << colour.red
 			<< "   " << color_irregularity << "&ti7\ngreen: "
 			<< colour.green << "\nblue: " << colour.blue
-			<< "&t0\n%r-4) mass:         " << mass << "   "
+			<< "&t0\n%r-4) mass:         " << Mass() << "   "
 			<< mass_irregularity << "\n%r-5) radius:       "
-			<< radius << "\n%r-6) coordinates:  x: "
-			<< pos.x << "&ti7\ny: " << pos.y << "\nz: " << pos.z
-			<< "&t0\n%r-7) velocity:     x: " << vel.x
-			<< "&ti7\ny: " << vel.y << "\nz: " << vel.z
+			<< Radius() << "\n%r-6) coordinates:  x: "
+			<< p.x << "&ti7\ny: " << p.y << "\nz: " << p.z
+			<< "&t0\n%r-7) velocity:     x: " << v.x
+			<< "&ti7\ny: " << v.y << "\nz: " << v.z
 			<< "&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  "
 			<< "this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n"
 			<< comment;
@@ -156,44 +149,49 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 				ss.str("");
 				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between " << typ->mass_min << " and " << typ->mass_max;
 				OPS (set, ss.str());
-				mass = in_ld();
+				SetMass(in_ld());
 				comment += "\nNew mass assigned succefully!";
 				break;
 		// Radius
 			case 5:
 				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)");
-				radius = in_ld();
+				SetRadius(in_ld());
 				comment += "\nNew radius assigned succefully!";
 				break;
 		// Coordiates
-			case 6:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)");
-				pos.x = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)");
-				pos.y = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)");
-				pos.z = in_ld();
-				comment += "\nNew coordinates assigned succefully!";
-				break;
+			case 6: {
+					vec3<long double> p;
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)");
+					p.x = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)");
+					p.y = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)");
+					p.z = in_ld();
+					SetPos(p);
+					comment += "\nNew coordinates assigned succefully!";
+					break;
+				}
 		// Velocity
-			case 7:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)");
-				vel.x = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)");
-				vel.y = in_ld();
-				OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)");
-				vel.z = in_ld();
-				comment += "\nNew velocity assigned succefully!";
-				break;
+			case 7: {
+					vec3<long double> v;
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)");
+					v.x = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)");
+					v.y = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)");
+					v.z = in_ld();
+					SetVel(v);
+					comment += "\nNew velocity assigned succefully!";
+					break;
+				}
 		// LOAD
 			case 8: {
 					// load the object in a temporany variable
 					signal result;
 					object temp(stype, name, result);
 					if (result == signal::good) {
-						// move cinematic stats
-						temp.pos = pos;
-						temp.vel = vel;
+						// move kinematic stats
+						MoveKinematic(temp);
 						// move the temp(the new) object in this
 						(*this) = temp;
 						comment += "New object loaded succefully!";
@@ -301,8 +299,8 @@ signal object::Read (ifstream& stream, typeSTR& stype) {
 	colour.red = in_fi(stream);
 	colour.green = in_fi(stream);
 	colour.blue = in_fi(stream);
-	radius = in_fld(stream);
-	mass = in_fld(stream);
+	SetRadius(in_fld(stream));
+	SetMass(in_fld(stream));
 	
 	return signal::good;
 }
@@ -312,12 +310,15 @@ signal object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	if(Read(stream, stype) == signal::corrupted)
 		return signal::corrupted;
 	// read complete stuff
-	pos.x = in_fld(stream);
-	pos.y = in_fld(stream);
-	pos.z = in_fld(stream);
-	vel.x = in_fld(stream);
-	vel.y = in_fld(stream);
-	vel.z = in_fld(stream);
+	vec3<long double> v;
+	v.x = in_fld(stream);
+	v.y = in_fld(stream);
+	v.z = in_fld(stream);
+	SetPos(v);
+	v.x = in_fld(stream);
+	v.y = in_fld(stream);
+	v.z = in_fld(stream);
+	SetVel(v);
 	
 	return signal::good;
 }
@@ -329,20 +330,20 @@ void object::Write (ofstream& stream) {
 	stream << colour.red << "\n";
 	stream << colour.green << "\n";
 	stream << colour.blue << "\n";
-	stream << radius << "\n";
-	stream << mass << "\n";
+	stream << Radius() << "\n";
+	stream << Mass() << "\n";
 }
 
 void object::WriteComplete (ofstream& stream) {
 	// write basic infos
 	Write(stream);
 	// write additional stuff
-	stream << pos.x << "\n";
-	stream << pos.y << "\n";
-	stream << pos.z << "\n";
-	stream << vel.x << "\n";
-	stream << vel.y << "\n";
-	stream << vel.z << "\n";
+	stream << Pos().x << "\n";
+	stream << Pos().y << "\n";
+	stream << Pos().z << "\n";
+	stream << Vel().x << "\n";
+	stream << Vel().y << "\n";
+	stream << Vel().z << "\n";
 }
 
 /***
@@ -371,14 +372,14 @@ void object::AI_Hunter(system_c& sys) {
 	// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 	object *closest = targets[0];
 	for(int i=1; i!=targets_num; i++)
-		if( Distance(*closest) > Distance(*targets[i]) )
+		if( Distance(*closest).length() > Distance(*targets[i]).length() )
 			closest = targets[i];
 	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
-	vel.x -= (pos.x - closest->pos.x) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
-	vel.y -= (pos.y - closest->pos.y) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
-	vel.z -= (pos.z - closest->pos.z) * HUNTER_ACCELERATION * sys.precision / Distance(*closest);
+	// TODO: not optimal solution!
+	
+	AddForce (Distance(*closest).direction() * HUNTER_ACCELERATION * Mass());
 }
 
 
@@ -407,9 +408,9 @@ void object::Impact_Anaelastic(object& obj) {
 	// the type is the type of the bigger
 	typ = bigger->typ;
 	// the color is the average, but considering the radius and the type's range
-	colour.blue = ((bigger->colour.blue * bigger->radius *COLOR_PREDOMINANCE) + (smaller->colour.blue * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
-	colour.green = ((bigger->colour.green * bigger->radius *COLOR_PREDOMINANCE) + (smaller->colour.green * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
-	colour.red = ((bigger->colour.red * bigger->radius *COLOR_PREDOMINANCE) + (smaller->colour.red * smaller->radius)) / (bigger->radius*COLOR_PREDOMINANCE + smaller->radius);
+	colour.blue = ((bigger->colour.blue * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.blue * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
+	colour.green = ((bigger->colour.green * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.green * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
+	colour.red = ((bigger->colour.red * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.red * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
 	
 	if(colour.blue > typ->color_max.blue)
 		colour.blue = typ->color_max.blue;
@@ -424,13 +425,13 @@ void object::Impact_Anaelastic(object& obj) {
 	else if(colour.green < typ->color_min.green)
 		colour.green = typ->color_min.green;
 	// the mass is the sum
-	mass = obj.mass + mass;
+	SetMass (obj.Mass() + Mass());
 	// the coordinates are the average
-	pos = ((pos * mass) + (obj.pos * obj.mass)) / (obj.mass + mass);
+	SetPos (((Pos() * Mass()) + (obj.Pos() * obj.Mass())) / (obj.Mass() + Mass()));
 	// the velocity
-	vel = ((vel * mass) + (obj.vel * obj.mass)) / (obj.mass + mass);
+	SetVel (((Vel() * Mass()) + (obj.Vel() * obj.Mass())) / (obj.Mass() + Mass()));
 	// to calculate the radius we calculate the volum of the two object,
-	radius = RadiusestoVolume(radius, obj.radius);
+	SetRadius (RadiusestoVolume(Radius(), obj.Radius()));
 	
 	debug_Printf("Anaelastic Impact: Created this new object:");
 	debug_Object(newobj);
@@ -451,10 +452,6 @@ void object::Impact_Hunting(object& hed) {
 	float p;
 	// a variable that store the volume of an object
 	double volum;
-	// a force variable
-	long double f;
-	// indicate in which direction the hunter is faster
-	axis3 faster;
 	// the velocity of the hunter in three axis
 	vec3<long double> v;
 	
@@ -466,30 +463,38 @@ void object::Impact_Hunting(object& hed) {
 	hed.typ = hed.typ->product;
 	
 	// move a percentage p of ed mass in er
-	mass += hed.mass * p;
-	hed.mass -= hed.mass * p;
+	SetMass( Mass() + hed.Mass() * p);
+	hed.SetMass( hed.Mass() * (1 - p) );
 	
 	// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 	// the hunter volume before
-	volum = 4/3 * PI * radius * radius * radius;
+	volum = 4/3 * PI * Radius() * Radius() * Radius();
 	// the hunter volume after
-	volum +=  (4/3 * PI * hed.radius * hed.radius * hed.radius) * p;	// volum += volum_eated
+	volum +=  (4/3 * PI * hed.Radius() * hed.Radius() * hed.Radius()) * p;	// volum += volum_eated
 	// the hunter radius compute from the new volume
-	radius = pow(volum * 3 / (4 * PI), 1/3.0);
+	SetRadius ( pow(volum * 3 / (4 * PI), 1/3.0) );
 	
 	// the hunted volume before (v = 4/3 * PI * r^3)
-	volum = 4/3 * PI * hed.radius * hed.radius * hed.radius;
+	volum = 4/3 * PI * hed.Radius() * hed.Radius() * hed.Radius();
 	// reduce the hunted volume
 	volum -= volum * p;
-	hed.radius = pow(volum * 3 / (4 * PI), 1/3.0);
+	hed.SetRadius ( pow(volum * 3 / (4 * PI), 1/3.0) );
 	
 	// move the hunted a bit away and give him some velocity from the hunter
 	// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
 	// We use the absolute value of the velocity
-	v = vel.absolute();
+	
+	
+	
+	/*
+	
+	// indicate in which direction the hunter is faster
+	axis3 faster;
+	
+	v = body.GetVel().absolute();
 	
 	faster = v.greatest();
-	
+
 	if(hed.pos[faster] > pos[faster])
 		hed.pos[faster] += hed.radius + radius + 0.01 + Distance(hed);
 	else
@@ -498,8 +503,5 @@ void object::Impact_Hunting(object& hed) {
 	f = vel[faster] * mass /2;
 	hed.vel[faster] = f / hed.mass;
 	vel[faster] /= 2;
-}
-
-void object::UpdateFast (double t){
-	pos = pos + vel * t;
+	*/
 }
