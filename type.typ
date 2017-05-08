@@ -143,16 +143,8 @@ PARENT: Object
 	DESCRIPTION: A planet is a celestial body that is rounded by its own gravity because is massive enought, has cleared its neightbouring region of planetesimal and doesn't have thermonuclear fusion into it for is mass
 	PARENT: Celestial object
 
-		NAME: Carbon Planet
-		DESCRIPTION: A carbon planet is a planet that contein much much carbon, and a minor quantity of oxygen
-		PARENT: Planet
-
 		NAME: Chthonian planet
 		DESCRIPTION: A chtonian planet is a planet generated from the hydrodinamic escape of a Gas Giant atmosphere. The remaining metal and rocky core form this planet
-		PARENT: Planet
-	
-		NAME: Helium planet
-		DESCRIPTION: An helium planet is a planet whit an atmosphere composed mainly by helium and a solid core
 		PARENT: Planet
 
 		NAME: Giant planet
@@ -186,10 +178,6 @@ PARENT: Object
 			DESCRIPTION: A dwarf planet is a planetary mass object enought massive to have an hydrostatic equilibrium, but not enought to clear the materials in the neightbouroud space
 			PARENT: Minor planet
 	
-		NAME: Ocean planet
-		DESCRIPTION: A planet with a surface nearly totally covered by oceans
-		PARENT: Planet
-	
 		NAME: Terrestrial planet
 		DESCRIPTION: A terrestrial planet is a planet composed mainly by rock and metal
 		PARENT: Planet
@@ -197,11 +185,7 @@ PARENT: Object
 			NAME: Earth analog
 			DESCRIPTION: An Earth analog is a terrestrial planet much similar to the Earth
 			PARENT: Terrestrial planet
-	
-			NAME: Lava planet
-			DESCRIPTION: A lava planet is a type of terrestrial planet with the surface completely covered by lava
-			PARENT: Terrestrial planet
-	
+
 			NAME: Super Earth
 			DESCRIPTION: A super Earth is a terrestrial planet massive two to five Earth masses, more massive terrestrial planet are called Mega Earth
 			MASS MAX: 29.863e21
@@ -215,30 +199,31 @@ PARENT: Object
 			PARENT: Terrestrial planet
 
 ########################################################################
-#	SPACE MONSTERS
+#	ORGANIC
 #
-NAME: Space Monster
-DESCRIPTION: As in the old times big and unknown creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
-HUNTER: Y
-PARENT: Object
-
-	NAME: Deep Space Kraken
-	DESCRIPTION: Terrifying huge creature that destroy anything encouters
-	HUNTER: Y
-	PARENT: Space Monster
-	
-	NAME: Leviatan
-	DESCRIPTION: Huge dragon of the space, the information about him are very few
-	HUNTER: Y
-	PARENT: Space Monster
-
-########################################################################
-#	TUX
-#
-NAME: Tux
-DESCRIPTION: Our hero!
+NAME: Organic Matter
+DESCRIPTION: Matter composed of carbon compound, it's life or a life product
 HUNTED: Y
+PRODUCT: Organic Matter
 PARENT: Object
+
+	NAME: Space Monster
+	DESCRIPTION: As in the old times big and unknown creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
+	HUNTER: Y
+	HUNTED: N
+	PARENT: Organic Matter
+
+		NAME: Deep Space Kraken
+		DESCRIPTION: Terrifying huge creature that destroy anything encouters
+		PARENT: Space Monster
+	
+		NAME: Leviatan
+		DESCRIPTION: Huge dragon of the space, the information about him are very few
+		PARENT: Space Monster
+
+	NAME: Tux
+	DESCRIPTION: Our hero!
+	PARENT: Object
 
 EOF
 (END OF FILE)

@@ -72,12 +72,12 @@ void menu_Settings_OPS(setting& set) {
 		i = in_i();
 		// WIDTH
 		if(i == 1) {
-			OPS(set, "SETTINGS/OPS\n\nInsert the new number of columns:\n&tdnow " + to_string(set.width));
+			OPS(set, "SETTINGS/OPS\n\nInsert the new number of columns:\n&tdnow " + to_string(set.width) + ", recommended minimum 68");
 			set.width = in_i();
 		}
 		// HEIGHT
 		else if(i == 2){
-			OPS(set, "SETTINGS/OPS\n\nInsert the new number of lines:\n&tdnow " + to_string(set.height));
+			OPS(set, "SETTINGS/OPS\n\nInsert the new number of lines:\n&tdnow " + to_string(set.height) + ", recommended minimum 48");
 			set.height = in_i();
 		}
 		// NUMBER PRECISION

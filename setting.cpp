@@ -24,8 +24,8 @@
 
 // Internal constants
 // Default values for the set structure
-#define DEFAULT_OPS_HEIGHT 			42
-#define DEFAULT_OPS_WIDTH 			88
+#define DEFAULT_OPS_HEIGHT 			48
+#define DEFAULT_OPS_WIDTH 			68
 #define DEFAULT_DEBUG 				false
 #define DEFAULT_OPS_NUMPRECISION 	6
 #define DEFAULT_VIDEO 				videomode::OPS
@@ -38,8 +38,9 @@ using namespace std;
 void setting::Save() {
 	
 	ofstream cf(CONFIGURATION_FILE);
-	if(!cf){
+	if(!cf) {
 		debug_Printf(IRREGULARITY" setting::Save() Can't open the - " CONFIGURATION_FILE " - file");
+		return;
 	}
 	if (vmode == videomode::OPS)
 		cf << "O";	// OPS
