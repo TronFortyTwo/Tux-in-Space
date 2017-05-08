@@ -87,11 +87,9 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	else if (!(input.compare("settings")) || (!input.compare("configuration")))
 		menu_Settings(set);
 	// wrong command
-	else {
+	else
 		parser_Reask(set, input);
-		in_s();
-	}
-		 
+	
 	return t;
 }
 	
@@ -100,6 +98,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
  */
 void parser_Reask(const setting& set, const string& command){
 	OPS_Error(set, "Sorry. But the command " + command + " that you wrote is unknown. Press something to continue:");
+	in_s();
 }
 	
 /***
@@ -113,15 +112,19 @@ void parser_Distance(const setting& set, system_c& sys){
 	long double distance;
 	
 	// ask which two object
-	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:");
+	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the first object:\n\n'n' to exit");
 	in_s(name);
+	if(!name.compare("n"))
+		return;
 	o = sys.SearchObj(name);
 	if(o == nullptr) {
 		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command");
 		return;
 	}
-	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:");
+	OPS(set, "DISTANCE\n\nCalculate the distance between two objects.\n\n&t2Insert the name of the second object:\n\n'n' to exit");
 	in_s(name);
+	if(!name.compare("n"))
+		return;
 	u = sys.SearchObj(name);
 	if(u == nullptr) {
 		OPS_Error(set, "There isn't any object whit that name!\n\nInsert a new command");
@@ -193,7 +196,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	
 	// Generic informations about the system
 	ss << "Informations\n\nSystem " << sys.name << " with " << sys.o.size() 
-		<< " objects\n\nOf which object do you want informations? press 'n' to not display any object informations";
+		<< " objects\n\nOf which object do you want informations? press 'n' to exit";
 	OPS(set, ss.str());
 	in_s(input);
 	if(!input.compare("n"))
@@ -201,7 +204,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	// information about a precise object
 	obj = sys.SearchObj(input);
 	if(obj == nullptr){
-		OPS_Error(set, "No object whit this name is been found. press a button to continue");
+		OPS_Error(set, "No object with this name has been found.\n\n&t2Press something to continue...");
 		in_s();
 		return;
 	}
@@ -214,7 +217,7 @@ void parser_Information(const setting& set, system_c& sys) {
 		<< "\n%r-radius: " << obj->Radius() << "\n%r-x: " << obj->Pos().x << "\n\ny: "
 		<< obj->Pos().y << "\n\nz: " << obj->Pos().z << "\n%r-velocity in x: "
 		<< obj->Vel().x << "\n\nvelocity in y: " << obj->Vel().y << "\n\nvelocity in z: "
-		<< obj->Vel().z << "\n%r-\n\nPress somthing to continue...";
+		<< obj->Vel().z << "\n%r-\n\n&t2Press somthing to continue...";
 	
 	OPS(set, ss.str());
 	in_s();
@@ -222,7 +225,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	
 	
 /***
- * The parser_Wait function make the simulation parser_Wait for a while. The user say how much 
+ * Make the simulation wait for a while
  */
 time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 		
@@ -245,7 +248,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	
 	// check the time is future
 	if (now.Compare(t) == comparison::major){
-		OPS_Error(set, "You can't go in the past!\n\nPress something to continue...");
+		OPS_Error(set, "You can't go in the past!\n\n&t2Press something to continue...");
 		in_s();
 		return now;
 	}
@@ -254,7 +257,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 }
 	
 /***
- * The parser_Jump function make the simulation Jump to a determined time 
+ * Make the simulation Jump to a determined time 
  */
 time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 
