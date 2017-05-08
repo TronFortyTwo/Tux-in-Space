@@ -64,6 +64,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 	string mass_irregularity;	// assume the value IRREGULARITY if the mass is out of range
 	string color_irregularity;	// assume the value IRREGULARITY if the color is out of range
 	string name_irregularity;	// assume the value IRREGULARITY if there is no name
+	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
 	
 	// Initialize the object
 	name.clear();
@@ -83,6 +84,17 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		else {
 			mass_irregularity = IRREGULARITY;
 			comment += "\n" IRREGULARITY " mass out of range";
+		}
+		// irregularity: RADIUS
+		if(Radius() > 0)
+			radius_irregularity.clear();
+		else if (Radius() == 0) {
+			radius_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " radius is zero";
+		}
+		else {
+			radius_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " radius is below zero";
 		}
 		// irregularity: COLOR
 		if (colour.CheckRange(typ->color_min, typ->color_max) == true)
@@ -112,7 +124,8 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 			<< colour.green << "\nblue: " << colour.blue
 			<< "&t0\n%r-4) mass:         " << Mass() << "   "
 			<< mass_irregularity << "\n%r-5) radius:       "
-			<< Radius() << "\n%r-6) coordinates:  x: "
+			<< Radius() << "   " << radius_irregularity
+			<< "\n%r-6) coordinates:  x: "
 			<< p.x << "&ti7\ny: " << p.y << "\nz: " << p.z
 			<< "&t0\n%r-7) velocity:     x: " << v.x
 			<< "&ti7\ny: " << v.y << "\nz: " << v.z
@@ -214,12 +227,15 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 				break;
 		// DONE
 			case 10:
-				if (!(!mass_irregularity.compare(IRREGULARITY)) || (!color_irregularity.compare(IRREGULARITY)) || (!name_irregularity.compare(IRREGULARITY))) {
+				if ( mass_irregularity.compare(IRREGULARITY) &&
+					color_irregularity.compare(IRREGULARITY) &&
+					name_irregularity.compare(IRREGULARITY)  &&
+					radius_irregularity.compare(IRREGULARITY) ){
 					result = signal::good;
 					return;
 				}
 				else
-					comment += "\nCannot exit! Fix irregularity first";
+					comment += "\nCannot exit! Fix irregularities first";
 				break;
 		// EXIT WHITOUT SAVE
 			case 11:
