@@ -59,18 +59,6 @@ class object : public PEntity {
 		void	Impact_Anaelastic(object&);	// create a new object from an impact with another one
 		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
 		
-		inline double Mass() const {
-			return GetMass();
-		}
-		inline double Radius() const {
-			return GetRadius();
-		}
-		inline vec3<long double> Pos() const {
-			return GetPos();
-		}
-		inline vec3<long double> Vel() const {
-			return GetVel();
-		}
 		inline void Sim (float delta){
 			Simulation(delta);
 		}

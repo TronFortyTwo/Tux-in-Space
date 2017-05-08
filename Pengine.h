@@ -64,19 +64,19 @@ class PEntity {
 	
 	public:
 	
-		inline double GetMass() const {
+		inline double Mass() const {
 			return mass;
 		}
 		
-		inline double GetRadius() const {
+		inline double Radius() const {
 			return radius;
 		}
 		
-		inline vec3<long double> GetPos() const {
+		inline vec3<long double> Pos() const {
 			return pos;
 		}
 		
-		inline vec3<long double> GetVel() const {
+		inline vec3<long double> Vel() const {
 			return vel;
 		}
 		
