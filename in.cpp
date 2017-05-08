@@ -41,6 +41,10 @@ void in_s () {
 	scanf(" %127[^\n]", b);
 }
 
+void in_inline_s(std::string& s){
+	cin >> s;
+}
+
 /***
  * Scan a string WHIT space, to use when scanning a name, a type... but from a file
  * 
@@ -144,4 +148,8 @@ int in_inline_i(){
 	cin >> s;
 	
 	return stoi(s);
+}
+
+void in_clear(){
+	cin.ignore(999999, '\n');
 }

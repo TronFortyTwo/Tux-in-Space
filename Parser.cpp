@@ -48,7 +48,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	time_sim t = sys.stime;
 		
 	// Now for every possible command call the correct command's function or simply do it if is short.
-	in_s(input);
+	in_inline_s(input);
 	// continue
 	if ((!input.compare("step")) || (!input.compare("s"))) {
 		t.AddSec(sys.precision);
@@ -89,6 +89,8 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	// wrong command
 	else
 		parser_Reask(set, input);
+	
+	in_clear();
 	
 	return t;
 }
@@ -176,7 +178,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	// search the object
 	obj = sys.SearchObj(name);
 	if (obj == nullptr) {	//if there isn't any object whit that name
-		OPS_Error(set, "DELETE\n\nThere isn't any object whit that name!\nPress something to continue");
+		OPS_Error(set, "There isn't any object whit that name!\nPress something to continue");
 		in_s();
 		return;
 	}

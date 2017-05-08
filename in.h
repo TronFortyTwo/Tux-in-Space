@@ -30,6 +30,7 @@
 // line
 void in_s	(std::string&);					// scan a string with spaces
 void in_s	();								// clean the stdin reading a line but without save it anywhere
+void in_inline_s(std::string&);				// scan not the whole line but only until the next space
 
 // line in a file
 void in_fs	(std::string&, std::istream&);	// scan a line in a file
@@ -37,7 +38,7 @@ void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines a
 
 // int
 int in_i();
-int in_inline_i();		// scan not the whole line but only until the next space
+int in_inline_i();
 
 // int in a file
 int in_fi(std::istream&);
@@ -59,5 +60,8 @@ long double in_ld();
 
 // long double in a file
 long double in_fld(std::istream&);
+
+// read all the line if there is anything else
+void in_clear();
 
 #endif
