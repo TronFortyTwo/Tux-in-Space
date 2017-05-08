@@ -248,14 +248,8 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	
 	time_sim t (y, d, h, m, s);
 	
-	// check the time is future
-	if (now.Compare(t) == comparison::major){
-		OPS_Error(set, "You can't go in the past!\n\n&t2Press something to continue...");
-		in_s();
-		return now;
-	}
 	
-	return t;
+	return now + t;
 }
 	
 /***

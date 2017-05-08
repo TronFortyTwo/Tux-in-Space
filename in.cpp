@@ -31,14 +31,14 @@ using namespace std;
  * 
  */
 void in_s (string& d) {
-	char b[128];
-	scanf(" %127[^\n]", b);
+	char b[256];
+	scanf(" %255[^\n]", b);
 	d = b;
 }
 
 void in_s () {
-	char b[128];
-	scanf(" %127[^\n]", b);
+	char b[256];
+	scanf(" %255[^\n]", b);
 }
 
 void in_inline_s(std::string& s){
@@ -145,7 +145,8 @@ int in_inline_i(){
 	
 	string s;
 	
-	cin >> s;
+	if(!(cin >> s))
+		return in_inline_i();
 	
 	return stoi(s);
 }
