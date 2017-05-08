@@ -118,7 +118,10 @@ class PEntity {
 			vel = _vel;
 		}
 		
-		inline PEntity() = default;
+		inline PEntity(){
+			mass = 0;
+			radius = 0;
+		};
 };
 
 #endif

@@ -72,6 +72,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 	colour.red = 0;
 	colour.green = 0;
 	
+	
 	// the loop
 	while(1) {
 		// check for IRREGALARITY
@@ -234,7 +235,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
  * This constructor loads from a file the object
  */
 object::object(typeSTR& stype, const string& name, signal& result) {
-		
+	
 	// From the name, get the file address
 	string path;
 		
@@ -484,6 +485,10 @@ void object::Impact_Hunting(object& hed) {
 	// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
 	// We use the absolute value of the velocity
 	
+	vec3<long double> direction = Distance(hed).direction();
+
+	hed.AddForce(direction * Mass());
+	hed.AddForce(-direction * Mass());
 	
 	
 	/*
