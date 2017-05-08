@@ -88,7 +88,7 @@ int in_fi(istream& f) {
 	
 	in_fs(s, f);
 	
-	return stoi(s);
+	return stof(s);
 }
 
 float in_f() {
@@ -135,4 +135,13 @@ long double in_fld(istream& f) {
 	in_fs(s, f);
 	
 	return stold(s);
+}
+
+int in_inline_i(){
+	
+	string s;
+	
+	cin >> s;
+	
+	return stoi(s);
 }

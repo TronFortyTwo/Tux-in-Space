@@ -37,6 +37,7 @@ void in_hfs	(std::string&, std::istream&);	// like in_fs, but jump blank lines a
 
 // int
 int in_i();
+int in_inline_i();		// scan not the whole line but only until the next space
 
 // int in a file
 int in_fi(std::istream&);

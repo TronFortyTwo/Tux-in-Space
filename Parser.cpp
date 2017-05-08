@@ -231,13 +231,13 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 	int y, d, h, m;
 	float s;
 	// year
-	y = in_i();
+	y = in_inline_i();
 	// day
-	d = in_i();
+	d = in_inline_i();
 	// hour
-	h = in_i();
+	h = in_inline_i();
 	// minute
-	m = in_i();
+	m = in_inline_i();
 	// second
 	s = in_f();
 	
@@ -271,13 +271,13 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		int y, d, h, m;
 		float s;
 		// year
-		y = in_i();
+		y = in_inline_i();
 		// day
-		d = in_i();
+		d = in_inline_i();
 		// hour
-		h = in_i();
+		h = in_inline_i();
 		// minute
-		m = in_i();
+		m = in_inline_i();
 		// second
 		s = in_f();
 		
