@@ -27,8 +27,47 @@
 
 #include "generic.h"
 
-// the time structure
-class time_sim {	// the time of a simulation
+class time_sim;
+
+// store time just in seconds,
+// WARNING! not use for big value of times!!(use time_sim instead)
+class time_raw {
+	
+	private:
+		int sec;	// the integer nmumber of seconds
+		float fs;	// the fraction of second
+	
+	public:
+	
+		inline long long int Sec() const {
+			return sec;
+		}
+		inline long double Time() const {
+			return sec + fs;
+		}
+	
+		inline time_raw(long long int _sec, float _fs) {
+			sec = _sec;
+			fs = _fs;
+		}
+		inline time_raw(long double f) {
+			fs = f;
+			while(f >= 1){		// TODO: optimize here
+				sec ++;
+				fs --;
+			}
+		}
+		inline time_raw(){
+			sec = 0;
+			fs = 0.0;
+		}
+	
+	friend time_sim;
+};
+
+
+// the time of a simulation
+class time_sim {	
 	
 	private:
 		int year;
@@ -57,8 +96,9 @@ class time_sim {	// the time of a simulation
 			return sec;
 		}
 		
-		inline void AddSec(float s){
-			sec += s;
+		inline void AddSec(time_raw s){
+			sec += s.sec;
+			sec += s.fs;
 			Sync();
 		}
 		
@@ -90,6 +130,16 @@ class time_sim {	// the time of a simulation
 			min = 0;
 			sec = 0.0;
 		}
+		
+		inline time_sim(const time_raw& t) {
+			sec = t.Time();
+			Sync();
+			
+		}
+		
+		// transform into time_raw
+		time_raw get_Raw();
 
 };
+
 #endif

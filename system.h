@@ -30,6 +30,7 @@
 #include "type.h"
 #include "time.h"
 #include "debug.h"
+#include "math.h"
 
 class typeSTR;
 class object;
@@ -40,9 +41,9 @@ class system_c {
 		std::string name;
 		time_sim stime;			// the time of the simulation
 		std::vector<object> o;	// the object vector
-		double G;				// the universal gravitation constant
+		tguc G;				// the universal gravitation constant
 		typeSTR *stype;			// The pointer at the structure that contein all the types
-		double precision;		// Precision of the simulation
+		time_raw precision;		// Precision of the simulation
 		
 		object *SearchObj	(const std::string&);	// Search for an object in the system from his name
 		void RemoveObj 		(object&);				// Remove an object from a system

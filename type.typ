@@ -209,8 +209,8 @@ PARENT: Object
 
 	NAME: Space Monster
 	DESCRIPTION: As in the old times big and unknown creatures have terrorized for years the men of the sea, now space monsters' legends terrorize the men in our modern times. Are they real or are only a legend?
-	HUNTER: Y
 	HUNTED: N
+	HUNTER: Y
 	PARENT: Organic Matter
 
 		NAME: Deep Space Kraken

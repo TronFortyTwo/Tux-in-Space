@@ -32,8 +32,8 @@ void parser_Create(const setting&, system_c&);
 void parser_Delete(const setting&, system_c&);
 bool parser_Quit (const setting& set, system_c&);
 void parser_Distance(const setting&, system_c&);
-time_sim parser_Jump(const setting& set, time_sim&, long double);
-time_sim parser_Wait(const setting& set, time_sim&, long double);
+time_sim parser_Jump(const setting& set, time_sim&, const time_raw&);
+time_sim parser_Wait(const setting& set, time_sim&, const time_raw&);
 void parser_Information (const setting&, system_c&);
 
 /**
@@ -133,7 +133,7 @@ void parser_Distance(const setting& set, system_c& sys){
 		in_s();
 		return;
 	}
-	distance = o->Distance(*u).length();
+	distance = o->Distance(*u).module();
 	stringstream ss;
 	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance << " km/s\n\n&t0Press something to continue...";
 	OPS(set, ss.str());
@@ -215,11 +215,11 @@ void parser_Information(const setting& set, system_c& sys) {
 	ss.str("");
 	ss << "Informations about " << obj->name << "%s\n%r-type: " << obj->typ->name 
 		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
-		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass() 
-		<< "\n%r-radius: " << obj->Radius() << "\n%r-x: " << obj->Pos().x << "\n\ny: "
-		<< obj->Pos().y << "\n\nz: " << obj->Pos().z << "\n%r-velocity in x: "
-		<< obj->Vel().x << "\n\nvelocity in y: " << obj->Vel().y << "\n\nvelocity in z: "
-		<< obj->Vel().z << "\n%r-\n\n&t2Press somthing to continue...";
+		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass().value()
+		<< "\n%r-radius: " << obj->Radius().value() << "\n%r-x: " << obj->Pos().x() << "\n\ny: "
+		<< obj->Pos().y() << "\n\nz: " << obj->Pos().z() << "\n%r-velocity in x: "
+		<< obj->Vel().x() << "\n\nvelocity in y: " << obj->Vel().y() << "\n\nvelocity in z: "
+		<< obj->Vel().z() << "\n%r-\n\n&t2Press somthing to continue...";
 	
 	OPS(set, ss.str());
 	in_s();
@@ -229,9 +229,9 @@ void parser_Information(const setting& set, system_c& sys) {
 /***
  * Make the simulation wait for a while
  */
-time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
+time_sim parser_Wait(const setting& set, time_sim& now, const time_raw& precision) {
 		
-	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision) + " seconds");
+	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision.Time()) + " seconds");
 	//scanf the time
 	int y, d, h, m;
 	float s;
@@ -255,7 +255,7 @@ time_sim parser_Wait(const setting& set, time_sim& now, long double precision) {
 /***
  * Make the simulation Jump to a determined time 
  */
-time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
+time_sim parser_Jump(const setting& set, time_sim& now, const time_raw& precision) {
 
 	time_sim t;
 	
@@ -263,7 +263,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 	ss << "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR "
 		<< now.Year() << " DAY " << now.Day() << " TIME " << now.Hour() << ":"
 		<< now.Minute() << ":" << now.Second() << "\nThe jump will be made whit an error of max "
-		<< precision << " seconds";
+		<< precision.Time() << " seconds";
 	
 	OPS(set, ss.str());
 	while(1) {
@@ -285,7 +285,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, long double precision) {
 		if(t.Compare(now) == comparison::major)	{
 			// Error message if the time given isn't valid
 			t = now;
-			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR " + to_string(t.Year()) + " DAY " + to_string(t.Day()) + " TIME " + to_string(t.Hour()) + ":" + to_string(t.Minute()) + ":" + to_string(t.Second()) + "\nThe jump will be made whit an error of max " + to_string(precision) + " seconds");
+			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR " + to_string(t.Year()) + " DAY " + to_string(t.Day()) + " TIME " + to_string(t.Hour()) + ":" + to_string(t.Minute()) + ":" + to_string(t.Second()) + "\nThe jump will be made whit an error of max " + to_string(precision.Time()) + " seconds");
 		}
 		else
 			break;

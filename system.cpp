@@ -54,7 +54,7 @@ void system_c::RemoveObj (object& rem) {
  * Initialize a new system
  */
 system_c::system_c (const setting& set, typeSTR& s) {
-	
+
 	// set the type struct pointer
 	stype = &s;
 	// set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
@@ -65,7 +65,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	// the name
 	in_s(name);
 	
-	precision = 1;
+	precision = time_raw(1, 0);
 }
 
 /***
@@ -105,9 +105,9 @@ void system_c::Save(const setting& set){
 }
 
 void system_c::Write(ofstream& dest){
-	dest << precision << "\n";
+	dest << precision.Time() << "\n";
 	dest << o.size() << "\n";
-	dest << G << "\n";
+	dest << G.value() << "\n";
 	dest << stime.Year() << "\n";
 	dest << stime.Day() << "\n";
 	dest << stime.Hour() << "\n";
@@ -212,7 +212,7 @@ void system_c::Physic (time_sim& dest) {
 		for (unsigned int i=0; i!=o.size(); i++)
 			o[i].Sim(precision);
 		// TIME
-		stime.AddSec(precision);
+		stime.AddSec(precision.Time());
 	}
 }
 
@@ -226,26 +226,16 @@ void system_c::Physic_Gravity() {
 	// counters
 	unsigned int i,l;
 	// the force
-	long double f_scalar;
-	vec3<long double> f_vec;
-	// the distance
-	vec3<long double> dist;
+	tforce f;
 	
 	for(i=0; i < o.size(); i++) {
 		for (l=i+1; l < o.size(); l++) {
-			// calculate the axis' distance
-			dist = o[i].Distance(o[l]);
-			// if dist = 0, is bad. so
-			if(!dist.length()){
-				dist = vec3<long double>(0.000001, 0.000001, 0.000001);
-			}	
-			// the force is f = G * m1 * m2 / dist^2
-			f_scalar = G * o[i].Mass() * o[l].Mass() / (dist.length() * dist.length());
 			
-			f_vec = dist.direction() * f_scalar;
+			// the force is f = G * m1 * m2 / dist^2	
+			f = G.newton(o[i].Mass(), o[l].Mass(), o[i].Distance(o[l]));
 			
-			o[i].AddForce(f_vec);
-			o[l].AddForce(-f_vec);
+			o[i].AddForce(f);
+			o[l].AddForce(-f);
 		}
 	}
 }

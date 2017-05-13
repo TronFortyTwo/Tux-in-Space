@@ -22,10 +22,10 @@
 
 #include "Pengine.h"
 
-void PEntity::Simulation(float delta) {
+void PEntity::Simulation(const time_raw& delta) {
 	
 	// apply the force
-	vel += acc_force * delta / mass;
+	vel += (acc_force * delta) / mass;
 	acc_force.zero();
 	
 	// move the entity

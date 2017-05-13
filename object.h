@@ -59,7 +59,7 @@ class object : public PEntity {
 		void	Impact_Anaelastic(object&);	// create a new object from an impact with another one
 		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
 		
-		inline void Sim (float delta){
+		inline void Sim (const time_raw& delta){
 			Simulation(delta);
 		}
 		

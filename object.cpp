@@ -37,7 +37,7 @@ using namespace std;
 void object::GetBigger (object& obj, object *& ptr) {
 	
 	// an object is bigger if has mass much bigger
-	if (Mass() > obj.Mass()*BIGGER_TOLERANCE)
+	if (Mass() > obj.Mass()* BIGGER_TOLERANCE)
 		ptr = this;
 	else if (Mass() > obj.Mass()*BIGGER_TOLERANCE)
 		ptr = &obj;
@@ -86,9 +86,9 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 			comment += "\n" IRREGULARITY " mass out of range";
 		}
 		// irregularity: RADIUS
-		if(Radius() > 0)
+		if(Radius() > tlength(0) )
 			radius_irregularity.clear();
-		else if (Radius() == 0) {
+		else if (Radius() == tlength(0)) {
 			radius_irregularity = IRREGULARITY;
 			comment += "\n" IRREGULARITY " radius is zero";
 		}
@@ -112,8 +112,8 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		}
 		
 		// Print the actual state and scan the desire of the user
-		vec3<long double> p (Pos());
-		vec3<long double> v (Vel());
+		tposition p (Pos());
+		tvelocity v (Vel());
 		stringstream ss;
 		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
 			<< name << name_irregularity
@@ -122,13 +122,13 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 			<< "&t0\n%r-3) color:        red: " << colour.red
 			<< "   " << color_irregularity << "&ti7\ngreen: "
 			<< colour.green << "\nblue: " << colour.blue
-			<< "&t0\n%r-4) mass:         " << Mass() << "   "
+			<< "&t0\n%r-4) mass:         " << Mass().value() << "   "
 			<< mass_irregularity << "\n%r-5) radius:       "
-			<< Radius() << "   " << radius_irregularity
+			<< Radius().value() << "   " << radius_irregularity
 			<< "\n%r-6) coordinates:  x: "
-			<< p.x << "&ti7\ny: " << p.y << "\nz: " << p.z
-			<< "&t0\n%r-7) velocity:     x: " << v.x
-			<< "&ti7\ny: " << v.y << "\nz: " << v.z
+			<< p.x() << "&ti7\ny: " << p.y() << "\nz: " << p.z()
+			<< "&t0\n%r-7) velocity:     x: " << v.x()
+			<< "&ti7\ny: " << v.y() << "\nz: " << v.z()
 			<< "&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  "
 			<< "this object to a file\n%r-10) DONE\n11) EXIT whitout saving\n\n"
 			<< comment;
@@ -347,32 +347,27 @@ void object::Write (ofstream& stream) {
 	stream << colour.red << "\n";
 	stream << colour.green << "\n";
 	stream << colour.blue << "\n";
-	stream << Radius() << "\n";
-	stream << Mass() << "\n";
+	stream << Radius().value() << "\n";
+	stream << Mass().value() << "\n";
 }
 
 void object::WriteComplete (ofstream& stream) {
 	// write basic infos
 	Write(stream);
 	// write additional stuff
-	stream << Pos().x << "\n";
-	stream << Pos().y << "\n";
-	stream << Pos().z << "\n";
-	stream << Vel().x << "\n";
-	stream << Vel().y << "\n";
-	stream << Vel().z << "\n";
+	stream << Pos().x() << "\n";
+	stream << Pos().y() << "\n";
+	stream << Pos().z() << "\n";
+	stream << Vel().x() << "\n";
+	stream << Vel().y() << "\n";
+	stream << Vel().z() << "\n";
 }
 
 /***
  *  The AI of the hunters
  */
-#define HUNTER_ACCELERATION 0.002	// The acceleration of a hunter (will be moved to objdata)
-
+ 
 void object::AI_Hunter(system_c& sys) {
-	
-	// if there is only him, exit
-	if(sys.o.size() == 1)
-		return;
 	
 	// an object pointer array
 	vector<object *> targets;
@@ -396,7 +391,7 @@ void object::AI_Hunter(system_c& sys) {
 	// move the hunter in the direction of the closest
 	// TODO: not optimal solution!
 	
-	AddForce (Distance(*closest).direction() * HUNTER_ACCELERATION * Mass());
+	AddForce (tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)) * Mass());
 }
 
 
@@ -425,9 +420,9 @@ void object::Impact_Anaelastic(object& obj) {
 	// the type is the type of the bigger
 	typ = bigger->typ;
 	// the color is the average, but considering the radius and the type's range
-	colour.blue = ((bigger->colour.blue * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.blue * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
-	colour.green = ((bigger->colour.green * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.green * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
-	colour.red = ((bigger->colour.red * bigger->Radius() *COLOR_PREDOMINANCE) + (smaller->colour.red * smaller->Radius())) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
+	colour.blue = ((bigger->Radius() * bigger->colour.blue * COLOR_PREDOMINANCE) + (smaller->Radius() * smaller->colour.blue)) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
+	colour.green = ((bigger->Radius() * bigger->colour.green * COLOR_PREDOMINANCE) + (smaller->Radius() * smaller->colour.green)) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
+	colour.red = ((bigger->Radius() * bigger->colour.red * COLOR_PREDOMINANCE) + (smaller->Radius() * smaller->colour.red)) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
 	
 	if(colour.blue > typ->color_max.blue)
 		colour.blue = typ->color_max.blue;
@@ -467,8 +462,6 @@ void object::Impact_Hunting(object& hed) {
 	
 	// a random number that is the (p)ercentage that the hunter eats of the hunted /100
 	float p;
-	// a variable that store the volume of an object
-	double volum;
 	// the velocity of the hunter in three axis
 	vec3<long double> v;
 	
@@ -485,27 +478,35 @@ void object::Impact_Hunting(object& hed) {
 	
 	// decrease the radius of the hunted and increase the rasius of the hunter -- keep in mind that: r^3 = V * 3 / (4 * PI) -- V = 4 * PI * r^3 / 3
 	// the hunter volume before
-	volum = 4/3 * PI * Radius() * Radius() * Radius();
+	tvolume volum = Radius() * Radius() * Radius() * (4.0/3) * PI;
 	// the hunter volume after
-	volum +=  (4/3 * PI * hed.Radius() * hed.Radius() * hed.Radius()) * p;	// volum += volum_eated
+	volum +=  (hed.Radius() * hed.Radius() * hed.Radius() * (4.0/3) * PI) * p;	// volum += volum_eated
 	// the hunter radius compute from the new volume
-	SetRadius ( pow(volum * 3 / (4 * PI), 1/3.0) );
+	SetRadius ( pow((volum * 3 / (4 * PI)).value(), 1/3.0) );
 	
 	// the hunted volume before (v = 4/3 * PI * r^3)
-	volum = 4/3 * PI * hed.Radius() * hed.Radius() * hed.Radius();
+	volum = hed.Radius() * hed.Radius() * hed.Radius() * 4/3 * PI;
 	// reduce the hunted volume
 	volum -= volum * p;
-	hed.SetRadius ( pow(volum * 3 / (4 * PI), 1/3.0) );
+	hed.SetRadius ( pow((volum * 3 / (4 * PI)).value(), 1/3.0) );
 	
 	// move the hunted a bit away and give him some velocity from the hunter
-	// to decrease hunter velocity, launch the hunted in the direction the hunter is going faster
-	// We use the absolute value of the velocity
+	// to decrease hunter velocity, launch the hunted
 	
 	vec3<long double> direction = Distance(hed).direction();
 
-	hed.AddForce(direction * Mass());
-	hed.AddForce(-direction * Mass());
-	
+	hed.AddForce (
+		tforce (
+			tacceleration(direction, tacceleration_scalar(0.0003)), 
+			Mass()
+		)
+	);
+	AddForce (
+		tforce (
+			tacceleration(-direction, tacceleration_scalar(0.0003)), 
+			Mass()
+		)
+	);
 	
 	/*
 	

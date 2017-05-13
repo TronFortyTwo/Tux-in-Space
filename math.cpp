@@ -33,3 +33,33 @@ int math_RandomI (int min, int max) {
 	srand(time(nullptr));
 	return (rand() % (max - min)) + min;
 }
+
+
+tforce tacceleration::operator* (const tmass& m) const{
+		return tforce(*this * m);
+};
+
+timpulse tvelocity::operator* (const tmass& m)  {
+	return timpulse(v * m.m);
+}
+
+tposition tpositionmass::operator/ (const tmass& m){
+	return tposition(v / m.m);
+}
+
+tvolume tarea::operator* (const tlength& l){
+	return tvolume(m * l.m);
+}
+
+tarea tlength::operator* (const tlength& l){
+	return tarea(m * l.m);
+}
+
+tforce tguc::newton(const tmass& mass1, const tmass& mass2, const tposition& dist) {
+	// apply the newton law of gravitation
+	tforce f(
+		dist.direction(),
+		m * mass1.m * mass2.m / (dist.module() * dist.module())
+	);
+	return f;
+}

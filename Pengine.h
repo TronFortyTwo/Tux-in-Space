@@ -26,62 +26,62 @@
 
 #include "generic.h"
 #include "math.h"
+#include "time.h"
 
 // The physic entity
 // TODO: add orientation, torque and other angular datas
-
 class PEntity {
 	
 	private:
 	
-		vec3<long double> pos;	// position
+		tposition pos;
 	
-		vec3<long double> vel;	// velocity
+		tvelocity vel;
 		
-		vec3<long double> acc_force;	// force accumuled in the simulation slice [T/s^2]
+		tforce acc_force;	// accumuled in the simulation slice
 	
-		double mass;
+		tmass mass;
 	
-		double radius;
+		tlength radius;
 	
 	protected:
 		
-		inline void SetMass(double m) {
+		inline void SetMass(tmass m) {
 			mass = m;
 		}
 	
-		inline void SetRadius(double r) {
+		inline void SetRadius(tlength r) {
 			radius = r;
 		}
 	
-		inline void SetPos(const vec3<long double>& _pos){
+		inline void SetPos(const tposition& _pos){
 			pos = _pos;
 		}
 		
-		inline void SetVel(const vec3<long double>& _vel){
+		inline void SetVel(const tvelocity& _vel){
 			vel = _vel;
 		}
 	
 	public:
 	
-		inline double Mass() const {
+		inline tmass Mass() const {
 			return mass;
 		}
 		
-		inline double Radius() const {
+		inline tlength Radius() const {
 			return radius;
 		}
 		
-		inline vec3<long double> Pos() const {
+		inline tposition Pos() const {
 			return pos;
 		}
 		
-		inline vec3<long double> Vel() const {
+		inline tvelocity Vel() const {
 			return vel;
 		}
 		
 		// add a force to the entity
-		inline void AddForce(const vec3<long double>& force){
+		inline void AddForce(const tforce& force){
 			acc_force += force;
 		}
 		
@@ -93,24 +93,24 @@ class PEntity {
 		}
 		
 					
-		inline vec3<long double> Distance(const PEntity& obj) {
-			return vec3<long double>(pos - obj.pos);
+		inline tposition Distance(const PEntity& e) {
+			return tposition(pos - e.pos);
 		}
 		
 		// Do the simulation for the time slice given
-		void Simulation(const float delta);
+		void Simulation(const time_raw& delta);
 		
-		inline PEntity(const vec3<long double>& _pos, const vec3<long double>& _vel){
-			mass = 0;
-			radius = 0;
+		inline PEntity(const tposition& _pos, const tvelocity& _vel){
+			mass = 0.0;
+			radius = 0.0;
 			pos = _pos;
 			vel = _vel;
 		}
 		
-		inline PEntity(const vec3<long double>& _pos,
-			const vec3<long double>& _vel,
-			const double& _mass,
-			const double& _radius)
+		inline PEntity(const tposition& _pos,
+			const tvelocity& _vel,
+			const tmass& _mass,
+			const tlength& _radius)
 		{
 			mass = _mass;
 			radius = _radius;

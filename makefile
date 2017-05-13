@@ -3,10 +3,10 @@ CXXFLAGS = -Wall -g
 # write them in logic order
 objects = \
 		debug.o\
+		math.o\
 		generic.o\
 		setting.o\
 		in.o\
-		math.o\
 		color.o\
 		main.o\
 		OnlyPrintfSystem.o\
@@ -23,10 +23,10 @@ objects = \
 # like object but whit .h but without main.h and with generic.h
 libraries = \
 		debug.h\
+		math.h\
 		generic.h\
 		setting.h\
 		in.h\
-		math.h\
 		color.h\
 		OnlyPrintfSystem.h\
 		type.h\

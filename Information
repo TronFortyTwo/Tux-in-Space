@@ -15,9 +15,9 @@ MISUR UNIT
 
 	These are the misure units that I use in the program:
 
-	lenght:		Km	(1000 m)
-	mass:		t	(1000 Kg)
-	time:		s
+	lenght:		Km	(1000 metre)
+	mass:		t	(1000 Kilogram)
+	time:		s	(second)
 	
 	so,
 	
