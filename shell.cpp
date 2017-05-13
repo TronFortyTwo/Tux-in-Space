@@ -75,12 +75,12 @@ bool Shell (setting& set, typeSTR& stype) {
 	*/
 		bool quit = false;
 		while(quit == false) {
-			// call the phisic engine
-			sys->Physic(stime);
 			// Output
 			OPSo (set, *sys);
 			// call the instruction parser and ask him for destination time
 			stime = Parser(set, *sys, quit);
+			// call the phisic engine
+			sys->Physic(stime);
 			// loading message
 			OPS(set, "Loading...");
 		}
