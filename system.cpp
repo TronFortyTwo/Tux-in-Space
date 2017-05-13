@@ -161,8 +161,12 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 	result = signal::good;
 	
 	// ask which system
-	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?");
+	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?\n\n&t2type 'n' to cancel");
 	in_s(_name);
+	if(!_name.compare("n")){
+		result = signal::aborted;
+		return;
+	}
 	// write the path
 	path = SYSTEM_PATH;
 	path += _name;

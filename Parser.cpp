@@ -135,7 +135,7 @@ void parser_Distance(const setting& set, system_c& sys){
 	}
 	distance = o->Distance(*u).module();
 	stringstream ss;
-	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance << " km/s\n\n&t0Press something to continue...";
+	ss << "DISTANCE\n\nThe distance between the two object is:\n&td" << distance << " m/s\n\n&t0Press something to continue...";
 	OPS(set, ss.str());
 	in_s();
 }

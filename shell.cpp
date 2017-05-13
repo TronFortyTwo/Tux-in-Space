@@ -53,6 +53,8 @@ bool Shell (setting& set, typeSTR& stype) {
 					OPS_Error(set, "The system can't be loaded. It is from an incompatible previous version or has been corrupted. Type something to continue and return to the main menu");
 					in_s();
 				}
+				else if(result == signal::aborted)
+					return true;
 				return true;
 			}
 			break;

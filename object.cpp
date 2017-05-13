@@ -168,18 +168,18 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 				break;
 		// Radius
 			case 5:
-				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (Km)");
+				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (m)");
 				SetRadius(in_ld());
 				comment += "\nNew radius assigned succefully!";
 				break;
 		// Coordiates
 			case 6: {
 					vec3<long double> p;
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (Km)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (m)");
 					p.x = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (Km)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (m)");
 					p.y = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (Km)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (m)");
 					p.z = in_ld();
 					SetPos(p);
 					comment += "\nNew coordinates assigned succefully!";
@@ -188,11 +188,11 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 		// Velocity
 			case 7: {
 					vec3<long double> v;
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (Km/s)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)");
 					v.x = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (Km/s)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)");
 					v.y = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (Km/s)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)");
 					v.z = in_ld();
 					SetVel(v);
 					comment += "\nNew velocity assigned succefully!";
@@ -202,7 +202,10 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 			case 8: {
 					// load the object in a temporany variable
 					signal result;
-					object temp(stype, name, result);
+					string _name;
+					OPS(set, "Create A NEW OBJECT\n\nInsert the name of the object you want to load:");
+					in_s(_name);
+					object temp(stype, _name, result);
 					if (result == signal::good) {
 						// move kinematic stats
 						MoveKinematic(temp);
