@@ -120,13 +120,14 @@ void system_c::Write(ofstream& dest){
 
 signal system_c::Read(ifstream& file, string& _name) {
 	
-	unsigned int num_obj;
-	
 	name = _name;
 	
-	precision = in_ff(file);
-	num_obj = in_fi(file);
-	G = in_ff(file);
+	precision = time_raw(in_ff(file));
+	
+	unsigned int num_obj = in_fi(file);
+	
+	G = tguc(in_ff(file));
+	
 	int y, d, h, m;
 	float s;
 	y = in_fi(file);
@@ -175,7 +176,6 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 	
 	// set the type structure
 	stype = &str;
-	
 	// Read the system
 	result = Read(sysf, _name);
 }
@@ -189,8 +189,6 @@ object *system_c::SearchObj(const string& tofind) {
 			return &o[i];
 	return nullptr;
 }
-
-// And now, physic!
 
 #define COLOR_PREDOMINANCE 1.35
 

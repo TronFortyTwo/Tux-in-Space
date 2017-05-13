@@ -52,7 +52,7 @@ class time_raw {
 		}
 		inline time_raw(long double f) {
 			fs = f;
-			while(f >= 1){		// TODO: optimize here
+			while(fs >= 1){		// TODO: optimize here
 				sec ++;
 				fs --;
 			}
