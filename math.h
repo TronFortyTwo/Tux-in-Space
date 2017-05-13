@@ -443,7 +443,7 @@ class tvelocity {
 			v += t.v;
 		}
 		inline tposition operator* (const time_raw& t) {
-			return tposition(v * t.Time());
+			return tposition(v * t.time());
 		}
 		inline tspeed speed(){
 			return tspeed(v.length());
@@ -557,7 +557,7 @@ class tforce {
 			return tacceleration(v / m.value());
 		}
 		inline timpulse operator* (const time_raw& t){
-			return timpulse(v * t.Time());
+			return timpulse(v * t.time());
 		}
 		inline tforce operator- (void){
 			return tforce(-v);

@@ -65,7 +65,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	// the name
 	in_s(name);
 	
-	precision = time_raw(1, 0);
+	precision = time_raw(1);
 }
 
 /***
@@ -105,7 +105,7 @@ void system_c::Save(const setting& set){
 }
 
 void system_c::Write(ofstream& dest){
-	dest << precision.Time() << "\n";
+	dest << precision.time() << "\n";
 	dest << o.size() << "\n";
 	dest << G.value() << "\n";
 	dest << stime.Year() << "\n";
@@ -210,7 +210,7 @@ void system_c::Physic (time_sim& dest) {
 		for (unsigned int i=0; i!=o.size(); i++)
 			o[i].Sim(precision);
 		// TIME
-		stime.AddSec(precision.Time());
+		stime.Add(precision.time());
 	}
 }
 

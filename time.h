@@ -33,33 +33,20 @@ class time_sim;
 // WARNING! not use for big value of times!!(use time_sim instead)
 class time_raw {
 	
-	private:
-		int sec;	// the integer nmumber of seconds
-		float fs;	// the fraction of second
+	protected:
+		long double sec;
 	
 	public:
 	
-		inline long long int Sec() const {
+		inline long double time() const {
 			return sec;
 		}
-		inline long double Time() const {
-			return sec + fs;
-		}
 	
-		inline time_raw(long long int _sec, float _fs) {
+		inline time_raw(const long double& _sec) {
 			sec = _sec;
-			fs = _fs;
-		}
-		inline time_raw(long double f) {
-			fs = f;
-			while(fs >= 1){		// TODO: optimize here
-				sec ++;
-				fs --;
-			}
 		}
 		inline time_raw(){
 			sec = 0;
-			fs = 0.0;
 		}
 	
 	friend time_sim;
@@ -96,9 +83,8 @@ class time_sim {
 			return sec;
 		}
 		
-		inline void AddSec(time_raw s){
+		inline void Add(time_raw s){
 			sec += s.sec;
-			sec += s.fs;
 			Sync();
 		}
 		
@@ -107,7 +93,7 @@ class time_sim {
 		
 		comparison Compare(const time_sim&);
 		
-		time_sim operator+ (const time_sim& t);
+		time_sim operator+ (const time_sim& t); 
 		
 		inline time_sim(const time_sim& t) {
 			*this = t;
@@ -132,14 +118,10 @@ class time_sim {
 		}
 		
 		inline time_sim(const time_raw& t) {
-			sec = t.Time();
+			sec = t.time();
 			Sync();
 			
 		}
-		
-		// transform into time_raw
-		time_raw get_Raw();
-
 };
 
 #endif

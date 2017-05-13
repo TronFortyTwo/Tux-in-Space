@@ -109,14 +109,3 @@ string time_sim::String(){
 	
 	return time;
 }
-
-time_raw time_sim::get_Raw(){
-	
-	
-	
-	long double lt = ((((year * 365) + day) * 24 + hour) * 60 + min) * 60 + sec;
-	int it = ((((year * 365) + day) * 24 + hour) * 60 + min) * 60 + sec;
-	
-	return time_raw (it, lt-it);
-	
-}

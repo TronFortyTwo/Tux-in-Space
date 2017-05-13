@@ -51,7 +51,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	in_inline_s(input);
 	// continue
 	if ((!input.compare("step")) || (!input.compare("s"))) {
-		t.AddSec(sys.precision);
+		t.Add(sys.precision.time());
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
@@ -231,7 +231,7 @@ void parser_Information(const setting& set, system_c& sys) {
  */
 time_sim parser_Wait(const setting& set, time_sim& now, const time_raw& precision) {
 		
-	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision.Time()) + " seconds");
+	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision.time()) + " seconds");
 	//scanf the time
 	int y, d, h, m;
 	float s;
@@ -263,7 +263,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, const time_raw& precisio
 	ss << "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR "
 		<< now.Year() << " DAY " << now.Day() << " TIME " << now.Hour() << ":"
 		<< now.Minute() << ":" << now.Second() << "\nThe jump will be made whit an error of max "
-		<< precision.Time() << " seconds";
+		<< precision.time() << " seconds";
 	
 	OPS(set, ss.str());
 	while(1) {
@@ -285,7 +285,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, const time_raw& precisio
 		if(t.Compare(now) == comparison::major)	{
 			// Error message if the time given isn't valid
 			t = now;
-			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR " + to_string(t.Year()) + " DAY " + to_string(t.Day()) + " TIME " + to_string(t.Hour()) + ":" + to_string(t.Minute()) + ":" + to_string(t.Second()) + "\nThe jump will be made whit an error of max " + to_string(precision.Time()) + " seconds");
+			OPS_Error(set, "The time given is out of range! Please put a time that is future to the actual time, that is:\nYEAR " + to_string(t.Year()) + " DAY " + to_string(t.Day()) + " TIME " + to_string(t.Hour()) + ":" + to_string(t.Minute()) + ":" + to_string(t.Second()) + "\nThe jump will be made whit an error of max " + to_string(precision.time()) + " seconds");
 		}
 		else
 			break;
