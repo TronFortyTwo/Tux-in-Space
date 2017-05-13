@@ -57,8 +57,8 @@ system_c::system_c (const setting& set, typeSTR& s) {
 
 	// set the type struct pointer
 	stype = &s;
-	// set the constant of gravitation. 6.67e-11 (m*m*m)/(Kg*s*s) but whit our units (t, s and Km) is 6.67e-17
-	G = 6.67e-17;
+	// set the constant of gravitation. 6.67e-11
+	G = tguc(6.67408e-11);
 	
 	// Ask for the name of the new system
 	OPS (set, "NEW SYSTEM INITIALIZATION\n\nname of the system:");

@@ -15,14 +15,14 @@ MISUR UNIT
 
 	These are the misure units that I use in the program:
 
-	lenght:		Km	(1000 metre)
-	mass:		t	(1000 Kilogram)
+	lenght:		m	(metre)
+	mass:		Kg	(Kilogram)
 	time:		s	(second)
 	
 	so,
 	
-	fast:		Km/s
-	acc:		Km/s*s
+	fast:		m/s
+	acc:		m/s*s
 
 VARIOUS
 

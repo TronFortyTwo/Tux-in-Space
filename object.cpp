@@ -208,7 +208,7 @@ object::object (const setting& set, typeSTR& stype, signal& result) {
 						MoveKinematic(temp);
 						// move the temp(the new) object in this
 						(*this) = temp;
-						comment += "New object loaded succefully!";
+						comment += "\nNew object loaded succefully!";
 					}
 					// negative comment if fail
 					else {

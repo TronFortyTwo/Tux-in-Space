@@ -50,17 +50,17 @@ void OPSo (const setting& set, system_c& sys) {
 			buffer += t.typ->name;
 			buffer += "\nX axis: ";
 			buffer += to_string(t.Pos().x());
-			buffer += " Km with a velocity of ";
+			buffer += " m with a velocity of ";
 			buffer += to_string(t.Vel().x());
-			buffer +=" Km/s\nY axis: ";
+			buffer +=" m/s\nY axis: ";
 			buffer += to_string(t.Pos().y());
-			buffer += " Km with a velocity of ";
+			buffer += " m with a velocity of ";
 			buffer += to_string(t.Vel().y());
-			buffer += " Km/s\nZ axis: ";
+			buffer += " m/s\nZ axis: ";
 			buffer += to_string(t.Pos().z());
-			buffer += " Km with a velocity of ";
+			buffer += " m with a velocity of ";
 			buffer += to_string(t.Vel().z());
-			buffer += " Km/s\n%r-";
+			buffer += " m/s\n%r-";
 		}
 	}
 	else
