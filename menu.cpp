@@ -68,21 +68,21 @@ signal menu_main(setting& set) {
 void menu_Settings_OPS(setting& set) {
 	int i;		 // input variable
 	while(1) {
-		OPS(set, "SETTINGS/OPS\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Back");
+		OPS(set, "SETTINGS/TEXT MODE\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Back");
 		i = in_i();
 		// WIDTH
 		if(i == 1) {
-			OPS(set, "SETTINGS/OPS\n\nInsert the new number of columns:\n&tdnow " + to_string(set.width) + ", recommended minimum 68");
+			OPS(set, "SETTINGS/TEXT MODE\n\nInsert the new number of columns:\n&tdnow " + to_string(set.width) + ", recommended minimum 68");
 			set.width = in_i();
 		}
 		// HEIGHT
 		else if(i == 2){
-			OPS(set, "SETTINGS/OPS\n\nInsert the new number of lines:\n&tdnow " + to_string(set.height) + ", recommended minimum 48");
+			OPS(set, "SETTINGS/TEXT MODE\n\nInsert the new number of lines:\n&tdnow " + to_string(set.height) + ", recommended minimum 48");
 			set.height = in_i();
 		}
 		// NUMBER PRECISION
 		else if(i == 3){
-			OPS(set, "SETTINGS/OPS\n\nInsert the new number of deciaml digits printed:\n&tdnow " + to_string(set.numprecision));
+			OPS(set, "SETTINGS/TEXT MODE\n\nInsert the new number of deciaml digits printed:\n&tdnow " + to_string(set.numprecision));
 			i = in_i();
 			set.numprecision = i;
 		}
@@ -106,7 +106,7 @@ void menu_Settings(setting& set) {
 	string input;
 		
 	while(1) {
-		OPS (set, "SETTINGS\n\n1) Select video mode\n2) OPS settings\n3) Video settings\n\n4) Done\n5) Restore defaults");
+		OPS (set, "SETTINGS\n\n1) Select video mode\n2) Text mode settings\n3) Video mode settings\n\n4) Done\n5) Restore defaults");
 		i = in_i();
 
 		// V_MODE
@@ -116,7 +116,7 @@ void menu_Settings(setting& set) {
 				mode = "OPS";
 			else
 				mode = "Graphic";
-			OPS(set, "SETTINGS\n\nNow the video mode is " + mode + ". Select the video mode:\n1) OPS\n2) GRAPHIC --EXPERIMENTAL--");
+			OPS(set, "SETTINGS\n\nNow the video mode is " + mode + ". Select the video mode:\n1) OPS (only text mode)\n2) GRAPHIC --EXPERIMENTAL--");
 			input = in_i();
 			if (input[0] == 2)
 				set.vmode = videomode::GL;
