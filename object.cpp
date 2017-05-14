@@ -390,10 +390,6 @@ void object::AI_Hunter(system_c& sys) {
 		if( Distance(*closest).length() > Distance(*targets[i]).length() )
 			closest = targets[i];
 	
-	cout << Mass().value() << endl;
-	cout << tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)).value() << endl;
-	cout << (tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)) * Mass()).value() << endl;
-	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
 	// TODO: not optimal solution!
