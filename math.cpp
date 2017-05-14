@@ -36,7 +36,7 @@ int math_RandomI (int min, int max) {
 
 
 tforce tacceleration::operator* (const tmass& m) const{
-		return tforce(*this * m);
+		return tforce(v * m.m);
 };
 
 timpulse tvelocity::operator* (const tmass& m)  {

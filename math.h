@@ -120,10 +120,10 @@ template<class T> class vec3 {
 		inline vec3<T> operator- (void) {
 			return vec3<T>(-x, -y, -z);
 		}
-		inline vec3<T> operator* (const long double& m) {
+		inline vec3<T> operator* (const long double& m) const {
 			return vec3<T>(x*m, y*m, z*m);
 		}
-		inline vec3<T> operator/ (const long double& d) {
+		inline vec3<T> operator/ (const long double& d) const {
 			return vec3<T>(x/d, y/d, z/d);
 		}
 		inline T& operator[] (axis3 n) {
@@ -349,6 +349,7 @@ class tmass {
 	friend class tpositionmass;
 	friend class tposition;
 	friend class tguc;
+	friend class tacceleration;
 };
 
 
@@ -492,6 +493,9 @@ class tacceleration {
 	
 		tforce operator* (const tmass& m) const; 
 		
+		inline long double value() {
+			return v.length();
+		}
 				
 		inline tacceleration(vec3<long double> _v){
 			v = _v;
@@ -565,6 +569,9 @@ class tforce {
 		
 		inline void zero() {
 			v.zero();
+		}
+		inline long double value(){
+			return v.length();
 		}
 		
 		inline tforce(const vec3<long double>& _v) {

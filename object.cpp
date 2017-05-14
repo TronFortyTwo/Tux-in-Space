@@ -390,6 +390,10 @@ void object::AI_Hunter(system_c& sys) {
 		if( Distance(*closest).length() > Distance(*targets[i]).length() )
 			closest = targets[i];
 	
+	cout << Mass().value() << endl;
+	cout << tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)).value() << endl;
+	cout << (tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)) * Mass()).value() << endl;
+	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
 	// TODO: not optimal solution!
@@ -465,8 +469,6 @@ void object::Impact_Hunting(object& hed) {
 	
 	// a random number that is the (p)ercentage that the hunter eats of the hunted /100
 	float p;
-	// the velocity of the hunter in three axis
-	vec3<long double> v;
 	
 	// set p (over 50, under 92)
 	// over 50 because elsewhere the hunter could collide in the hunted after this impact
@@ -510,23 +512,4 @@ void object::Impact_Hunting(object& hed) {
 			Mass()
 		)
 	);
-	
-	/*
-	
-	// indicate in which direction the hunter is faster
-	axis3 faster;
-	
-	v = body.GetVel().absolute();
-	
-	faster = v.greatest();
-
-	if(hed.pos[faster] > pos[faster])
-		hed.pos[faster] += hed.radius + radius + 0.01 + Distance(hed);
-	else
-		hed.pos[faster] -= hed.radius + radius + 0.01 + Distance(hed);
-	
-	f = vel[faster] * mass /2;
-	hed.vel[faster] = f / hed.mass;
-	vel[faster] /= 2;
-	*/
 }

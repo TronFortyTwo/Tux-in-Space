@@ -55,7 +55,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
-		OPS(set, "HELP\n\nYou have to press commands to manage the system. Insert a command to visualize his interface. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
+		OPS(set, "HELP\n\nYou have to press commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
 		in_s(input);
 	}
 	// parser_Jump
@@ -198,7 +198,16 @@ void parser_Information(const setting& set, system_c& sys) {
 	
 	// Generic informations about the system
 	ss << "Informations\n\nSystem " << sys.name << " with " << sys.o.size() 
-		<< " objects\n\nOf which object do you want informations? press 'n' to exit";
+		<< " objects\n\n";
+	if(sys.o.size() > 0)
+		ss << "Of which object do you want informations? press 'n' to exit";
+	else {
+		ss << "&t2Press something to continue...";
+		OPS(set, ss.str());
+		in_s();
+		return;
+	}
+	
 	OPS(set, ss.str());
 	in_s(input);
 	if(!input.compare("n"))
@@ -213,7 +222,7 @@ void parser_Information(const setting& set, system_c& sys) {
 	
 	ss.clear();
 	ss.str("");
-	ss << "Informations about " << obj->name << "%s\n%r-type: " << obj->typ->name 
+	ss << "Informations about " << obj->name << "%s\n\n%r-type: " << obj->typ->name 
 		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
 		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass().value()
 		<< "\n%r-radius: " << obj->Radius().value() << "\n%r-x: " << obj->Pos().x() << "\n\ny: "
