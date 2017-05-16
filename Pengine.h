@@ -97,6 +97,10 @@ class PEntity {
 			return tposition(pos - e.pos);
 		}
 		
+		bool touch(const PEntity& e) {
+			return Distance(e).length() < (e.radius + radius);
+		}
+		
 		// Do the simulation for the time slice given
 		void Simulation(const time_raw& delta);
 		

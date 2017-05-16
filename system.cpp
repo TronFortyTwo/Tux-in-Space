@@ -278,7 +278,7 @@ void system_c::physic_Impacts() {
 			if(l == i)
 				continue;
 			// if doesn't hit continue
-			if (o[i].Radius() + o[l].Radius() < o[i].Distance(o[l]).length())
+			if (!o[i].touch(o[l]))
 				continue;
 			impacts = true;
 			
@@ -296,7 +296,7 @@ void system_c::physic_Impacts() {
 				// write the new object in the first of the two position
 				// then move the new object in the last of the two position
 				if (i < l) {
-					o[i].Impact_Anaelastic(o[l]);;
+					o[i].Impact_Anaelastic(o[l]);
 					RemoveObj(o[l]);
 				}
 				else {	// i > l
