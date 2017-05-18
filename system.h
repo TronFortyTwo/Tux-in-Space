@@ -48,7 +48,7 @@ class system_c {
 		object *SearchObj	(const std::string&);	// Search for an object in the system from his name
 		void RemoveObj 		(object&);				// Remove an object from a system
 		void Save			(const setting& set);	// Save an object in a file
-		void NewObj			(const setting& set);	// Create a new object, put it in the system and initialize it
+		signal NewObj		(const setting& set);	// Create a new object, put it in the system and initialize it
 		
 		// old pengine
 		void Physic	(time_sim& dest);		// Apply the physic to the object
@@ -59,6 +59,7 @@ class system_c {
 		system_c () = default;
 	
 	private:
+	
 		// internal functions
 		void Physic_Inertia();	// apply the law: inertia
 		void Physic_Gravity();	// "     "    " : gravity

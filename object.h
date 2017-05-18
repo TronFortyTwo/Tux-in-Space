@@ -65,9 +65,21 @@ class object : public PEntity {
 		
 		
 		// CONSTRUCTOR:
-		object (typeSTR&, const std::string&, signal&);	// Load from a file (UI)
-		object (const setting&, typeSTR&, signal&);		// Init using an UI
-		object () {;}									// init a free object
+		inline object (const std::string& n,
+			const PEntity& e,
+			type* const& t,
+			const color& c)
+		{
+			(PEntity)*this = e;
+			name = n;
+			colour = c;
+			typ = t;
+		}
+		object (typeSTR&, const std::string&, signal&);		// Load from a file (UI)
+		object (const setting&, typeSTR&, const std::vector<object>& entity, signal&);	// Init using an UI
+		object () {;}										// init a free object
+		
+		friend class system_c;
 };
 
 #endif

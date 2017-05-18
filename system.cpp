@@ -26,18 +26,215 @@
 using namespace std;
 
 /***
- * This function prepare the object buffer for a new object and initialize it
+ * 	The function initialize a new object and ask information about it
+ * 
+ * 	n is the number of the object to initialize, if in a list
+ * 	return ABORTED_SIG if the new object isn't initialized
  */
-void system_c::NewObj (const setting& set) {
+signal system_c::NewObj (const setting& set) {
 	
-	signal result;
-	object temp(set, *stype, result);
-	if(result == signal::good)
-		o.push_back(temp);
-	else {
-		if(result != signal::aborted){
-			debug_Printf(IRREGULARITY" system_c::NewObj New object creation failed for");
-			debug_Signal(result);
+	// the new object
+	object obj;
+	
+	int input;
+	string comment;				// This is a buffer that contein comment of what is just been done
+	string mass_irregularity;	// assume the value IRREGULARITY if the mass is out of range
+	string color_irregularity;	// assume the value IRREGULARITY if the color is out of range
+	string name_irregularity;	// assume the value IRREGULARITY if there is no name
+	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
+	string touch_irregularity;	// assume the value IRREGULARITY if it touch some other object
+	
+	// Initialize the object
+	obj.name.clear();
+	obj.typ = stype->Search("Object");
+	obj.colour.blue = 0;
+	obj.colour.red = 0;
+	obj.colour.green = 0;
+	
+	
+	// the loop
+	while(1) {
+		// check for IRREGALARITY
+		// irregularity: NAME
+		if (obj.name.length())
+			name_irregularity.clear();
+		else {
+			name_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " name not given yet";
+		}
+		// irregularity: MASS
+		if ((obj.Mass() > obj.typ->mass_min) && (obj.Mass() < obj.typ->mass_max)) {
+			mass_irregularity.clear();
+		}
+		else {
+			mass_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " mass out of range";
+		}
+		// irregularity: RADIUS
+		if(obj.Radius() > tlength(0) )
+			radius_irregularity.clear();
+		else if (obj.Radius() == tlength(0)) {
+			radius_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " radius is zero";
+		}
+		else {
+			radius_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " radius is below zero";
+		}
+		// irregularity: COLOR
+		if (obj.colour.CheckRange(obj.typ->color_min, obj.typ->color_max) == true)
+			color_irregularity.clear();
+		else {
+			color_irregularity = IRREGULARITY;
+			comment += "\n" IRREGULARITY " color out of range";
+		}
+		// irregularity: TOUCH
+		touch_irregularity.clear();
+		for(unsigned int i=0; i!=o.size(); i++){
+			if (obj.touch(o[i])){
+				touch_irregularity = IRREGULARITY;
+				comment += "\n" IRREGULARITY " the object would overlap the ";
+				comment += o[i].name;
+				comment += " object";
+				break;
+			}
+		}
+		
+		// Print the actual state and scan the desire of the user
+		tposition p (obj.Pos());
+		tvelocity v (obj.Vel());
+		stringstream ss;
+		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
+			<< obj.name << name_irregularity
+			<< "\n%r-2) type:         " << obj.typ->name
+			<< "\n&ti7" << obj.typ->description
+			<< "&t0\n%r-3) color:        red: " << obj.colour.red
+			<< "   " << color_irregularity << "&ti7\ngreen: "
+			<< obj.colour.green << "\nblue: " << obj.colour.blue
+			<< "&t0\n%r-4) mass:         " << obj.Mass().value() << "   "
+			<< mass_irregularity << "\n%r-5) radius:       "
+			<< obj.Radius().value() << "   " << radius_irregularity
+			<< "\n%r-6) coordinates:  x: "
+			<< p.x() << "   " << touch_irregularity << "&ti7\ny: " << p.y() 
+			<< "\nz: " << p.z()	<< "&t0\n%r-7) velocity:     x: " << v.x()
+			<< "&ti7\ny: " << v.y() << "\nz: " << v.z()
+			<< "&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  "
+			<< "this object to a file\n%r-10) DONE\n11) EXIT without saving\n\n"
+			<< comment;
+			
+		OPS(set, ss.str());
+		input = in_i();
+		
+		// reset previous comment
+		comment.clear();
+	
+		switch(input) {
+			// Name
+			case 1:
+				OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:");
+				in_s(obj.name);
+				// apply the new name
+				comment += "\nNew name assigned succefully!";
+				break;
+		// Type
+			case 2:
+				obj.typ = &stype->Browse(set, "Choose a new type for your new object");
+				comment += "\nNew type assigned succefully!";
+				break;
+		// Color
+			case 3:
+				obj.colour.Scan(set, obj.typ->color_min, obj.typ->color_max);
+				comment += "\nNew color assigned succefully!";
+				break;
+		// Mass
+			case 4:
+				ss.clear();
+				ss.str("");
+				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between " << obj.typ->mass_min << " and " << obj.typ->mass_max;
+				OPS (set, ss.str());
+				obj.SetMass(in_ld());
+				comment += "\nNew mass assigned succefully!";
+				break;
+		// Radius
+			case 5:
+				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (m)");
+				obj.SetRadius(in_ld());
+				comment += "\nNew radius assigned succefully!";
+				break;
+		// Coordiates
+			case 6: {
+					vec3<long double> p;
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (m)");
+					p.x = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (m)");
+					p.y = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (m)");
+					p.z = in_ld();
+					obj.SetPos(p);
+					comment += "\nNew coordinates assigned succefully!";
+					break;
+				}
+		// Velocity
+			case 7: {
+					vec3<long double> v;
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)");
+					v.x = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)");
+					v.y = in_ld();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)");
+					v.z = in_ld();
+					obj.SetVel(v);
+					comment += "\nNew velocity assigned succefully!";
+					break;
+				}
+		// LOAD
+			case 8: {
+					// load the object in a temporany variable
+					signal result;
+					string _name;
+					OPS(set, "Create A NEW OBJECT\n\nInsert the name of the object you want to load:");
+					in_s(_name);
+					object temp(*stype, _name, result);
+					if (result == signal::good) {
+						// move kinematic stats
+						obj.MoveKinematic(temp);
+						// move the temp(the new) object in this
+						obj = temp;
+						comment += "\nNew object loaded succefully!";
+					}
+					// negative comment if fail
+					else {
+						comment += "\nCan't load the object! ";
+						if (result == signal::file_err)
+							comment += "No object whit that name found!";
+						else if (result == signal::corrupted)
+							comment += "File corrupted or outdated!";
+					}
+				}
+				break;
+		// SAVE
+			case 9:
+				Save(set);
+				comment += "\nNew object saved succefully!";
+				break;
+		// DONE
+			case 10:
+				if ( mass_irregularity.compare(IRREGULARITY) &&
+					color_irregularity.compare(IRREGULARITY) &&
+					name_irregularity.compare(IRREGULARITY)  &&
+					radius_irregularity.compare(IRREGULARITY) &&
+					touch_irregularity.compare(IRREGULARITY) ){
+	
+					o.push_back(obj);
+					return signal::good;
+				}
+				else
+					comment += "\nCannot exit! Fix irregularities first";
+				break;
+		// EXIT WHITOUT SAVE
+			case 11:
+				// quit
+				return signal::aborted;
 		}
 	}
 }

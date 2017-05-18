@@ -198,6 +198,12 @@ class tlength {
 			return false;
 			
 		}
+		inline bool operator<= (const tlength& t) const {
+			if (m <= t.m)
+				return true;
+			return false;
+			
+		}
 		inline tlength operator* (const long double& n){
 			return tlength(m * n);
 		}

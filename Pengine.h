@@ -97,8 +97,9 @@ class PEntity {
 			return tposition(pos - e.pos);
 		}
 		
+		// Does the two object touch?
 		bool touch(const PEntity& e) {
-			return Distance(e).length() < (e.radius + radius);
+			return Distance(e).length() <= (e.radius + radius);
 		}
 		
 		// Do the simulation for the time slice given
