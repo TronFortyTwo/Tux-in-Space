@@ -2,23 +2,23 @@
 CSpace: the space simulator
 
 This program is a simulation game. The program simulates the moving, under
-the phisic's law, of planets, spaceships, suns, and everything else in 
-the deep space.
+the phisic's laws, of planets, spaceships, suns, and everything else in 
+deep space.
 
-Now have:
-- An wide gerarchic collection of various object types whit different
-behavior
-- Phisic engine that simulate the gravity force and different types of 
-impacts between the objects
+Highlighted features:
+- A wide gerarchic collection of various object types with different
+behaviours
+- A phisic engine that simulates the gravity force and different types of 
+impacts between objects
 - Space Monsters with basic AI
 
-for test/use the program:
+test/use the program:
 -------------------------
-There is an executable file, compiled in a Linux 64 bit. Maybe it can run
-in other computers as well, but you can easily compile the program whit
-the makefile.
+There is an executable file, compiled in a 64 bit Linux; Maybe can run
+in other computers as well, but you can easily compile the program with
+the makefile (just run 'make' in the master directory).
 
-The program is programmed for linux only, but whit very few work can also
+The program is written for linux only, but with very few work or maybe no work at all could also
 run on other operative systems. (See information file)
 
 For developers is suggested to use the latest version in the 
@@ -26,8 +26,7 @@ master branch, for normal users the latest release.
 
 Status
 ------
-The program is in alpha status: this mean that the program is far away 
-from being complete.
+The program is far far away from being complete.
 
 License
 ------
