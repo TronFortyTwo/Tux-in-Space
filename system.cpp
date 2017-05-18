@@ -56,11 +56,19 @@ signal system_c::NewObj (const setting& set) {
 	while(1) {
 		// check for IRREGALARITY
 		// irregularity: NAME
-		if (obj.name.length())
-			name_irregularity.clear();
-		else {
+		name_irregularity.clear();
+		if (!obj.name.length()) {
 			name_irregularity = IRREGULARITY;
 			comment += "\n" IRREGULARITY " name not given yet";
+		}
+		for(unsigned int i=0; i!=o.size(); i++){
+			if (!obj.name.compare(o[i].name)){
+				name_irregularity = IRREGULARITY;
+				comment += "\n" IRREGULARITY " the name '";
+				comment += obj.name;
+				comment += "' already names another object";
+				break;
+			}
 		}
 		// irregularity: MASS
 		if ((obj.Mass() > obj.typ->mass_min) && (obj.Mass() < obj.typ->mass_max)) {
@@ -105,7 +113,7 @@ signal system_c::NewObj (const setting& set) {
 		tvelocity v (obj.Vel());
 		stringstream ss;
 		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
-			<< obj.name << name_irregularity
+			<< obj.name << "   " << name_irregularity
 			<< "\n%r-2) type:         " << obj.typ->name
 			<< "\n&ti7" << obj.typ->description
 			<< "&t0\n%r-3) color:        red: " << obj.colour.red
