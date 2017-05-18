@@ -44,13 +44,7 @@ signal system_c::NewObj (const setting& set) {
 	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
 	string touch_irregularity;	// assume the value IRREGULARITY if it touch some other object
 	
-	// Initialize the object
-	obj.name.clear();
 	obj.typ = stype->Search("Object");
-	obj.colour.blue = 0;
-	obj.colour.red = 0;
-	obj.colour.green = 0;
-	
 	
 	// the loop
 	while(1) {

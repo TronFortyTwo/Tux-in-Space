@@ -37,6 +37,10 @@ class color {
 		
 		void Scan(const setting&, const color&, const color&);	// An interface to create a color using OPS
 		bool CheckRange(const color&, const color&);			// Check if the color is in a range of colours given (a color max and a color min)
+
+		color(){
+			red = green = blue = 0;
+		}
 };
 
 #include "OnlyPrintfSystem.h"
