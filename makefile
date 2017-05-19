@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -g
+CXXFLAGS = -Wall -g -std=gnu++17
 
 # write them in logic order
 objects = \

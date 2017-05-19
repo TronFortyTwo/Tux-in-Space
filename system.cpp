@@ -194,7 +194,13 @@ signal system_c::NewObj (const setting& set) {
 					// load the object in a temporany variable
 					signal result;
 					string _name;
-					OPS(set, "Create A NEW OBJECT\n\nInsert the name of the object you want to load:");
+					
+					stringstream ss;
+					
+					ss << "Create A NEW OBJECT\n\nInsert the name of the object you want to load:\n";
+					ss << "%r-";
+					ss << "%r-press 'n' to cancel";
+					OPS(set, ss.str());
 					in_s(_name);
 					object temp(*stype, _name, result);
 					if (result == signal::good) {
@@ -216,7 +222,7 @@ signal system_c::NewObj (const setting& set) {
 				break;
 		// SAVE
 			case 9:
-				Save(set);
+				obj.Save(set);
 				comment += "\nNew object saved succefully!";
 				break;
 		// DONE
@@ -256,7 +262,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 
 	// set the type struct pointer
 	stype = &s;
-	// set the constant of gravitation. 6.67e-11
+	// set the constant of gravitation
 	G = tguc(6.67408e-11);
 	
 	// Ask for the name of the new system
@@ -298,15 +304,6 @@ void system_c::Save(const setting& set){
 	
 	// Write information about the system
 	Write(odest);
-	
-	// Write the system in the system saved list
-	ofstream out;
-	out.open(SYSTEM_LIST, ios_base::app);
-	
-	if(!out)
-		debug_Printf(IRREGULARITY " Can't access" SYSTEM_LIST "file!");
-	else
-		out << name << '\n';
 	
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue");
 	in_s();
@@ -361,19 +358,15 @@ signal system_c::Read(ifstream& file, string& _name) {
 /**
  * Load a system from a file
  */
+
 system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 
 	string _name;	// the name of the system
 	string path;	// the system file (path)
 	
 	stringstream output;
-	ifstream sys_list(SYSTEM_LIST);
 
 	output << "LOAD SYSTEM\n\nWhat is the name of the system you want to load?";
-	if(sys_list) {
-		output << "\n%r-" << sys_list.rdbuf();
-	}
-	output << "%r-type 'n' to cancel";
 	
 	// ask which system
 	OPS(set, output.str());
