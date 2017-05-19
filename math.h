@@ -449,13 +449,25 @@ class tvelocity {
 		inline void operator+= (const tvelocity& t){
 			v += t.v;
 		}
-		inline tposition operator* (const time_raw& t) {
+		inline tposition operator* (const time_raw& t) const {
 			return tposition(v * t.time());
 		}
 		inline tspeed speed(){
 			return tspeed(v.length());
 		}
 		timpulse operator* (const tmass& m);
+		inline tvelocity operator+ (const tvelocity& vel) {
+			return tvelocity(v+vel.v);
+		}
+		inline tvelocity operator- (const tvelocity& vel) {
+			return tvelocity(v-vel.v);
+		}
+		inline bool operator< (const tvelocity& vel) {
+			return v.length() < vel.v.length();
+		}
+		inline bool operator> (const tvelocity& vel) {
+			return v.length() > vel.v.length();
+		}
 		
 		inline long double x() { return v.x;}
 		inline long double y() { return v.y;}

@@ -195,9 +195,9 @@ void object::AI_Hunter(system_c& sys) {
 	
 	// PART TWO, FOLLOW THE OBJECT
 	// move the hunter in the direction of the closest
-	// TODO: not optimal solution!
-	
-	AddForce (tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.0001)) * Mass());
+	// accelerate only if the hunter hasn't reached yet a fixed fast
+	if(Vel() - closest->Vel() < tvelocity(vec3<long double>(20, 0, 0)))
+		AddForce (tacceleration(Distance(*closest).direction(), tacceleration_scalar(0.01)) * Mass());
 }
 
 
@@ -299,13 +299,13 @@ void object::Impact_Hunting(object& hed) {
 
 	hed.AddForce (
 		tforce (
-			tacceleration(direction, tacceleration_scalar(0.0003)), 
+			tacceleration(direction, tacceleration_scalar(0.03)), 
 			Mass()
 		)
 	);
 	AddForce (
 		tforce (
-			tacceleration(-direction, tacceleration_scalar(0.0003)), 
+			tacceleration(-direction, tacceleration_scalar(0.03)), 
 			Mass()
 		)
 	);
