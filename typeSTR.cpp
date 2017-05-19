@@ -259,8 +259,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 		// the title
 		buf << title << "\n";
 		// write in the dbuf the parent
-		buf << commonparent->name;
-		buf << ":\n";
+		buf << commonparent->name << ":\n";
 		// search for types that have as parent commonparent
 		for (unsigned int i=0; i!=t.size(); i++) {
 			// if the type has commonparent as parent
@@ -270,10 +269,7 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 				if(&t[i] == t[i].parent)
 					continue;
 				types_listed.push_back(&t[i]);
-				buf << "\n";
-				buf << types_listed.size();
-				buf << ") ";
-				buf << t[i].name;
+				buf << "\n" << types_listed.size() << ") " << t[i].name;
 			}
 		}
 		// add the generic button
@@ -318,17 +314,11 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 			buf.clear();
 			buf.str("");
 			buf << "Of which type of object do you want an explaination?\n";
-			for(unsigned int i=0; i < types_listed.size(); i++){
-				buf << "\n";
-				buf << i+1;
-				buf << ") ";
-				buf << types_listed[i]->name;
-			}
+			for(unsigned int i=0; i < types_listed.size(); i++)
+				buf << "\n" << i+1 << ") " << types_listed[i]->name;
 			// generic
-			buf << "\n";
-			buf << types_listed.size() + 1;
-			buf << ") Generic ";
-			buf << commonparent->name;
+			buf << "\n" << types_listed.size() +1 << ") Generic " << commonparent->name;
+			
 			OPS(set, buf.str());
 			// input
 			unsigned int n = in_i();
@@ -348,33 +338,16 @@ type& typeSTR::Browse(const setting& set, const string& title) {
 				type_descr = types_listed[n-1];
 			buf.clear();
 			buf.str("");
-			buf << "Info about:  ";
-			buf << type_descr->name;
-			buf << "\n\nDescription: &ti3";
-			buf << type_descr->description;
-			buf << "&t0";
-			buf << "\nUnder the category:&t9 ";
-			buf << type_descr->parent->name;
-			buf << "&t0";
+			buf << "Info about:  " << type_descr->name;
+			buf << "\n\nDescription: &ti3" << type_descr->description << "&t0";
+			buf << "\nUnder the category:&t9 " << type_descr->parent->name << "&t0";
 			// the mass range
-			buf << "\nMinimum mass: ";
-			buf << type_descr->mass_min;
-			buf << "\nMaximum mass: ";
-			buf << type_descr->mass_max;
+			buf << "\nMinimum mass: " << type_descr->mass_min;
+			buf << "\nMaximum mass: " << type_descr->mass_max;
 			// the color range
-			buf << "\nColor range:\n&t9red: ";
-			buf << type_descr->color_min.red;
-			buf << " - ";
-			buf << type_descr->color_max.red;
-			buf << "\ngreen: ";
-			buf << type_descr->color_min.green;
-			buf << " - ";
-			buf << type_descr->color_max.green;
-			buf << "\nblue: ";
-			buf << type_descr->color_min.blue;
-			buf << " - ";
-			buf << type_descr->color_max.blue;
-			buf << "&t0";
+			buf << "\nColor range:\n&t9red: " << type_descr->color_min.red << " - " << type_descr->color_max.red;
+			buf << "\ngreen: " << type_descr->color_min.green << " - " << type_descr->color_max.green;
+			buf << "\nblue: " << type_descr->color_min.blue << " - " << type_descr->color_max.blue << "&t0";
 
 			// finalizing the description page
 			buf << "\n\nPress something to continue...";

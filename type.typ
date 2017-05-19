@@ -10,7 +10,7 @@
 # - please, use the indentation (using tabs)
 # - to write comments, start a line with '#'
 # - write the type elements in the same order
-# - there is no support yet for object that are both hunter AND hunted
+# - there is no official support yet for types that are both hunter AND hunted
 ########################################################################
 ########################################################################
 # the Object type is the base for all other types
