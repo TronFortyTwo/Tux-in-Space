@@ -95,9 +95,9 @@ signal system_c::NewObj (const setting& set) {
 		for(unsigned int i=0; i!=o.size(); i++){
 			if (obj.touch(o[i])){
 				touch_irregularity = IRREGULARITY;
-				comment += "\n" IRREGULARITY " the object would overlap the ";
+				comment += "\n" IRREGULARITY " the object would overlap the '";
 				comment += o[i].name;
-				comment += " object";
+				comment += "' object";
 				break;
 			}
 		}
@@ -199,9 +199,41 @@ signal system_c::NewObj (const setting& set) {
 					
 					ss << "Create A NEW OBJECT\n\nInsert the name of the object you want to load:\n";
 					ss << "%r-";
-					ss << "%r-press 'n' to cancel";
-					OPS(set, ss.str());
+					for(auto& p: experimental::filesystem::directory_iterator(OBJECT_PATH))
+						ss << p << '\n';
+					ss << "%r-type 'n' to cancel";
+
+					string sout = ss.str();
+					// remove stuff not nice to see
+					// search for the '"'s
+					while(1) {
+						auto pos = sout.find("\"");
+						if(pos == string::npos)
+							break;
+						sout.replace(pos, 1, "");
+					}
+					// search for ".obj"
+					while(1) {
+						auto pos = sout.find(".object");
+						if(pos == string::npos)
+							break;
+						sout.replace(pos, 7, "");
+					}
+					// search for "Objects/"
+					while(1) {
+						auto pos = sout.find("Objects/");
+						if(pos == string::npos)
+							break;
+						sout.replace(pos, 8, "");
+					}
+					
+					// out and in
+					OPS(set, sout);
 					in_s(_name);
+					
+					if(!_name.compare("n"))
+						break;
+					
 					object temp(*stype, _name, result);
 					if (result == signal::good) {
 						// move kinematic stats
