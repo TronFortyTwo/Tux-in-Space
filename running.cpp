@@ -81,10 +81,10 @@ bool Run (setting& set, typeSTR& stype) {
 			OPSo (set, *sys);
 			// call the instruction parser and ask him for destination time
 			stime = Parser(set, *sys, quit);
-			// call the phisic engine
-			sys->Physic(stime);
 			// loading message
 			OPS(set, "Loading...");
+			// call the phisic engine
+			sys->Physic(stime);
 		}
 	/*
 	else if (set.vmode == V_GL) {

@@ -204,7 +204,7 @@ void OPS(const setting& set, const std::string& phrase) {
 	OPS_Line(set.width, FRAMEEND, TWOFRAMELEN);
 	cout << FRAMER << "\n";
 	OPS_Line(set.width, FRAMESTART, 0);
-	cout << "\n" << FRAME;
+	cout << endl << FRAME;
 
 }
 	
