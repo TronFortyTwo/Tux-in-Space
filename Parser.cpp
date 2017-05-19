@@ -55,7 +55,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
-		OPS(set, "HELP\n\nYou have to press commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
+		OPS(set, "HELP\n\nYou have to use commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
 		in_s(input);
 	}
 	// parser_Jump
