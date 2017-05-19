@@ -147,7 +147,7 @@ bool parser_Quit (const setting& set, system_c& sys){
 		
 	string input;		
 	// ask for confirm to quit
-	OPS(set, "QUIT\n\nAre you sure you want to quit? [y/n]\nOr you want to save before go? [s]");
+	OPS(set, "QUIT\n%r-Are you sure you want to quit? [y/n]\nOr you want to save before go? [s]");
 	in_s(input);
 	
 	if (input[0] == 's') {
@@ -170,7 +170,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	object *obj;	//the pointer to the object
 		
 	// ask the user for the name
-	OPS(set, "DELETE\n\nWhich object do you want do delete?\n\n&t1Press 'n' to go back");
+	OPS(set, "DELETE\n%r-Which object do you want do delete?\n\n&t1Press 'n' to go back");
 	in_s(name);
 	if (!name.compare("n"))
 		return;
@@ -197,10 +197,10 @@ void parser_Information(const setting& set, system_c& sys) {
 	stringstream ss;
 	
 	// Generic informations about the system
-	ss << "Informations\n\nSystem " << sys.name << " with " << sys.o.size() 
-		<< " objects\n\n";
+	ss << "INFORMATIONS\n%r-System " << sys.name << " with " << sys.o.size() 
+		<< " objects\n";
 	if(sys.o.size() > 0)
-		ss << "Of which object do you want informations? press 'n' to exit";
+		ss << "Of which object do you want informations?\n\npress 'n' to exit";
 	else {
 		ss << "&t2Press something to continue...";
 		OPS(set, ss.str());
@@ -225,10 +225,10 @@ void parser_Information(const setting& set, system_c& sys) {
 	ss << "Informations about " << obj->name << "%s\n\n%r-type: " << obj->typ->name 
 		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
 		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass().value()
-		<< "\n%r-radius: " << obj->Radius().value() << "\n%r-x: " << obj->Pos().x() << "\n\ny: "
-		<< obj->Pos().y() << "\n\nz: " << obj->Pos().z() << "\n%r-velocity in x: "
-		<< obj->Vel().x() << "\n\nvelocity in y: " << obj->Vel().y() << "\n\nvelocity in z: "
-		<< obj->Vel().z() << "\n%r-\n\n&t2Press somthing to continue...";
+		<< "\n%r-radius: " << obj->Radius().value() << "\n%r-x: " << obj->Pos().x() << "\ny: "
+		<< obj->Pos().y() << "\nz: " << obj->Pos().z() << "\n%r-velocity in x: "
+		<< obj->Vel().x() << "\nvelocity in y: " << obj->Vel().y() << "\nvelocity in z: "
+		<< obj->Vel().z() << "\n%r-\nPress somthing to continue...";
 	
 	OPS(set, ss.str());
 	in_s();
@@ -240,7 +240,7 @@ void parser_Information(const setting& set, system_c& sys) {
  */
 time_sim parser_Wait(const setting& set, time_sim& now, const time_raw& precision) {
 		
-	OPS(set, "Wait\n\nInsert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision.time()) + " seconds");
+	OPS(set, "WAIT\n%r-Insert the amount of simulation-time you want to wait\n<year> <day> <hour> <minute> <second>\nThe operation will be made whit an error of max " + to_string(precision.time()) + " seconds");
 	//scanf the time
 	int y, d, h, m;
 	float s;
@@ -269,7 +269,7 @@ time_sim parser_Jump(const setting& set, time_sim& now, const time_raw& precisio
 	time_sim t;
 	
 	stringstream ss;
-	ss << "Jump\n\nInsert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR "
+	ss << "JUMP\n%r-Insert the information about the moment you want to jump\n<year> <day> <hour> <minute> <second>\nThe actual time is: YEAR "
 		<< now.Year() << " DAY " << now.Day() << " TIME " << now.Hour() << ":"
 		<< now.Minute() << ":" << now.Second() << "\nThe jump will be made whit an error of max "
 		<< precision.time() << " seconds";
