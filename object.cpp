@@ -230,6 +230,8 @@ void object::Impact_Anaelastic(object& obj) {
 	colour.green = ((bigger->Radius() * bigger->colour.green * COLOR_PREDOMINANCE) + (smaller->Radius() * smaller->colour.green)) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
 	colour.red = ((bigger->Radius() * bigger->colour.red * COLOR_PREDOMINANCE) + (smaller->Radius() * smaller->colour.red)) / (bigger->Radius()*COLOR_PREDOMINANCE + smaller->Radius());
 	
+	cout << "prova" << endl;
+	
 	if(colour.blue > typ->color_max.blue)
 		colour.blue = typ->color_max.blue;
 	else if(colour.blue < typ->color_min.blue)

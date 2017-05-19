@@ -302,7 +302,7 @@ system_c::system_c (const setting& set, typeSTR& s) {
 	// the name
 	in_s(name);
 	
-	precision = time_raw(1);
+	precision = time_raw(0.1);
 }
 
 /***
@@ -474,11 +474,11 @@ void system_c::Physic (time_sim& dest) {
 		Physic_Gravity();
 		// HUNTER IA
 		Hunter_AI();
-		// IMPACTS
-		physic_Impacts();
-		//
+		// INERTIA
 		for (unsigned int i=0; i!=o.size(); i++)
 			o[i].Sim(precision);
+		// IMPACTS
+		physic_Impacts();
 		// TIME
 		stime.Add(precision.time());
 	}
