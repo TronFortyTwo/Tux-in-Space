@@ -34,7 +34,6 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
-#include <experimental/filesystem>
 		
 // The three axis must have different codes
 enum class axis3 {x, y, z};

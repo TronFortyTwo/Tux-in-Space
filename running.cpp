@@ -21,11 +21,11 @@
  * 
  */
 
-#include "shell.h"
+#include "running.h"
 
 using namespace std;
 
-bool Shell (setting& set, typeSTR& stype) {
+bool Run (setting& set, typeSTR& stype) {
 	
 	// a pointer to the system-c
 	system_c *sys;

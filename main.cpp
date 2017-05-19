@@ -64,7 +64,7 @@ int main () {
 	
 	// RUNNING
 	while
-		(Shell (set, stype) != false);
+		(Run (set, stype) != false);
 		
 	// EXITING THE PROGRAM
 		

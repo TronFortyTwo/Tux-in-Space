@@ -17,7 +17,7 @@ objects = \
 		object.o\
 		system.o\
 		Parser.o\
-		shell.o\
+		running.o\
 		OPSo.o\
 		menu.o
 # like object but whit .h but without main.h and with generic.h
@@ -36,7 +36,7 @@ libraries = \
 		object.h\
 		system.h\
 		Parser.h\
-		shell.h\
+		running.h\
 		OPSo.h\
 		menu.h
 
