@@ -68,7 +68,7 @@ signal menu_main(setting& set) {
 void menu_Settings_OPS(setting& set) {
 	int i;		 // input variable
 	while(1) {
-		OPS(set, "SETTINGS/TEXT MODE\n\n1) Change number of columns\n2) Change number of lines\n3) Change number precision\n4) Back");
+		OPS(set, "SETTINGS/TEXT MODE\n\n1) Change number of columns\n2) Change number of lines\n3) Back");
 		i = in_i();
 		// WIDTH
 		if(i == 1) {
@@ -80,13 +80,7 @@ void menu_Settings_OPS(setting& set) {
 			OPS(set, "SETTINGS/TEXT MODE\n\nInsert the new number of lines:\n&tdnow " + to_string(set.height) + ", recommended minimum 48");
 			set.height = in_i();
 		}
-		// NUMBER PRECISION
-		else if(i == 3){
-			OPS(set, "SETTINGS/TEXT MODE\n\nInsert the new number of deciaml digits printed:\n&tdnow " + to_string(set.numprecision));
-			i = in_i();
-			set.numprecision = i;
-		}
-		else if(i == 4)
+		else if(i == 3)
 			return;
 	}
 }
@@ -116,7 +110,7 @@ void menu_Settings(setting& set) {
 				mode = "OPS";
 			else
 				mode = "Graphic";
-			OPS(set, "SETTINGS\n\nNow the video mode is " + mode + ". Select the video mode:\n1) OPS (only text mode)\n2) GRAPHIC --EXPERIMENTAL--");
+			OPS(set, "SETTINGS\n\nNow the video mode is " + mode + ". Select the video mode:\n1) OPS (only text mode)\n2) GRAPHICAL --EXPERIMENTAL--");
 			input = in_i();
 			if (input[0] == 2)
 				set.vmode = videomode::GL;

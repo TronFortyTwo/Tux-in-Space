@@ -36,7 +36,6 @@ class setting {
 	public:
 		unsigned int width;			// The number of columns that OPS use
 		unsigned int height;		// The number of lines that OPS use
-		unsigned int numprecision;	// Number of character used for printing the deciamal of a long double (OPS)
 		videomode vmode;			// Visual mode
 		
 		

@@ -27,7 +27,6 @@
 #define DEFAULT_OPS_HEIGHT 			48
 #define DEFAULT_OPS_WIDTH 			68
 #define DEFAULT_DEBUG 				false
-#define DEFAULT_OPS_NUMPRECISION 	6
 #define DEFAULT_VIDEO 				videomode::OPS
 
 using namespace std;
@@ -46,7 +45,7 @@ void setting::Save() {
 		cf << "O";	// OPS
 	else
 		cf << "G";	// Graphic
-	cf << "\n" << height << "\n" << width << "\n" << numprecision << "\n";
+	cf << "\n" << height << "\n" << width << "\n";
 }
 	
 /***
@@ -67,7 +66,6 @@ setting::setting() {
 		// scan OPS settings
 		cf >> height;
 		cf >> width;
-		cf >> numprecision;
 	}
 	// if not, load defaults
 	else 
@@ -81,7 +79,6 @@ void setting::Defaults(){
 	
 	height = DEFAULT_OPS_HEIGHT;
 	width = DEFAULT_OPS_WIDTH;
-	numprecision = DEFAULT_OPS_NUMPRECISION;
 	vmode = DEFAULT_VIDEO;
 }
 

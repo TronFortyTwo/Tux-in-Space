@@ -69,7 +69,7 @@ int main () {
 	// EXITING THE PROGRAM
 		
 	// goodbye message
-	OPS (set, "Tux in Space\n\n\n%r-&t5SEE YOU LATER!");
+	OPS (set, "TUX IN SPACE\n%r-%r-%r-\n\n\n\nSEE YOU LATER!");
 	
 	return EXIT_SUCCESS;
 }
