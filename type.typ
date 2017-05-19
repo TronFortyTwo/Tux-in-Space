@@ -73,8 +73,8 @@ PARENT: Object
 
 	NAME: Brown Dwarf
 	DESCRIPTION: A brown dwarf is a particular type of celestial object that is more massive than a planet, but doesn't have nuclear fusion in its core
-	MASS MAX: 1.528552e26
-	MASS MIN: 2.467647e25
+	MASS MAX: 1.528552e29
+	MASS MIN: 2.467647e28
 	PARENT: Celestial object
 	
 		NAME: Sub-brown dwarf
@@ -98,8 +98,8 @@ PARENT: Object
 
 		NAME: Meteroid
 		DESCRIPTION: A meteroid is a rocky fragment. Is usually generated from asteroid impacts or from comet cores
-		MASS MAX: 1e5
-		MASS MIN: 1e-11
+		MASS MAX: 1e8
+		MASS MIN: 1e-14
 		PRODUCT: Micrometeroid
 		PARENT: Small body
 
@@ -110,8 +110,8 @@ PARENT: Object
 
 	NAME: Star
 	DESCRIPTION: A star is a celestial body that has termonuclear reaction in its core, for that shine of its own light. Stars have a mass between 0.08 and 200 Sun Masses. Lighter objects are called brown dwarfs, and they don't produce energy via nuclear fusion
-	MASS MAX: 3.97784e29
-	MASS MIN: 9241818
+	MASS MAX: 3.97784e32
+	MASS MIN: 9241818000
 	PARENT: Celestial object
 
 		NAME: Compact star
@@ -120,7 +120,7 @@ PARENT: Object
 
 			NAME: Black hole
 			DESCRIPTION: A so massive and dense body that even the light can't escape from it
-			MASS MIN: 0.02177
+			MASS MIN: 21.77
 			BLUE MAX: 0
 			RED MAX: 0
 			GREEN MAX: 0
@@ -148,7 +148,7 @@ PARENT: Object
 		PARENT: Planet
 
 		NAME: Giant planet
-		MASS MAX: 2.467647e25
+		MASS MAX: 2.467647e28
 		PARENT: Planet
 
 			NAME: Gas giant
@@ -158,7 +158,8 @@ PARENT: Object
 			PARENT: Giant planet
 			
 				NAME: Mini-Neptune
-				MASS MAX: 1e23
+				DESCRIPTION: An ice giant similar to Neptune, but littler
+				MASS MAX: 1e26
 				PARENT: Planet
 
 		NAME: Iron planet
@@ -188,14 +189,14 @@ PARENT: Object
 
 			NAME: Super Earth
 			DESCRIPTION: A super Earth is a terrestrial planet massive two to five Earth masses, more massive terrestrial planet are called Mega Earth
-			MASS MAX: 29.863e21
-			MASS MIN: 11e21
+			MASS MAX: 29.863e24
+			MASS MIN: 11e24
 			PARENT: Terrestrial planet
 
 			NAME: Mega Earth
 			DESCRIPTION: A Mega Earth is a terrestrial planet ten or more times more massive than Earth, even more massive than super-Earths that are five to ten times more massive than Earth 
-			MASS MAX: 6e22
-			MASS MIN: 298e20
+			MASS MAX: 6e25
+			MASS MIN: 298e23
 			PARENT: Terrestrial planet
 
 ########################################################################
