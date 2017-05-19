@@ -1,6 +1,6 @@
 /*
 #############################################################################
-#    Tux in Space - space simulator												#
+#    Tux in Space - space simulator											#
 #    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com					#
 #																			#
 #    This program is free software; you can redistribute it and/or modify	#
