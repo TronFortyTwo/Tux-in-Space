@@ -299,13 +299,13 @@ void object::Impact_Hunting(object& hed) {
 
 	hed.AddForce (
 		tforce (
-			tacceleration(direction, tacceleration_scalar(0.03)), 
+			tacceleration(direction, tacceleration_scalar(Vel().length()/2)), 
 			Mass()
 		)
 	);
 	AddForce (
 		tforce (
-			tacceleration(-direction, tacceleration_scalar(0.03)), 
+			tacceleration(-direction, tacceleration_scalar(Vel().length()/2)), 
 			Mass()
 		)
 	);

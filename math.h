@@ -472,6 +472,9 @@ class tvelocity {
 		inline long double x() { return v.x;}
 		inline long double y() { return v.y;}
 		inline long double z() { return v.z;}
+		inline long double length(){
+			return v.length();
+		}
 		
 		inline tvelocity(const vec3<long double>& _v) {
 			v = _v;
