@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -g -std=gnu++17
+CXXFLAGS = -Wall -g -std=gnu++17 -lstdc++fs
 
 # write them in logic order
 objects = \
@@ -41,7 +41,7 @@ libraries = \
 		menu.h
 
 cspace: $(objects) $(libraries)
-		g++ -o cspace $(CXXFLAGS) $(objects)
+		g++ -o cspace $(CXXFLAGS) $(objects) -lstdc++fs
 
 $(objects):
 

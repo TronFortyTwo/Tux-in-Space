@@ -366,7 +366,10 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 	
 	stringstream output;
 
-	output << "LOAD SYSTEM\n\nWhat is the name of the system you want to load?";
+	output << "LOAD SYSTEM\n\nWhat is the name of the system you want to load?\n%r-";
+	for(auto& p: experimental::filesystem::directory_iterator(SYSTEM_PATH))
+        output << p << '\n';
+	output << "%r-type 'n' to cancel";
 	
 	// ask which system
 	OPS(set, output.str());

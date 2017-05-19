@@ -152,9 +152,7 @@ bool parser_Quit (const setting& set, system_c& sys){
 	
 	if (input[0] == 's') {
 		sys.Save(set);
-		return true;
 	}
-	
 	else if (input[0] != 'y')
 		return false;
 	
