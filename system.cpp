@@ -371,8 +371,31 @@ system_c::system_c (const setting& set, typeSTR& str, signal& result) {
         output << p << '\n';
 	output << "%r-type 'n' to cancel";
 	
+	string sout = output.str();
+	// remove stuff not nice to see
+	// search for the '"'s
+	while(1) {
+		auto pos = sout.find("\"");
+		if(pos == string::npos)
+			break;
+		sout.replace(pos, 1, "");
+	}
+	// search for ".sys"
+	while(1) {
+		auto pos = sout.find(".sys");
+		if(pos == string::npos)
+			break;
+		sout.replace(pos, 4, "");
+	}
+	// search for "Systems/"
+	while(1) {
+		auto pos = sout.find("Systems/");
+		if(pos == string::npos)
+			break;
+		sout.replace(pos, 8, "");
+	}
 	// ask which system
-	OPS(set, output.str());
+	OPS(set, sout);
 	in_s(_name);
 	if(!_name.compare("n")){
 		result = signal::aborted;
