@@ -1,5 +1,5 @@
-# CSpace
-CSpace: the space simulator
+# Tux in Space
+Tux in Space: the space simulator
 
 This program is a simulation game. The program simulates the moving, under
 the phisic's laws, of planets, spaceships, suns, and everything else in 
@@ -30,7 +30,7 @@ The program is far far away from being complete.
 
 License
 ------
-CSpace - space simulator
+Tux in Space - space simulator
 Copyright (C) 2016-2017  emanuele.sorce@hotmail.com
 
 This program is free software; you can redistribute it and/or modify

@@ -1,6 +1,6 @@
 /*
 #############################################################################
-#    CSpace - space simulator												#
+#    Tux in Space - space simulator												#
 #    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com					#
 #																			#
 #    This program is free software; you can redistribute it and/or modify	#
@@ -42,13 +42,13 @@ int main () {
 	
 	// initialize the program directories
 	if(set.InitDir() != signal::good) {
-		printf("\n\nCSpace:\n\nError: can't Create program directories!\nPress something to exit");
+		printf("\n\nTUX IN SPACE:\n\nError: can't Create program directories!\nPress something to exit");
 		in_s();
 		return EXIT_FAILURE;
 	}
 	
 	// print loading and license banner
-	OPS(set, "LOADING CSPACE........\n\n" BANNER);
+	OPS(set, "LOADING TUX IN SPACE........\n\n" BANNER);
 	
 	// The big type STRucture
 	signal result;
@@ -69,7 +69,7 @@ int main () {
 	// EXITING THE PROGRAM
 		
 	// goodbye message
-	OPS (set, "CSPACE\n\n\n%r-&t5SEE YOU LATER!");
+	OPS (set, "Tux in Space\n\n\n%r-&t5SEE YOU LATER!");
 	
 	return EXIT_SUCCESS;
 }

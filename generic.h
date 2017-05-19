@@ -1,6 +1,6 @@
 /*
 #############################################################################################
-#    CSpace - space simulator																#
+#    Tux in Space - space simulator																#
 #    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
@@ -62,12 +62,12 @@ enum class videomode{OPS, GL};
 // The files and directoryes
 #define DEBUG_FILE "debug.dbg"				// Where are printed debug information
 #define TYPE_DATABASE_FILE "type.typ"		// Where read type information
-#define CONFIGURATION_FILE "cspace.conf"	// configuration file
+#define CONFIGURATION_FILE "tuxinspace.conf"	// configuration file
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
 
-#define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/CSpace\n\nLICENSE: \
-GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\
+#define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/Tux in Space\n\nLICENSE: \
+GNU GPL V3\n\n Tux in Space - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\
 \n\nThis program is free software; you can redistribute it and/or modify \
 it under the terms of the GNU General Public License as published by the \
 Free Software Foundation, version 3 or compatibles. This program is distributed \

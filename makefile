@@ -40,8 +40,8 @@ libraries = \
 		OPSo.h\
 		menu.h
 
-cspace: $(objects) $(libraries)
-		g++ -o cspace $(CXXFLAGS) $(objects) -lstdc++fs
+Tux in Space: $(objects) $(libraries)
+		g++ -o tuxinspace $(CXXFLAGS) $(objects) -lstdc++fs
 
 $(objects):
 
@@ -49,4 +49,4 @@ clean:
 	rm *.o
 	rm *.ghc
 	rm *.h.ghc
-	rm cspace
+	rm Tux in Space

@@ -1,6 +1,6 @@
 /*
 #############################################################################################
-#    CSpace - space simulator																#
+#    Tux in Space - space simulator																#
 #    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
@@ -40,7 +40,7 @@ signal menu_main(setting& set) {
 	while (1) {
 		
 		//Principal menù, first screen	
-		OPS(set, "&t5CSPACE: The space simulator\n\n\n&t01) New system\n2) Load system\n\n3) Settings\n4) informations\n\n5) Quit");
+		OPS(set, "%r-&t3TUX IN SPACE&t0\n%r-\n&t01) New system\n2) Load system\n\n3) Settings\n4) informations\n\n5) Quit");
 		i = in_i();
 			
 		// If "new simulation" tell the Shell 0; (uninitialized obj)
