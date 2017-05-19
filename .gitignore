@@ -7,3 +7,7 @@ debug.dbg
 # object file
 *.o
 *.ghc
+
+# systems and objects
+Systems/*
+Objects/*

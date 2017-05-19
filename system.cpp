@@ -299,6 +299,15 @@ void system_c::Save(const setting& set){
 	// Write information about the system
 	Write(odest);
 	
+	// Write the system in the system saved list
+	ofstream out;
+	out.open(SYSTEM_LIST, ios_base::app);
+	
+	if(!out)
+		debug_Printf(IRREGULARITY " Can't access" SYSTEM_LIST "file!");
+	else
+		out << name << '\n';
+	
 	OPS(set, "SYSTEM SAVED WHIT SUCCESS!\n\nPress something to continue");
 	in_s();
 }
@@ -354,13 +363,20 @@ signal system_c::Read(ifstream& file, string& _name) {
  */
 system_c::system_c (const setting& set, typeSTR& str, signal& result) {
 
-	std::string _name;	// the name of the system
-	std::string path;	// the system file (path)
+	string _name;	// the name of the system
+	string path;	// the system file (path)
 	
-	result = signal::good;
+	stringstream output;
+	ifstream sys_list(SYSTEM_LIST);
+
+	output << "LOAD SYSTEM\n\nWhat is the name of the system you want to load?";
+	if(sys_list) {
+		output << "\n%r-" << sys_list.rdbuf();
+	}
+	output << "%r-type 'n' to cancel";
 	
 	// ask which system
-	OPS(set, "LOAD SYSTEM\n\nWhat is the name of the system you want to load?\n\n&t2type 'n' to cancel");
+	OPS(set, output.str());
 	in_s(_name);
 	if(!_name.compare("n")){
 		result = signal::aborted;

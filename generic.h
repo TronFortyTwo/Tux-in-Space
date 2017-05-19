@@ -32,6 +32,8 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <algorithm>
+#include <iterator>
 
 		
 // The three axis must have different codes
@@ -63,6 +65,8 @@ enum class videomode{OPS, GL};
 #define CONFIGURATION_FILE "cspace.conf"	// configuration file
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
+#define SYSTEM_LIST "Systems/systems.list"	// where write systems list
+#define OBJECT_LIST "Objects/objects.list"	// where write objects list
 
 #define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/CSpace\n\nLICENSE: \
 GNU GPL V3\n\n CSpace - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\
