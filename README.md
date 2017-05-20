@@ -1,5 +1,5 @@
 # Tux in Space
-Tux in Space: the space simulator
+Tux in Space: space exploration game
 
 This program is a simulation game. The program simulates the moving, under
 the phisic's laws, of planets, spaceships, suns, and everything else in 
@@ -30,7 +30,7 @@ The program is far far away from being complete.
 
 License
 ------
-Tux in Space - space simulator
+Tux in Space - space exploration game
 Copyright (C) 2016-2017  emanuele.sorce@hotmail.com
 
 This program is free software; you can redistribute it and/or modify

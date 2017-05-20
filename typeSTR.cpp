@@ -1,6 +1,6 @@
 /*
 #############################################################################################
-#    Tux in Space - space simulator															#
+#    Tux in Space - space exploration game													#
 #    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com									#
 #																							#
 #    This program is free software; you can redistribute it and/or modify					#
@@ -31,49 +31,48 @@ typeSTR::typeSTR (signal& result) {
 	
 	string buf;
 	int num = 0;
+	ifstream stream(TYPE_DATABASE_FILE);
 	
 	// count how many types there are in the file
-	{
-		// the stream to use
-		ifstream stream(TYPE_DATABASE_FILE);
-		if(!stream) {
-			result = signal::file_err;
-			return;
-		}
+			
+	if(!stream) {
+		result = signal::file_err;
+		return;
+	}
 		
-		while(1) {
-			// read the line (jumping blank ones)
-			in_hfs (buf, stream);
-			if(!buf.length())
-				continue;
-			// if is a new object memorize that there is a new object
-			if (!buf.compare(0, 6, "NAME: "))
-				num++;
-			// if the file is finished exit
-			else if (!buf.compare(0, 3, "EOF"))
-				break;
-		}
-	}	
+	while(1) {
+		// read the line (jumping blank ones)
+		in_hfs (buf, stream);
+		if(!buf.length())
+			continue;
+		// if is a new object memorize that there is a new object
+		if (!buf.compare(0, 6, "NAME: "))
+			num++;
+		// if the file is finished exit
+		else if (!buf.compare(0, 3, "EOF"))
+			break;
+	}
+		
 	// alloc enought spaces for all the ttype structures
 	t.resize(num);
 	
 	// NAME. scan all the names
-	{
-		// the stream
-		ifstream stream(TYPE_DATABASE_FILE);
-		if(!stream) {
-			result = signal::file_err;
-			return;
-		}
-		
-		for(unsigned int i=0; i!=t.size(); i++) {
-			do
-				in_hfs(buf, stream);
-			while
-				(buf.compare(0, 6, "NAME: "));
-			t[i].name = buf.substr(6, buf.length());
-		}
+	
+	stream.open(TYPE_DATABASE_FILE);
+	
+	if(!stream) {
+		result = signal::file_err;
+		return;
 	}
+		
+	for(unsigned int i=0; i!=t.size(); i++) {
+		do
+			in_hfs(buf, stream);
+		while
+			(buf.compare(0, 6, "NAME: "));
+		t[i].name = buf.substr(6, buf.length());
+	}
+	
 	
 	// PARENT. Set all the parent
 	{
