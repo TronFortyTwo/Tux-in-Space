@@ -35,6 +35,7 @@
 #include <algorithm>
 #include <iterator>
 #include <experimental/filesystem>
+#include <SDL2/SDL.h>
 		
 // The three axis must have different codes
 enum class axis3 {x, y, z};

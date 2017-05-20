@@ -58,26 +58,26 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 		OPS(set, "HELP\n\nYou have to use commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
 		in_s(input);
 	}
-	// parser_Jump
+	// Jump
 	else if ((!input.compare("jump")) || (!input.compare("j")))
 		t = parser_Jump(set, sys.stime, sys.precision);
 		
-	// parser_Settings
+	// Settings
 	else if ((!input.compare("information")) || (!input.compare("i")) ||  (!input.compare("info")))
 		parser_Information(set, sys);
-	// parser_Wait
+	// Wait
 	else if ((!input.compare("wait")) || (!input.compare("w")))
 		t = parser_Wait(set, sys.stime, sys.precision);
-	// parser_Create
+	// Create
 	else if (!(input.compare("create")) || (!input.compare("c")))
 		sys.NewObj(set);
-	// parser_Quit / exit
+	// Quit / exit
 	else if (!(input.compare("quit")) || (!input.compare("exit")))
 		quit = parser_Quit(set, sys);
 	// save
 	else if (!input.compare("save"))
 		sys.Save(set);
-	//distance
+	// distance
 	else if (!input.compare("distance"))
 		parser_Distance(set, sys);
 	// delete an object
@@ -173,7 +173,7 @@ void parser_Delete(const setting& set, system_c& sys) {
 	if (!name.compare("n"))
 		return;
 		
-	// search the object
+	// look for the object
 	obj = sys.SearchObj(name);
 	if (obj == nullptr) {	//if there isn't any object whit that name
 		OPS_Error(set, "There isn't any object whit that name!\nPress something to continue");

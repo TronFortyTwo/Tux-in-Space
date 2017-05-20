@@ -35,13 +35,12 @@ class PEntity {
 	private:
 	
 		tposition pos;
-	
 		tvelocity vel;
 		
-		tforce acc_force;	// accumuled in the simulation slice
+		tforce acc_force;		// accumuled in the simulation slice
+		tforce_scalar force_tolerance;	// if a force is littler than this is ignored
 	
 		tmass mass;
-	
 		tlength radius;
 	
 	protected:
@@ -82,7 +81,8 @@ class PEntity {
 		
 		// add a force to the entity
 		inline void AddForce(const tforce& force){
-			acc_force += force;
+			if(force > force_tolerance)
+				acc_force += force;
 		}
 		
 		// Move all the stats about position and kinematic elements to a dest PEntity
@@ -106,27 +106,24 @@ class PEntity {
 		void Simulation(const time_raw& delta);
 		
 		inline PEntity(const tposition& _pos, const tvelocity& _vel){
-			mass = 0.0;
-			radius = 0.0;
 			pos = _pos;
 			vel = _vel;
 		}
 		
 		inline PEntity(const tposition& _pos,
 			const tvelocity& _vel,
+			const tforce_scalar _tol,
 			const tmass& _mass,
 			const tlength& _radius)
 		{
 			mass = _mass;
 			radius = _radius;
+			force_tolerance = _tol;
 			pos = _pos;
 			vel = _vel;
 		}
 		
-		inline PEntity(){
-			mass = 0;
-			radius = 0;
-		};
+		inline PEntity(){};
 };
 
 #endif

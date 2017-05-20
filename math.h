@@ -557,7 +557,24 @@ class timpulse {
 		}
 };
 
-
+// represent the module of a force
+class tforce_scalar{
+	private:
+		long double m;
+		
+	public:
+		
+		inline long double value() const {
+			return m;
+		}
+		
+		tforce_scalar(const long double& _m){
+			m = _m;
+		}
+		tforce_scalar(){
+			m = 0;
+		}
+};
 
 class tforce {
 	
@@ -587,6 +604,12 @@ class tforce {
 		inline tforce operator- (void){
 			return tforce(-v);
 		}
+		inline bool operator> (const tforce_scalar& f) const {
+			return v.length() > f.value();
+		}
+		inline bool operator< (const tforce_scalar& f) const {
+			return v.length() < f.value();
+		}
 		
 		inline void zero() {
 			v.zero();
@@ -598,8 +621,8 @@ class tforce {
 		inline tforce(const vec3<long double>& _v) {
 			v = _v;
 		}
-		inline tforce(const vec3<long double>& dir, const long double& len) {
-			v = vec3<long double>(dir, len);
+		inline tforce(const vec3<long double>& dir, const tforce_scalar& f) {
+			v = vec3<long double>(dir, f.value());
 		}
 		inline tforce() {
 			v.zero();
