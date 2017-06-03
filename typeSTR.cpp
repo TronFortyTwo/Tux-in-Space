@@ -106,9 +106,10 @@ typeSTR::typeSTR (signal& result) {
 		return;
 	}
 		
-	// loop to scan all the types
+	// loop to scan every feature
 	for(unsigned int i=0; i!=t.size(); i++) {
-		// start assigning some values
+		
+		// start assigning parent's values
 		t[i].color_max = t[i].parent->color_max;
 		t[i].color_min = t[i].parent->color_min;
 		t[i].hunted = t[i].parent->hunted;
@@ -123,91 +124,109 @@ typeSTR::typeSTR (signal& result) {
 		in_hfs(buf, stream);
 		
 		in_hfs(buf, stream);
-		if(!buf.compare(0, 13, "DESCRIPTION: ")) {
-			t[i].description = buf.substr(13, buf.length());
-			in_hfs(buf, stream);
-		}
-		// mass max:
-		if(!buf.compare(0, 10, "MASS MAX: ")) {
-			string temp = buf.substr(9, buf.length());
-			t[i].mass_max = atof(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// mass min:
-		if(!buf.compare(0, 10, "MASS MIN: ")) {
-			string temp = buf.substr(9, buf.length());
-			t[i].mass_min = atof(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// blue max:
-		if(!buf.compare(0, 10, "BLUE MAX: ")) {
-			string temp = buf.substr(10, buf.length());
-			t[i].color_max.blue = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// blue min:
-		if(!buf.compare(0, 10, "BLUE MIN: ")) {
-			string temp = buf.substr(10, buf.length());
-			t[i].color_min.blue = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// red max:
-		if(!buf.compare(0, 9, "RED MAX: ")) {
-			string temp = buf.substr(9, buf.length());
-			t[i].color_max.red = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// red min:
-		if(!buf.compare(0, 9, "RED MIN: ")) {
-			string temp = buf.substr(9, buf.length());
-			t[i].color_min.red = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// green max:
-		if(!buf.compare(0, 11, "GREEN MAX: ")) {
-			string temp = buf.substr(11, buf.length());
-			t[i].color_max.green = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// green min:
-		if(!buf.compare(0, 11, "GREEN MIN: ")) {
-			string temp = buf.substr(11,buf.length());
-			t[i].color_min.green = atoi(temp.c_str());
-			in_hfs(buf, stream);
-		}
-		// HUNTED:
-		if(!buf.compare(0, 8,"HUNTED: ")) {
-			if(buf[8] == 'N')
-				t[i].hunted = false;
-			else
-				t[i].hunted = true;
-			in_hfs(buf, stream);
-		}
-		// HUNTER:
-		if(!buf.compare(0, 8,"HUNTER: ")) {
-			if(buf[8] == 'N')
-				t[i].hunter = false;
-			else
-				t[i].hunter = true;
-			in_hfs(buf, stream);
-		}
-		// PRODUCT:
-		if(!buf.compare(0, 9, "PRODUCT: ")) {
-			string temp = buf.substr(9, buf.length());
-			t[i].product = Search(temp);
-			in_hfs(buf, stream);
-		}
 		
-		if(buf.compare(0, 8, "PARENT: ")) {
-			debug_Printf("(!) typeSTR::typeSTR! Unparsable line");
-			debug_Printf(buf);
-			debug_Printf("while object");
-			debug_Printf(t[i].name);
-		}
+		while(1){
+			
+			if(!buf.compare(0, 13, "DESCRIPTION: ")) {
+				t[i].description = buf.substr(13, buf.length());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// mass max:
+			if(!buf.compare(0, 10, "MASS MAX: ")) {
+				string temp = buf.substr(9, buf.length());
+				t[i].mass_max = atof(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// mass min:
+			if(!buf.compare(0, 10, "MASS MIN: ")) {
+				string temp = buf.substr(9, buf.length());
+				t[i].mass_min = atof(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// blue max:
+			if(!buf.compare(0, 10, "BLUE MAX: ")) {
+				string temp = buf.substr(10, buf.length());
+				t[i].color_max.blue = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// blue min:
+			if(!buf.compare(0, 10, "BLUE MIN: ")) {
+				string temp = buf.substr(10, buf.length());
+				t[i].color_min.blue = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// red max:
+			if(!buf.compare(0, 9, "RED MAX: ")) {
+				string temp = buf.substr(9, buf.length());
+				t[i].color_max.red = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// red min:
+			if(!buf.compare(0, 9, "RED MIN: ")) {
+				string temp = buf.substr(9, buf.length());
+				t[i].color_min.red = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// green max:
+			if(!buf.compare(0, 11, "GREEN MAX: ")) {
+				string temp = buf.substr(11, buf.length());
+				t[i].color_max.green = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// green min:
+			if(!buf.compare(0, 11, "GREEN MIN: ")) {
+				string temp = buf.substr(11,buf.length());
+				t[i].color_min.green = atoi(temp.c_str());
+				in_hfs(buf, stream);
+				continue;
+			}
+			// HUNTED:
+			if(!buf.compare(0, 8,"HUNTED: ")) {
+				if(buf[8] == 'N')
+					t[i].hunted = false;
+				else
+					t[i].hunted = true;
+				in_hfs(buf, stream);
+				continue;
+			}
+			// HUNTER:
+			if(!buf.compare(0, 8,"HUNTER: ")) {
+				if(buf[8] == 'N')
+					t[i].hunter = false;
+				else			
+					t[i].hunter = true;
+				in_hfs(buf, stream);
+				continue;
+			}
+			// PRODUCT:
+			if(!buf.compare(0, 9, "PRODUCT: ")) {
+				string temp = buf.substr(9, buf.length());
+				t[i].product = Search(temp);
+				in_hfs(buf, stream);
+				continue;
+			}
 		
+			// parent
+			if(buf.compare(0, 8, "PARENT: ")) {
+				debug_Printf(IRREGULARITY "typeSTR::typeSTR! Unparsable line");
+				debug_Printf(buf);
+				debug_Printf("while object");
+				debug_Printf(t[i].name);
+				continue;
+			}
+			break;
+		}
 		// assign the description if none has been set
 		if(!t[i].description.length())
-			t[i].description =  "No description is available yet for this type";
+			t[i].description =  "No description is available for this type yet";
 	}
 	
 	debug_Stype(*this);

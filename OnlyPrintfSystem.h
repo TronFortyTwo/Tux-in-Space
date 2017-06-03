@@ -17,10 +17,21 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * The function OnlyPrintfSystem: print words in a simple behavior that adapts on the value of width and height
+ * OnlyPrintfSystem: print words in a simple way, with some nice feature
  *
  * 	HEADER FILE
  */
+
+/*
+	ONLY PRINTF SYSTEM API
+
+	todo
+
+
+
+
+*/
+
 
 #ifndef OPSh
 #define OPSh

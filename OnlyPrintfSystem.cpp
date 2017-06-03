@@ -17,16 +17,15 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * The function OnlyPrintfSystem: print words in a simple behavior that adapts on the value of width and height
+ * OnlyPrintfSystem: print words in a simple way, with some nice feature
  * 
  * The advantages on use OnlyPrintfSystem is:
- * 		- A simply but nice automatic impagination that all function could use whit a simple call 
+ * 		- A simply but nice automatic impagination that all function could use with a simple call 
  * 		- make the program nice
- * 		- A very more simple algoritm (faster and lighter) respect more complex mode (like the AIB), but equally can adapts the width and height numbers
  * 		- Use only of the Standard C library for now
  *
  * 	NOTE:
- * 	OnlyPrintfSystem is often called OPS
+ * 	OnlyPrintfSystem is aka OPS
  * 
  */
 
