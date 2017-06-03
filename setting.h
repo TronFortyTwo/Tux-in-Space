@@ -19,6 +19,9 @@
  *
  * Here are stuff linked whit settings
  * 
+ * note:
+ * 	InitDir() is granted to work on linux only
+ * 
  *	HEADER FILE
  */
 
@@ -36,10 +39,8 @@ class setting {
 	public:
 		unsigned int width;			// The number of columns that OPS use
 		unsigned int height;		// The number of lines that OPS use
-		videomode vmode;			// Visual mode
 		
-		
-		signal InitDir();		// initialize directories
+		signal InitDir();	// initialize directories
 		void Defaults();	// set default setting
 		void Save();		// save set structure in a file
 		

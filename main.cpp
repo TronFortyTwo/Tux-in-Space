@@ -56,8 +56,8 @@ int main () {
 	// error handling
 	if(result != signal::good){
 		if(result == signal::file_err) {
-			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file, that contein the definitions of objects types.\n\nexiting.");
-			debug_Printf("Stype initialization failed! exiting with file error signal");
+			OPS_Error(set, "Can't find the " TYPE_DATABASE_FILE " file conteining the definitions of objects types\n\nexiting...");
+			debug_Printf(IRREGULARITY "Stype initialization failed! exiting with file error signal");
 			return EXIT_FAILURE;
 		}
 	}

@@ -26,8 +26,6 @@
 // Default values for the set structure
 #define DEFAULT_OPS_HEIGHT 			48
 #define DEFAULT_OPS_WIDTH 			68
-#define DEFAULT_DEBUG 				false
-#define DEFAULT_VIDEO 				videomode::OPS
 
 using namespace std;
 
@@ -41,11 +39,7 @@ void setting::Save() {
 		debug_Printf(IRREGULARITY" setting::Save() Can't open the - " CONFIGURATION_FILE " - file");
 		return;
 	}
-	if (vmode == videomode::OPS)
-		cf << "O";	// OPS
-	else
-		cf << "G";	// Graphic
-	cf << "\n" << height << "\n" << width << "\n";
+	cf << height << "\n" << width << "\n";
 }
 	
 /***
@@ -56,13 +50,6 @@ setting::setting() {
 	ifstream cf(CONFIGURATION_FILE);
 	// If there is a file
 	if(cf) {
-		char _vmode;
-		// scan the vmode
-		cf >> _vmode;
-		if (_vmode == 'O')
-			vmode = videomode::OPS;
-		else
-			vmode = videomode::GL;
 		// scan OPS settings
 		cf >> height;
 		cf >> width;
@@ -79,7 +66,6 @@ void setting::Defaults(){
 	
 	height = DEFAULT_OPS_HEIGHT;
 	width = DEFAULT_OPS_WIDTH;
-	vmode = DEFAULT_VIDEO;
 }
 
 /***

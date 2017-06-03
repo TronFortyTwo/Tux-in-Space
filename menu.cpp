@@ -84,15 +84,6 @@ void menu_Settings_OPS(setting& set) {
 			return;
 	}
 }
-void menu_Settings_G(setting& set) {
-	int i;		 // input variable
-	while(1) {
-		OPS(set, "SETTINGS/VIDEO\n\n1) Back");
-		i = in_i();
-		if(i == 1)
-			return;
-	}
-}
 	 
 void menu_Settings(setting& set) {
 	
@@ -100,34 +91,17 @@ void menu_Settings(setting& set) {
 	string input;
 		
 	while(1) {
-		OPS (set, "SETTINGS\n\n1) Select video mode\n2) Text mode settings\n3) Video mode settings\n\n4) Done\n5) Restore defaults");
+		OPS (set, "SETTINGS\n\n1) Text mode settings\n\n2) Done\n3) Restore defaults");
 		i = in_i();
 
-		// V_MODE
-		if(i == 1){
-			std::string mode;
-			if (set.vmode == videomode::OPS)
-				mode = "OPS";
-			else
-				mode = "Graphic";
-			OPS(set, "SETTINGS\n\nNow the video mode is " + mode + ". Select the video mode:\n1) OPS (only text mode)\n2) GRAPHICAL --EXPERIMENTAL--");
-			input = in_i();
-			if (input[0] == 2)
-				set.vmode = videomode::GL;
-			else
-				set.vmode = videomode::OPS;
-		}
 		// OPS settings
-		else if(i == 2)
+		if(i == 1)
 			menu_Settings_OPS(set);
-		// Graphic settings
-		else if(i == 3)
-			menu_Settings_G(set);
 		// DONE
-		else if(i == 4)
+		else if(i == 2)
 			break;
 		// RESTORE DEFAULTS
-		else if(i == 5) {
+		else if(i == 3) {
 			char input[2];
 			OPS(set, "SETTINGS\n\nAre you sure you want to restore the settings to the default ones? [y/N]");
 			scanf("%s", input);
@@ -135,6 +109,8 @@ void menu_Settings(setting& set) {
 				continue;
 			set.Defaults();
 		}
+		else
+			continue;
 	}
 	// Save and exit
 	set.Save();

@@ -21,6 +21,8 @@ the makefile (just run 'make' in the master directory).
 The program is written for linux only, but with very few work or maybe no work at all could also
 run on other operative systems. (See information file)
 
+Supported compiler is gcc >= 6.3.
+
 For developers is suggested to use the latest version in the 
 master branch, for normal users the latest release.
 

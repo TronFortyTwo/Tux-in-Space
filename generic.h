@@ -35,8 +35,14 @@
 #include <algorithm>
 #include <iterator>
 #include <experimental/filesystem>
-#include <SDL2/SDL.h>
-		
+//#include <SDL2/SDL.h>
+
+// What interface to use?
+// new proof of concrpt graphic GUI
+#define iSDL false
+// legacy OPS() based UI
+#define iOPS true
+
 // The three axis must have different codes
 enum class axis3 {x, y, z};
 enum class axis2 {x, y};
@@ -56,9 +62,6 @@ enum class signal {
 };
 
 enum class comparison{ major, minor, equal };
-
-// The video mode
-enum class videomode{OPS, GL};
 
 // The files and directoryes
 #define DEBUG_FILE "debug.dbg"				// Where are printed debug information
