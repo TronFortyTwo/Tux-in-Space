@@ -56,8 +56,8 @@ class object : public PEntity {
 		
 		void 	AI_Hunter 	(system_c&);		// the hunter object will behaviour in the system given
 		
-		void	Impact_Anaelastic(object&);	// create a new object from an impact with another one
-		void	Impact_Hunting(object&);	// "        " " "  "        "  hunting impact (the hunted is given)
+		void	Impact_Anaelastic(object&);						// create a new object from an impact with another one
+		void	Impact_Hunting(object&, const time_raw& delta);	// "        " " "  "        "  hunting impact (the hunted is given)
 		
 		inline void Sim (const time_raw& delta){
 			Simulation(delta);

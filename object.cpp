@@ -262,7 +262,7 @@ void object::Impact_Anaelastic(object& obj) {
  * this must be the object huntER
  * hed must the object huntED
  */
-void object::Impact_Hunting(object& hed) {
+void object::Impact_Hunting(object& hed, const time_raw& delta) {
 	
 	// a random number that is the (p)ercentage that the hunter eats of the hunted /100
 	float p;
@@ -292,20 +292,20 @@ void object::Impact_Hunting(object& hed) {
 	volum -= volum * p;
 	hed.SetRadius ( pow((volum * 3 / (4 * PI)).value(), 1/3.0) );
 	
-	// move the hunted a bit away and give him some velocity from the hunter
+	// move the hunted a away and give him some velocity from the hunter
 	// to decrease hunter velocity, launch the hunted
 	
 	vec3<long double> direction = Distance(hed).direction();
 
 	hed.AddForce (
 		tforce (
-			tacceleration(direction, tacceleration_scalar(Vel().length()/2)), 
+			tacceleration(direction, tacceleration_scalar((Vel().scalar()/delta)/2)), 
 			Mass()
 		)
 	);
 	AddForce (
 		tforce (
-			tacceleration(-direction, tacceleration_scalar(Vel().length()/2)), 
+			tacceleration(-direction, tacceleration_scalar((Vel().scalar()/delta)/2)), 
 			Mass()
 		)
 	);

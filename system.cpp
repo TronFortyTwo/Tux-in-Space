@@ -552,9 +552,9 @@ void system_c::physic_Impacts() {
 			// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
 			
 			if((o[i].typ->hunter == true) && (o[l].typ->hunted == true))
-				o[i].Impact_Hunting(o[l]);
+				o[i].Impact_Hunting(o[l], precision);
 			else if((o[i].typ->hunted == true) && (o[l].typ->hunter == true))
-				o[l].Impact_Hunting(o[i]);
+				o[l].Impact_Hunting(o[i], precision);
 				
 			// anaelastic impact
 			else {

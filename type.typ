@@ -9,7 +9,6 @@
 # - NAME must be the first element of a type, PARENT the last
 # - please, use the indentation (using tabs)
 # - to write comments, start a line with '#'
-# - write the type elements in the same order
 # - there is no official support yet for types that are both hunter AND hunted
 ########################################################################
 ########################################################################
@@ -203,8 +202,8 @@ PARENT: Object
 #	ORGANIC
 #
 NAME: Organic Matter
+HUNTED: N
 DESCRIPTION: Matter composed of carbon compound, it's life or a life product
-HUNTED: Y
 PRODUCT: Organic Matter
 PARENT: Object
 

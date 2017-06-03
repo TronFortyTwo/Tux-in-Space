@@ -44,6 +44,7 @@ class tacceleration;
 class tarea;
 class tvolume;
 class tguc;
+class tacceleration_scalar;
 
 // a vector in the space
 template<class T> class vec3 {
@@ -438,6 +439,43 @@ class tspeed {
 };
 
 
+class tacceleration_scalar {
+	private:
+		
+		long double m;
+	
+	public:
+	
+		inline tacceleration_scalar(const long double& a){
+			m = a;
+		}
+		inline tacceleration_scalar operator/ (const long double& n){
+			return tacceleration_scalar(m/n);
+		}
+		inline tacceleration_scalar operator* (const long double& n){
+			return tacceleration_scalar(m*n);
+		}
+	
+	friend tacceleration;
+};
+
+class tvelocity_scalar {
+	private:
+		
+		long double m;
+	
+	public:
+	
+		inline tacceleration_scalar operator/ (const time_raw& t){
+			return tacceleration_scalar(m/t.time());
+		}
+	
+		inline tvelocity_scalar(const long double& a){
+			m = a;
+		}
+	
+	friend tvelocity;
+};
 
 class tvelocity {
 	
@@ -475,6 +513,9 @@ class tvelocity {
 		inline long double length(){
 			return v.length();
 		}
+		inline tvelocity_scalar scalar(){
+			return tvelocity_scalar(v.length());
+		}
 		
 		inline tvelocity(const vec3<long double>& _v) {
 			v = _v;
@@ -487,22 +528,6 @@ class tvelocity {
 			v *= intensity.m;
 		}
 };
-
-
-class tacceleration_scalar {
-	private:
-		
-		long double m;
-	
-	public:
-	
-		inline tacceleration_scalar(const long double& a){
-			m = a;
-		}
-	
-	friend tacceleration;
-};
-
 
 
 class tacceleration {
