@@ -72,9 +72,7 @@ bool Run (setting& set, typeSTR& stype) {
 	time_sim stime(sys->stime);
 	
 	// Use the right loop (set.vmode) (for now only V_OPS availabile)
-	/*
-	if (set.vmode == V_OPS)
-	*/
+	#if iOPS
 		bool quit = false;
 		while(quit == false) {
 			// Output
@@ -86,11 +84,10 @@ bool Run (setting& set, typeSTR& stype) {
 			// call the phisic engine
 			sys->Physic(stime);
 		}
-	/*
-	else if (set.vmode == V_GL) {
-			GUI implementation (coming soon)
-		}
-	*/
+	#endif
+	#if iSDL
+		// GUI implementation coming soon
+	#endif
 
 	delete sys;
 	return true;

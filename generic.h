@@ -70,7 +70,7 @@ enum class comparison{ major, minor, equal };
 #define OBJECT_PATH "Objects/"				// Where save/load systems
 #define SYSTEM_PATH "Systems/"				// Where save/load objects
 
-#define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/Tux in Space\n\nLICENSE: \
+#define BANNER "Code hosted on GitHub: http://github.com/TronFourtyTwo/Tux-in-Space\n\nLICENSE: \
 GNU GPL V3\n\n Tux in Space - space simulator\nCopyright (C) 2016-2017  emanuele.sorce@hotmail.com\
 \n\nThis program is free software; you can redistribute it and/or modify \
 it under the terms of the GNU General Public License as published by the \
