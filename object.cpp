@@ -235,6 +235,20 @@ void object::Impact_Anaelastic(object& obj) {
 	debug_Object(*this);
 }
 
+/*
+ * Elastic impact
+ * 
+ * momentum is conserved
+ * kinektic energy is coserved
+ */
+
+void object::Impact_Elastic(object&) {
+
+  
+  
+}
+
+
 
 /***
  * This function simulate when an hunter 'eats' a hunted object
@@ -247,9 +261,8 @@ void object::Impact_Hunting(object& hed, const time_raw& delta) {
 	// a random number that is the (p)ercentage that the hunter eats of the hunted /100
 	float p;
 	
-	// set p (over 50, under 92)
-	// over 50 because elsewhere the hunter could collide in the hunted after this impact
-	p = (float) math_RandomI(50, 92);
+	// set p
+	p = (float) math_RandomI(10, 90);
 	p /= 100.0;
 	
 	hed.typ = hed.typ->product;

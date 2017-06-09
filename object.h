@@ -47,7 +47,6 @@ class object : public PEntity {
 		type *typ;			// the type of object
 		color colour;
 
-		void 		GetBigger 		(object&, object *&);		// Put the address of the bigger of the two object in the third position
 		void 		Save			(const setting&);			// Save the object in a file
 		signal 		Read 			(std::ifstream&, typeSTR&);	// Read from a file an object
 		signal 		ReadComplete 	(std::ifstream&, typeSTR&);	// Read from a file an object whit coordinates
@@ -57,6 +56,7 @@ class object : public PEntity {
 		void 	AI_Hunter 	(system_c&);		// the hunter object will behaviour in the system given
 		
 		void	Impact_Anaelastic(object&);						// create a new object from an impact with another one
+		void	Impact_Elastic(object&);						// Elastic hit
 		void	Impact_Hunting(object&, const time_raw& delta);	// "        " " "  "        "  hunting impact (the hunted is given)
 		
 		inline void Sim (const time_raw& delta){

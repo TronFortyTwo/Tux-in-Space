@@ -264,7 +264,11 @@ signal system_c::NewObj (const setting& set) {
 					name_irregularity.compare(IRREGULARITY)  &&
 					radius_irregularity.compare(IRREGULARITY) &&
 					touch_irregularity.compare(IRREGULARITY) ){
-	
+
+					// TODO: user should customize tolerance values, or they should somehow defined by type
+					obj.SetFrcSingleTolerance(0);
+					obj.SetFrcSumTolerance(0);
+  
 					o.push_back(obj);
 					return signal::good;
 				}

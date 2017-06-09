@@ -62,9 +62,25 @@ class PEntity {
 		inline void SetVel(const tvelocity& _vel){
 			vel = _vel;
 		}
+		
+		inline void SetFrcSingleTolerance (const tforce_scalar& frc){
+			force_single_tolerance = frc;
+		}
+		
+		inline void SetFrcSumTolerance (const tforce_scalar& frc){
+			force_sum_tolerance = frc;
+		}
 	
 	public:
 	
+		inline tforce_scalar FrcSumTolerance() const {
+			return force_sum_tolerance;
+		}
+		
+		inline tforce_scalar FrcSingleTolerance() const {
+			return force_single_tolerance;
+		}
+	  
 		inline tmass Mass() const {
 			return mass;
 		}
