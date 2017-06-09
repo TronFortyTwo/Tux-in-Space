@@ -30,17 +30,15 @@ using namespace std;
 typeSTR::typeSTR (signal& result) {
 	
 	string buf;
-	int num = 0;
+	int num_types = 0;
 	ifstream stream(TYPE_DATABASE_FILE);
-	
-	// count how many types there are in the file
-			
 	if(!stream) {
 		result = signal::file_err;
 		return;
 	}
 	
-		
+	// count how many types there are in the file
+
 	while(1) {
 		// read the line (jumping blank ones)
 		in_hfs (buf, stream);
@@ -48,14 +46,14 @@ typeSTR::typeSTR (signal& result) {
 			continue;
 		// if is a new object memorize that there is a new object
 		if (!buf.compare(0, 6, "NAME: "))
-			num++;
+			num_types++;
 		// if the file is finished exit
 		else if (!buf.compare(0, 3, "EOF"))
 			break;
 	}
 		
 	// alloc enought spaces for all the ttype structures
-	t.resize(num);
+	t.resize(num_types);
 	
 	// NAME. scan all the names
 	

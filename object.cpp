@@ -28,32 +28,6 @@
 using namespace std;
 
 /***
- * Put in *b the address of the biggest object
- * i and l are the two objects,
- */
-// how much an object must be bigger to another to be considered so.
-#define BIGGER_TOLERANCE 1.21
-
-void object::GetBigger (object& obj, object *& ptr) {
-	
-	// an object is bigger if has mass much bigger
-	if (Mass() > obj.Mass()* BIGGER_TOLERANCE)
-		ptr = this;
-	else if (Mass() > obj.Mass()*BIGGER_TOLERANCE)
-		ptr = &obj;
-	// if no one is much bigger than the other, pick one randomly, but considering the mass
-	else {
-		srand(time(nullptr));
-		if 		( (rand()/RAND_MAX) > (Mass()/(Mass()+obj.Mass())) )
-			ptr = &obj;
-		else
-			ptr = this;
-	}
-}
-
-
-
-/***
  * This constructor loads from a file the object
  */
 object::object(typeSTR& stype, const string& name, signal& result) {
@@ -215,11 +189,17 @@ void object::Impact_Anaelastic(object& obj) {
 	object *smaller;		// the smaller is the object that fuse whit the bigger and lose personality
 	
 	// set the bigger and the smaller
-	GetBigger(obj, bigger);
-	if(this == bigger)
+		
+	// an object is bigger if has mass much bigger
+	
+	if(obj.Mass() < Mass()){
 		smaller = &obj;
-	else
+		bigger = this;
+	}
+	else{
 		smaller = this;
+		bigger = &obj;
+	}
 	// The new object mantein the name of the bigger. The new object is written in the this position
 	if(bigger != this)
 		name = obj.name;
