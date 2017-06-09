@@ -1,7 +1,7 @@
 /*
 #############################################################################
 #    Tux in Space - space exploration game									#
-#    Copyright (C) 2016-2017  emanuele.sorce@hotmail.com					#
+#    Copyright (C) 2016-2017  Emanuele Sorce <emanuele.sorce@hotmail.com>		#
 #																			#
 #    This program is free software; you can redistribute it and/or modify	#
 #    it under the terms of the GNU General Public License as published by	#
@@ -34,11 +34,11 @@ class setting;
 
 class typeSTR {
 	public:
-		std::vector<type> t;					// the types
-		
+		std::vector<type> t;	// the types
+
 		type&	Browse	(const setting&, const std::string&);	// Browse and choose a type (give a title to the page)
 		type	*Search	(const std::string&);	// Search a type from the name
-		
+
 		// constructor
 		typeSTR(signal& result);
 };

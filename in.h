@@ -17,9 +17,9 @@
 #    Foundation, Inc.														#
 #############################################################################
  *
- * 
+ *
  * Here we have function that help whit input
- * 
+ *
  */
 
 #ifndef inh
@@ -61,7 +61,7 @@ long double in_ld();
 // long double in a file
 long double in_fld(std::istream&);
 
-// read all the line if there is anything else
+// clear the input
 void in_clear();
 
 #endif

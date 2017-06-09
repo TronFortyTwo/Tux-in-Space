@@ -123,69 +123,61 @@ typeSTR::typeSTR (signal& result) {
 		// name, jump it
 		in_hfs(buf, stream);
 		
-		in_hfs(buf, stream);
 		
 		while(1){
 			
+			in_hfs(buf, stream);
+		  
 			if(!buf.compare(0, 13, "DESCRIPTION: ")) {
 				t[i].description = buf.substr(13, buf.length());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// mass max:
 			if(!buf.compare(0, 10, "MASS MAX: ")) {
 				string temp = buf.substr(9, buf.length());
 				t[i].mass_max = atof(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// mass min:
 			if(!buf.compare(0, 10, "MASS MIN: ")) {
 				string temp = buf.substr(9, buf.length());
 				t[i].mass_min = atof(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// blue max:
 			if(!buf.compare(0, 10, "BLUE MAX: ")) {
 				string temp = buf.substr(10, buf.length());
 				t[i].color_max.blue = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// blue min:
 			if(!buf.compare(0, 10, "BLUE MIN: ")) {
 				string temp = buf.substr(10, buf.length());
 				t[i].color_min.blue = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// red max:
 			if(!buf.compare(0, 9, "RED MAX: ")) {
 				string temp = buf.substr(9, buf.length());
 				t[i].color_max.red = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// red min:
 			if(!buf.compare(0, 9, "RED MIN: ")) {
 				string temp = buf.substr(9, buf.length());
 				t[i].color_min.red = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// green max:
 			if(!buf.compare(0, 11, "GREEN MAX: ")) {
 				string temp = buf.substr(11, buf.length());
 				t[i].color_max.green = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// green min:
 			if(!buf.compare(0, 11, "GREEN MIN: ")) {
 				string temp = buf.substr(11,buf.length());
 				t[i].color_min.green = atoi(temp.c_str());
-				in_hfs(buf, stream);
 				continue;
 			}
 			// HUNTED:
@@ -194,7 +186,6 @@ typeSTR::typeSTR (signal& result) {
 					t[i].hunted = false;
 				else
 					t[i].hunted = true;
-				in_hfs(buf, stream);
 				continue;
 			}
 			// HUNTER:
@@ -203,18 +194,16 @@ typeSTR::typeSTR (signal& result) {
 					t[i].hunter = false;
 				else			
 					t[i].hunter = true;
-				in_hfs(buf, stream);
 				continue;
 			}
 			// PRODUCT:
 			if(!buf.compare(0, 9, "PRODUCT: ")) {
 				string temp = buf.substr(9, buf.length());
 				t[i].product = Search(temp);
-				in_hfs(buf, stream);
 				continue;
 			}
 		
-			// parent
+			// NOT PARSABLE LINE
 			if(buf.compare(0, 8, "PARENT: ")) {
 				debug_Printf(IRREGULARITY "typeSTR::typeSTR! Unparsable line");
 				debug_Printf(buf);
