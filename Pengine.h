@@ -29,7 +29,7 @@
 #include "time.h"
 
 // The physic entity
-// TODO: add orientation, torque and other angular datas
+// TODO: add orientation, torque and company
 class PEntity {
 	
 	private:
@@ -38,7 +38,9 @@ class PEntity {
 		tvelocity vel;
 		
 		tforce acc_force;		// accumuled in the simulation slice
-		tforce_scalar force_tolerance;	// if a force is littler than this is ignored
+		
+		tforce_scalar force_single_tolerance;	// if a force applyed is littler than this is ignored
+		tforce_scalar force_sum_tolerance;		// if acc_force is littler than this will not be applyed to the object
 	
 		tmass mass;
 		tlength radius;
@@ -81,7 +83,7 @@ class PEntity {
 		
 		// add a force to the entity
 		inline void AddForce(const tforce& force){
-			if(force > force_tolerance)
+			if(force > force_single_tolerance)
 				acc_force += force;
 		}
 		
@@ -112,13 +114,15 @@ class PEntity {
 		
 		inline PEntity(const tposition& _pos,
 			const tvelocity& _vel,
-			const tforce_scalar _tol,
+			const tforce_scalar& _tol_single,
+			const tforce_scalar& _tol_sum,
 			const tmass& _mass,
 			const tlength& _radius)
 		{
 			mass = _mass;
 			radius = _radius;
-			force_tolerance = _tol;
+			force_single_tolerance = _tol_single;
+			force_sum_tolerance = _tol_sum;
 			pos = _pos;
 			vel = _vel;
 		}

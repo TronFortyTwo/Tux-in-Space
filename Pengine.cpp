@@ -25,7 +25,8 @@
 void PEntity::Simulation(const time_raw& delta) {
 	
 	// apply the force
-	vel += (acc_force * delta) / mass;
+	if(acc_force > force_sum_tolerance)
+	  vel += (acc_force * delta) / mass;
 	acc_force.zero();
 	
 	// move the entity
