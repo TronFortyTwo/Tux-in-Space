@@ -98,15 +98,20 @@ signal object::Read (ifstream& stream, typeSTR& stype) {
 	colour.blue = in_fi(stream);
 	SetRadius(in_fld(stream));
 	SetMass(in_fld(stream));
+	SetFrcSingleTolerance(in_fld(stream));
+	SetFrcSumTolerance(in_fld(stream));
 	
 	return signal::good;
 }
 
+// Like Read(), but will read also elements like position, velocity
+//
 signal object::ReadComplete (ifstream& stream, typeSTR& stype) {
 	// read basic info
 	if(Read(stream, stype) == signal::corrupted)
 		return signal::corrupted;
-	// read complete stuff
+	
+	// read kinematics elements
 	vec3<long double> v;
 	v.x = in_fld(stream);
 	v.y = in_fld(stream);
@@ -129,7 +134,12 @@ void object::Write (ofstream& stream) {
 	stream << colour.blue << "\n";
 	stream << Radius().value() << "\n";
 	stream << Mass().value() << "\n";
+	stream << FrcSingleTolerance().value() << "\n";
+	stream << FrcSingleTolerance().value() << "\n";
 }
+
+// Like Write(), but will write also elements like position, velocity
+//
 
 void object::WriteComplete (ofstream& stream) {
 	// write basic infos

@@ -223,10 +223,10 @@ void parser_Information(const setting& set, system_c& sys) {
 	ss << "Informations about " << obj->name << "%s\n\n%r-type: " << obj->typ->name 
 		<< "\n%r-color: &td \nred: " << obj->colour.red << "\ngreen: " << obj->colour.green
 		<< "\nblue: " << obj->colour.blue << " &t0 \n%r-mass: " << obj->Mass().value()
-		<< "\n%r-radius: " << obj->Radius().value() << "\n%r-x: " << obj->Pos().x() << "\ny: "
-		<< obj->Pos().y() << "\nz: " << obj->Pos().z() << "\n%r-velocity in x: "
-		<< obj->Vel().x() << "\nvelocity in y: " << obj->Vel().y() << "\nvelocity in z: "
-		<< obj->Vel().z() << "\n%r-\nPress somthing to continue...";
+		<< " Kg\n%r-radius: " << obj->Radius().value() << " m\n%r-x: " << obj->Pos().x() << " m\ny: "
+		<< obj->Pos().y() << " m\nz: " << obj->Pos().z() << " m\n%r-velocity in x: "
+		<< obj->Vel().x() << " m/s\nvelocity in y: " << obj->Vel().y() << " m/s\nvelocity in z: "
+		<< obj->Vel().z() << " m/s\n%r-\nPress somthing to continue...";
 	
 	OPS(set, ss.str());
 	in_s();
