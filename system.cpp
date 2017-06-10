@@ -152,10 +152,15 @@ signal system_c::NewObj (const setting& set) {
 			case 4:
 				ss.clear();
 				ss.str("");
-				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (t)\n&tdThe mass's legal values are between " << obj.typ->mass_min << " and " << obj.typ->mass_max;
+				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (Kg)\n&tdThe mass's legal values are between " << obj.typ->mass_min << " and " << obj.typ->mass_max;
 				OPS (set, ss.str());
 				obj.SetMass(in_ld());
 				comment += "\nNew mass assigned succefully!";
+				
+				// TODO: user should customize tolerance values, or they should somehow defined by type
+				// tolerance for now is just related to mass
+				obj.SetFrcSingleTolerance((obj.Mass()/600)*tacceleration_scalar(1));
+				obj.SetFrcSumTolerance((obj.Mass()/400)*tacceleration_scalar(1));
 				break;
 		// Radius
 			case 5:
@@ -264,10 +269,6 @@ signal system_c::NewObj (const setting& set) {
 					name_irregularity.compare(IRREGULARITY)  &&
 					radius_irregularity.compare(IRREGULARITY) &&
 					touch_irregularity.compare(IRREGULARITY) ){
-
-					// TODO: user should customize tolerance values, or they should somehow defined by type
-					obj.SetFrcSingleTolerance((obj.Mass()/500)*tacceleration_scalar(1));
-					obj.SetFrcSumTolerance((obj.Mass()/500)*tacceleration_scalar(1));
   
 					o.push_back(obj);
 					return signal::good;

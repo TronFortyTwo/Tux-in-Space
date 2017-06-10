@@ -135,7 +135,7 @@ void object::Write (ofstream& stream) {
 	stream << Radius().value() << "\n";
 	stream << Mass().value() << "\n";
 	stream << FrcSingleTolerance().value() << "\n";
-	stream << FrcSingleTolerance().value() << "\n";
+	stream << FrcSumTolerance().value() << "\n";
 }
 
 // Like Write(), but will write also elements like position, velocity
