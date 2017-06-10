@@ -11,3 +11,7 @@ debug.dbg
 # systems and objects
 Systems/*
 Objects/*
+
+# Kdevelop configuration files
+.kdev4/
+*.kdev4
