@@ -37,6 +37,7 @@ int math_RandomI (int, int);
 class tmass;
 class tlength;
 class tforce;
+class tforce_scalar;
 class timpulse;
 class tposition;
 class tvelocity;
@@ -302,6 +303,50 @@ class tguc{	// gravitational universal constant (m^3/(Kg*s*s))
 		}
 };
 
+class tacceleration_scalar {
+	private:
+		
+		long double m;
+	
+	public:
+	
+		inline tacceleration_scalar(const long double& a){
+			m = a;
+		}
+		inline tacceleration_scalar operator/ (const long double& n){
+			return tacceleration_scalar(m/n);
+		}
+		inline tacceleration_scalar operator* (const long double& n){
+			return tacceleration_scalar(m*n);
+		}
+		
+		inline long double value() const {
+			return m;
+		}
+	
+	friend tacceleration;
+};
+
+
+// represent the module of a force
+class tforce_scalar{
+	private:
+		long double m;
+		
+	public:
+		
+		inline long double value() const {
+			return m;
+		}
+		
+		tforce_scalar(const long double& _m){
+			m = _m;
+		}
+		tforce_scalar(){
+			m = 0;
+		}
+};
+
 class tmass {
 	// unit = kilogram^1000
 	
@@ -325,9 +370,18 @@ class tmass {
 		inline tmass operator* (const long double& pure) {
 			return tmass(m * pure);
 		}
+		inline tforce_scalar operator* (const tacceleration_scalar& a){
+			return tforce_scalar(m * a.value());
+		}
+		
 		inline long double operator/ (const tmass& t) {
 			return m / t.m;
 		}
+		
+		inline tmass operator/ (const long double& n) {
+			return tmass(m/n);
+		}
+		
 		inline tmass operator+ (const tmass& t) {
 			return tmass(m + t.m);
 		}
@@ -438,26 +492,6 @@ class tspeed {
 	friend tvelocity;
 };
 
-
-class tacceleration_scalar {
-	private:
-		
-		long double m;
-	
-	public:
-	
-		inline tacceleration_scalar(const long double& a){
-			m = a;
-		}
-		inline tacceleration_scalar operator/ (const long double& n){
-			return tacceleration_scalar(m/n);
-		}
-		inline tacceleration_scalar operator* (const long double& n){
-			return tacceleration_scalar(m*n);
-		}
-	
-	friend tacceleration;
-};
 
 class tvelocity_scalar {
 	private:
@@ -579,25 +613,6 @@ class timpulse {
 		}
 		inline timpulse(const vec3<long double>& m){
 			v = m;
-		}
-};
-
-// represent the module of a force
-class tforce_scalar{
-	private:
-		long double m;
-		
-	public:
-		
-		inline long double value() const {
-			return m;
-		}
-		
-		tforce_scalar(const long double& _m){
-			m = _m;
-		}
-		tforce_scalar(){
-			m = 0;
 		}
 };
 
