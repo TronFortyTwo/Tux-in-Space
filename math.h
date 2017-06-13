@@ -38,7 +38,8 @@ class tmass;
 class tlength;
 class tforce;
 class tforce_scalar;
-class timpulse;
+class tmomentum;
+class tangular_momentum;
 class tposition;
 class tvelocity;
 class tacceleration;
@@ -527,7 +528,7 @@ class tvelocity {
 		inline tspeed speed(){
 			return tspeed(v.length());
 		}
-		timpulse operator* (const tmass& m);
+		tmomentum operator* (const tmass& m);
 		inline tvelocity operator+ (const tvelocity& vel) {
 			return tvelocity(v+vel.v);
 		}
@@ -591,9 +592,27 @@ class tacceleration {
 	friend tforce;
 };
 
+class timpulse_scalar {
+	private:
+		
+		long double m;
+	
+	public:
+	
+		inline timpulse_scalar operator/ (const long double& n){
+			return timpulse_scalar(m/n);
+		}
+		inline timpulse_scalar operator* (const long double& n){
+			return timpulse_scalar(m/n);
+		}
+	
+		inline timpulse_scalar(const long double& a){
+			m = a;
+		}
+	
+};
 
-
-class timpulse {
+class tmomentum {
 	// Kg m / s
 	
 	private:
@@ -604,14 +623,14 @@ class timpulse {
 		inline tvelocity operator/ (const tmass& m) {
 			return tvelocity(v / m.value());
 		}
-		inline timpulse operator+ (const timpulse& i){
-			return timpulse(v + i.v);
+		inline tmomentum operator+ (const tmomentum& i){
+			return tmomentum(v + i.v);
 		}
 	
-		inline timpulse(){
+		inline tmomentum(){
 			v.zero();
 		}
-		inline timpulse(const vec3<long double>& m){
+		inline tmomentum(const vec3<long double>& m){
 			v = m;
 		}
 };
@@ -638,8 +657,8 @@ class tforce {
 		inline tacceleration operator/ (const tmass& m) {
 			return tacceleration(v / m.value());
 		}
-		inline timpulse operator* (const time_raw& t){
-			return timpulse(v * t.time());
+		inline tmomentum operator* (const time_raw& t){
+			return tmomentum(v * t.time());
 		}
 		inline tforce operator- (void){
 			return tforce(-v);
@@ -669,6 +688,43 @@ class tforce {
 		}
 		inline tforce(const tacceleration& a, const tmass& m){
 			v = (a * m).v;
+		}
+};
+
+class tangular_momentum {
+	// N * m (IS NOT JOULE!!!)
+	
+	private:
+		long double m;
+		
+	public:
+		
+		inline tforce_scalar operator/ (const tlength& l){
+			return tforce_scalar(m/l.value());
+		}
+		
+		
+		inline tangular_momentum(const long double& n){
+			m = n;
+		}
+		inline tangular_momentum(){
+			m = 0;
+		}
+};
+
+class tenergy {
+	// Joule, aka Kg*m^2/s^2
+	
+	private:
+		long double m;
+		
+	public:
+		
+		inline tenergy (){
+			m = 0;
+		}
+		inline tenergy (const long double& e){
+			m = e;
 		}
 };
 

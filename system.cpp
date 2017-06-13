@@ -495,14 +495,12 @@ void system_c::Physic (time_sim& dest) {
  * WARNING: this function is heavily optimized! readability compromised! Refer to the comments
  */
 void system_c::Physic_Gravity() {
-		
-	// counters
-	unsigned int i,l;
+	
 	// the force
 	tforce f;
 	
-	for(i=0; i < o.size(); i++) {
-		for (l=i+1; l < o.size(); l++) {
+	for(unsigned int i=0; i < o.size(); i++) {
+		for (unsigned int l=i+1; l < o.size(); l++) {
 			
 			// the force is f = G * m1 * m2 / dist^2	
 			f = G.newton(o[i].Mass(), o[l].Mass(), o[i].Distance(o[l]));

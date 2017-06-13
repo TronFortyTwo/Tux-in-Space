@@ -246,16 +246,18 @@ void object::Impact_Anaelastic(object& obj) {
 }
 
 /*
- * Elastic impact
+ * Pure elastic impact
  * 
  * momentum is conserved
  * kinektic energy is coserved
  */
 
-void object::Impact_Elastic(object&) {
+void object::Impact_Elastic(object& obj) {
 
-  
-  
+	 // = Mass() * Vel().scalar() + obj.Mass() * obj.Vel().scalar();
+	 // = Mass() * Vel().scalar() * * Vel().scalar() +
+	//									obj.Mass() * obj.Vel().scalar() * obj.Vel().scalar();
+	
 }
 
 

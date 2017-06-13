@@ -39,8 +39,8 @@ tforce tacceleration::operator* (const tmass& m) const{
 		return tforce(v * m.m);
 };
 
-timpulse tvelocity::operator* (const tmass& m)  {
-	return timpulse(v * m.m);
+tmomentum tvelocity::operator* (const tmass& m)  {
+	return tmomentum(v * m.m);
 }
 
 tposition tpositionmass::operator/ (const tmass& m){
