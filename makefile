@@ -1,4 +1,4 @@
-CXXFLAGS = -std=gnu++11 -Wall -g -lstdc++fs
+CXXFLAGS = -std=gnu++11 -Wall -lstdc++fs
 
 # write them in logic order
 objects = \

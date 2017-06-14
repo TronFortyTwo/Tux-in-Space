@@ -254,9 +254,8 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj) {
 
-	 // = Mass() * Vel().scalar() + obj.Mass() * obj.Vel().scalar();
-	 // = Mass() * Vel().scalar() * * Vel().scalar() +
-	//									obj.Mass() * obj.Vel().scalar() * obj.Vel().scalar();
+	tmomentum momentum = Mass() * Vel() + obj.Mass() * obj.Vel();
+	tenergy kinetic = Mass() * Vel().scalar() * Vel().scalar() + obj.Mass() * obj.Vel().scalar() * obj.Vel().scalar();
 	
 }
 

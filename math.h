@@ -34,11 +34,13 @@
 
 int math_RandomI (int, int);
 
+class tspeed;
 class tmass;
 class tlength;
 class tforce;
 class tforce_scalar;
 class tmomentum;
+class tmomentum_scalar;
 class tangular_momentum;
 class tposition;
 class tvelocity;
@@ -47,6 +49,7 @@ class tarea;
 class tvolume;
 class tguc;
 class tacceleration_scalar;
+class tenergy;
 
 // a vector in the space
 template<class T> class vec3 {
@@ -153,6 +156,26 @@ template<class T> class vec3 {
 		}
 };
 
+class tspeed {
+	// tvelocity scalar
+	
+	private:
+		long double m;
+	
+	public:
+		inline tspeed (const long double& _m){
+			m = _m;
+		}
+		
+		long double value() const {
+			return m;
+		}
+		
+		tacceleration_scalar operator/ (const time_raw& t) const;
+	
+	friend tvelocity;
+};
+
 
 //
 // Classes about physiscal quantities
@@ -166,36 +189,36 @@ class tlength {
 	
 	public:
 
-		inline void operator= (const long double& _m) {
+		void operator= (const long double& _m) {
 			m = _m;
 		}
-		inline void operator-= (const tlength& l) {
+		void operator-= (const tlength& l) {
 			m -= l.m;
 		}
-		inline void operator+= (const tlength& l) {
+		void operator+= (const tlength& l) {
 			m += l.m;
 		}
-		inline tlength operator+ (const tlength& l) const {
+		tlength operator+ (const tlength& l) const {
 			return tlength(m + l.m);
 		}
-		inline tlength operator- (const tlength& l) const {
+		tlength operator- (const tlength& l) const {
 			return tlength(m - l.m);
 		}
-		inline bool operator== (const tlength& l) const {
+		bool operator== (const tlength& l) const {
 			if (l.m == m)
 				return true;
 			return false;
 		}
-		inline void operator>> (std::ostream& s){
+		void operator>> (std::ostream& s){
 			s << std::to_string(m);
 		}
-		inline bool operator> (const tlength& t) const {
+		bool operator> (const tlength& t) const {
 			if (m > t.m)
 				return true;
 			return false;
 			
 		}
-		inline bool operator< (const tlength& t) const {
+		bool operator< (const tlength& t) const {
 			if (m < t.m)
 				return true;
 			return false;
@@ -207,15 +230,15 @@ class tlength {
 			return false;
 			
 		}
-		inline tlength operator* (const long double& n){
+		tlength operator* (const long double& n){
 			return tlength(m * n);
 		}
 		tarea operator* (const tlength& l);
-		inline long double operator/ (const tlength& l){
+		long double operator/ (const tlength& l){
 			return m/l.m;
 		}
 		
-		inline long double value() const {
+		long double value() const {
 			return m;
 		}
 		
@@ -252,19 +275,19 @@ class tvolume {
 		
 	public:
 		
-		inline tvolume operator+ (const tvolume& v){
+		tvolume operator+ (const tvolume& v){
 			return tvolume(m + m);
 		}
-		inline tvolume operator* (const long double& n) {
+		tvolume operator* (const long double& n) {
 			return tvolume(m * n);
 		}
-		inline tvolume operator/ (const long double& n) {
+		tvolume operator/ (const long double& n) {
 			return tvolume(m / n);
 		}
-		inline void operator+= (const tvolume& v){
+		void operator+= (const tvolume& v){
 			m += v.m;
 		}
-		inline void operator-= (const tvolume& v){
+		void operator-= (const tvolume& v){
 			m -= v.m;
 		}
 		
@@ -286,7 +309,7 @@ class tguc{	// gravitational universal constant (m^3/(Kg*s*s))
 		
 	public:
 		
-		inline long double value(){
+		long double value(){
 			return m;
 		}
 		// helpful to not starve with dozens of classes
@@ -310,19 +333,19 @@ class tacceleration_scalar {
 		long double m;
 	
 	public:
-	
-		inline tacceleration_scalar(const long double& a){
-			m = a;
-		}
-		inline tacceleration_scalar operator/ (const long double& n){
+		tacceleration_scalar operator/ (const long double& n) const{
 			return tacceleration_scalar(m/n);
 		}
-		inline tacceleration_scalar operator* (const long double& n){
+		tacceleration_scalar operator* (const long double& n) const{
 			return tacceleration_scalar(m*n);
 		}
 		
 		inline long double value() const {
 			return m;
+		}
+		
+		inline tacceleration_scalar(const long double& a){
+			m = a;
 		}
 	
 	friend tacceleration;
@@ -336,7 +359,7 @@ class tforce_scalar{
 		
 	public:
 		
-		inline long double value() const {
+		long double value() const {
 			return m;
 		}
 		
@@ -348,6 +371,26 @@ class tforce_scalar{
 		}
 };
 
+
+class tmomentum_scalar {
+	private:
+		
+		long double m;
+	
+	public:
+	
+		tmomentum_scalar operator/ (const long double& n) const;
+		tmomentum_scalar operator* (const long double& n) const;
+		tmomentum_scalar operator+ (const tmomentum_scalar& s) const;
+		tenergy operator* (const tspeed& s) const;
+		
+		inline tmomentum_scalar(const long double& a){
+			m = a;
+		}
+	
+};
+
+
 class tmass {
 	// unit = kilogram^1000
 	
@@ -355,48 +398,31 @@ class tmass {
 		double m;
 	
 	public:
-	
-		inline void operator= (const tmass& t) {
-			m = t.m;
-		}
-		inline void operator>> (std::ostream& s){
-			s << std::to_string(m);
-		}
-		inline void operator+= (const tmass& t) {
-			m += t.m;
-		}
-		inline void operator*= (const long double& pure) {
-			m *= pure;
-		}
-		inline tmass operator* (const long double& pure) {
-			return tmass(m * pure);
-		}
-		inline tforce_scalar operator* (const tacceleration_scalar& a){
-			return tforce_scalar(m * a.value());
-		}
+		void operator= (const tmass& t);
+		void operator>> (std::ostream& s);
+		void operator+= (const tmass& t);
+		void operator*= (const long double& pure);
+		tmass operator* (const long double& pure) const;
+		tforce_scalar operator* (const tacceleration_scalar& a) const;
+		tmomentum_scalar operator* (const tspeed& v) const;
+		long double operator/ (const tmass& t) const;
+		tmomentum operator* (const tvelocity& vel) const;
+		tmass operator/ (const long double& n) const;
 		
-		inline long double operator/ (const tmass& t) {
-			return m / t.m;
-		}
-		
-		inline tmass operator/ (const long double& n) {
-			return tmass(m/n);
-		}
-		
-		inline tmass operator+ (const tmass& t) {
+		tmass operator+ (const tmass& t) {
 			return tmass(m + t.m);
 		}
-		inline bool operator >(const tmass& t) {
+		bool operator> (const tmass& t) {
 			if(m > t.m)
 				return true;
 			return false;
 		}
-		inline bool operator <(const tmass& t){
+		bool operator< (const tmass& t){
 			if(m < t.m)
 				return true;
 			return false;
 		}
-		inline long double value() const {
+		long double value() const {
 			return m;
 		}
 		
@@ -427,11 +453,11 @@ class tpositionmass {
 	public:
 	
 		tposition operator/ (const tmass& m);
-		inline tpositionmass operator+ (const tpositionmass& pm){
+		tpositionmass operator+ (const tpositionmass& pm){
 			return tpositionmass(v - pm.v);
 		}
 		
-		inline tpositionmass (const vec3<long double> _v) {
+		tpositionmass (const vec3<long double> _v) {
 			v = _v;
 		}
 };
@@ -446,23 +472,23 @@ class tposition {
 
 	public:
 	
-		inline tposition operator- (const tposition& p) {
+		tposition operator- (const tposition& p) {
 			return tposition(v - p.v);
 		}
-		inline void operator+= (const tposition& p) {
+		void operator+= (const tposition& p) {
 			v += p.v;
 		}
-		inline tpositionmass operator* (const tmass& m){
+		tpositionmass operator* (const tmass& m){
 			return tpositionmass(v * m.m);
 		}
 		
-		inline tlength length() const {
+		tlength length() const {
 			return tlength(v.length());
 		}
-		inline long double module() const {
+		long double module() const {
 			return v.length();
 		}
-		inline vec3<long double> direction() const{
+		vec3<long double> direction() const{
 			return v.direction();
 		}
 		inline long double x() { return v.x;}
@@ -479,39 +505,6 @@ class tposition {
 };
 
 
-
-class tspeed {
-	
-	private:
-		long double m;
-	
-	public:
-		inline tspeed (const long double& _m){
-			m = _m;
-		}
-	
-	friend tvelocity;
-};
-
-
-class tvelocity_scalar {
-	private:
-		
-		long double m;
-	
-	public:
-	
-		inline tacceleration_scalar operator/ (const time_raw& t){
-			return tacceleration_scalar(m/t.time());
-		}
-	
-		inline tvelocity_scalar(const long double& a){
-			m = a;
-		}
-	
-	friend tvelocity;
-};
-
 class tvelocity {
 	
 	private:
@@ -519,37 +512,36 @@ class tvelocity {
 	
 	public:
 	
-		inline void operator+= (const tvelocity& t){
+		void operator+= (const tvelocity& t){
 			v += t.v;
 		}
-		inline tposition operator* (const time_raw& t) const {
+		tposition operator* (const time_raw& t) const {
 			return tposition(v * t.time());
 		}
-		inline tspeed speed(){
+		tspeed speed(){
 			return tspeed(v.length());
 		}
 		tmomentum operator* (const tmass& m);
-		inline tvelocity operator+ (const tvelocity& vel) {
+		tvelocity operator+ (const tvelocity& vel) {
 			return tvelocity(v+vel.v);
 		}
-		inline tvelocity operator- (const tvelocity& vel) {
+		tvelocity operator- (const tvelocity& vel) {
 			return tvelocity(v-vel.v);
 		}
-		inline bool operator< (const tvelocity& vel) {
+		bool operator< (const tvelocity& vel) {
 			return v.length() < vel.v.length();
 		}
-		inline bool operator> (const tvelocity& vel) {
+		bool operator> (const tvelocity& vel) {
 			return v.length() > vel.v.length();
 		}
 		
-		inline long double x() { return v.x;}
-		inline long double y() { return v.y;}
-		inline long double z() { return v.z;}
-		inline long double length(){
-			return v.length();
-		}
-		inline tvelocity_scalar scalar(){
-			return tvelocity_scalar(v.length());
+		long double x() { return v.x;}
+		long double y() { return v.y;}
+		long double z() { return v.z;}
+		vec3<long double> value() const;
+		
+		tspeed scalar() const {
+			return tspeed(v.length());
 		}
 		
 		inline tvelocity(const vec3<long double>& _v) {
@@ -574,7 +566,7 @@ class tacceleration {
 	
 		tforce operator* (const tmass& m) const; 
 		
-		inline long double value() {
+		long double value() {
 			return v.length();
 		}
 				
@@ -592,25 +584,7 @@ class tacceleration {
 	friend tforce;
 };
 
-class timpulse_scalar {
-	private:
-		
-		long double m;
-	
-	public:
-	
-		inline timpulse_scalar operator/ (const long double& n){
-			return timpulse_scalar(m/n);
-		}
-		inline timpulse_scalar operator* (const long double& n){
-			return timpulse_scalar(m/n);
-		}
-	
-		inline timpulse_scalar(const long double& a){
-			m = a;
-		}
-	
-};
+
 
 class tmomentum {
 	// Kg m / s
@@ -620,10 +594,10 @@ class tmomentum {
 		
 	public:
 	
-		inline tvelocity operator/ (const tmass& m) {
+		tvelocity operator/ (const tmass& m) {
 			return tvelocity(v / m.value());
 		}
-		inline tmomentum operator+ (const tmomentum& i){
+		tmomentum operator+ (const tmomentum& i){
 			return tmomentum(v + i.v);
 		}
 	
@@ -642,38 +616,38 @@ class tforce {
 	
 	public:
 	
-		inline tforce operator+ (const tforce& f) {
+		tforce operator+ (const tforce& f) {
 			return tforce(v + f.v);
 		}
-		inline tforce operator- (const tforce& f) {
+		tforce operator- (const tforce& f) {
 			return tforce(v - f.v);
 		}
-		inline void operator+= (const tforce& f) {
+		void operator+= (const tforce& f) {
 			v += f.v;
 		}
-		inline tforce operator* (const long double& pure){
+		tforce operator* (const long double& pure){
 			return tforce(v * pure);
 		}
-		inline tacceleration operator/ (const tmass& m) {
+		tacceleration operator/ (const tmass& m) {
 			return tacceleration(v / m.value());
 		}
-		inline tmomentum operator* (const time_raw& t){
+		tmomentum operator* (const time_raw& t){
 			return tmomentum(v * t.time());
 		}
-		inline tforce operator- (void){
+		tforce operator- (void){
 			return tforce(-v);
 		}
-		inline bool operator> (const tforce_scalar& f) const {
+		bool operator> (const tforce_scalar& f) const {
 			return v.length() > f.value();
 		}
-		inline bool operator< (const tforce_scalar& f) const {
+		bool operator< (const tforce_scalar& f) const {
 			return v.length() < f.value();
 		}
 		
-		inline void zero() {
+		void zero() {
 			v.zero();
 		}
-		inline long double value(){
+		long double value(){
 			return v.length();
 		}
 		
@@ -699,7 +673,7 @@ class tangular_momentum {
 		
 	public:
 		
-		inline tforce_scalar operator/ (const tlength& l){
+		tforce_scalar operator/ (const tlength& l){
 			return tforce_scalar(m/l.value());
 		}
 		
@@ -719,6 +693,9 @@ class tenergy {
 		long double m;
 		
 	public:
+		
+		tenergy operator+ (const tenergy& e) const;
+		tenergy operator- (const tenergy& e) const;
 		
 		inline tenergy (){
 			m = 0;
