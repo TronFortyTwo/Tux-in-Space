@@ -22,6 +22,8 @@
 
 #include "Pengine.h"
 
+
+// TODO: over an amount of force, the object could have side effects
 void PEntity::Simulation(const time_raw& delta) {
 	
 	// apply the force

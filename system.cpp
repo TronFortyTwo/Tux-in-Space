@@ -553,25 +553,21 @@ void system_c::physic_Impacts() {
 			
 			// Call the appropriate impact simulator
 			// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
-			
+			// HUNTING IMPACT
 			if((o[i].typ->hunter == true) && (o[l].typ->hunted == true))
 				o[i].Impact_Hunting(o[l], precision);
 			else if((o[i].typ->hunted == true) && (o[l].typ->hunter == true))
 				o[l].Impact_Hunting(o[i], precision);
-				
-			// anaelastic impact
+		
+			// TODO: refine this part of code!
+			// ELASTIC/ANAELASTIC IMPACT
+			if ((o[i].typ->merge == false) && (o[l].typ->merge == false)){
+				// pure elastic impact
+				o[i].Impact_Elastic(o[l], precision);
+			}
 			else {
-				
-				// write the new object in the first of the two position
-				// then move the new object in the last of the two position
-				if (i < l) {
-					o[i].Impact_Anaelastic(o[l]);
-					RemoveObj(o[l]);
-				}
-				else {	// i > l
-					o[l].Impact_Anaelastic(o[i]);
-					RemoveObj(o[i]);
-				}
+				o[i].Impact_Anaelastic(o[l]);
+				RemoveObj(o[l]);
 			}
 		}
 	}

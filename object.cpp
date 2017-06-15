@@ -259,6 +259,10 @@ void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
 	obj.AddForce (f);
 	AddForce (-f);
+	
+	debug_Printf("Eelastic Impact: Created these new object:");
+	debug_Object(*this);
+	debug_Object(obj);
 }
 
 
