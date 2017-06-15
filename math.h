@@ -167,10 +167,10 @@ class tspeed {
 			m = _m;
 		}
 		
-		long double value() const {
-			return m;
-		}
+		long double value() const;
 		
+		tspeed operator+ (const tspeed& s) const;
+		tspeed operator- (const tspeed& s) const;
 		tacceleration_scalar operator/ (const time_raw& t) const;
 	
 	friend tvelocity;
@@ -383,6 +383,7 @@ class tmomentum_scalar {
 		tmomentum_scalar operator* (const long double& n) const;
 		tmomentum_scalar operator+ (const tmomentum_scalar& s) const;
 		tenergy operator* (const tspeed& s) const;
+		tforce_scalar operator/ (const time_raw& t) const;
 		
 		inline tmomentum_scalar(const long double& a){
 			m = a;
@@ -594,12 +595,10 @@ class tmomentum {
 		
 	public:
 	
-		tvelocity operator/ (const tmass& m) {
-			return tvelocity(v / m.value());
-		}
-		tmomentum operator+ (const tmomentum& i){
-			return tmomentum(v + i.v);
-		}
+		tvelocity operator/ (const tmass& m);
+		tmomentum operator+ (const tmomentum& i);
+		
+		vec3<long double> value() const;
 	
 		inline tmomentum(){
 			v.zero();
@@ -696,6 +695,8 @@ class tenergy {
 		
 		tenergy operator+ (const tenergy& e) const;
 		tenergy operator- (const tenergy& e) const;
+		
+		long double value() const;
 		
 		inline tenergy (){
 			m = 0;

@@ -252,11 +252,13 @@ void object::Impact_Anaelastic(object& obj) {
  * kinektic energy is coserved
  */
 
-void object::Impact_Elastic(object& obj) {
-
-	tmomentum momentum = Mass() * Vel() + obj.Mass() * obj.Vel();
-	tenergy kinetic = Mass() * Vel().scalar() * Vel().scalar() + obj.Mass() * obj.Vel().scalar() * obj.Vel().scalar();
+void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
+	// The force: intensity and direction
+	tforce f( Distance(obj).direction(), Mass() * (Vel().scalar()-obj.Vel().scalar()) / delta);
+	
+	obj.AddForce (f);
+	AddForce (-f);
 }
 
 

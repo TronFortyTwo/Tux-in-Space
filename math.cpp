@@ -73,6 +73,18 @@ vec3<long double> tvelocity::value() const{
 	return v;
 }
 
+// TSPEED
+
+long double tspeed::value() const {
+	return m;
+}
+tspeed tspeed::operator+ (const tspeed& s) const{
+	return tspeed(m + s.m);
+}
+tspeed tspeed::operator- (const tspeed& s) const{
+	return tspeed(m - s.m);
+}
+
 // TACCELERATION
 
 tforce tacceleration::operator* (const tmass& m) const{
@@ -83,6 +95,17 @@ tforce tacceleration::operator* (const tmass& m) const{
 
 tacceleration_scalar tspeed::operator/ (const time_raw& t) const {
 	return tacceleration_scalar(m/t.time());
+}
+
+// TMOMENTUM
+tvelocity tmomentum::operator/ (const tmass& m){
+	return tvelocity(v / m.value());
+}
+tmomentum tmomentum::operator+ (const tmomentum& i){
+	return tmomentum(v + i.v);
+}
+vec3<long double> tmomentum::value() const {
+	return v;
 }
 
 // TMOMENTUM SCALAR
@@ -98,6 +121,9 @@ tmomentum_scalar tmomentum_scalar::operator/ (const long double& n) const{
 }
 tmomentum_scalar tmomentum_scalar::operator* (const long double& n) const{
 	return tmomentum_scalar(m/n);
+}
+tforce_scalar tmomentum_scalar::operator/ (const time_raw& t) const{
+	return tforce_scalar(m/t.time());
 }
 
 // TMASS
@@ -140,6 +166,9 @@ tenergy tenergy::operator+ (const tenergy& e) const{
 }
 tenergy tenergy::operator- (const tenergy& e) const{
 	return tenergy(m - e.m);
+}
+long double tenergy::value() const{
+	return m;
 }
 
 
