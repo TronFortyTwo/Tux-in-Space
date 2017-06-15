@@ -115,6 +115,7 @@ typeSTR::typeSTR (signal& result) {
 		t[i].mass_max = t[i].parent->mass_max;
 		t[i].mass_min = t[i].parent->mass_min;
 		t[i].product = t[i].parent->product;
+		t[i].merge = t[i].parent->merge;
 		t[i].description.clear();
 		// then scan own values over his parent ones
 		

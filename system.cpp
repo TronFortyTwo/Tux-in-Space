@@ -535,21 +535,15 @@ void system_c::Hunter_AI() {
  * 	- special hit mechanics depending on the types of the objects (WIP)
  */
 void system_c::physic_Impacts() {
-		
-	// counter
-	unsigned int l;
-	// if has been computed some impact
-	bool impacts = false;
 	
 	for(unsigned int i=0; i < o.size(); i++) {
-		for (l=0; l < o.size(); l++) {
+		for (unsigned int l=0; l < o.size(); l++) {
 			// if are the same object continue
 			if(l == i)
 				continue;
 			// if doesn't hit continue
 			if (!o[i].touch(o[l]))
 				continue;
-			impacts = true;
 			
 			// Call the appropriate impact simulator
 			// If is an hunter that hunts an hunted (if the first is an hunter and the second an hunted or viceversa)
@@ -571,7 +565,4 @@ void system_c::physic_Impacts() {
 			}
 		}
 	}
-	// If some impacts happened, restart rechecking for impact from start
-	if (impacts == true)
-		physic_Impacts();
 }
