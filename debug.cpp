@@ -39,14 +39,58 @@ void debug_Init(){
  */
 void debug_Type(const type& t) {
 	
-	debug_Printf("\nName:");
-	debug_Printf(t.name);
-	debug_Printf("Description:");
-	debug_Printf(t.description);
-	debug_Printf("Product:");
-	debug_Printf(t.product->name);
-	debug_Printf("Parent:");
-	debug_Printf(t.parent->name);
+	std::string buffer;
+	
+	buffer = "NAME:\t\t\t";
+	buffer += t.name;
+		
+	buffer += "\nDESCRPTION:\t\t";
+	buffer += t.description;
+		
+	buffer += "\nPARENT:\t\t\t";
+	buffer += t.parent->name;
+		
+	buffer += "\nMASS MIN:\t\t";
+	debug_Printf(buffer);
+	debug_Double(t.mass_min);
+	debug_Printf("MASS MAX:\t\t");
+	debug_Double(t.mass_max);
+	
+	debug_Printf("BLUE RANGE\t\t");
+	debug_Int(t.color_min.blue);
+	debug_Int(t.color_max.blue);
+		
+	debug_Printf("GREEN RANGE\t\t");
+	debug_Int(t.color_min.green);
+	debug_Int(t.color_max.green);
+		
+	debug_Printf("RED RANGE\t\t");
+	debug_Int(t.color_min.red);
+	debug_Int(t.color_max.red);
+		
+	buffer = "HUNTED:\t\t\t";
+	if (t.hunted == true)
+		buffer += "YES";
+	else
+		buffer += "NO";
+	
+	buffer += "\nHUNTER:\t\t\t";
+	if (t.hunter == true)
+		buffer += "YES";
+	else
+		buffer += "NO";
+		
+	buffer += "\nPRODUCT:\t\t";
+	buffer += t.product->name;
+	
+	buffer += "\nMERGE:\t\t\t";
+	if (t.merge == false)
+		buffer += "NO";
+	else
+		buffer += "YES";
+	debug_Printf(buffer);
+	
+	debug_Printf("\n");
 }
 
 /***
@@ -122,58 +166,13 @@ void debug_Object(const object& o) {
  * This function print the Stype structure
  */
 void debug_Stype(const typeSTR& stype) {
-
-	std::string buffer;
 		
 	debug_Printf("\n\nSTYPE PRINTING -- types found:");
 	debug_Int(stype.t.size());
-	debug_Printf("\n");
 	
 	for (unsigned int i=0; i!=stype.t.size(); i++) {
-		
-		buffer = "NAME:\t\t\t";
-		buffer += stype.t[i].name;
-		
-		buffer += "\nDESCRPTION:\t\t";
-		buffer += stype.t[i].description;
-		
-		buffer += "\nPARENT:\t\t\t";
-		buffer += stype.t[i].parent->name;
-		
-		buffer += "\nMASS MIN:\t\t";
-		debug_Printf(buffer);
-		debug_Double(stype.t[i].mass_min);
-		debug_Printf("MASS MAX:\t\t");
-		debug_Double(stype.t[i].mass_max);
-		
-		debug_Printf("BLUE RANGE\t\t");
-		debug_Int(stype.t[i].color_min.blue);
-		debug_Int(stype.t[i].color_max.blue);
-		
-		debug_Printf("GREEN RANGE\t\t");
-		debug_Int(stype.t[i].color_min.green);
-		debug_Int(stype.t[i].color_max.green);
-		
-		debug_Printf("RED RANGE\t\t");
-		debug_Int(stype.t[i].color_min.red);
-		debug_Int(stype.t[i].color_max.red);
-		
-		buffer = "HUNTED:\t\t\t";
-		if (stype.t[i].hunted == true)
-			buffer += "YES";
-		else
-			buffer += "NO";
-		
-		buffer += "\nHUNTER:\t\t\t";
-		if (stype.t[i].hunter == false)
-			buffer += "YES";
-		else
-			buffer += "NO";
-		
-		buffer += "\nPRODUCT:\t\t";
-		buffer += stype.t[i].product->name;
-		debug_Printf(buffer);
-		debug_Printf("\n");
+		debug_Printf(" ");
+		debug_Type(stype.t[i]);
 	}
 }
 

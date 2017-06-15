@@ -28,6 +28,7 @@
 #include "generic.h"
 #include "color.h"
 
+
 // The structure that represent a type of a object
 class type {
 	public:
@@ -37,14 +38,16 @@ class type {
 		type *parent;
 		type *product;
 		
-		double mass_min;		// Mass range
+		double mass_min;	// Mass range
 		double mass_max;
 		
-		color color_max;		// Color range
+		color color_max;	// Color range
 		color color_min;
 		
-		bool hunted;			// if is hunted
-		bool hunter;			// if hunts
+		bool hunted;		// if is hunted
+		bool hunter;		// if hunts
+		
+		bool merge;			// can the object be merged with another (anaelastic impact)? Is a suggestion
 };
 
 #endif

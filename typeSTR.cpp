@@ -182,16 +182,26 @@ typeSTR::typeSTR (signal& result) {
 			if(!buf.compare(0, 8,"HUNTED: ")) {
 				if(buf[8] == 'N')
 					t[i].hunted = false;
-				else
+				else if (buf[8] == 'Y')
 					t[i].hunted = true;
+				else{
+					debug_Printf(IRREGULARITY "Unvalid argurment at line:");
+					debug_Printf(buf);
+					debug_Printf("inside the object: " + t[i].name);
+				}
 				continue;
 			}
 			// HUNTER:
 			if(!buf.compare(0, 8,"HUNTER: ")) {
 				if(buf[8] == 'N')
 					t[i].hunter = false;
-				else			
+				else if (buf[8] == 'Y')
 					t[i].hunter = true;
+				else{
+					debug_Printf(IRREGULARITY "Unvalid argurment at line:");
+					debug_Printf(buf);
+					debug_Printf("inside the object: " + t[i].name);
+				}
 				continue;
 			}
 			// PRODUCT:
@@ -200,13 +210,25 @@ typeSTR::typeSTR (signal& result) {
 				t[i].product = Search(temp);
 				continue;
 			}
+			// MERGE:
+			if(!buf.compare(0, 7, "MERGE: ")) {
+				if(buf[7] == 'N')
+					t[i].merge = false;
+				else if (buf[7] == 'Y')
+					t[i].merge = true;
+				else{
+					debug_Printf(IRREGULARITY "Unvalid argurment at line:");
+					debug_Printf(buf);
+					debug_Printf("inside the object: " + t[i].name);
+				}
+				continue;
+			}
 		
 			// NOT PARSABLE LINE
 			if(buf.compare(0, 8, "PARENT: ")) {
 				debug_Printf(IRREGULARITY "typeSTR::typeSTR! Unparsable line");
 				debug_Printf(buf);
-				debug_Printf("while object");
-				debug_Printf(t[i].name);
+				debug_Printf("inside object " + t[i].name);
 				continue;
 			}
 			break;

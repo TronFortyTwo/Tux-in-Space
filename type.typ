@@ -9,7 +9,7 @@
 # - NAME must be the first element of a type, PARENT the last
 # - please, use the indentation (using tabs)
 # - to write comments, start a line with '#'
-# - there is no official support yet for types that are both hunter AND hunted
+# - there is no official support yet for types that are either hunter AND hunted
 ########################################################################
 ########################################################################
 # the Object type is the base for all other types
@@ -26,6 +26,7 @@ GREEN MAX: 255
 GREEN MIN: 0
 HUNTED: N
 HUNTER: N
+MERGE: Y
 PRODUCT: Object
 PARENT: Object
 
@@ -37,6 +38,7 @@ PARENT: Object
 NAME: Artificial object
 DESCRIPTION: The product of an intentional human manifacture, often buildt with metals
 HUNTED: Y
+MERGE: N
 PRODUCT: Debris
 PARENT: Object
 
@@ -68,6 +70,7 @@ PARENT: Object
 #
 NAME: Celestial object
 DESCRIPTION: A celestial object is a natural object
+MERGE: Y
 PARENT: Object
 
 	NAME: Brown Dwarf
@@ -205,6 +208,7 @@ NAME: Organic Matter
 HUNTED: N
 DESCRIPTION: Matter composed of carbon compound, it's life or a life product
 PRODUCT: Organic Matter
+MERGE: N
 PARENT: Object
 
 	NAME: Space Monster
