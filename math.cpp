@@ -35,6 +35,24 @@ int math_RandomI (int min, int max) {
 }
 
 
+// TPOSITION
+
+tposition tposition::operator- (const tposition& p) const {
+	return tposition(v - p.v);
+}
+void tposition::operator+= (const tposition& p) {
+	v += p.v;
+}
+tpositionmass tposition::operator* (const tmass& m) const{
+	return tpositionmass(v * m.m);
+}
+tlength tposition::scalar() const {
+	return v.length();
+}
+vec3<long double> tposition::direction() const{
+	return v.direction();
+}
+
 // TPOSITIONMASS
 
 tposition tpositionmass::operator/ (const tmass& m){
@@ -59,7 +77,7 @@ tforce tguc::newton(const tmass& mass1, const tmass& mass2, const tposition& dis
 	// apply the newton law of gravitation
 	tforce f(
 		dist.direction(),
-		m * mass1.m * mass2.m / (dist.module() * dist.module())
+		m * mass1.value() * mass2.value() / (dist.scalar().value() * dist.scalar().value())
 	);
 	return f;
 }
@@ -71,6 +89,31 @@ tmomentum tvelocity::operator* (const tmass& m)  {
 }
 vec3<long double> tvelocity::value() const{
 	return v;
+}
+void tvelocity::operator+= (const tvelocity& t){
+	v += t.v;
+}
+tposition tvelocity::operator* (const time_raw& t) const {
+	return tposition(v * t.time());
+}
+tspeed tvelocity::scalar() const{
+	return tspeed(v.length());
+}
+tmomentum tvelocity::operator* (const tmass& m);
+tvelocity tvelocity::operator+ (const tvelocity& vel) {
+	return tvelocity(v+vel.v);
+}
+tvelocity tvelocity::operator- (const tvelocity& vel) {
+	return tvelocity(v-vel.v);
+}
+bool tvelocity::operator< (const tvelocity& vel) {
+	return v.length() < vel.v.length();
+}
+bool tvelocity::operator> (const tvelocity& vel) {
+	return v.length() > vel.v.length();
+}
+tacceleration tvelocity::operator/ (const time_raw& t) const{
+	return tacceleration(v / t.time());
 }
 
 // TSPEED
@@ -157,6 +200,22 @@ tmomentum_scalar tmass::operator* (const tspeed& v) const{
 }
 long double tmass::operator/ (const tmass& t) const{
 	return m / t.m;
+}
+tmass tmass::operator+ (const tmass& t) const {
+	return tmass(m + t.m);
+}
+bool tmass::operator> (const tmass& t) const {
+	if(m > t.m)
+		return true;
+	return false;
+}
+bool tmass::operator< (const tmass& t) const {
+	if(m < t.m)
+		return true;
+	return false;
+}
+long double tmass::value() const {
+	return m;
 }
 
 

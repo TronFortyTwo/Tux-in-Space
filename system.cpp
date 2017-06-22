@@ -117,9 +117,9 @@ signal system_c::NewObj (const setting& set) {
 			<< mass_irregularity << "\n%r-5) radius:       "
 			<< obj.Radius().value() << "   " << radius_irregularity
 			<< "\n%r-6) coordinates:  x: "
-			<< p.x() << "   " << touch_irregularity << "&ti7\ny: " << p.y() 
-			<< "\nz: " << p.z()	<< "&t0\n%r-7) velocity:     x: " << v.x()
-			<< "&ti7\ny: " << v.y() << "\nz: " << v.z()
+			<< p.x().value() << "   " << touch_irregularity << "&ti7\ny: " << p.y().value() 
+			<< "\nz: " << p.z().value()	<< "&t0\n%r-7) velocity:     x: " << v.x().value()
+			<< "&ti7\ny: " << v.y().value() << "\nz: " << v.z().value()
 			<< "&t0\n%r-8) LOAD  the object from a file\n%r-9) SAVE  "
 			<< "this object to a file\n%r-10) DONE\n11) EXIT without saving\n\n"
 			<< comment;

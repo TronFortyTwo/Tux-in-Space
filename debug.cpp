@@ -148,16 +148,16 @@ void debug_Object(const object& o) {
 	debug_Printf(buffer);
 	// coordinates
 	buffer = "COORDINATES:\t";
-	ob << o.Pos().x() << '\n';
-	ob << o.Pos().y() << '\n';
-	ob << o.Pos().z() << '\n';
+	ob << o.Pos().x().value() << '\n';
+	ob << o.Pos().y().value() << '\n';
+	ob << o.Pos().z().value() << '\n';
 	buffer += ob.str();
 	debug_Printf(buffer);
 	// velocity
 	buffer = "VELOCITY:\t";
-	ob << o.Vel().x() << '\n';
-	ob << o.Vel().y() << '\n';
-	ob << o.Vel().z() << '\n';
+	ob << o.Vel().x().value() << '\n';
+	ob << o.Vel().y().value() << '\n';
+	ob << o.Vel().z().value() << '\n';
 	buffer += ob.str();
 	debug_Printf(buffer);
 }

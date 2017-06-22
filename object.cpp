@@ -145,12 +145,12 @@ void object::WriteComplete (ofstream& stream) {
 	// write basic infos
 	Write(stream);
 	// write additional stuff
-	stream << Pos().x() << "\n";
-	stream << Pos().y() << "\n";
-	stream << Pos().z() << "\n";
-	stream << Vel().x() << "\n";
-	stream << Vel().y() << "\n";
-	stream << Vel().z() << "\n";
+	stream << Pos().x().value() << "\n";
+	stream << Pos().y().value() << "\n";
+	stream << Pos().z().value() << "\n";
+	stream << Vel().x().value() << "\n";
+	stream << Vel().y().value() << "\n";
+	stream << Vel().z().value() << "\n";
 }
 
 /***
@@ -174,7 +174,7 @@ void object::AI_Hunter(system_c& sys) {
 	// search the closest one: assume that the closest is the first. Then watch the next. If is closer, assume it as closest. Restart
 	object *closest = targets[0];
 	for(int i=1; i!=targets_num; i++)
-		if( Distance(*closest).length() > Distance(*targets[i]).length() )
+		if( Distance(*closest).scalar() > Distance(*targets[i]).scalar() )
 			closest = targets[i];
 	
 	// PART TWO, FOLLOW THE OBJECT
@@ -254,13 +254,7 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
-	// The force: intensity and direction
-	tforce f( Distance(obj).direction(), Mass() * (Vel().scalar()-obj.Vel().scalar()) / delta);
-	
-	obj.AddForce (f);
-	AddForce (-f);
-	
-	debug_Printf("Eelastic Impact: Created these new object:");
+	debug_Printf("Elastic Impact: Created these new object:");
 	debug_Object(*this);
 	debug_Object(obj);
 }

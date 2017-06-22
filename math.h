@@ -59,22 +59,22 @@ template<class T> class vec3 {
 		T length() const {
 			return sqrtl (z*z + pow(sqrtl(x*x + y*y), 2));
 		};
-		
 		// absolute value
 		inline vec3<T> absolute() {
 			return vec3<T>(abs(x), abs(y), abs(z));
 		}
-		
 		inline void zero() {
 			x = 0;
 			y = 0;
 			z = 0;
 		}
-		
+		// return the project on another vector
+		inline vec3<T> projection(const vec3<T>& v) const{
+			
+		}
 		// return the direction of the vector (the same vector with length 1)
 		vec3<T> direction() const {
-			long double l = length();
-			
+			T l = length();
 			return vec3<T>(x/l, y/l, z/l);
 		}
 		
@@ -109,27 +109,27 @@ template<class T> class vec3 {
 			*this = v;
 		}
 		// the vector passing for a point, of a given direction
-		inline vec3(const vec3<T>& direction, const long double& len) {
-			long double ratio = len / direction.length();
+		inline vec3(const vec3<T>& direction, const T& len) {
+			T ratio = len / direction.length();
 			x = direction.x * ratio;
 			y = direction.y * ratio;
 			z = direction.z * ratio;
 		}
 		
 		// operators
-		inline vec3<T> operator+ (const vec3<T>& s) {
+		inline vec3<T> operator+ (const vec3<T>& s) const{
 			return vec3<T>(s.x+x, s.y+y, s.z+z);
 		}
-		inline vec3<T> operator- (const vec3<T>& s) {
+		inline vec3<T> operator- (const vec3<T>& s) const{
 			return vec3<T>(s.x-x, s.y-y, s.z-z);
 		}
-		inline vec3<T> operator- (void) {
+		inline vec3<T> operator- (void) const {
 			return vec3<T>(-x, -y, -z);
 		}
-		inline vec3<T> operator* (const long double& m) const {
+		inline vec3<T> operator* (const T& m) const {
 			return vec3<T>(x*m, y*m, z*m);
 		}
-		inline vec3<T> operator/ (const long double& d) const {
+		inline vec3<T> operator/ (const T& d) const {
 			return vec3<T>(x/d, y/d, z/d);
 		}
 		inline T& operator[] (axis3 n) {
@@ -149,10 +149,15 @@ template<class T> class vec3 {
 			y -= s.y;
 			z -= s.z;
 		}
-		inline void operator *= (const long double& s){
+		inline void operator *= (const T& s){
 			x *= s;
 			y *= s;
 			z *= s;
+		}
+		inline void operator /= (const T& s){
+			x /= s;
+			y /= s;
+			z /= s;
 		}
 };
 
@@ -175,6 +180,8 @@ class tspeed {
 	
 	friend tvelocity;
 };
+
+
 
 
 //
@@ -409,23 +416,10 @@ class tmass {
 		long double operator/ (const tmass& t) const;
 		tmomentum operator* (const tvelocity& vel) const;
 		tmass operator/ (const long double& n) const;
-		
-		tmass operator+ (const tmass& t) {
-			return tmass(m + t.m);
-		}
-		bool operator> (const tmass& t) {
-			if(m > t.m)
-				return true;
-			return false;
-		}
-		bool operator< (const tmass& t){
-			if(m < t.m)
-				return true;
-			return false;
-		}
-		long double value() const {
-			return m;
-		}
+		tmass operator+ (const tmass& t) const;
+		bool operator> (const tmass& t) const;
+		bool operator< (const tmass& t) const;
+		long double value() const;
 		
 		inline tmass(){
 			m = 0;
@@ -445,7 +439,7 @@ class tmass {
 
 class tpositionmass {
 	// position * mass
-	
+	// TODO: consider if keep this
 	
 	private:
 		
@@ -473,28 +467,14 @@ class tposition {
 
 	public:
 	
-		tposition operator- (const tposition& p) {
-			return tposition(v - p.v);
-		}
-		void operator+= (const tposition& p) {
-			v += p.v;
-		}
-		tpositionmass operator* (const tmass& m){
-			return tpositionmass(v * m.m);
-		}
-		
-		tlength length() const {
-			return tlength(v.length());
-		}
-		long double module() const {
-			return v.length();
-		}
-		vec3<long double> direction() const{
-			return v.direction();
-		}
-		inline long double x() { return v.x;}
-		inline long double y() { return v.y;}
-		inline long double z() { return v.z;}
+		tposition operator- (const tposition& p) const;
+		void operator+= (const tposition& p);
+		tpositionmass operator* (const tmass& m) const;
+		tlength scalar() const;
+		vec3<long double> direction() const;
+		inline tlength x() { return v.x;}
+		inline tlength y() { return v.y;}
+		inline tlength z() { return v.z;}
 		
 		inline tposition(const vec3<long double>& _v){
 			v = _v;
@@ -513,37 +493,21 @@ class tvelocity {
 	
 	public:
 	
-		void operator+= (const tvelocity& t){
-			v += t.v;
-		}
-		tposition operator* (const time_raw& t) const {
-			return tposition(v * t.time());
-		}
-		tspeed speed(){
-			return tspeed(v.length());
-		}
+		void operator+= (const tvelocity& t);
+		tposition operator* (const time_raw& t) const;
 		tmomentum operator* (const tmass& m);
-		tvelocity operator+ (const tvelocity& vel) {
-			return tvelocity(v+vel.v);
-		}
-		tvelocity operator- (const tvelocity& vel) {
-			return tvelocity(v-vel.v);
-		}
-		bool operator< (const tvelocity& vel) {
-			return v.length() < vel.v.length();
-		}
-		bool operator> (const tvelocity& vel) {
-			return v.length() > vel.v.length();
-		}
+		tvelocity operator+ (const tvelocity& vel);
+		tvelocity operator- (const tvelocity& vel);
+		tacceleration operator/ (const time_raw& t) const;
+		bool operator< (const tvelocity& vel);
+		bool operator> (const tvelocity& vel);
 		
-		long double x() { return v.x;}
-		long double y() { return v.y;}
-		long double z() { return v.z;}
+		tspeed x() { return tspeed(v.x);}
+		tspeed y() { return tspeed(v.y);}
+		tspeed z() { return tspeed(v.z);}
+		
 		vec3<long double> value() const;
-		
-		tspeed scalar() const {
-			return tspeed(v.length());
-		}
+		tspeed scalar() const;
 		
 		inline tvelocity(const vec3<long double>& _v) {
 			v = _v;
