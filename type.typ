@@ -53,12 +53,6 @@ PARENT: Object
 		PRODUCT: Debris
 		PARENT: Spacecraft
 
-		NAME: Spaceplane
-		DESCRIPTION: Often winged, a spaceplane is a spacecraft designed only for manned flight. An example is the Space Shuttle
-		HUNTED: Y
-		PRODUCT: Relict
-		PARENT: Spacecraft
-
 		NAME: Relict
 		DESCRIPTION: A spacecraft destroyed or damaged floating the universe...
 		HUNTED: N
@@ -116,20 +110,16 @@ PARENT: Object
 	MASS MIN: 9241818000
 	PARENT: Celestial object
 
-		NAME: Compact star
-		DESCRIPTION: A compact star is a star that is composed by esotic matter (like white dwarf, neutron star and others) or other objects like the Black Holes that we don't know of which matter are composed. All these objects have big mass but are small, having a very high density.
-		PARENT: Star
-
 			NAME: Black hole
 			DESCRIPTION: A so massive and dense body that even the light can't escape from it
 			MASS MIN: 21.77
 			BLUE MAX: 0
 			RED MAX: 0
 			GREEN MAX: 0
-			PARENT: Compact star
+			PARENT: Star
 
 			NAME: White dwarf
-			PARENT: Compact star
+			PARENT: Star
 			
 		NAME: Neutron star
 		PARENT: Compact star

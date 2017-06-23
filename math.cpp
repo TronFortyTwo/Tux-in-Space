@@ -35,6 +35,12 @@ int math_RandomI (int min, int max) {
 }
 
 
+// TFORCE SCALAR
+
+long double tforce_scalar::value() const {
+	return m;
+}
+
 // TPOSITION
 
 tposition tposition::operator- (const tposition& p) const {
@@ -84,7 +90,7 @@ tforce tguc::newton(const tmass& mass1, const tmass& mass2, const tposition& dis
 
 // TVELOCITY
 
-tmomentum tvelocity::operator* (const tmass& m)  {
+tmomentum tvelocity::operator* (const tmass& m) const{
 	return tmomentum(v * m.m);
 }
 vec3<long double> tvelocity::value() const{
@@ -99,17 +105,17 @@ tposition tvelocity::operator* (const time_raw& t) const {
 tspeed tvelocity::scalar() const{
 	return tspeed(v.length());
 }
-tmomentum tvelocity::operator* (const tmass& m);
-tvelocity tvelocity::operator+ (const tvelocity& vel) {
+tmomentum tvelocity::operator* (const tmass& m) const;
+tvelocity tvelocity::operator+ (const tvelocity& vel) const{
 	return tvelocity(v+vel.v);
 }
-tvelocity tvelocity::operator- (const tvelocity& vel) {
+tvelocity tvelocity::operator- (const tvelocity& vel) const{
 	return tvelocity(v-vel.v);
 }
-bool tvelocity::operator< (const tvelocity& vel) {
+bool tvelocity::operator< (const tvelocity& vel) const {
 	return v.length() < vel.v.length();
 }
-bool tvelocity::operator> (const tvelocity& vel) {
+bool tvelocity::operator> (const tvelocity& vel) const {
 	return v.length() > vel.v.length();
 }
 tacceleration tvelocity::operator/ (const time_raw& t) const{
@@ -127,20 +133,34 @@ tspeed tspeed::operator+ (const tspeed& s) const{
 tspeed tspeed::operator- (const tspeed& s) const{
 	return tspeed(m - s.m);
 }
+tacceleration_scalar tspeed::operator/ (const time_raw& t) const {
+	return tacceleration_scalar(m/t.time());
+}
 
 // TACCELERATION
 
 tforce tacceleration::operator* (const tmass& m) const{
 		return tforce(v * m.m);
 };
+long double tacceleration::value() const {
+	return v.length();
+}
 
 // TACCELERATION_SCALAR
 
-tacceleration_scalar tspeed::operator/ (const time_raw& t) const {
-	return tacceleration_scalar(m/t.time());
+tacceleration_scalar tacceleration_scalar::operator/ (const long double& n) const{
+			return tacceleration_scalar(m/n);
+}
+tacceleration_scalar tacceleration_scalar::operator* (const long double& n) const{
+	return tacceleration_scalar(m*n);
+}
+	
+inline long double tacceleration_scalar::value() const {
+	return m;
 }
 
 // TMOMENTUM
+
 tvelocity tmomentum::operator/ (const tmass& m){
 	return tvelocity(v / m.value());
 }

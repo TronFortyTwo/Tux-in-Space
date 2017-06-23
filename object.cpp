@@ -254,7 +254,10 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
-	debug_Printf("Elastic Impact: Created these new object:");
+	
+	
+	
+	debug_Printf("Elastic Impact: Created these new objects:");
 	debug_Object(*this);
 	debug_Object(obj);
 }

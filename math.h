@@ -340,16 +340,10 @@ class tacceleration_scalar {
 		long double m;
 	
 	public:
-		tacceleration_scalar operator/ (const long double& n) const{
-			return tacceleration_scalar(m/n);
-		}
-		tacceleration_scalar operator* (const long double& n) const{
-			return tacceleration_scalar(m*n);
-		}
+		tacceleration_scalar operator/ (const long double& n) const;
+		tacceleration_scalar operator* (const long double& n) const;
 		
-		inline long double value() const {
-			return m;
-		}
+		inline long double value() const;
 		
 		inline tacceleration_scalar(const long double& a){
 			m = a;
@@ -366,14 +360,12 @@ class tforce_scalar{
 		
 	public:
 		
-		long double value() const {
-			return m;
-		}
+		long double value() const;
 		
-		tforce_scalar(const long double& _m){
+		inline tforce_scalar(const long double& _m){
 			m = _m;
 		}
-		tforce_scalar(){
+		inline tforce_scalar(){
 			m = 0;
 		}
 };
@@ -495,16 +487,16 @@ class tvelocity {
 	
 		void operator+= (const tvelocity& t);
 		tposition operator* (const time_raw& t) const;
-		tmomentum operator* (const tmass& m);
-		tvelocity operator+ (const tvelocity& vel);
-		tvelocity operator- (const tvelocity& vel);
+		tmomentum operator* (const tmass& m) const;
+		tvelocity operator+ (const tvelocity& vel) const;
+		tvelocity operator- (const tvelocity& vel) const;
 		tacceleration operator/ (const time_raw& t) const;
-		bool operator< (const tvelocity& vel);
-		bool operator> (const tvelocity& vel);
+		bool operator< (const tvelocity& vel) const;
+		bool operator> (const tvelocity& vel) const;
 		
-		tspeed x() { return tspeed(v.x);}
-		tspeed y() { return tspeed(v.y);}
-		tspeed z() { return tspeed(v.z);}
+		tspeed x() const { return tspeed(v.x);}
+		tspeed y() const { return tspeed(v.y);}
+		tspeed z() const { return tspeed(v.z);}
 		
 		vec3<long double> value() const;
 		tspeed scalar() const;
@@ -531,9 +523,7 @@ class tacceleration {
 	
 		tforce operator* (const tmass& m) const; 
 		
-		long double value() {
-			return v.length();
-		}
+		long double value() const;
 				
 		inline tacceleration(vec3<long double> _v){
 			v = _v;
