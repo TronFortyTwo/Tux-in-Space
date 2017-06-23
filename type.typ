@@ -122,7 +122,7 @@ PARENT: Object
 			PARENT: Star
 			
 		NAME: Neutron star
-		PARENT: Compact star
+		PARENT: Star
 
 			NAME: Pulsar
 			PARENT: Neutron star

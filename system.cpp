@@ -170,12 +170,12 @@ signal system_c::NewObj (const setting& set) {
 				break;
 		// Coordiates
 			case 6: {
-					vec3<long double> p;
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (m)");
+					vec3<long double> p = obj.Pos().value();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (m)\n&t2Now is " + to_string(p.x) + " m");
 					p.x = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (m)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (m)\n&t2Now is " + to_string(p.y) + " m");
 					p.y = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (m)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (m)\n&t2Now is " + to_string(p.z) + " m");
 					p.z = in_ld();
 					obj.SetPos(p);
 					comment += "\nNew coordinates assigned succefully!";
@@ -183,12 +183,12 @@ signal system_c::NewObj (const setting& set) {
 				}
 		// Velocity
 			case 7: {
-					vec3<long double> v;
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)");
+					vec3<long double> v = obj.Vel().value();
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)"  + to_string(v.x) + " m/s");
 					v.x = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)" + to_string(v.y) + " m/s");
 					v.y = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)" + to_string(v.z) + " m/s");
 					v.z = in_ld();
 					obj.SetVel(v);
 					comment += "\nNew velocity assigned succefully!";

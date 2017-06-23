@@ -58,6 +58,9 @@ tlength tposition::scalar() const {
 vec3<long double> tposition::direction() const{
 	return v.direction();
 }
+vec3<long double> tposition::value() const{
+	return v;
+}
 
 // TPOSITIONMASS
 
@@ -121,6 +124,9 @@ bool tvelocity::operator> (const tvelocity& vel) const {
 tacceleration tvelocity::operator/ (const time_raw& t) const{
 	return tacceleration(v / t.time());
 }
+tvelocity tvelocity::operator- (void) const{
+	return tvelocity(-v);
+};
 
 // TSPEED
 

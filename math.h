@@ -467,6 +467,7 @@ class tposition {
 		inline tlength x() { return v.x;}
 		inline tlength y() { return v.y;}
 		inline tlength z() { return v.z;}
+		vec3<long double> value() const;
 		
 		inline tposition(const vec3<long double>& _v){
 			v = _v;
@@ -490,6 +491,7 @@ class tvelocity {
 		tmomentum operator* (const tmass& m) const;
 		tvelocity operator+ (const tvelocity& vel) const;
 		tvelocity operator- (const tvelocity& vel) const;
+		tvelocity operator- (void) const;
 		tacceleration operator/ (const time_raw& t) const;
 		bool operator< (const tvelocity& vel) const;
 		bool operator> (const tvelocity& vel) const;

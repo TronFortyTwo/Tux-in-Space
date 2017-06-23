@@ -167,10 +167,8 @@ void OPS(const setting& set, const std::string& phrase) {
 		
 			// PART TWO: print the buffer
 			// if the buffer is finished print only spaces
-			if (bufend == 1)
-				cout << " ";
 			// print a space if we are behind the indentation
-			else if (columndone < indentation)
+			if ((bufend == true)||(columndone < indentation))
 				cout << " ";
 			// a space in the first column is ignored
 			else if ((columndone == indentation) && (buf.str()[p] == ' ')) {
@@ -188,7 +186,7 @@ void OPS(const setting& set, const std::string& phrase) {
 				OPS_Line(set.width, " ", columndone+TWOFRAMELEN);
 				p++;
 				// if there is space for more line print the new line
-				if(linedone < set.height-(+5)) {
+				if(linedone < set.height-5) {
 					cout << FRAMER << "\n" << FRAME;
 					linedone++;
 					columndone = -1;

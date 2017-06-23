@@ -254,7 +254,10 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
+	// just to make the program not explode...
 	
+	obj.SetVel(-obj.Vel());
+	SetVel(-Vel());
 	
 	
 	debug_Printf("Elastic Impact: Created these new objects:");
