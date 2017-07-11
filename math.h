@@ -174,8 +174,12 @@ class tspeed {
 		
 		long double value() const;
 		
+		tspeed operator* (const long double& a) const;
+		tspeed operator/ (const long double& a) const;
 		tspeed operator+ (const tspeed& s) const;
 		tspeed operator- (const tspeed& s) const;
+		void operator+= (const tspeed& s);
+		void operator-= (const tspeed& s);
 		tacceleration_scalar operator/ (const time_raw& t) const;
 	
 	friend tvelocity;
@@ -551,8 +555,9 @@ class tmomentum {
 		
 	public:
 	
-		tvelocity operator/ (const tmass& m);
-		tmomentum operator+ (const tmomentum& i);
+		tvelocity operator/ (const tmass& m) const;
+		tmomentum operator+ (const tmomentum& i) const;
+		tforce operator/ (const time_raw& t) const;
 		
 		vec3<long double> value() const;
 	

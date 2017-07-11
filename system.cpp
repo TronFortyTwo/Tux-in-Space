@@ -26,15 +26,10 @@
 using namespace std;
 
 /***
- * 	The function initialize a new object and ask information about it
- * 
- * 	n is the number of the object to initialize, if in a list
- * 	return ABORTED_SIG if the new object isn't initialized
+ * 	The object editor
  */
-signal system_c::NewObj (const setting& set) {
-	
-	// the new object
-	object obj;
+
+signal system_c::EditObj (const setting& set, object& obj) {
 	
 	int input;
 	string comment;				// This is a buffer that contein comment of what is just been done
@@ -44,7 +39,6 @@ signal system_c::NewObj (const setting& set) {
 	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
 	string touch_irregularity;	// assume the value IRREGULARITY if it touch some other object
 	
-	obj.typ = stype->Search("Object");
 	
 	// the loop
 	while(1) {
@@ -269,8 +263,7 @@ signal system_c::NewObj (const setting& set) {
 					name_irregularity.compare(IRREGULARITY)  &&
 					radius_irregularity.compare(IRREGULARITY) &&
 					touch_irregularity.compare(IRREGULARITY) ){
-  
-					o.push_back(obj);
+
 					return signal::good;
 				}
 				else
@@ -282,6 +275,24 @@ signal system_c::NewObj (const setting& set) {
 				return signal::aborted;
 		}
 	}
+	
+}
+
+/***
+ * 	The function initialize a new object and ask information about it
+ * 
+ */
+void system_c::NewObj (const setting& set) {
+	
+	// new empty object
+	object newobj = object();
+	
+	debug_Object(newobj);
+	
+	// Open the editor, if good
+	if(EditObj(set, newobj) == signal::good)
+		o.push_back(newobj);
+	
 }
 
 /***

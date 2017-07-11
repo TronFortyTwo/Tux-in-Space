@@ -43,7 +43,7 @@ object::object(typeSTR& stype, const string& name, signal& result) {
 	ifstream file(path);
 	if(!file){
 		result = signal::file_err;
-		debug_Printf(IRREGULARITY" Canno't read the object! File not found!");
+		debug_Printf(IRREGULARITY" Cannot read the object! File not found!");
 		debug_Printf(name);
 		return;
 	}
@@ -250,14 +250,11 @@ void object::Impact_Anaelastic(object& obj) {
  * 
  * momentum is conserved
  * kinektic energy is coserved
+ * 
+ * TODO: Apply forces instead to operate directly on the velocity
  */
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
-	
-	// just to make the program not explode...
-	
-	obj.SetVel(-obj.Vel());
-	SetVel(-Vel());
 	
 	
 	debug_Printf("Elastic Impact: Created these new objects:");
@@ -319,4 +316,9 @@ void object::Impact_Hunting(object& hed, const time_raw& delta) {
 			Mass()
 		)
 	);
+}
+
+// Init a new object
+object::object (typeSTR& stype) {
+	typ = stype.Search("Object");
 }

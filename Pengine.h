@@ -21,8 +21,8 @@
  * see information file for more info
  */
 
-#ifndef PENGINEH
-#define PENGINEH
+#ifndef PengineH
+#define PengineH
 
 #include "generic.h"
 #include "math.h"
@@ -98,9 +98,13 @@ class PEntity {
 		}
 		
 		// add a force to the entity
-		inline void AddForce(const tforce& force){
+		inline void AddForce(const tforce& force) {
 			if(force > force_single_tolerance)
 				acc_force += force;
+		}
+		// add an impulse to the entity
+		inline void AddImpulse(const tmomentum& impulse, const time_raw& t){
+			AddForce(impulse / t);
 		}
 		
 		// Move all the stats about position and kinematic elements to a dest PEntity

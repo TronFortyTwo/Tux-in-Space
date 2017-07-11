@@ -77,7 +77,8 @@ class object : public PEntity {
 		}
 		object (typeSTR&, const std::string&, signal&);		// Load from a file (UI)
 		object (const setting&, typeSTR&, const std::vector<object>& entity, signal&);	// Init using an UI
-		object () {;}										// init a free object
+		object (typeSTR& stype); // Init a free object
+		object ();	// BE CAREFUL!!! USE THE OTHER CONSTRUCTORS INSTEAD!
 		
 		friend class system_c;
 };

@@ -81,7 +81,7 @@ PARENT: Object
 	PARENT: Celestial object
 
 		NAME: Comet
-		DESCRIPTION: A comet is an icy body composed of water and dust. When exposed to solar wind, some of it's water sublime and behind him a 'tail' appears.
+		DESCRIPTION: A comet is an icy body composed of water and dust. When exposed to solar wind, some of it's water sublime and behind him a so called 'tail' appears.
 		PRODUCT: Meteroid
 		PARENT: Small body
 

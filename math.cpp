@@ -142,6 +142,18 @@ tspeed tspeed::operator- (const tspeed& s) const{
 tacceleration_scalar tspeed::operator/ (const time_raw& t) const {
 	return tacceleration_scalar(m/t.time());
 }
+tspeed tspeed::operator* (const long double& a) const{
+	return tspeed(m*a);
+}
+tspeed tspeed::operator/ (const long double& a) const{
+	return tspeed(m/a);
+}
+void tspeed::operator+= (const tspeed& s){
+	m += s.m;
+}
+void tspeed::operator-= (const tspeed& s){
+	m -= s.m;
+}
 
 // TACCELERATION
 
@@ -167,11 +179,14 @@ inline long double tacceleration_scalar::value() const {
 
 // TMOMENTUM
 
-tvelocity tmomentum::operator/ (const tmass& m){
+tvelocity tmomentum::operator/ (const tmass& m) const{
 	return tvelocity(v / m.value());
 }
-tmomentum tmomentum::operator+ (const tmomentum& i){
+tmomentum tmomentum::operator+ (const tmomentum& i) const {
 	return tmomentum(v + i.v);
+}
+tforce tmomentum::operator/ (const time_raw& t) const{
+	return tforce(v / t.time());
 }
 vec3<long double> tmomentum::value() const {
 	return v;
