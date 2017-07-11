@@ -558,6 +558,8 @@ class tmomentum {
 		tvelocity operator/ (const tmass& m) const;
 		tmomentum operator+ (const tmomentum& i) const;
 		tforce operator/ (const time_raw& t) const;
+		tmomentum operator* (const vec3<long double>& vector) const;
+		tmomentum operator/ (const vec3<long double>& vector) const;
 		
 		vec3<long double> value() const;
 	

@@ -178,11 +178,11 @@ signal system_c::EditObj (const setting& set, object& obj) {
 		// Velocity
 			case 7: {
 					vec3<long double> v = obj.Vel().value();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)"  + to_string(v.x) + " m/s");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)\n&t2Now is "  + to_string(v.x) + " m/s");
 					v.x = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)" + to_string(v.y) + " m/s");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)\n&t2Now is " + to_string(v.y) + " m/s");
 					v.y = in_ld();
-					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)" + to_string(v.z) + " m/s");
+					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)\n&t2Now is " + to_string(v.z) + " m/s");
 					v.z = in_ld();
 					obj.SetVel(v);
 					comment += "\nNew velocity assigned succefully!";
@@ -285,7 +285,7 @@ signal system_c::EditObj (const setting& set, object& obj) {
 void system_c::NewObj (const setting& set) {
 	
 	// new empty object
-	object newobj = object();
+	object newobj(*stype);
 	
 	debug_Object(newobj);
 	

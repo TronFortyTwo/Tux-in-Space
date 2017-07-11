@@ -18,7 +18,7 @@ There is an executable file, compiled in a 64 bit Linux; Maybe can run
 in other computers as well, but you can easily compile the program with
 the makefile (just run 'make' in the master directory).
 
-The program is written for linux only, but with very few work or maybe no work at all could also
+The program is written for linux only, but with very little work or maybe no work at all could also
 run on other operative systems. (See information file)
 
 Officially supported compiler is gcc >= 6.3.
@@ -33,7 +33,7 @@ The program is far far away from being complete.
 License
 ------
 Tux in Space - space exploration game
-Copyright (C) 2016-2017  emanuele.sorce@hotmail.com
+Copyright (C) 2016-2017 emanuele.sorce@hotmail.com
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

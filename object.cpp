@@ -256,6 +256,13 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
+	vec3<long double> dir = Distance(obj).direction();
+	
+	obj.AddImpulse(Mass() * Vel() * dir, delta);
+	AddImpulse(Mass() * -Vel() * dir, delta);
+	
+	AddImpulse(obj.Mass() * obj.Vel() * -dir, delta);
+	obj.AddImpulse(obj.Mass() * -obj.Vel() * -dir, delta);
 	
 	debug_Printf("Elastic Impact: Created these new objects:");
 	debug_Object(*this);

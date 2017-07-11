@@ -188,6 +188,13 @@ tmomentum tmomentum::operator+ (const tmomentum& i) const {
 tforce tmomentum::operator/ (const time_raw& t) const{
 	return tforce(v / t.time());
 }
+tmomentum tmomentum::operator* (const vec3<long double>& vector) const{
+	return tmomentum(vec3<long double>(v.x*vector.x, v.y*vector.y, v.z*vector.z));
+}
+tmomentum tmomentum::operator/ (const vec3<long double>& vector) const{
+	return tmomentum(vec3<long double>(v.x/vector.x, v.y/vector.y, v.z/vector.z));
+}
+
 vec3<long double> tmomentum::value() const {
 	return v;
 }
