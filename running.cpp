@@ -77,7 +77,7 @@ bool Run (setting& set, typeSTR& stype) {
 		while(quit == false) {
 			// Output
 			OPSo (set, *sys);
-			// call the instruction parser and ask him for destination time
+			// Input
 			stime = Parser(set, *sys, quit);
 			// loading message
 			OPS(set, "Loading...");

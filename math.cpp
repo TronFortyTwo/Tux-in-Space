@@ -278,13 +278,44 @@ long double tenergy::value() const{
 	return m;
 }
 
+// TFORCE
 
-
-
-
-
-
-
+tforce tforce::operator+ (const tforce& f) const {
+	return tforce(v + f.v);
+}
+tforce tforce::operator- (const tforce& f) const{
+	return tforce(v - f.v);
+}
+void tforce::operator+= (const tforce& f) {
+	v += f.v;
+}
+void tforce::operator-= (const tforce& f) {
+	v -= f.v;
+}
+tforce tforce::operator* (const long double& pure) const{
+	return tforce(v * pure);
+}
+tacceleration tforce::operator/ (const tmass& m) const {
+	return tacceleration(v / m.value());
+}
+tmomentum tforce::operator* (const time_raw& t) const {
+	return tmomentum(v * t.time());
+}
+tforce tforce::operator- (void) const {
+	return tforce(-v);
+}
+bool tforce::operator> (const tforce_scalar& f) const {
+	return v.length() > f.value();
+}
+bool tforce::operator< (const tforce_scalar& f) const {
+	return v.length() < f.value();
+}	
+void tforce::zero() {
+	v.zero();
+}
+long double tforce::value() const{
+	return v.length();
+}
 
 
 

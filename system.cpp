@@ -486,11 +486,12 @@ void system_c::Physic (time_sim& dest) {
 	
 	while (dest.Compare (stime) == comparison::major) {
 		
-		// GRAVITY
+		// Apply gravity
 		Physic_Gravity();
-		// HUNTER IA
+		// TODO: AI should think only sometimes
+		// AI will make their move
 		Hunter_AI();
-		// INERTIA
+		// Run the simulation
 		for (unsigned int i=0; i!=o.size(); i++)
 			o[i].Sim(precision);
 		// IMPACTS

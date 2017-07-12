@@ -31,7 +31,7 @@
 #include "generic.h"
 #include "debug.h"
 
-// Other libraries for unix-like
+// For LINUX this library is used to create directories
 #include <sys/stat.h>
 
 

@@ -261,8 +261,8 @@ void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	obj.AddImpulse(Mass() * Vel() * dir, delta);
 	AddImpulse(Mass() * -Vel() * dir, delta);
 	
-	AddImpulse(obj.Mass() * obj.Vel() * -dir, delta);
-	obj.AddImpulse(obj.Mass() * -obj.Vel() * -dir, delta);
+	AddImpulse(obj.Mass() * -obj.Vel() * -dir, delta);
+	obj.AddImpulse(obj.Mass() * obj.Vel() * -dir, delta);
 	
 	debug_Printf("Elastic Impact: Created these new objects:");
 	debug_Object(*this);

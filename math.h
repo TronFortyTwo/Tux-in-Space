@@ -578,40 +578,19 @@ class tforce {
 	
 	public:
 	
-		tforce operator+ (const tforce& f) {
-			return tforce(v + f.v);
-		}
-		tforce operator- (const tforce& f) {
-			return tforce(v - f.v);
-		}
-		void operator+= (const tforce& f) {
-			v += f.v;
-		}
-		tforce operator* (const long double& pure){
-			return tforce(v * pure);
-		}
-		tacceleration operator/ (const tmass& m) {
-			return tacceleration(v / m.value());
-		}
-		tmomentum operator* (const time_raw& t){
-			return tmomentum(v * t.time());
-		}
-		tforce operator- (void){
-			return tforce(-v);
-		}
-		bool operator> (const tforce_scalar& f) const {
-			return v.length() > f.value();
-		}
-		bool operator< (const tforce_scalar& f) const {
-			return v.length() < f.value();
-		}
+		tforce operator+ (const tforce& f) const;
+		tforce operator- (const tforce& f) const;
+		void operator+= (const tforce& f);
+		void operator-= (const tforce& f);
+		tforce operator* (const long double& pure) const;
+		tacceleration operator/ (const tmass& m) const;
+		tmomentum operator* (const time_raw& t) const;
+		tforce operator- (void) const;
+		bool operator> (const tforce_scalar& f) const;
+		bool operator< (const tforce_scalar& f) const;
 		
-		void zero() {
-			v.zero();
-		}
-		long double value(){
-			return v.length();
-		}
+		void zero();
+		long double value() const;
 		
 		inline tforce(const vec3<long double>& _v) {
 			v = _v;
