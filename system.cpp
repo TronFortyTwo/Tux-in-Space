@@ -39,20 +39,23 @@ void system_c::EditObj (const setting& set, object& obj) {
 	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
 	string touch_irregularity;	// assume the value IRREGULARITY if it touch some other object
 	
-	// if the user wants to revert changes
-	object backup(obj);
+	// the object after the editing
+	object newobj(obj);
 	
 	// the loop
 	while(1) {
 		// check for IRREGALARITY
 		// irregularity: NAME
 		name_irregularity.clear();
-		if (!obj.name.length()) {
+		if (!newobj.name.length()) {
 			name_irregularity = IRREGULARITY;
 			comment += "\n" IRREGULARITY " name not given yet";
 		}
+		// Two object can't have the same name
 		for(unsigned int i=0; i!=o.size(); i++){
-			if (!obj.name.compare(o[i].name)){
+			if (!newobj.name.compare(o[i].name)){
+				if(o[i] == obj)
+					continue;
 				name_irregularity = IRREGULARITY;
 				comment += "\n" IRREGULARITY " the name '";
 				comment += obj.name;
@@ -61,7 +64,7 @@ void system_c::EditObj (const setting& set, object& obj) {
 			}
 		}
 		// irregularity: MASS
-		if ((obj.Mass() > obj.typ->mass_min) && (obj.Mass() < obj.typ->mass_max)) {
+		if ((newobj.Mass() > newobj.typ->mass_min) && (newobj.Mass() < newobj.typ->mass_max)) {
 			mass_irregularity.clear();
 		}
 		else {
@@ -69,9 +72,9 @@ void system_c::EditObj (const setting& set, object& obj) {
 			comment += "\n" IRREGULARITY " mass out of range";
 		}
 		// irregularity: RADIUS
-		if(obj.Radius() > tlength(0) )
+		if(newobj.Radius() > tlength(0) )
 			radius_irregularity.clear();
-		else if (obj.Radius() == tlength(0)) {
+		else if (newobj.Radius() == tlength(0)) {
 			radius_irregularity = IRREGULARITY;
 			comment += "\n" IRREGULARITY " radius is zero";
 		}
@@ -80,7 +83,7 @@ void system_c::EditObj (const setting& set, object& obj) {
 			comment += "\n" IRREGULARITY " radius is below zero";
 		}
 		// irregularity: COLOR
-		if (obj.colour.CheckRange(obj.typ->color_min, obj.typ->color_max) == true)
+		if (newobj.colour.CheckRange(newobj.typ->color_min, newobj.typ->color_max) == true)
 			color_irregularity.clear();
 		else {
 			color_irregularity = IRREGULARITY;
@@ -89,7 +92,9 @@ void system_c::EditObj (const setting& set, object& obj) {
 		// irregularity: TOUCH
 		touch_irregularity.clear();
 		for(unsigned int i=0; i!=o.size(); i++){
-			if (obj.touch(o[i])){
+			if (newobj.touch(o[i])){
+				if(o[i] == obj)
+					continue;
 				touch_irregularity = IRREGULARITY;
 				comment += "\n" IRREGULARITY " the object would overlap the '";
 				comment += o[i].name;
@@ -99,19 +104,19 @@ void system_c::EditObj (const setting& set, object& obj) {
 		}
 		
 		// Print the actual state and scan the desire of the user
-		tposition p (obj.Pos());
-		tvelocity v (obj.Vel());
+		tposition p (newobj.Pos());
+		tvelocity v (newobj.Vel());
 		stringstream ss;
 		ss << "CREATE A NEW OBJECT\n\n%r-1) name:         "
-			<< obj.name << "   " << name_irregularity
-			<< "\n%r-2) type:         " << obj.typ->name
-			<< "\n&ti7" << obj.typ->description
-			<< "&t0\n%r-3) color:        red: " << obj.colour.red
+			<< newobj.name << "   " << name_irregularity
+			<< "\n%r-2) type:         " << newobj.typ->name
+			<< "\n&ti7" << newobj.typ->description
+			<< "&t0\n%r-3) color:        red: " << newobj.colour.red
 			<< "   " << color_irregularity << "&ti7\ngreen: "
-			<< obj.colour.green << "\nblue: " << obj.colour.blue
-			<< "&t0\n%r-4) mass:         " << obj.Mass().value() << "   "
+			<< newobj.colour.green << "\nblue: " << newobj.colour.blue
+			<< "&t0\n%r-4) mass:         " << newobj.Mass().value() << "   "
 			<< mass_irregularity << "\n%r-5) radius:       "
-			<< obj.Radius().value() << "   " << radius_irregularity
+			<< newobj.Radius().value() << "   " << radius_irregularity
 			<< "\n%r-6) coordinates:  x: "
 			<< p.x().value() << "   " << touch_irregularity << "&ti7\ny: " << p.y().value() 
 			<< "\nz: " << p.z().value()	<< "&t0\n%r-7) velocity:     x: " << v.x().value()
@@ -130,63 +135,63 @@ void system_c::EditObj (const setting& set, object& obj) {
 			// Name
 			case 1:
 				OPS (set, "INITIALIZE A NEW OBJECT\n\nInsert the name of the new object:");
-				in_s(obj.name);
+				in_s(newobj.name);
 				// apply the new name
 				comment += "\nNew name assigned succefully!";
 				break;
 		// Type
 			case 2:
-				obj.typ = &stype->Browse(set, "Choose a new type for your new object");
+				newobj.typ = &stype->Browse(set, "Choose a new type for your new object");
 				comment += "\nNew type assigned succefully!";
 				break;
 		// Color
 			case 3:
-				obj.colour.Scan(set, obj.typ->color_min, obj.typ->color_max);
+				newobj.colour.Scan(set, newobj.typ->color_min, newobj.typ->color_max);
 				comment += "\nNew color assigned succefully!";
 				break;
 		// Mass
 			case 4:
 				ss.clear();
 				ss.str("");
-				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (Kg)\n&tdThe mass's legal values are between " << obj.typ->mass_min << " and " << obj.typ->mass_max;
+				ss << "Create A NEW OBJECT\n\nInsert the mass of the new object: (Kg)\n&tdThe mass's legal values are between " << newobj.typ->mass_min << " and " << newobj.typ->mass_max;
 				OPS (set, ss.str());
-				obj.SetMass(in_ld());
+				newobj.SetMass(in_ld());
 				comment += "\nNew mass assigned succefully!";
 				
 				// TODO: user should customize tolerance values, or they should somehow defined by type
 				// tolerance for now is just related to mass
-				obj.SetFrcSingleTolerance((obj.Mass()/600)*tacceleration_scalar(1));
-				obj.SetFrcSumTolerance((obj.Mass()/400)*tacceleration_scalar(1));
+				newobj.SetFrcSingleTolerance((newobj.Mass()/600)*tacceleration_scalar(1));
+				newobj.SetFrcSumTolerance((newobj.Mass()/400)*tacceleration_scalar(1));
 				break;
 		// Radius
 			case 5:
 				OPS (set, "Create A NEW OBJECT\n\nInsert the radius of the new object: (m)");
-				obj.SetRadius(in_ld());
+				newobj.SetRadius(in_ld());
 				comment += "\nNew radius assigned succefully!";
 				break;
 		// Coordiates
 			case 6: {
-					vec3<long double> p = obj.Pos().value();
+					vec3<long double> p = newobj.Pos().value();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the x axis of the new object: (m)\n&t2Now is " + to_string(p.x) + " m");
 					p.x = in_ld();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the y axis of the new object: (m)\n&t2Now is " + to_string(p.y) + " m");
 					p.y = in_ld();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the position in the z axis of the new object: (m)\n&t2Now is " + to_string(p.z) + " m");
 					p.z = in_ld();
-					obj.SetPos(p);
+					newobj.SetPos(p);
 					comment += "\nNew coordinates assigned succefully!";
 					break;
 				}
 		// Velocity
 			case 7: {
-					vec3<long double> v = obj.Vel().value();
+					vec3<long double> v = newobj.Vel().value();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the x axis of the new object: (m/s)\n&t2Now is "  + to_string(v.x) + " m/s");
 					v.x = in_ld();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the y axis of the new object: (m/s)\n&t2Now is " + to_string(v.y) + " m/s");
 					v.y = in_ld();
 					OPS (set, "Create A NEW OBJECT\n\nInsert the velocity in the z axis of the new object: (m/s)\n&t2Now is " + to_string(v.z) + " m/s");
 					v.z = in_ld();
-					obj.SetVel(v);
+					newobj.SetVel(v);
 					comment += "\nNew velocity assigned succefully!";
 					break;
 				}
@@ -238,9 +243,9 @@ void system_c::EditObj (const setting& set, object& obj) {
 					object temp(*stype, _name, result);
 					if (result == signal::good) {
 						// move kinematic stats
-						obj.MoveKinematic(temp);
+						newobj.MoveKinematic(temp);
 						// move the temp(the new) object in this
-						obj = temp;
+						newobj = temp;
 						comment += "\nNew object loaded succefully!";
 					}
 					// negative comment if fail
@@ -255,7 +260,7 @@ void system_c::EditObj (const setting& set, object& obj) {
 				break;
 		// SAVE
 			case 9:
-				obj.Save(set);
+				newobj.Save(set);
 				comment += "\nNew object saved succefully!";
 				break;
 		// DONE
@@ -266,6 +271,8 @@ void system_c::EditObj (const setting& set, object& obj) {
 					radius_irregularity.compare(IRREGULARITY) &&
 					touch_irregularity.compare(IRREGULARITY) ){
 
+					obj = newobj;
+					
 					return;
 				}
 				else
@@ -273,8 +280,6 @@ void system_c::EditObj (const setting& set, object& obj) {
 				break;
 		// EXIT WHITOUT SAVE
 			case 11:
-				// reset the object and quit
-				obj = backup;
 				return;
 		}
 	}
