@@ -256,6 +256,7 @@ void object::Impact_Anaelastic(object& obj) {
 
 void object::Impact_Elastic(object& obj, const time_raw& delta) {
 	
+	
 	vec3<long double> dir = Distance(obj).direction();
 	
 	obj.AddImpulse(Mass() * Vel() * dir, delta);

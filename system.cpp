@@ -578,7 +578,10 @@ void system_c::physic_Impacts() {
 			// ELASTIC/ANAELASTIC IMPACT
 			if ((o[i].typ->merge == false) && (o[l].typ->merge == false)){
 				// pure elastic impact
-				o[i].Impact_Elastic(o[l], precision);
+				// THEY ARE STILL UNSTABLE!!! USING ANAELASTIC INSTEAD
+				//o[i].Impact_Elastic(o[l], precision);
+				o[i].Impact_Anaelastic(o[l]);
+				RemoveObj(o[l]);
 			}
 			else {
 				o[i].Impact_Anaelastic(o[l]);
