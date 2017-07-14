@@ -63,6 +63,10 @@ class object : public PEntity {
 			Simulation(delta);
 		}
 		
+		// OPERATORS:
+		
+		bool operator==(const object& o);
+		bool operator!=(const object& o);
 		
 		// CONSTRUCTOR:
 		inline object (const std::string& n,

@@ -98,3 +98,17 @@ bool color::CheckRange(const color& min, const color& max) {
 	
 	return true;
 }
+
+bool color::operator== (const color& c) const{
+	return
+		(blue == c.blue) &&
+		(red == c.red) &&
+		(green == c.green);
+}
+
+bool color::operator!= (const color& c) const{
+	return
+		(blue != c.blue) ||
+		(red != c.red) ||
+		(green != c.green);
+}

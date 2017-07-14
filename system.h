@@ -48,8 +48,8 @@ class system_c {
 		object *SearchObj	(const std::string&);	// Search for an object in the system from his name
 		void RemoveObj 		(object&);				// Remove an object from a system
 		void Save			(const setting& set);	// Save an object in a file
-		void NewObj		(const setting& set);	// Create a new object, put it in the system and initialize it
-		signal EditObj (const setting& set, object& obj);	// Edit an object
+		void NewObj			(const setting& set);	// Create a new object, put it in the system and initialize it
+		void EditObj 		(const setting& set, object& obj);	// Edit an object
 		
 		// old pengine
 		void Physic	(time_sim& dest);		// Apply the physic to the object

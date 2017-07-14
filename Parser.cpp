@@ -35,6 +35,7 @@ void parser_Distance(const setting&, system_c&);
 time_sim parser_Jump(const setting& set, time_sim&, const time_raw&);
 time_sim parser_Wait(const setting& set, time_sim&, const time_raw&);
 void parser_Information (const setting&, system_c&);
+void parser_Edit (const setting&, system_c&);
 
 /**
  * The main function
@@ -55,7 +56,7 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	}
 	// help
 	else if ((!input.compare("help")) || (!input.compare("h"))) {
-		OPS(set, "HELP\n\nYou have to use commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-distance\n-quit\n-delete\n\nPress something to continue...");
+		OPS(set, "HELP\n\nYou have to use commands to manage the system. Some commands are:\n-step (s)\n-create (c)\n-jump (j)\n-wait (w)\n-information (i)\n-settings\n-save\n-edit (e)\n-distance\n-quit\n-delete\n\nPress something to continue...");
 		in_s(input);
 	}
 	// Jump
@@ -83,6 +84,9 @@ time_sim Parser(setting& set, system_c& sys, bool& quit) {
 	// delete an object
 	else if (!(input.compare("delete")) || (!input.compare("remove")))
 		parser_Delete(set, sys);
+	// edit an object
+	else if (!(input.compare("edit")) || (!input.compare("e")))
+		parser_Edit(set, sys);
 	// settings
 	else if (!(input.compare("settings")) || (!input.compare("configuration")))
 		menu_Settings(set);
@@ -298,4 +302,24 @@ time_sim parser_Jump(const setting& set, time_sim& now, const time_raw& precisio
 			break;
 	}
 	return t;
+}
+
+
+void parser_Edit (const setting& set, system_c& sys){
+	
+	OPS(set, "EDIT\n\nWhat object do you want to edit?");
+	
+	string name;
+	
+	in_s(name);
+	
+	object *obj = sys.SearchObj(name);
+	
+	if(obj == nullptr){
+		OPS_Error(set, "There is no object with such a name!\n\n&t2Press something to continue...");
+		in_s();
+		return;
+	}
+	
+	sys.EditObj(set, *obj);
 }

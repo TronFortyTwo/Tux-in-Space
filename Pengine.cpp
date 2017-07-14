@@ -34,3 +34,26 @@ void PEntity::Simulation(const time_raw& delta) {
 	// move the entity
 	pos += vel * delta;
 }
+
+
+bool PEntity::operator== (const PEntity& o){
+	return
+		(pos == o.pos) &&
+		(vel == o.vel) &&
+		(acc_force == o.acc_force) &&
+		(force_single_tolerance == o.force_single_tolerance) &&
+		(force_sum_tolerance == o.force_sum_tolerance) &&
+		(mass == o.mass) &&
+		(radius == o.radius);
+}
+
+bool PEntity::operator!= (const PEntity& o){
+	return
+		(pos != o.pos) ||
+		(vel != o.vel) ||
+		(acc_force != o.acc_force) ||
+		(force_single_tolerance != o.force_single_tolerance) ||
+		(force_sum_tolerance != o.force_sum_tolerance) ||
+		(mass != o.mass) ||
+		(radius != o.radius);
+}

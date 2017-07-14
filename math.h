@@ -159,6 +159,18 @@ template<class T> class vec3 {
 			y /= s;
 			z /= s;
 		}
+		inline bool operator== (const vec3<T>& v) const {
+			return
+				(v.x == x) &&
+				(v.y == y) &&
+				(v.z == z);
+		}
+		inline bool operator!= (const vec3<T>& v) const{
+			return
+				(v.x != x) ||
+				(v.y != y) ||
+				(v.z != z);
+		}
 };
 
 class tspeed {
@@ -200,58 +212,22 @@ class tlength {
 	
 	public:
 
-		void operator= (const long double& _m) {
-			m = _m;
-		}
-		void operator-= (const tlength& l) {
-			m -= l.m;
-		}
-		void operator+= (const tlength& l) {
-			m += l.m;
-		}
-		tlength operator+ (const tlength& l) const {
-			return tlength(m + l.m);
-		}
-		tlength operator- (const tlength& l) const {
-			return tlength(m - l.m);
-		}
-		bool operator== (const tlength& l) const {
-			if (l.m == m)
-				return true;
-			return false;
-		}
-		void operator>> (std::ostream& s){
-			s << std::to_string(m);
-		}
-		bool operator> (const tlength& t) const {
-			if (m > t.m)
-				return true;
-			return false;
-			
-		}
-		bool operator< (const tlength& t) const {
-			if (m < t.m)
-				return true;
-			return false;
-			
-		}
-		inline bool operator<= (const tlength& t) const {
-			if (m <= t.m)
-				return true;
-			return false;
-			
-		}
-		tlength operator* (const long double& n){
-			return tlength(m * n);
-		}
+		void operator= (const long double& _m);
+		void operator-= (const tlength& l);
+		void operator+= (const tlength& l);
+		tlength operator+ (const tlength& l) const;
+		tlength operator- (const tlength& l) const;
+		bool operator== (const tlength& l) const;
+		void operator>> (std::ostream& s);
+		bool operator> (const tlength& t) const;
+		bool operator< (const tlength& t) const;
+		bool operator<= (const tlength& t) const;
+		tlength operator* (const long double& n);
 		tarea operator* (const tlength& l);
-		long double operator/ (const tlength& l){
-			return m/l.m;
-		}
-		
-		long double value() const {
-			return m;
-		}
+		long double operator/ (const tlength& l);
+		long double value() const;
+		bool operator== (const tlength& l);
+		bool operator!= (const tlength& l);
 		
 		inline tlength(const long double& _m){
 			m = _m;
@@ -364,6 +340,9 @@ class tforce_scalar{
 		
 	public:
 		
+		bool operator== (const tforce_scalar& f) const;
+		bool operator!= (const tforce_scalar& f) const;
+		
 		long double value() const;
 		
 		inline tforce_scalar(const long double& _m){
@@ -416,6 +395,8 @@ class tmass {
 		bool operator> (const tmass& t) const;
 		bool operator< (const tmass& t) const;
 		long double value() const;
+		bool operator== (const tmass& t) const;
+		bool operator!= (const tmass& t) const;
 		
 		inline tmass(){
 			m = 0;
@@ -466,12 +447,17 @@ class tposition {
 		tposition operator- (const tposition& p) const;
 		void operator+= (const tposition& p);
 		tpositionmass operator* (const tmass& m) const;
-		tlength scalar() const;
+		bool operator== (const tposition& p) const;
+		bool operator!= (const tposition& p) const;
+		
 		vec3<long double> direction() const;
+		
 		inline tlength x() { return v.x;}
 		inline tlength y() { return v.y;}
 		inline tlength z() { return v.z;}
+		
 		vec3<long double> value() const;
+		tlength scalar() const;
 		
 		inline tposition(const vec3<long double>& _v){
 			v = _v;
@@ -499,6 +485,8 @@ class tvelocity {
 		tacceleration operator/ (const time_raw& t) const;
 		bool operator< (const tvelocity& vel) const;
 		bool operator> (const tvelocity& vel) const;
+		bool operator== (const tvelocity& p) const;
+		bool operator!= (const tvelocity& p) const;
 		
 		tspeed x() const { return tspeed(v.x);}
 		tspeed y() const { return tspeed(v.y);}
@@ -588,6 +576,8 @@ class tforce {
 		tforce operator- (void) const;
 		bool operator> (const tforce_scalar& f) const;
 		bool operator< (const tforce_scalar& f) const;
+		bool operator== (const tforce& f) const;
+		bool operator!= (const tforce& f) const;
 		
 		void zero();
 		long double value() const;

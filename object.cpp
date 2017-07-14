@@ -329,3 +329,43 @@ void object::Impact_Hunting(object& hed, const time_raw& delta) {
 object::object (typeSTR& stype) {
 	typ = stype.Search("Object");
 }
+
+// OPERATORS:
+
+bool object::operator==(const object& o){
+	
+	return
+		(name == o.name) &&
+		(typ == o.typ) &&
+		(colour == o.colour) &&
+ 		(
+			static_cast<PEntity>(*this) == static_cast<PEntity>(o)
+		);
+}
+
+bool object::operator!=(const object& o){
+	
+	return
+		(name != o.name) ||
+		(typ != o.typ) ||
+		(colour != o.colour) ||
+ 		(
+			static_cast<PEntity>(*this) != static_cast<PEntity>(o)
+		);
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

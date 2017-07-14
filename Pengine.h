@@ -28,6 +28,7 @@
 #include "math.h"
 #include "time.h"
 
+
 // The physic entity
 // TODO: add orientation, torque and company
 class PEntity {
@@ -146,6 +147,9 @@ class PEntity {
 			pos = _pos;
 			vel = _vel;
 		}
+		
+		bool operator== (const PEntity& o);
+		bool operator!= (const PEntity& o);
 		
 		inline PEntity(){};
 };

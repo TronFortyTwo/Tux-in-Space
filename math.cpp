@@ -40,6 +40,13 @@ int math_RandomI (int min, int max) {
 long double tforce_scalar::value() const {
 	return m;
 }
+bool tforce_scalar::operator== (const tforce_scalar& f) const{
+	return m == f.m;
+}
+bool tforce_scalar::operator!= (const tforce_scalar& f) const{
+	return m != f.m;
+}
+	
 
 // TPOSITION
 
@@ -61,6 +68,12 @@ vec3<long double> tposition::direction() const{
 vec3<long double> tposition::value() const{
 	return v;
 }
+bool tposition::operator== (const tposition& p) const{
+	return p.v == v;
+}
+bool tposition::operator!= (const tposition& p) const{
+	return p.v != v;
+}
 
 // TPOSITIONMASS
 
@@ -78,6 +91,59 @@ tvolume tarea::operator* (const tlength& l){
 
 tarea tlength::operator* (const tlength& l){
 	return tarea(m * l.m);
+}
+void tlength::operator= (const long double& _m) {
+	m = _m;
+}
+void tlength::operator-= (const tlength& l) {
+	m -= l.m;
+}
+void tlength::operator+= (const tlength& l) {
+	m += l.m;
+}
+tlength tlength::operator+ (const tlength& l) const {
+	return tlength(m + l.m);
+}
+tlength tlength::operator- (const tlength& l) const {
+	return tlength(m - l.m);
+}
+bool tlength::operator== (const tlength& l) const {
+	if (l.m == m)
+		return true;
+	return false;
+}
+void tlength::operator>> (std::ostream& s){
+	s << std::to_string(m);
+}
+bool tlength::operator> (const tlength& t) const {
+	if (m > t.m)
+		return true;
+	return false;
+}
+bool tlength::operator< (const tlength& t) const {
+	if (m < t.m)
+		return true;
+	return false;	
+}
+bool tlength::operator<= (const tlength& t) const {
+	if (m <= t.m)
+		return true;
+	return false;
+}
+tlength tlength::operator* (const long double& n){
+	return tlength(m * n);
+}
+long double tlength::operator/ (const tlength& l){
+	return m/l.m;
+}
+long double tlength::value() const {
+	return m;
+}
+bool tlength::operator== (const tlength& l){
+	return m == l.m;
+}
+bool tlength::operator!= (const tlength& l){
+	return m != l.m;
 }
 
 // TGUC
@@ -126,7 +192,13 @@ tacceleration tvelocity::operator/ (const time_raw& t) const{
 }
 tvelocity tvelocity::operator- (void) const{
 	return tvelocity(-v);
-};
+}
+bool tvelocity::operator== (const tvelocity& p) const{
+	return p.v == v;
+}
+bool tvelocity::operator!= (const tvelocity& p) const{
+	return p.v != v;
+}
 
 // TSPEED
 
@@ -265,6 +337,12 @@ bool tmass::operator< (const tmass& t) const {
 long double tmass::value() const {
 	return m;
 }
+bool tmass::operator== (const tmass& t) const{
+	return m == t.m;
+}
+bool tmass::operator!= (const tmass& t) const{
+	return m != t.m;
+}
 
 
 // TENERGY
@@ -316,7 +394,13 @@ void tforce::zero() {
 long double tforce::value() const{
 	return v.length();
 }
-
+bool tforce::operator== (const tforce& f) const{
+	return v == f.v;
+}
+bool tforce::operator!= (const tforce& f) const{
+	return v != f.v;
+}
+		
 
 
 

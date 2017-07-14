@@ -29,7 +29,7 @@ using namespace std;
  * 	The object editor
  */
 
-signal system_c::EditObj (const setting& set, object& obj) {
+void system_c::EditObj (const setting& set, object& obj) {
 	
 	int input;
 	string comment;				// This is a buffer that contein comment of what is just been done
@@ -39,6 +39,8 @@ signal system_c::EditObj (const setting& set, object& obj) {
 	string radius_irregularity;	// assume the value IRREGULARITY if the radius is 0
 	string touch_irregularity;	// assume the value IRREGULARITY if it touch some other object
 	
+	// if the user wants to revert changes
+	object backup(obj);
 	
 	// the loop
 	while(1) {
@@ -264,15 +266,16 @@ signal system_c::EditObj (const setting& set, object& obj) {
 					radius_irregularity.compare(IRREGULARITY) &&
 					touch_irregularity.compare(IRREGULARITY) ){
 
-					return signal::good;
+					return;
 				}
 				else
 					comment += "\nCannot exit! Fix irregularities first";
 				break;
 		// EXIT WHITOUT SAVE
 			case 11:
-				// quit
-				return signal::aborted;
+				// reset the object and quit
+				obj = backup;
+				return;
 		}
 	}
 	
@@ -287,10 +290,11 @@ void system_c::NewObj (const setting& set) {
 	// new empty object
 	object newobj(*stype);
 	
-	debug_Object(newobj);
+	// edit
+	EditObj(set, newobj);
 	
-	// Open the editor, if good
-	if(EditObj(set, newobj) == signal::good)
+	// if the object is not empty anymore push it
+	if(newobj != object(*stype))
 		o.push_back(newobj);
 	
 }
